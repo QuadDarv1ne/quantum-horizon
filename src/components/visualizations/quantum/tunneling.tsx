@@ -1,0 +1,246 @@
+"use client"
+
+import { useRef, useState, useEffect } from "react"
+import { setupCanvas } from "@/hooks/use-canvas-animation"
+import { Slider } from "@/components/ui/slider"
+
+interface TunnelingVisualizationProps {
+  isDark: boolean
+}
+
+export function TunnelingVisualization({ isDark }: TunnelingVisualizationProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [barrierHeight, setBarrierHeight] = useState(50)
+  const [barrierWidth, setBarrierWidth] = useState(30)
+  const [energy, setEnergy] = useState(30)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    let animationFrameId: number
+    let bgGradient: CanvasGradient | null = null
+
+    const resize = () => {
+      setupCanvas(canvas, ctx)
+      bgGradient = null
+    }
+    resize()
+    window.addEventListener("resize", resize)
+
+    let time = 0
+
+    const animate = () => {
+      time += 0.015
+      const width = canvas.offsetWidth
+      const height = canvas.offsetHeight
+      ctx.clearRect(0, 0, width, height)
+
+      // Background
+      ctx.fillStyle = isDark ? "#050510" : "#f8fafc"
+      ctx.fillRect(0, 0, width, height)
+
+      const baseY = height * 0.6
+      const waveAmplitude = 40
+
+      // Energy level line
+      const energyY = baseY - (energy / 100) * 80
+      ctx.strokeStyle = isDark ? "rgba(255, 200, 100, 0.5)" : "rgba(255, 150, 50, 0.5)"
+      ctx.setLineDash([5, 5])
+      ctx.beginPath()
+      ctx.moveTo(0, energyY)
+      ctx.lineTo(width, energyY)
+      ctx.stroke()
+      ctx.setLineDash([])
+
+      ctx.fillStyle = isDark ? "rgba(255, 200, 100, 0.7)" : "rgba(255, 150, 50, 0.7)"
+      ctx.font = "10px sans-serif"
+      ctx.fillText("E (particle energy)", 10, energyY - 5)
+
+      // Potential barrier
+      const barrierX = width * 0.35
+      const barrierW = (barrierWidth / 100) * width * 0.4
+      const barrierTop = baseY - (barrierHeight / 100) * 80
+
+      ctx.fillStyle = isDark ? "rgba(255, 100, 100, 0.3)" : "rgba(255, 100, 100, 0.2)"
+      ctx.fillRect(barrierX, barrierTop, barrierW, baseY - barrierTop)
+      ctx.strokeStyle = isDark ? "rgba(255, 100, 100, 0.8)" : "rgba(255, 50, 50, 0.8)"
+      ctx.lineWidth = 2
+      ctx.strokeRect(barrierX, barrierTop, barrierW, baseY - barrierTop)
+
+      ctx.fillStyle = isDark ? "rgba(255, 100, 100, 0.8)" : "rgba(255, 50, 50, 0.8)"
+      ctx.font = "10px sans-serif"
+      ctx.textAlign = "center"
+      ctx.fillText("Barrier V₀", barrierX + barrierW / 2, barrierTop - 5)
+
+      // Calculate transmission probability (simplified)
+      const transmissionProb =
+        energy < barrierHeight
+          ? Math.exp(-2 * Math.sqrt((barrierHeight - energy) / 20) * (barrierWidth / 20))
+          : 1 -
+            Math.pow(
+              (Math.sqrt(barrierHeight / energy) - 1) / (Math.sqrt(barrierHeight / energy) + 1),
+              2
+            )
+
+      // Wave function
+      const k1 = 0.15
+      const k2Real =
+        energy > barrierHeight
+          ? k1 * Math.sqrt(energy / barrierHeight)
+          : k1 * Math.sqrt((barrierHeight - energy) / 50)
+      const isOscillating = energy > barrierHeight
+
+      // Incoming wave (left of barrier)
+      ctx.beginPath()
+      ctx.strokeStyle = isDark ? "#60A5FA" : "#2563EB"
+      ctx.lineWidth = 2
+      for (let x = 0; x < barrierX; x++) {
+        const waveX = x - ((time * 80) % width)
+        const psi = Math.sin(waveX * k1) * Math.exp(-Math.pow((x - barrierX + 50) / 100, 2))
+        const y = energyY + psi * waveAmplitude
+        if (x === 0) ctx.moveTo(x, y)
+        else ctx.lineTo(x, y)
+      }
+      ctx.stroke()
+
+      // Inside barrier
+      ctx.beginPath()
+      ctx.strokeStyle =
+        energy > barrierHeight ? (isDark ? "#60A5FA" : "#2563EB") : isDark ? "#F472B6" : "#DB2777"
+      ctx.lineWidth = 2
+      for (let x = barrierX; x < barrierX + barrierW; x++) {
+        const relX = (x - barrierX) / barrierW
+        let psi
+        if (isOscillating) {
+          psi = Math.sin(x * k2Real - time * 50) * (1 - relX * 0.3)
+        } else {
+          psi = Math.exp(-relX * barrierW * k2Real * 0.5) * Math.cos(x * k1 - time * 50)
+        }
+        const y = energyY + psi * waveAmplitude * 0.5
+        if (x === barrierX) ctx.moveTo(x, y)
+        else ctx.lineTo(x, y)
+      }
+      ctx.stroke()
+
+      // Transmitted wave (right of barrier)
+      ctx.beginPath()
+      ctx.strokeStyle = isDark ? "#4ADE80" : "#16A34A"
+      ctx.lineWidth = 2
+      const transmittedAmplitude = waveAmplitude * Math.sqrt(transmissionProb)
+      for (let x = barrierX + barrierW; x < width; x++) {
+        const waveX = x - ((time * 80) % width)
+        const psi =
+          ((Math.sin(waveX * k1) * transmittedAmplitude) / waveAmplitude) *
+          Math.exp(-Math.pow((x - barrierX - barrierW - 30) / 150, 2))
+        const y = energyY + psi * transmittedAmplitude
+        if (x === barrierX + barrierW) ctx.moveTo(x, y)
+        else ctx.lineTo(x, y)
+      }
+      ctx.stroke()
+
+      // Probability display
+      ctx.fillStyle = isDark ? "#fff" : "#000"
+      ctx.font = "bold 11px sans-serif"
+      ctx.textAlign = "center"
+      ctx.fillText(`Tunneling probability: ${(transmissionProb * 100).toFixed(1)}%`, width / 2, 25)
+
+      // Labels
+      ctx.font = "9px sans-serif"
+      ctx.fillStyle = isDark ? "#60A5FA" : "#2563EB"
+      ctx.textAlign = "left"
+      ctx.fillText("Incident wave", 10, baseY + 20)
+      ctx.fillStyle = isDark ? "#4ADE80" : "#16A34A"
+      ctx.fillText("Transmitted wave", width - 120, baseY + 20)
+
+      animationFrameId = requestAnimationFrame(animate)
+    }
+
+    animate()
+
+    return () => {
+      window.removeEventListener("resize", resize)
+      cancelAnimationFrame(animationFrameId)
+    }
+  }, [barrierHeight, barrierWidth, energy, isDark])
+
+  return (
+    <div className="space-y-4">
+      <canvas
+        ref={canvasRef}
+        className="w-full h-[350px] rounded-lg"
+        aria-label="Quantum tunneling: particle passing through potential barrier"
+        role="img"
+      />
+
+      <div className="grid grid-cols-3 gap-2 text-xs">
+        <div className="space-y-1">
+          <div className="flex justify-between">
+            <span className={isDark ? "text-yellow-400" : "text-yellow-700"}>E</span>
+            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+              {energy}%
+            </span>
+          </div>
+          <Slider
+            value={[energy]}
+            onValueChange={(v) => {
+              setEnergy(v[0])
+            }}
+            min={10}
+            max={100}
+            step={1}
+          />
+        </div>
+        <div className="space-y-1">
+          <div className="flex justify-between">
+            <span className={isDark ? "text-red-400" : "text-red-700"}>V₀</span>
+            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+              {barrierHeight}%
+            </span>
+          </div>
+          <Slider
+            value={[barrierHeight]}
+            onValueChange={(v) => {
+              setBarrierHeight(v[0])
+            }}
+            min={20}
+            max={100}
+            step={1}
+          />
+        </div>
+        <div className="space-y-1">
+          <div className="flex justify-between">
+            <span className={isDark ? "text-orange-400" : "text-orange-700"}>Width</span>
+            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+              {barrierWidth}%
+            </span>
+          </div>
+          <Slider
+            value={[barrierWidth]}
+            onValueChange={(v) => {
+              setBarrierWidth(v[0])
+            }}
+            min={10}
+            max={80}
+            step={1}
+          />
+        </div>
+      </div>
+
+      <div
+        className={`rounded-lg p-3 border text-sm ${
+          isDark ? "bg-green-900/20 border-green-500/20" : "bg-green-50 border-green-200"
+        }`}
+      >
+        <p className={isDark ? "text-gray-300" : "text-gray-700"}>
+          <span className={isDark ? "text-green-300" : "text-green-700"}>Tunnel effect:</span> A
+          particle can pass through a barrier even if its energy is less than the barrier height!
+          This is impossible in classical physics, but explains α-decay and the operation of
+          tunneling microscopes.
+        </p>
+      </div>
+    </div>
+  )
+}

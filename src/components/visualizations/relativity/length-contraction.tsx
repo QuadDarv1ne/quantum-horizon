@@ -1,155 +1,143 @@
 "use client"
 
-import { useState } from "react"
-import { VisualizationCanvas } from "../base/visualization-canvas"
-import { VisualizationControls } from "../base/visualization-controls"
-import { useVisualizationStore } from "@/stores/visualization-store"
-
-const c = 299792458 // Speed of light
+import { useMemo, useState } from "react"
+import { Slider } from "@/components/ui/slider"
+import { Button } from "@/components/ui/button"
 
 interface LengthContractionVisualizationProps {
   isDark: boolean
 }
 
 export function LengthContractionVisualization({ isDark }: LengthContractionVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore()
-  const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
+  const [velocity, setVelocity] = useState(0.8)
+  const [showGrid, setShowGrid] = useState(true)
 
-  const [velocity, setVelocity] = useState(0.5)
-
-  const draw = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
-    const centerX = width / 2
-    const centerY = height / 2
-
-    // Clear canvas
-    ctx.fillStyle = isDark ? "#0f172a" : "#f8fafc"
-    ctx.fillRect(0, 0, width, height)
-
-    // Lorentz factor
-    const gamma = 1 / Math.sqrt(1 - velocity * velocity)
-    const properLength = 200
-    const contractedLength = properLength / gamma
-
-    // Draw stationary ruler (observer frame)
-    ctx.save()
-    ctx.translate(centerX - 150, centerY - 80)
-
-    ctx.fillStyle = isDark ? "#64748b" : "#475569"
-    ctx.fillRect(0, 0, properLength, 20)
-
-    // Ruler marks
-    ctx.strokeStyle = isDark ? "#e2e8f0" : "#1e293b"
-    ctx.lineWidth = 1
-    for (let i = 0; i <= properLength; i += 20) {
-      ctx.beginPath()
-      ctx.moveTo(i, 0)
-      ctx.lineTo(i, 20)
-      ctx.stroke()
-    }
-
-    ctx.fillStyle = isDark ? "#e2e8f0" : "#1e293b"
-    ctx.font = "12px sans-serif"
-    ctx.textAlign = "center"
-    ctx.fillText("Observer (rest)", properLength / 2, 40)
-
-    ctx.restore()
-
-    // Draw moving ruler (moving frame)
-    ctx.save()
-    ctx.translate(centerX - 150, centerY + 50)
-
-    // Moving ruler with contraction
-    const xPos = (properLength - contractedLength) / 2
-    ctx.fillStyle = isDark ? "#3b82f6" : "#2563eb"
-    ctx.fillRect(xPos, 0, contractedLength, 20)
-
-    // Ruler marks (contracted)
-    ctx.strokeStyle = isDark ? "#bfdbfe" : "#1e40af"
-    ctx.lineWidth = 1
-    const contractedStep = 20 / gamma
-    for (let i = 0; i <= gamma; i++) {
-      const x = xPos + i * contractedStep
-      if (x <= xPos + contractedLength) {
-        ctx.beginPath()
-        ctx.moveTo(x, 0)
-        ctx.lineTo(x, 20)
-        ctx.stroke()
-      }
-    }
-
-    ctx.fillStyle = isDark ? "#e2e8f0" : "#1e293b"
-    ctx.font = "12px sans-serif"
-    ctx.textAlign = "center"
-    ctx.fillText(`Moving (v = ${(velocity * 100).toFixed(0)}% c)`, properLength / 2, 40)
-
-    ctx.restore()
-
-    // Draw velocity indicator
-    ctx.strokeStyle = isDark ? "#64748b" : "#94a3b8"
-    ctx.lineWidth = 2
-    ctx.beginPath()
-    ctx.moveTo(centerX - 100, centerY + 120)
-    ctx.lineTo(centerX + 100, centerY + 120)
-    ctx.stroke()
-
-    // Arrow
-    ctx.beginPath()
-    ctx.moveTo(centerX + 90, centerY + 115)
-    ctx.lineTo(centerX + 100, centerY + 120)
-    ctx.lineTo(centerX + 90, centerY + 125)
-    ctx.fillStyle = isDark ? "#64748b" : "#94a3b8"
-    ctx.fill()
-
-    ctx.fillStyle = isDark ? "#94a3b8" : "#64748b"
-    ctx.font = "12px sans-serif"
-    ctx.textAlign = "center"
-    ctx.fillText(`v = ${(velocity * 100).toFixed(0)}% c`, centerX, centerY + 145)
-
-    // Formula
-    ctx.fillStyle = isDark ? "#e2e8f0" : "#1e293b"
-    ctx.font = "14px monospace"
-    ctx.textAlign = "center"
-    ctx.fillText(
-      `L = L₀ / γ = ${properLength} / ${gamma.toFixed(2)} = ${contractedLength.toFixed(1)}`,
-      centerX,
-      30
-    )
-    ctx.fillText(`γ = 1/√(1 - v²/c²) = ${gamma.toFixed(4)}`, centerX, 50)
-  }
+  const gamma = useMemo(() => 1 / Math.sqrt(1 - velocity * velocity), [velocity])
+  const contractedLength = useMemo(() => 100 / gamma, [gamma])
 
   return (
     <div className="space-y-4">
-      <VisualizationCanvas draw={draw} isDark={isDark} className="h-[400px]" />
-      <VisualizationControls
-        isPlaying={isPlaying}
-        animationSpeed={animationSpeed}
-        onTogglePlay={() => {
-          togglePlaying()
+      <div
+        className="relative h-40 rounded-lg overflow-hidden"
+        style={{
+          background: isDark
+            ? "linear-gradient(180deg, #0a0515 0%, #150a20 100%)"
+            : "linear-gradient(180deg, #e0e7ff 0%, #c7d2fe 100%)",
         }}
-        onSpeedChange={(speed) => {
-          setAnimationSpeed(speed)
-        }}
-        isDark={isDark}
-      />
-      <div className={`p-4 rounded-lg ${isDark ? "bg-gray-800/50" : "bg-gray-100/50"}`}>
-        <label className="block text-sm font-medium mb-2">
-          Velocity: {(velocity * 100).toFixed(0)}% c
-        </label>
-        <input
-          type="range"
-          min="0"
-          max="0.99"
-          step="0.01"
-          value={velocity}
-          onChange={(e) => {
-            setVelocity(parseFloat(e.target.value))
-          }}
-          className="w-full"
-        />
-        <div className="flex justify-between text-xs mt-1 text-gray-500">
-          <span>0%</span>
-          <span>99%</span>
+      >
+        {/* Grid */}
+        {showGrid && (
+          <svg className="absolute inset-0 w-full h-full opacity-20">
+            {[...Array(20)].map((_, i) => (
+              <line
+                key={`v${i}`}
+                x1={`${i * 5}%`}
+                y1="0"
+                x2={`${i * 5}%`}
+                y2="100%"
+                stroke={isDark ? "#444" : "#888"}
+                strokeWidth="0.5"
+              />
+            ))}
+            {[...Array(10)].map((_, i) => (
+              <line
+                key={`h${i}`}
+                x1="0"
+                y1={`${i * 10}%`}
+                x2="100%"
+                y2={`${i * 10}%`}
+                stroke={isDark ? "#444" : "#888"}
+                strokeWidth="0.5"
+              />
+            ))}
+          </svg>
+        )}
+
+        {/* Moving object */}
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2">
+          <div
+            className={`h-8 rounded ${
+              isDark
+                ? "bg-gradient-to-r from-blue-500 to-blue-400"
+                : "bg-gradient-to-r from-blue-600 to-blue-400"
+            }`}
+            style={{ width: `${contractedLength}px` }}
+          />
+          <div className={`text-center text-xs mt-1 ${isDark ? "text-blue-300" : "text-blue-700"}`}>
+            Moving: {contractedLength.toFixed(1)} m
+          </div>
         </div>
+
+        {/* Stationary reference */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+          <div
+            className={`h-8 rounded ${
+              isDark
+                ? "bg-gradient-to-r from-green-500 to-green-400"
+                : "bg-gradient-to-r from-green-600 to-green-400"
+            }`}
+            style={{ width: "100px" }}
+          />
+          <div
+            className={`text-center text-xs mt-1 ${isDark ? "text-green-300" : "text-green-700"}`}
+          >
+            At rest: 100 m
+          </div>
+        </div>
+
+        {/* Velocity arrow */}
+        <div
+          className={`absolute top-1/2 right-4 transform -translate-y-1/2 text-sm ${
+            isDark ? "text-orange-400" : "text-orange-600"
+          }`}
+        >
+          → v = {(velocity * 100).toFixed(0)}% c
+        </div>
+      </div>
+
+      <div className="space-y-1">
+        <div className="flex justify-between text-xs">
+          <span className={isDark ? "text-orange-400" : "text-orange-700"}>Velocity</span>
+          <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+            {(velocity * 100).toFixed(0)}% c
+          </span>
+        </div>
+        <Slider
+          value={[velocity * 100]}
+          onValueChange={(v) => {
+            setVelocity(v[0] / 100)
+          }}
+          min={0}
+          max={99}
+          step={1}
+        />
+      </div>
+
+      <Button
+        onClick={() => {
+          setShowGrid(!showGrid)
+        }}
+        variant="outline"
+        size="sm"
+        className="w-full text-xs"
+      >
+        {showGrid ? "🔲 Hide grid" : "🔲 Show grid"}
+      </Button>
+
+      <div
+        className={`rounded-lg p-3 border text-sm ${
+          isDark ? "bg-purple-900/20 border-purple-500/20" : "bg-purple-50 border-purple-200"
+        }`}
+      >
+        <div className={`font-semibold mb-1 ${isDark ? "text-purple-300" : "text-purple-700"}`}>
+          📐 Length contraction formula:
+        </div>
+        <div className={`font-mono text-center ${isDark ? "text-white" : "text-gray-900"}`}>
+          L = L₀ / γ = L₀ · √(1 - v²/c²)
+        </div>
+        <p className={`mt-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+          The object contracts only in the direction of motion! Transverse dimensions do not change.
+        </p>
       </div>
     </div>
   )
