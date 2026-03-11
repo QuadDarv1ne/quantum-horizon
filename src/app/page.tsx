@@ -452,12 +452,15 @@ function WaveFunctionVisualization() {
     let bgGradient: CanvasGradient | null = null
     let cachedWidth = 0
     let cachedHeight = 0
+    let wellPath: Path2D | null = null
+    let wellL = 0
 
     const resize = () => {
       setupCanvas(canvas, ctx)
       cachedWidth = canvas.offsetWidth
       cachedHeight = canvas.offsetHeight
       bgGradient = null
+      wellPath = null
     }
     resize()
     window.addEventListener('resize', resize)
@@ -483,15 +486,18 @@ function WaveFunctionVisualization() {
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
 
-      // Potential well
+      // Potential well - cache path
+      if (!wellPath || wellL !== L) {
+        wellPath = new Path2D()
+        wellPath.moveTo(offsetX, 20)
+        wellPath.lineTo(offsetX, height - 20)
+        wellPath.lineTo(offsetX + L, height - 20)
+        wellPath.lineTo(offsetX + L, 20)
+        wellL = L
+      }
       ctx.strokeStyle = 'rgba(100, 150, 255, 0.6)'
       ctx.lineWidth = 3
-      ctx.beginPath()
-      ctx.moveTo(offsetX, 20)
-      ctx.lineTo(offsetX, height - 20)
-      ctx.lineTo(offsetX + L, height - 20)
-      ctx.lineTo(offsetX + L, 20)
-      ctx.stroke()
+      ctx.stroke(wellPath)
 
       // Well label
       ctx.fillStyle = 'rgba(100, 150, 255, 0.6)'
