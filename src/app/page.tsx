@@ -1,6 +1,5 @@
 'use client'
 
-<<<<<<< HEAD
 import { useState, useEffect, useRef, createContext, useContext } from 'react'
 import { useCanvasAnimation } from '@/hooks/use-canvas-animation'
 import { Button } from '@/components/ui/button'
@@ -8,23 +7,6 @@ import { Slider } from '@/components/ui/slider'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { G, c, h, h_bar, k_B, M_SUN, eV, m_e, m_p } from '@/lib/constants'
 import { setupCanvas } from '@/hooks/use-canvas-animation'
-=======
-import { useState, useEffect, useRef, useCallback, createContext, useContext } from 'react'
-import { Button } from '@/components/ui/button'
-import { Slider } from '@/components/ui/slider'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-
-// ==================== CONSTANTS ====================
-const G = 6.674e-11
-const c = 2.998e8
-const h = 6.626e-34
-const h_bar = h / (2 * Math.PI)
-const k_B = 1.381e-23
-const M_SUN = 1.989e30
-const eV = 1.602e-19
-const m_e = 9.109e-31
-const m_p = 1.673e-27
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
 
 // ==================== TRANSLATIONS ====================
 const translations = {
@@ -88,11 +70,6 @@ const translations = {
     calculatorDesc: 'Расчёты физических величин',
     mechanics: 'Механика',
     electromagnetism: 'Электричество',
-<<<<<<< HEAD
-=======
-    quantum: 'Квантовая физика',
-    relativity: 'Относительность',
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     calculate: 'Вычислить',
     result: 'Результат',
     timeline: '📅 Таймлайн открытий',
@@ -168,11 +145,6 @@ const translations = {
     calculatorDesc: 'Physical quantities calculations',
     mechanics: 'Mechanics',
     electromagnetism: 'Electricity',
-<<<<<<< HEAD
-=======
-    quantum: 'Quantum Physics',
-    relativity: 'Relativity',
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     calculate: 'Calculate',
     result: 'Result',
     timeline: '📅 Timeline of Discoveries',
@@ -248,11 +220,6 @@ const translations = {
     calculatorDesc: '物理量计算',
     mechanics: '力学',
     electromagnetism: '电学',
-<<<<<<< HEAD
-=======
-    quantum: '量子物理',
-    relativity: '相对论',
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     calculate: '计算',
     result: '结果',
     timeline: '📅 发现时间线',
@@ -328,11 +295,6 @@ const translations = {
     calculatorDesc: 'חישובי כמויות פיזיקליות',
     mechanics: 'מכניקה',
     electromagnetism: 'חשמל',
-<<<<<<< HEAD
-=======
-    quantum: 'פיזיקה קוונטית',
-    relativity: 'יחסות',
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     calculate: 'חשב',
     result: 'תוצאה',
     timeline: '📅 ציר הזמן של התגליות',
@@ -400,14 +362,14 @@ function FullscreenWrapper({
       }
     }
     window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
+    return () => { window.removeEventListener('keydown', handleKeyDown); }
   }, [isFullscreen])
 
   return (
     <>
       {/* Fullscreen button */}
       <button
-        onClick={() => setIsFullscreen(true)}
+        onClick={() => { setIsFullscreen(true); }}
         className={`absolute top-2 right-2 z-10 p-1.5 rounded-lg transition-all ${
           isDark 
             ? 'bg-gray-800/80 hover:bg-gray-700 text-gray-400 hover:text-white' 
@@ -424,7 +386,7 @@ function FullscreenWrapper({
       {isFullscreen && (
         <div 
           className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-          onClick={() => setIsFullscreen(false)}
+          onClick={() => { setIsFullscreen(false); }}
         >
           {/* Backdrop */}
           <div className={`absolute inset-0 ${isDark ? 'bg-black/95' : 'bg-white/95'} backdrop-blur-sm`} />
@@ -434,7 +396,7 @@ function FullscreenWrapper({
             className={`relative w-full max-w-6xl max-h-[90vh] overflow-auto rounded-xl shadow-2xl ${
               isDark ? 'bg-gray-900 border border-gray-700' : 'bg-white border border-gray-200'
             }`}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => { e.stopPropagation(); }}
           >
             {/* Header */}
             <div className={`sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b ${
@@ -444,7 +406,7 @@ function FullscreenWrapper({
                 {title}
               </h3>
               <button
-                onClick={() => setIsFullscreen(false)}
+                onClick={() => { setIsFullscreen(false); }}
                 className={`p-2 rounded-lg transition-colors ${
                   isDark 
                     ? 'hover:bg-gray-800 text-gray-400 hover:text-white' 
@@ -476,10 +438,6 @@ function FullscreenWrapper({
 // Wave Function Visualization
 function WaveFunctionVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [n, setN] = useState(1)
   const [showProbability, setShowProbability] = useState(true)
   const [particlePosition, setParticlePosition] = useState<number | null>(null)
@@ -490,7 +448,6 @@ function WaveFunctionVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
     let cachedWidth = 0
@@ -504,30 +461,14 @@ function WaveFunctionVisualization() {
       cachedHeight = canvas.offsetHeight
       bgGradient = null
       wellPath = null
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
 
-<<<<<<< HEAD
-=======
-    const width = canvas.offsetWidth
-    const height = canvas.offsetHeight
-    const L = width * 0.8
-    const offsetX = (width - L) / 2
-    const centerY = height / 2
-
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     let time = 0
 
     const animate = () => {
       time += 0.03
-<<<<<<< HEAD
       const width = canvas.offsetWidth
       const height = canvas.offsetHeight
       const L = width * 0.8
@@ -557,26 +498,6 @@ function WaveFunctionVisualization() {
       ctx.strokeStyle = 'rgba(100, 150, 255, 0.6)'
       ctx.lineWidth = 3
       ctx.stroke(wellPath)
-=======
-      ctx.clearRect(0, 0, width, height)
-
-      // Background
-      const bgGradient = ctx.createLinearGradient(0, 0, width, height)
-      bgGradient.addColorStop(0, '#0a0a1a')
-      bgGradient.addColorStop(1, '#151530')
-      ctx.fillStyle = bgGradient
-      ctx.fillRect(0, 0, width, height)
-
-      // Potential well
-      ctx.strokeStyle = 'rgba(100, 150, 255, 0.6)'
-      ctx.lineWidth = 3
-      ctx.beginPath()
-      ctx.moveTo(offsetX, 20)
-      ctx.lineTo(offsetX, height - 20)
-      ctx.lineTo(offsetX + L, height - 20)
-      ctx.lineTo(offsetX + L, 20)
-      ctx.stroke()
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
 
       // Well label
       ctx.fillStyle = 'rgba(100, 150, 255, 0.6)'
@@ -620,7 +541,7 @@ function WaveFunctionVisualization() {
       ctx.strokeStyle = 'rgba(100, 200, 255, 0.9)'
       ctx.lineWidth = 2
 
-      const points: {x: number, y: number}[] = []
+      const points: Array<{x: number, y: number}> = []
       
       for (let px = 0; px <= L; px += 2) {
         const x = px / L
@@ -700,22 +621,14 @@ function WaveFunctionVisualization() {
       ctx.textAlign = 'center'
       ctx.fillText(`ψ${n}(x) = √(2/L)·sin(${n}πx/L)`, width / 2, 30)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [n, showProbability, particlePosition])
 
@@ -736,7 +649,7 @@ function WaveFunctionVisualization() {
     }
     
     setParticlePosition(position)
-    setTimeout(() => setParticlePosition(null), 2000)
+    setTimeout(() => { setParticlePosition(null); }, 2000)
   }
 
   return (
@@ -752,11 +665,11 @@ function WaveFunctionVisualization() {
             <span className="text-cyan-400">Квантовое число n</span>
             <span className="text-white font-mono">{n}</span>
           </div>
-          <Slider value={[n]} onValueChange={(v) => setN(v[0])} min={1} max={5} step={1} />
+          <Slider value={[n]} onValueChange={(v) => { setN(v[0]); }} min={1} max={5} step={1} />
         </div>
         <div className="flex gap-2">
           <Button 
-            onClick={() => setShowProbability(!showProbability)} 
+            onClick={() => { setShowProbability(!showProbability); }} 
             variant="outline" 
             size="sm"
             className="flex-1 text-xs border-pink-500/50 text-pink-300"
@@ -787,10 +700,6 @@ function WaveFunctionVisualization() {
 // Heisenberg Uncertainty Principle
 function UncertaintyVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [deltaX, setDeltaX] = useState(50)
 
   useEffect(() => {
@@ -799,40 +708,20 @@ function UncertaintyVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
       bgGradient = null
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
 
-<<<<<<< HEAD
-=======
-    const width = canvas.offsetWidth
-    const height = canvas.offsetHeight
-    const centerX = width / 2
-    const centerY = height / 2
-
-    // Calculate momentum uncertainty
-    const deltaP = (h_bar / 2) / (deltaX * 1e-10) // Convert to meters
-    const deltaP_normalized = Math.min(deltaP / 1e-24, 100)
-
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     let time = 0
 
     const animate = () => {
       time += 0.02
-<<<<<<< HEAD
       const width = canvas.offsetWidth
       const height = canvas.offsetHeight
       const centerX = width / 2
@@ -846,12 +735,6 @@ function UncertaintyVisualization() {
         bgGradient.addColorStop(1, '#151520')
       }
       ctx.fillStyle = bgGradient
-=======
-      ctx.clearRect(0, 0, width, height)
-
-      // Background
-      ctx.fillStyle = '#0a0a15'
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       ctx.fillRect(0, 0, width, height)
 
       // Position wave function (Gaussian)
@@ -950,22 +833,14 @@ function UncertaintyVisualization() {
       ctx.fillStyle = '#F472B6'
       ctx.fillText(`Δp ≥ ${deltaP.toExponential(1)} кг·м/с`, width * 0.75, centerY + 80)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [deltaX])
 
@@ -983,7 +858,7 @@ function UncertaintyVisualization() {
           <span className="text-blue-400">Неопределённость позиции Δx</span>
           <span className="text-white font-mono">{deltaX * 1e-10} Å = {(deltaX * 1e-2).toFixed(1)} нм</span>
         </div>
-        <Slider value={[deltaX]} onValueChange={(v) => setDeltaX(v[0])} min={5} max={100} step={1} />
+        <Slider value={[deltaX]} onValueChange={(v) => { setDeltaX(v[0]); }} min={5} max={100} step={1} />
       </div>
 
       <div className="grid grid-cols-2 gap-2 text-xs">
@@ -1013,10 +888,6 @@ function UncertaintyVisualization() {
 // Quantum Tunneling
 function TunnelingVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [barrierHeight, setBarrierHeight] = useState(50)
   const [barrierWidth, setBarrierWidth] = useState(30)
   const [energy, setEnergy] = useState(30)
@@ -1027,34 +898,20 @@ function TunnelingVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
       bgGradient = null
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
 
-<<<<<<< HEAD
-=======
-    const width = canvas.offsetWidth
-    const height = canvas.offsetHeight
-
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     let time = 0
 
     const animate = () => {
       time += 0.015
-<<<<<<< HEAD
       const width = canvas.offsetWidth
       const height = canvas.offsetHeight
       ctx.clearRect(0, 0, width, height)
@@ -1066,12 +923,6 @@ function TunnelingVisualization() {
         bgGradient.addColorStop(1, '#0a0a18')
       }
       ctx.fillStyle = bgGradient
-=======
-      ctx.clearRect(0, 0, width, height)
-
-      // Background
-      ctx.fillStyle = '#050510'
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       ctx.fillRect(0, 0, width, height)
 
       const baseY = height * 0.6
@@ -1178,22 +1029,14 @@ function TunnelingVisualization() {
       ctx.fillStyle = '#4ADE80'
       ctx.fillText('Прошедшая волна', width - 100, baseY + 20)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [barrierHeight, barrierWidth, energy])
 
@@ -1210,21 +1053,21 @@ function TunnelingVisualization() {
             <span className="text-yellow-400">E</span>
             <span className="text-white font-mono">{energy}%</span>
           </div>
-          <Slider value={[energy]} onValueChange={(v) => setEnergy(v[0])} min={10} max={100} step={1} />
+          <Slider value={[energy]} onValueChange={(v) => { setEnergy(v[0]); }} min={10} max={100} step={1} />
         </div>
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className="text-red-400">V₀</span>
             <span className="text-white font-mono">{barrierHeight}%</span>
           </div>
-          <Slider value={[barrierHeight]} onValueChange={(v) => setBarrierHeight(v[0])} min={20} max={100} step={1} />
+          <Slider value={[barrierHeight]} onValueChange={(v) => { setBarrierHeight(v[0]); }} min={20} max={100} step={1} />
         </div>
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className="text-orange-400">Ширина</span>
             <span className="text-white font-mono">{barrierWidth}%</span>
           </div>
-          <Slider value={[barrierWidth]} onValueChange={(v) => setBarrierWidth(v[0])} min={10} max={80} step={1} />
+          <Slider value={[barrierWidth]} onValueChange={(v) => { setBarrierWidth(v[0]); }} min={10} max={80} step={1} />
         </div>
       </div>
 
@@ -1244,10 +1087,6 @@ function TunnelingVisualization() {
 // Time Dilation
 function TimeDilationVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [velocity, setVelocity] = useState(0.5) // fraction of c
 
   useEffect(() => {
@@ -1256,39 +1095,23 @@ function TimeDilationVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
       bgGradient = null
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
 
-<<<<<<< HEAD
     let time = 0
     let bgGradient: CanvasGradient | null = null
-=======
-    const width = canvas.offsetWidth
-    const height = canvas.offsetHeight
-    const centerX = width / 2
-
-    let time = 0
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
 
     // Lorentz factor
     const gamma = 1 / Math.sqrt(1 - velocity * velocity)
 
     const animate = () => {
       time += 0.016
-<<<<<<< HEAD
       const width = canvas.offsetWidth
       const height = canvas.offsetHeight
       const centerX = width / 2
@@ -1300,14 +1123,6 @@ function TimeDilationVisualization() {
         bgGradient.addColorStop(0, '#0a0515')
         bgGradient.addColorStop(1, '#150a20')
       }
-=======
-      ctx.clearRect(0, 0, width, height)
-
-      // Background
-      const bgGradient = ctx.createLinearGradient(0, 0, width, height)
-      bgGradient.addColorStop(0, '#0a0515')
-      bgGradient.addColorStop(1, '#150a20')
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
 
@@ -1427,22 +1242,14 @@ function TimeDilationVisualization() {
       ctx.stroke()
       ctx.setLineDash([])
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [velocity])
 
@@ -1460,7 +1267,7 @@ function TimeDilationVisualization() {
           <span className="text-orange-400">Скорость v/c</span>
           <span className="text-white font-mono">{(velocity * 100).toFixed(0)}% скорости света</span>
         </div>
-        <Slider value={[velocity * 100]} onValueChange={(v) => setVelocity(v[0] / 100)} min={0} max={99} step={1} />
+        <Slider value={[velocity * 100]} onValueChange={(v) => { setVelocity(v[0] / 100); }} min={0} max={99} step={1} />
       </div>
 
       <div className="grid grid-cols-3 gap-2 text-xs text-center">
@@ -1548,10 +1355,10 @@ function LengthContractionVisualization() {
           <span className="text-orange-400">Скорость</span>
           <span className="text-white font-mono">{(velocity * 100).toFixed(0)}% c</span>
         </div>
-        <Slider value={[velocity * 100]} onValueChange={(v) => setVelocity(v[0] / 100)} min={0} max={99} step={1} />
+        <Slider value={[velocity * 100]} onValueChange={(v) => { setVelocity(v[0] / 100); }} min={0} max={99} step={1} />
       </div>
 
-      <Button onClick={() => setShowGrid(!showGrid)} variant="outline" size="sm" className="w-full text-xs">
+      <Button onClick={() => { setShowGrid(!showGrid); }} variant="outline" size="sm" className="w-full text-xs">
         {showGrid ? '🔲 Скрыть сетку' : '🔲 Показать сетку'}
       </Button>
 
@@ -1622,7 +1429,7 @@ function MassEnergyVisualization() {
         </div>
         <Slider 
           value={[Math.log10(massKg) + 6]} 
-          onValueChange={(v) => setMassKg(Math.pow(10, v[0] - 6))} 
+          onValueChange={(v) => { setMassKg(Math.pow(10, v[0] - 6)); }} 
           min={-3} 
           max={21} 
           step={0.5} 
@@ -1661,11 +1468,7 @@ function MassEnergyVisualization() {
 // Hertzsprung-Russell Diagram
 function HRDiagramVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
   const [selectedStar, setSelectedStar] = useState<{name: string, temp: number, luminosity: number, type: string, color: string, size: number} | null>(null)
-=======
-  const [selectedStar, setSelectedStar] = useState<{name: string, temp: number, luminosity: number, type: string} | null>(null)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
 
   const stars = [
     { name: 'Солнце', temp: 5778, luminosity: 1, type: 'G2V', color: '#FFF4E0', size: 4 },
@@ -1684,7 +1487,6 @@ function HRDiagramVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
@@ -1768,7 +1570,7 @@ function HRDiagramVisualization() {
       ctx.fillText('10⁻⁴', padding.left - 5, height - padding.bottom - 5)
 
       // Draw stars - cache gradients
-      const starGradients: Map<string, CanvasGradient> = new Map()
+      const starGradients = new Map<string, CanvasGradient>()
       stars.forEach((star) => {
         // Temperature to x (log scale, reversed)
         const logTemp = Math.log10(star.temp)
@@ -1819,134 +1621,6 @@ function HRDiagramVisualization() {
     resize()
     window.addEventListener('resize', resize)
 
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
-    }
-    resize()
-    window.addEventListener('resize', resize)
-
-    const width = canvas.offsetWidth
-    const height = canvas.offsetHeight
-    const padding = { left: 50, right: 20, top: 20, bottom: 40 }
-
-    const plotWidth = width - padding.left - padding.right
-    const plotHeight = height - padding.top - padding.bottom
-
-    // Clear
-    ctx.fillStyle = '#050510'
-    ctx.fillRect(0, 0, width, height)
-
-    // Grid
-    ctx.strokeStyle = 'rgba(100, 100, 150, 0.1)'
-    ctx.lineWidth = 0.5
-    for (let i = 0; i <= 10; i++) {
-      const x = padding.left + (i / 10) * plotWidth
-      const y = padding.top + (i / 10) * plotHeight
-      ctx.beginPath()
-      ctx.moveTo(x, padding.top)
-      ctx.lineTo(x, height - padding.bottom)
-      ctx.stroke()
-      ctx.beginPath()
-      ctx.moveTo(padding.left, y)
-      ctx.lineTo(width - padding.right, y)
-      ctx.stroke()
-    }
-
-    // Main sequence band
-    ctx.fillStyle = 'rgba(100, 150, 255, 0.1)'
-    ctx.beginPath()
-    ctx.moveTo(padding.left, padding.top + plotHeight * 0.8)
-    ctx.quadraticCurveTo(padding.left + plotWidth * 0.5, padding.top + plotHeight * 0.4, width - padding.right, padding.top + plotHeight * 0.2)
-    ctx.lineTo(width - padding.right, padding.top + plotHeight * 0.4)
-    ctx.quadraticCurveTo(padding.left + plotWidth * 0.5, padding.top + plotHeight * 0.6, padding.left, padding.top + plotHeight * 0.95)
-    ctx.closePath()
-    ctx.fill()
-
-    // Regions labels
-    ctx.font = '9px sans-serif'
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
-    ctx.textAlign = 'center'
-    ctx.fillText('Главная', padding.left + plotWidth * 0.3, padding.top + plotHeight * 0.55)
-    ctx.fillText('последовательность', padding.left + plotWidth * 0.3, padding.top + plotHeight * 0.65)
-    
-    ctx.fillText('Гиганты', padding.left + plotWidth * 0.2, padding.top + plotHeight * 0.2)
-    ctx.fillText('Сверхгиганты', padding.left + plotWidth * 0.15, padding.top + plotHeight * 0.08)
-    ctx.fillText('Белые карлики', padding.left + plotWidth * 0.85, padding.top + plotHeight * 0.85)
-
-    // Axes labels
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'
-    ctx.font = '10px sans-serif'
-    
-    // Temperature (reversed)
-    ctx.textAlign = 'center'
-    ctx.fillText('Температура (K)', width / 2, height - 8)
-    ctx.font = '8px sans-serif'
-    ctx.fillText('40000', padding.left + 15, height - 25)
-    ctx.fillText('10000', padding.left + plotWidth * 0.5, height - 25)
-    ctx.fillText('3000', width - padding.right - 15, height - 25)
-
-    // Luminosity
-    ctx.save()
-    ctx.translate(12, height / 2)
-    ctx.rotate(-Math.PI / 2)
-    ctx.font = '10px sans-serif'
-    ctx.textAlign = 'center'
-    ctx.fillText('Светимость (L☉)', 0, 0)
-    ctx.restore()
-
-    ctx.font = '8px sans-serif'
-    ctx.textAlign = 'right'
-    ctx.fillText('10⁶', padding.left - 5, padding.top + 15)
-    ctx.fillText('1', padding.left - 5, padding.top + plotHeight * 0.5)
-    ctx.fillText('10⁻⁴', padding.left - 5, height - padding.bottom - 5)
-
-    // Draw stars
-    stars.forEach((star) => {
-      // Temperature to x (log scale, reversed)
-      const logTemp = Math.log10(star.temp)
-      const x = padding.left + plotWidth * (1 - (logTemp - 3.5) / 1.6)
-      
-      // Luminosity to y (log scale)
-      const logLum = Math.log10(star.luminosity)
-      const y = padding.top + plotHeight * (1 - (logLum + 4) / 10)
-
-      // Glow
-      const gradient = ctx.createRadialGradient(x, y, 0, x, y, star.size * 3)
-      gradient.addColorStop(0, star.color)
-      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
-      ctx.fillStyle = gradient
-      ctx.beginPath()
-      ctx.arc(x, y, star.size * 3, 0, Math.PI * 2)
-      ctx.fill()
-
-      // Star
-      ctx.beginPath()
-      ctx.arc(x, y, star.size, 0, Math.PI * 2)
-      ctx.fillStyle = star.color
-      ctx.fill()
-    })
-
-    // Sun marker with label
-    const sunLogTemp = Math.log10(5778)
-    const sunX = padding.left + plotWidth * (1 - (sunLogTemp - 3.5) / 1.6)
-    const sunLogLum = Math.log10(1)
-    const sunY = padding.top + plotHeight * (1 - (sunLogLum + 4) / 10)
-    
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
-    ctx.lineWidth = 1
-    ctx.beginPath()
-    ctx.arc(sunX, sunY, 12, 0, Math.PI * 2)
-    ctx.stroke()
-    
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'
-    ctx.font = '9px sans-serif'
-    ctx.textAlign = 'left'
-    ctx.fillText('☉ Солнце', sunX + 15, sunY + 3)
-
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     return () => {
       window.removeEventListener('resize', resize)
     }
@@ -1964,7 +1638,7 @@ function HRDiagramVisualization() {
           <div 
             key={star.name} 
             className="bg-gray-800/50 rounded p-1.5 text-center cursor-pointer hover:bg-gray-700/50 transition-colors"
-            onClick={() => setSelectedStar(star)}
+            onClick={() => { setSelectedStar(star); }}
           >
             <div className="font-semibold" style={{ color: star.color }}>{star.name}</div>
             <div className="text-gray-500">{star.type}</div>
@@ -2002,10 +1676,6 @@ function HRDiagramVisualization() {
 // Neutron Star Visualization
 function NeutronStarVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [rotationPeriod, setRotationPeriod] = useState(33) // milliseconds
   const [magneticTilt, setMagneticTilt] = useState(45)
 
@@ -2015,17 +1685,10 @@ function NeutronStarVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2171,22 +1834,14 @@ function NeutronStarVisualization() {
       ctx.fillText(`P = ${rotationPeriod} мс`, centerX, canvas.offsetHeight - 15)
       ctx.fillText(`f = ${(1000 / rotationPeriod).toFixed(1)} Гц`, centerX, canvas.offsetHeight - 3)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [rotationPeriod, magneticTilt])
 
@@ -2203,14 +1858,14 @@ function NeutronStarVisualization() {
             <span className="text-cyan-400">Период</span>
             <span className="text-white font-mono">{rotationPeriod} мс</span>
           </div>
-          <Slider value={[rotationPeriod]} onValueChange={(v) => setRotationPeriod(v[0])} min={1} max={100} step={1} />
+          <Slider value={[rotationPeriod]} onValueChange={(v) => { setRotationPeriod(v[0]); }} min={1} max={100} step={1} />
         </div>
         <div className="space-y-1">
           <div className="flex justify-between text-xs">
             <span className="text-blue-400">Наклон оси</span>
             <span className="text-white font-mono">{magneticTilt}°</span>
           </div>
-          <Slider value={[magneticTilt]} onValueChange={(v) => setMagneticTilt(v[0])} min={0} max={90} step={1} />
+          <Slider value={[magneticTilt]} onValueChange={(v) => { setMagneticTilt(v[0]); }} min={0} max={90} step={1} />
         </div>
       </div>
 
@@ -2238,10 +1893,6 @@ function NeutronStarVisualization() {
 // ==================== DOUBLE-SLIT EXPERIMENT ====================
 function DoubleSlitVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [slitSeparation, setSlitSeparation] = useState(40)
   const [slitWidth, setSlitWidth] = useState(8)
   const [wavelength, setWavelength] = useState(15)
@@ -2255,19 +1906,12 @@ function DoubleSlitVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
       bgGradient = null
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2285,7 +1929,6 @@ function DoubleSlitVisualization() {
       time += 0.016
       ctx.clearRect(0, 0, width, height)
 
-<<<<<<< HEAD
       // Background - cached gradient
       if (!bgGradient) {
         bgGradient = ctx.createLinearGradient(0, 0, width, height)
@@ -2293,10 +1936,6 @@ function DoubleSlitVisualization() {
         bgGradient.addColorStop(1, '#0a0a1a')
       }
       ctx.fillStyle = bgGradient
-=======
-      // Background
-      ctx.fillStyle = '#050510'
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       ctx.fillRect(0, 0, width, height)
 
       // Wave visualization from source
@@ -2447,22 +2086,14 @@ function DoubleSlitVisualization() {
       ctx.fillText('λ = ' + wavelength + ' (длина волны)', 10, height - 22)
       ctx.fillText('a = ' + slitWidth + ' (ширина щели)', 10, height - 9)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [slitSeparation, slitWidth, wavelength, showParticles, showWave])
 
@@ -2479,21 +2110,21 @@ function DoubleSlitVisualization() {
             <span className="text-blue-400">d (щели)</span>
             <span className="text-white font-mono">{slitSeparation}</span>
           </div>
-          <Slider value={[slitSeparation]} onValueChange={(v) => setSlitSeparation(v[0])} min={15} max={80} step={1} />
+          <Slider value={[slitSeparation]} onValueChange={(v) => { setSlitSeparation(v[0]); }} min={15} max={80} step={1} />
         </div>
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className="text-green-400">λ (волна)</span>
             <span className="text-white font-mono">{wavelength}</span>
           </div>
-          <Slider value={[wavelength]} onValueChange={(v) => setWavelength(v[0])} min={5} max={30} step={1} />
+          <Slider value={[wavelength]} onValueChange={(v) => { setWavelength(v[0]); }} min={5} max={30} step={1} />
         </div>
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className="text-yellow-400">a (ширина)</span>
             <span className="text-white font-mono">{slitWidth}</span>
           </div>
-          <Slider value={[slitWidth]} onValueChange={(v) => setSlitWidth(v[0])} min={3} max={20} step={1} />
+          <Slider value={[slitWidth]} onValueChange={(v) => { setSlitWidth(v[0]); }} min={3} max={20} step={1} />
         </div>
       </div>
 
@@ -2529,10 +2160,6 @@ function DoubleSlitVisualization() {
 // ==================== DARK MATTER VISUALIZATION ====================
 function DarkMatterVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [darkMatterFraction, setDarkMatterFraction] = useState(85)
   const [showDarkMatter, setShowDarkMatter] = useState(true)
 
@@ -2542,19 +2169,12 @@ function DarkMatterVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
       bgGradient = null
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2600,19 +2220,12 @@ function DarkMatterVisualization() {
       time += 0.016
       ctx.clearRect(0, 0, width, height)
 
-<<<<<<< HEAD
       // Background - cached gradient
       if (!bgGradient) {
         bgGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 120)
         bgGradient.addColorStop(0, '#0a0520')
         bgGradient.addColorStop(1, '#050510')
       }
-=======
-      // Background
-      const bgGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 120)
-      bgGradient.addColorStop(0, '#0a0520')
-      bgGradient.addColorStop(1, '#050510')
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
 
@@ -2736,22 +2349,14 @@ function DarkMatterVisualization() {
       ctx.fillStyle = 'rgba(100, 200, 255, 0.8)'
       ctx.fillText('С тёмной материей', graphX + graphW - 80, graphY + 20)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [darkMatterFraction, showDarkMatter])
 
@@ -2767,12 +2372,12 @@ function DarkMatterVisualization() {
           <span className="text-purple-400">Доля тёмной материи</span>
           <span className="text-white font-mono">{darkMatterFraction}%</span>
         </div>
-        <Slider value={[darkMatterFraction]} onValueChange={(v) => setDarkMatterFraction(v[0])} min={0} max={95} step={5} />
+        <Slider value={[darkMatterFraction]} onValueChange={(v) => { setDarkMatterFraction(v[0]); }} min={0} max={95} step={5} />
       </div>
 
       <div className="flex gap-2">
         <Button 
-          onClick={() => setShowDarkMatter(!showDarkMatter)} 
+          onClick={() => { setShowDarkMatter(!showDarkMatter); }} 
           variant="outline"
           size="sm"
           className="flex-1 text-xs border-purple-500/50 text-purple-300"
@@ -2807,10 +2412,6 @@ function DarkMatterVisualization() {
 // ==================== BLACK HOLE (ENHANCED) ====================
 function BlackHoleVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [massSolar, setMassSolar] = useState(10)
 
   const mass = massSolar * M_SUN
@@ -2824,19 +2425,12 @@ function BlackHoleVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
       bgGradient = null
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2878,7 +2472,6 @@ function BlackHoleVisualization() {
       time += 0.016
       ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight)
 
-<<<<<<< HEAD
       // Background - cached gradient
       if (!bgGradient) {
         bgGradient = ctx.createLinearGradient(0, 0, canvas.offsetWidth, canvas.offsetHeight)
@@ -2886,9 +2479,6 @@ function BlackHoleVisualization() {
         bgGradient.addColorStop(1, '#0a0a10')
       }
       ctx.fillStyle = bgGradient
-=======
-      ctx.fillStyle = '#000002'
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight)
 
       // Stars with lensing
@@ -3070,22 +2660,14 @@ function BlackHoleVisualization() {
       })
       ctx.restore()
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [massSolar])
 
@@ -3098,7 +2680,7 @@ function BlackHoleVisualization() {
           <span className="text-orange-400">Масса</span>
           <span className="text-white font-mono">{massSolar} M☉</span>
         </div>
-        <Slider value={[massSolar]} onValueChange={(v) => setMassSolar(v[0])} min={1} max={100} step={1} />
+        <Slider value={[massSolar]} onValueChange={(v) => { setMassSolar(v[0]); }} min={1} max={100} step={1} />
       </div>
 
       <div className="grid grid-cols-2 gap-2 text-xs">
@@ -3150,10 +2732,6 @@ function BlackHoleVisualization() {
 // ==================== WHITE HOLE ====================
 function WhiteHoleVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [massSolar, setMassSolar] = useState(10)
 
   useEffect(() => {
@@ -3162,17 +2740,10 @@ function WhiteHoleVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -3310,22 +2881,14 @@ function WhiteHoleVisualization() {
       ctx.textAlign = 'center'
       ctx.fillText('Белая дыра', centerX, canvas.offsetHeight - 15)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [massSolar])
 
@@ -3338,7 +2901,7 @@ function WhiteHoleVisualization() {
           <span className="text-cyan-400">Масса</span>
           <span className="text-white font-mono">{massSolar} M☉</span>
         </div>
-        <Slider value={[massSolar]} onValueChange={(v) => setMassSolar(v[0])} min={1} max={50} step={1} />
+        <Slider value={[massSolar]} onValueChange={(v) => { setMassSolar(v[0]); }} min={1} max={50} step={1} />
       </div>
 
       <div className="bg-cyan-900/20 rounded-lg p-2 border border-cyan-500/20 text-xs">
@@ -3375,10 +2938,6 @@ function WhiteHoleVisualization() {
 // ==================== SCHRÖDINGER'S CAT ====================
 function SchrodingersCatVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [observationCount, setObservationCount] = useState(0)
   const [catState, setCatState] = useState<'alive' | 'dead' | 'superposition'>('superposition')
   const [isObserving, setIsObserving] = useState(false)
@@ -3389,17 +2948,10 @@ function SchrodingersCatVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -3573,22 +3125,14 @@ function SchrodingersCatVisualization() {
       }
       ctx.stroke()
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [catState, isObserving])
 
@@ -3654,10 +3198,6 @@ function SchrodingersCatVisualization() {
 // ==================== BIG BANG ====================
 function BigBangVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [expansionSpeed, setExpansionSpeed] = useState(50)
   const [timeScale, setTimeScale] = useState(0)
   const [isPlaying, setIsPlaying] = useState(true)
@@ -3668,17 +3208,10 @@ function BigBangVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -3813,22 +3346,14 @@ function BigBangVisualization() {
       ctx.fillStyle = 'rgba(100, 200, 255, 0.8)'
       ctx.fillText(`a(t) = ${expansionFactor.toFixed(2)}`, 10, height - 10)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [expansionSpeed, timeScale, isPlaying])
 
@@ -3837,7 +3362,7 @@ function BigBangVisualization() {
     const interval = setInterval(() => {
       setTimeScale(t => Math.min(100, t + 0.5))
     }, 50)
-    return () => clearInterval(interval)
+    return () => { clearInterval(interval); }
   }, [isPlaying])
 
   return (
@@ -3850,22 +3375,22 @@ function BigBangVisualization() {
             <span className="text-cyan-400">Скорость расширения</span>
             <span className="text-white font-mono">{expansionSpeed}%</span>
           </div>
-          <Slider value={[expansionSpeed]} onValueChange={(v) => setExpansionSpeed(v[0])} min={10} max={100} step={5} />
+          <Slider value={[expansionSpeed]} onValueChange={(v) => { setExpansionSpeed(v[0]); }} min={10} max={100} step={5} />
         </div>
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className="text-yellow-400">Время</span>
             <span className="text-white font-mono">{timeScale.toFixed(0)}%</span>
           </div>
-          <Slider value={[timeScale]} onValueChange={(v) => setTimeScale(v[0])} min={0} max={100} step={1} />
+          <Slider value={[timeScale]} onValueChange={(v) => { setTimeScale(v[0]); }} min={0} max={100} step={1} />
         </div>
       </div>
 
       <div className="flex gap-2">
-        <Button onClick={() => setIsPlaying(!isPlaying)} variant="outline" size="sm" className="flex-1">
+        <Button onClick={() => { setIsPlaying(!isPlaying); }} variant="outline" size="sm" className="flex-1">
           {isPlaying ? '⏸️ Пауза' : '▶️ Играть'}
         </Button>
-        <Button onClick={() => setTimeScale(0)} variant="outline" size="sm" className="flex-1">
+        <Button onClick={() => { setTimeScale(0); }} variant="outline" size="sm" className="flex-1">
           🔄 Сначала
         </Button>
       </div>
@@ -3884,10 +3409,6 @@ function BigBangVisualization() {
 // ==================== PHOTOELECTRIC EFFECT ====================
 function PhotoelectricEffectVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [frequency, setFrequency] = useState(50) // as % of threshold
   const [intensity, setIntensity] = useState(50)
   const [workFunction, setWorkFunction] = useState(2.5) // eV
@@ -3898,17 +3419,10 @@ function PhotoelectricEffectVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -3998,8 +3512,8 @@ function PhotoelectricEffectVisualization() {
         // Draw photon as wave packet
         const wavelength = 30 - (frequency / 100) * 20
         ctx.strokeStyle = frequency > 50 
-          ? `rgba(150, 50, 255, ${0.8})` // UV
-          : `rgba(255, 200, 50, ${0.8})` // Visible
+          ? `rgba(150, 50, 255, 0.8)` // UV
+          : `rgba(255, 200, 50, 0.8)` // Visible
         ctx.lineWidth = 2
         ctx.beginPath()
         for (let dx = -15; dx <= 15; dx++) {
@@ -4106,22 +3620,14 @@ function PhotoelectricEffectVisualization() {
         ctx.fillText(`Eкин = ${(kineticEnergy * 1.6e-19).toExponential(1)} Дж`, 10, 35)
       }
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [frequency, intensity, workFunction])
 
@@ -4135,21 +3641,21 @@ function PhotoelectricEffectVisualization() {
             <span className="text-purple-400">Частота ν</span>
             <span className="text-white font-mono">{(frequency * 0.8 + 400).toFixed(0)} ТГц</span>
           </div>
-          <Slider value={[frequency]} onValueChange={(v) => setFrequency(v[0])} min={10} max={100} step={1} />
+          <Slider value={[frequency]} onValueChange={(v) => { setFrequency(v[0]); }} min={10} max={100} step={1} />
         </div>
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className="text-yellow-400">Интенсивность</span>
             <span className="text-white font-mono">{intensity}%</span>
           </div>
-          <Slider value={[intensity]} onValueChange={(v) => setIntensity(v[0])} min={10} max={100} step={5} />
+          <Slider value={[intensity]} onValueChange={(v) => { setIntensity(v[0]); }} min={10} max={100} step={5} />
         </div>
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className="text-orange-400">Работа выхода</span>
             <span className="text-white font-mono">{workFunction} эВ</span>
           </div>
-          <Slider value={[workFunction * 10]} onValueChange={(v) => setWorkFunction(v[0] / 10)} min={10} max={50} step={1} />
+          <Slider value={[workFunction * 10]} onValueChange={(v) => { setWorkFunction(v[0] / 10); }} min={10} max={50} step={1} />
         </div>
       </div>
 
@@ -4178,10 +3684,6 @@ function PhotoelectricEffectVisualization() {
 // ==================== BROWNIAN MOTION ====================
 function BrownianMotionVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [particleCount, setParticleCount] = useState(5)
   const [temperature, setTemperature] = useState(300) // Kelvin
   const [showTrails, setShowTrails] = useState(true)
@@ -4192,17 +3694,10 @@ function BrownianMotionVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4346,22 +3841,14 @@ function BrownianMotionVisualization() {
       ctx.fillText('H₂O молекулы: 200', 10, height - 20)
       ctx.fillText(`Частицы: ${particleCount}`, 10, height - 8)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [particleCount, temperature, showTrails])
 
@@ -4375,18 +3862,18 @@ function BrownianMotionVisualization() {
             <span className="text-orange-400">Температура</span>
             <span className="text-white font-mono">{temperature} K</span>
           </div>
-          <Slider value={[temperature]} onValueChange={(v) => setTemperature(v[0])} min={100} max={1000} step={50} />
+          <Slider value={[temperature]} onValueChange={(v) => { setTemperature(v[0]); }} min={100} max={1000} step={50} />
         </div>
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className="text-cyan-400">Частицы</span>
             <span className="text-white font-mono">{particleCount}</span>
           </div>
-          <Slider value={[particleCount]} onValueChange={(v) => setParticleCount(v[0])} min={1} max={15} step={1} />
+          <Slider value={[particleCount]} onValueChange={(v) => { setParticleCount(v[0]); }} min={1} max={15} step={1} />
         </div>
       </div>
 
-      <Button onClick={() => setShowTrails(!showTrails)} variant="outline" size="sm" className="w-full text-xs">
+      <Button onClick={() => { setShowTrails(!showTrails); }} variant="outline" size="sm" className="w-full text-xs">
         {showTrails ? '🔄 Скрыть следы' : '🔄 Показать следы'}
       </Button>
 
@@ -4415,10 +3902,6 @@ function BrownianMotionVisualization() {
 // ==================== GRAVITATIONAL WAVES ====================
 function GravitationalWavesVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [mass1, setMass1] = useState(30) // Solar masses
   const [mass2, setMass2] = useState(30)
   const [distance, setDistance] = useState(50)
@@ -4431,17 +3914,10 @@ function GravitationalWavesVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4592,22 +4068,14 @@ function GravitationalWavesVisualization() {
       ctx.fillStyle = 'rgba(100, 200, 255, 0.8)'
       ctx.fillText(`f ≈ ${freq.toFixed(1)} Гц`, 10, height - 15)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [mass1, mass2, distance, isPlaying, timeScale])
 
@@ -4621,25 +4089,25 @@ function GravitationalWavesVisualization() {
             <span className="text-orange-400">M₁</span>
             <span className="text-white font-mono">{mass1} M☉</span>
           </div>
-          <Slider value={[mass1]} onValueChange={(v) => setMass1(v[0])} min={5} max={50} step={1} />
+          <Slider value={[mass1]} onValueChange={(v) => { setMass1(v[0]); }} min={5} max={50} step={1} />
         </div>
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className="text-blue-400">M₂</span>
             <span className="text-white font-mono">{mass2} M☉</span>
           </div>
-          <Slider value={[mass2]} onValueChange={(v) => setMass2(v[0])} min={5} max={50} step={1} />
+          <Slider value={[mass2]} onValueChange={(v) => { setMass2(v[0]); }} min={5} max={50} step={1} />
         </div>
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className="text-green-400">Расст.</span>
             <span className="text-white font-mono">{distance} км</span>
           </div>
-          <Slider value={[distance]} onValueChange={(v) => setDistance(v[0])} min={20} max={100} step={5} />
+          <Slider value={[distance]} onValueChange={(v) => { setDistance(v[0]); }} min={20} max={100} step={5} />
         </div>
       </div>
 
-      <Button onClick={() => setIsPlaying(!isPlaying)} variant="outline" size="sm" className="w-full text-xs">
+      <Button onClick={() => { setIsPlaying(!isPlaying); }} variant="outline" size="sm" className="w-full text-xs">
         {isPlaying ? '⏸️ Пауза' : '▶️ Играть'}
       </Button>
 
@@ -4668,10 +4136,6 @@ function GravitationalWavesVisualization() {
 // ==================== QUANTUM ENTANGLEMENT ====================
 function QuantumEntanglementVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [entanglementStrength, setEntanglementStrength] = useState(80)
   const [measuredParticle, setMeasuredParticle] = useState<'left' | 'right' | null>(null)
   const [leftState, setLeftState] = useState<'superposition' | 'up' | 'down'>('superposition')
@@ -4683,17 +4147,10 @@ function QuantumEntanglementVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4851,22 +4308,14 @@ function QuantumEntanglementVisualization() {
       ctx.font = '11px monospace'
       ctx.fillText('|Ψ⟩ = (|↑↑⟩ + |↓↓⟩) / √2', width / 2, height - 15)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [entanglementStrength, leftState, rightState, measuredParticle])
 
@@ -4899,7 +4348,7 @@ function QuantumEntanglementVisualization() {
           <span className="text-purple-400">Сила запутанности</span>
           <span className="text-white font-mono">{entanglementStrength}%</span>
         </div>
-        <Slider value={[entanglementStrength]} onValueChange={(v) => setEntanglementStrength(v[0])} min={0} max={100} step={5} />
+        <Slider value={[entanglementStrength]} onValueChange={(v) => { setEntanglementStrength(v[0]); }} min={0} max={100} step={5} />
       </div>
 
       <div className="flex gap-2">
@@ -4938,10 +4387,6 @@ function QuantumEntanglementVisualization() {
 // ==================== BOHR ATOMIC MODEL ====================
 function AtomicModelVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [element, setElement] = useState<'H' | 'He' | 'Li' | 'C' | 'Na'>('H')
   const [showTransitions, setShowTransitions] = useState(true)
   const [selectedTransition, setSelectedTransition] = useState<{from: number, to: number} | null>(null)
@@ -4963,17 +4408,10 @@ function AtomicModelVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -5157,28 +4595,20 @@ function AtomicModelVisualization() {
       ctx.textAlign = 'center'
       ctx.fillText('E_n = -13.6 eV / n²', width / 2, height - 15)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [element, showTransitions, selectedTransition, currentElement])
 
   const triggerTransition = (from: number, to: number) => {
     setSelectedTransition({ from, to })
-    setTimeout(() => setSelectedTransition(null), 3000)
+    setTimeout(() => { setSelectedTransition(null); }, 3000)
   }
 
   return (
@@ -5189,7 +4619,7 @@ function AtomicModelVisualization() {
         {Object.keys(elements).map((el) => (
           <Button
             key={el}
-            onClick={() => setElement(el as 'H' | 'He' | 'Li' | 'C' | 'Na')}
+            onClick={() => { setElement(el as 'H' | 'He' | 'Li' | 'C' | 'Na'); }}
             variant={element === el ? 'default' : 'outline'}
             size="sm"
             className={`text-xs ${element === el ? 'bg-purple-600' : ''}`}
@@ -5202,7 +4632,7 @@ function AtomicModelVisualization() {
       {showTransitions && currentElement.shells.length > 1 && (
         <div className="flex gap-2">
           <Button 
-            onClick={() => triggerTransition(1, 2)}
+            onClick={() => { triggerTransition(1, 2); }}
             variant="outline"
             size="sm"
             className="text-xs text-yellow-400 border-yellow-500/50"
@@ -5210,7 +4640,7 @@ function AtomicModelVisualization() {
             ↑ Возбуждение
           </Button>
           <Button 
-            onClick={() => triggerTransition(2, 1)}
+            onClick={() => { triggerTransition(2, 1); }}
             variant="outline"
             size="sm"
             className="text-xs text-red-400 border-red-500/50"
@@ -5234,10 +4664,6 @@ function AtomicModelVisualization() {
 // ==================== RADIOACTIVE DECAY ====================
 function RadioactiveDecayVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [decayType, setDecayType] = useState<'alpha' | 'beta' | 'gamma'>('alpha')
   const [halfLife, setHalfLife] = useState(50)
   const [atomCount, setAtomCount] = useState(100)
@@ -5251,17 +4677,10 @@ function RadioactiveDecayVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -5462,22 +4881,14 @@ function RadioactiveDecayVisualization() {
       ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
       ctx.fillText(decayLabel, 10, height - 15)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [decayType, halfLife, atomCount, isPlaying])
 
@@ -5535,7 +4946,7 @@ function RadioactiveDecayVisualization() {
       </div>
 
       <div className="flex gap-2">
-        <Button onClick={() => setIsPlaying(!isPlaying)} variant="outline" size="sm" className="flex-1 text-xs">
+        <Button onClick={() => { setIsPlaying(!isPlaying); }} variant="outline" size="sm" className="flex-1 text-xs">
           {isPlaying ? '⏸️ Пауза' : '▶️ Играть'}
         </Button>
         <Button onClick={reset} variant="outline" size="sm" className="flex-1 text-xs">
@@ -5557,10 +4968,6 @@ function RadioactiveDecayVisualization() {
 // ==================== SUPERCONDUCTIVITY ====================
 function SuperconductivityVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [temperature, setTemperature] = useState(100) // Kelvin
   const [criticalTemp, setCriticalTemp] = useState(90) // Tc for YBCO
   const [showMagneticField, setShowMagneticField] = useState(true)
@@ -5572,7 +4979,6 @@ function SuperconductivityVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
     let lastIsSuperconducting = false
@@ -5580,12 +4986,6 @@ function SuperconductivityVisualization() {
     const resize = () => {
       setupCanvas(canvas, ctx)
       bgGradient = null
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -5597,28 +4997,19 @@ function SuperconductivityVisualization() {
     // Superconducting state
     const isSuperconducting = temperature < criticalTemp
     const targetHeight = isSuperconducting ? 40 : 0
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     let time = 0
     let currentHeight = levitationHeight
 
     const animate = () => {
       time += 0.03
-<<<<<<< HEAD
 
-=======
-      
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       // Smoothly animate levitation height
       currentHeight += (targetHeight - currentHeight) * 0.05
       setLevitationHeight(currentHeight)
 
       ctx.clearRect(0, 0, width, height)
 
-<<<<<<< HEAD
       // Background gradient - cached based on state
       if (!bgGradient || lastIsSuperconducting !== isSuperconducting) {
         bgGradient = ctx.createLinearGradient(0, 0, width, height)
@@ -5630,17 +5021,6 @@ function SuperconductivityVisualization() {
           bgGradient.addColorStop(1, '#402520')
         }
         lastIsSuperconducting = isSuperconducting
-=======
-      // Background gradient based on temperature
-      const tempRatio = temperature / 150
-      const bgGradient = ctx.createLinearGradient(0, 0, width, height)
-      if (isSuperconducting) {
-        bgGradient.addColorStop(0, '#0a1525')
-        bgGradient.addColorStop(1, '#152540')
-      } else {
-        bgGradient.addColorStop(0, '#251510')
-        bgGradient.addColorStop(1, '#402520')
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       }
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
@@ -5819,22 +5199,14 @@ function SuperconductivityVisualization() {
       ctx.textAlign = 'center'
       ctx.fillText('B = 0 внутри сверхпроводника (эффект Мейсснера)', centerX, height - 15)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [temperature, criticalTemp, showMagneticField, levitationHeight])
 
@@ -5850,20 +5222,20 @@ function SuperconductivityVisualization() {
             <span className="text-blue-400">Температура T (K)</span>
             <span className="text-white font-mono">{temperature} K</span>
           </div>
-          <Slider value={[temperature]} onValueChange={(v) => setTemperature(v[0])} min={4} max={150} step={1} />
+          <Slider value={[temperature]} onValueChange={(v) => { setTemperature(v[0]); }} min={4} max={150} step={1} />
         </div>
         <div className="space-y-1">
           <div className="flex justify-between text-xs">
             <span className="text-yellow-400">Критическая Tc (K)</span>
             <span className="text-white font-mono">{criticalTemp} K</span>
           </div>
-          <Slider value={[criticalTemp]} onValueChange={(v) => setCriticalTemp(v[0])} min={20} max={120} step={5} />
+          <Slider value={[criticalTemp]} onValueChange={(v) => { setCriticalTemp(v[0]); }} min={20} max={120} step={5} />
         </div>
       </div>
 
       <div className="flex gap-2">
         <Button 
-          onClick={() => setShowMagneticField(!showMagneticField)} 
+          onClick={() => { setShowMagneticField(!showMagneticField); }} 
           variant="outline"
           size="sm"
           className={`flex-1 text-xs ${showMagneticField ? 'border-blue-500/50 text-blue-300' : ''}`}
@@ -5900,10 +5272,6 @@ function SuperconductivityVisualization() {
 // ==================== STANDARD MODEL ====================
 function StandardModelVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [selectedParticle, setSelectedParticle] = useState<string | null>(null)
   const [showDecays, setShowDecays] = useState(false)
 
@@ -5926,19 +5294,11 @@ function StandardModelVisualization() {
       { name: 'ντ', fullName: 'Tau neutrino', mass: '< 18 MeV', charge: '0', color: '#F472B6', generation: 3 },
     ],
     bosons: [
-<<<<<<< HEAD
       { name: 'γ', fullName: 'Photon', mass: '0', charge: '0', color: '#FBBF24', spin: '1', generation: 0 },
       { name: 'g', fullName: 'Gluon', mass: '0', charge: '0', color: '#F59E0B', spin: '1', generation: 0 },
       { name: 'Z', fullName: 'Z boson', mass: '91.2 GeV', charge: '0', color: '#A855F7', spin: '1', generation: 0 },
       { name: 'W', fullName: 'W boson', mass: '80.4 GeV', charge: '±1', color: '#EF4444', spin: '1', generation: 0 },
       { name: 'H', fullName: 'Higgs', mass: '125 GeV', charge: '0', color: '#FFD700', spin: '0', generation: 0 },
-=======
-      { name: 'γ', fullName: 'Photon', mass: '0', charge: '0', color: '#FBBF24', spin: '1' },
-      { name: 'g', fullName: 'Gluon', mass: '0', charge: '0', color: '#F59E0B', spin: '1' },
-      { name: 'Z', fullName: 'Z boson', mass: '91.2 GeV', charge: '0', color: '#A855F7', spin: '1' },
-      { name: 'W', fullName: 'W boson', mass: '80.4 GeV', charge: '±1', color: '#EF4444', spin: '1' },
-      { name: 'H', fullName: 'Higgs', mass: '125 GeV', charge: '0', color: '#FFD700', spin: '0' },
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     ]
   }
 
@@ -5948,19 +5308,12 @@ function StandardModelVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
       bgGradient = null
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -5969,13 +5322,13 @@ function StandardModelVisualization() {
     const height = canvas.offsetHeight
 
     let time = 0
-    let hoveredParticle: typeof particles.quarks[0] | null = null
+    const hoveredParticle: typeof particles.quarks[0] | null = null
 
     const drawParticle = (
       x: number, y: number, 
       particle: typeof particles.quarks[0], 
       isHovered: boolean,
-      isQuark: boolean = false
+      isQuark = false
     ) => {
       const radius = isHovered ? 28 : 22
       
@@ -6032,19 +5385,12 @@ function StandardModelVisualization() {
       time += 0.02
       ctx.clearRect(0, 0, width, height)
 
-<<<<<<< HEAD
       // Background - cached gradient
       if (!bgGradient) {
         bgGradient = ctx.createLinearGradient(0, 0, width, height)
         bgGradient.addColorStop(0, '#0a0a15')
         bgGradient.addColorStop(1, '#15152a')
       }
-=======
-      // Background
-      const bgGradient = ctx.createLinearGradient(0, 0, width, height)
-      bgGradient.addColorStop(0, '#0a0a15')
-      bgGradient.addColorStop(1, '#15152a')
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
 
@@ -6093,7 +5439,7 @@ function StandardModelVisualization() {
       ctx.fillText('II', 25, height * 0.4)
       ctx.fillText('III', 25, height * 0.7)
 
-      const particlePositions: { x: number, y: number, radius: number, particle: typeof particles.quarks[0] }[] = []
+      const particlePositions: Array<{ x: number, y: number, radius: number, particle: typeof particles.quarks[0] }> = []
 
       // Draw quarks
       particles.quarks.forEach((p, i) => {
@@ -6187,11 +5533,7 @@ function StandardModelVisualization() {
         }
       }
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
@@ -6220,11 +5562,7 @@ function StandardModelVisualization() {
     return () => {
       window.removeEventListener('resize', resize)
       canvas.removeEventListener('click', handleClick)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [selectedParticle, showDecays])
 
@@ -6234,7 +5572,7 @@ function StandardModelVisualization() {
       
       <div className="flex gap-2 flex-wrap">
         <Button 
-          onClick={() => setSelectedParticle('u')}
+          onClick={() => { setSelectedParticle('u'); }}
           variant={selectedParticle === 'u' ? 'default' : 'outline'}
           size="sm"
           className={`text-xs ${selectedParticle === 'u' ? 'bg-red-600' : 'border-red-500/50 text-red-400'}`}
@@ -6242,7 +5580,7 @@ function StandardModelVisualization() {
           u - Up
         </Button>
         <Button 
-          onClick={() => setSelectedParticle('e')}
+          onClick={() => { setSelectedParticle('e'); }}
           variant={selectedParticle === 'e' ? 'default' : 'outline'}
           size="sm"
           className={`text-xs ${selectedParticle === 'e' ? 'bg-blue-600' : 'border-blue-500/50 text-blue-400'}`}
@@ -6250,7 +5588,7 @@ function StandardModelVisualization() {
           e - Электрон
         </Button>
         <Button 
-          onClick={() => setSelectedParticle('H')}
+          onClick={() => { setSelectedParticle('H'); }}
           variant={selectedParticle === 'H' ? 'default' : 'outline'}
           size="sm"
           className={`text-xs ${selectedParticle === 'H' ? 'bg-yellow-500' : 'border-yellow-500/50 text-yellow-400'}`}
@@ -6258,7 +5596,7 @@ function StandardModelVisualization() {
           H - Хиггс
         </Button>
         <Button 
-          onClick={() => setShowDecays(!showDecays)}
+          onClick={() => { setShowDecays(!showDecays); }}
           variant="outline"
           size="sm"
           className="text-xs border-purple-500/50 text-purple-400"
@@ -6348,10 +5686,6 @@ function PhysicsTimeline() {
   }
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -6359,7 +5693,6 @@ function PhysicsTimeline() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
     let timelineGradient: CanvasGradient | null = null
@@ -6368,12 +5701,6 @@ function PhysicsTimeline() {
       setupCanvas(canvas, ctx)
       bgGradient = null
       timelineGradient = null
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -6383,13 +5710,12 @@ function PhysicsTimeline() {
     const centerY = height / 2
 
     let time = 0
-    let scrollOffset = 0
+    const scrollOffset = 0
 
     const animate = () => {
       time += 0.02
       ctx.clearRect(0, 0, width, height)
 
-<<<<<<< HEAD
       // Background - cached gradient
       if (!bgGradient) {
         bgGradient = ctx.createLinearGradient(0, 0, width, height)
@@ -6413,25 +5739,6 @@ function PhysicsTimeline() {
 
       // Draw timeline line
       const lineY = centerY
-=======
-      // Background
-      const bgGradient = ctx.createLinearGradient(0, 0, width, height)
-      bgGradient.addColorStop(0, '#0a0a18')
-      bgGradient.addColorStop(1, '#151530')
-      ctx.fillStyle = bgGradient
-      ctx.fillRect(0, 0, width, height)
-
-      // Draw timeline line
-      const lineY = centerY
-      const gradient = ctx.createLinearGradient(0, 0, width, 0)
-      gradient.addColorStop(0, '#8B5CF6')
-      gradient.addColorStop(0.25, '#3B82F6')
-      gradient.addColorStop(0.5, '#10B981')
-      gradient.addColorStop(0.75, '#EC4899')
-      gradient.addColorStop(1, '#F97316')
-      ctx.strokeStyle = gradient
-      ctx.lineWidth = 3
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       ctx.beginPath()
       ctx.moveTo(0, lineY)
       ctx.lineTo(width, lineY)
@@ -6507,22 +5814,14 @@ function PhysicsTimeline() {
         ctx.fillText(year.toString(), x, height - 5)
       }
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [filteredEvents, hoveredEvent])
 
@@ -6532,7 +5831,7 @@ function PhysicsTimeline() {
       
       <div className="flex gap-2 flex-wrap">
         <Button
-          onClick={() => setSelectedEra(null)}
+          onClick={() => { setSelectedEra(null); }}
           variant={selectedEra === null ? 'default' : 'outline'}
           size="sm"
           className={`text-xs ${selectedEra === null ? 'bg-purple-600' : ''}`}
@@ -6542,7 +5841,7 @@ function PhysicsTimeline() {
         {eras.slice(2, 7).map((era) => (
           <Button
             key={era.id}
-            onClick={() => setSelectedEra(selectedEra === era.id ? null : era.id)}
+            onClick={() => { setSelectedEra(selectedEra === era.id ? null : era.id); }}
             variant={selectedEra === era.id ? 'default' : 'outline'}
             size="sm"
             className={`text-xs ${selectedEra === era.id ? '' : ''}`}
@@ -6567,10 +5866,6 @@ function PhysicsTimeline() {
 // ==================== SOLAR SYSTEM ====================
 function SolarSystemVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [speed, setSpeed] = useState(1)
   const [showOrbits, setShowOrbits] = useState(true)
   const [showLabels, setShowLabels] = useState(true)
@@ -6595,17 +5890,10 @@ function SolarSystemVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -6775,22 +6063,14 @@ function SolarSystemVisualization() {
       ctx.textAlign = 'right'
       ctx.fillText('Масштаб не сохранён', width - 10, height - 5)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [speed, showOrbits, showLabels, selectedPlanet, zoom])
 
@@ -6804,20 +6084,20 @@ function SolarSystemVisualization() {
             <span className="text-yellow-400">Скорость</span>
             <span className="text-white font-mono">{speed.toFixed(1)}x</span>
           </div>
-          <Slider value={[speed]} onValueChange={(v) => setSpeed(v[0])} min={0.1} max={5} step={0.1} />
+          <Slider value={[speed]} onValueChange={(v) => { setSpeed(v[0]); }} min={0.1} max={5} step={0.1} />
         </div>
         <div className="space-y-1">
           <div className="flex justify-between text-xs">
             <span className="text-blue-400">Масштаб</span>
             <span className="text-white font-mono">{zoom.toFixed(1)}x</span>
           </div>
-          <Slider value={[zoom]} onValueChange={(v) => setZoom(v[0])} min={0.5} max={2} step={0.1} />
+          <Slider value={[zoom]} onValueChange={(v) => { setZoom(v[0]); }} min={0.5} max={2} step={0.1} />
         </div>
       </div>
 
       <div className="flex gap-2 flex-wrap">
         <Button 
-          onClick={() => setShowOrbits(!showOrbits)} 
+          onClick={() => { setShowOrbits(!showOrbits); }} 
           variant={showOrbits ? 'default' : 'outline'}
           size="sm"
           className={`text-xs ${showOrbits ? 'bg-blue-600' : ''}`}
@@ -6825,7 +6105,7 @@ function SolarSystemVisualization() {
           🔵 Орбиты
         </Button>
         <Button 
-          onClick={() => setShowLabels(!showLabels)} 
+          onClick={() => { setShowLabels(!showLabels); }} 
           variant={showLabels ? 'default' : 'outline'}
           size="sm"
           className={`text-xs ${showLabels ? 'bg-purple-600' : ''}`}
@@ -6835,7 +6115,7 @@ function SolarSystemVisualization() {
         {planets.slice(0, 4).map((planet) => (
           <Button
             key={planet.nameEn}
-            onClick={() => setSelectedPlanet(selectedPlanet === planet.nameEn ? null : planet.nameEn)}
+            onClick={() => { setSelectedPlanet(selectedPlanet === planet.nameEn ? null : planet.nameEn); }}
             variant={selectedPlanet === planet.nameEn ? 'default' : 'outline'}
             size="sm"
             className="text-xs"
@@ -6863,10 +6143,6 @@ function SolarSystemVisualization() {
 // ==================== COSMIC MICROWAVE BACKGROUND ====================
 function CMBVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [temperature, setTemperature] = useState(2.725) // Current CMB temperature in K
   const [showGalaxies, setShowGalaxies] = useState(true)
   const [timeScale, setTimeScale] = useState(1)
@@ -6877,17 +6153,10 @@ function CMBVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -6997,22 +6266,14 @@ function CMBVisualization() {
       ctx.fillText('Возраст: ~380 000 лет после БВ', 10, height - 25)
       ctx.fillText('ΔT/T ≈ 10⁻⁵ (флуктуации)', 10, height - 12)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [temperature, showGalaxies, timeScale])
 
@@ -7026,11 +6287,11 @@ function CMBVisualization() {
             <span className="text-red-400">T (K)</span>
             <span className="text-white font-mono">{temperature.toFixed(3)}</span>
           </div>
-          <Slider value={[temperature]} onValueChange={(v) => setTemperature(v[0])} min={2.7} max={3.0} step={0.001} />
+          <Slider value={[temperature]} onValueChange={(v) => { setTemperature(v[0]); }} min={2.7} max={3.0} step={0.001} />
         </div>
         <div className="flex gap-2">
           <Button 
-            onClick={() => setShowGalaxies(!showGalaxies)} 
+            onClick={() => { setShowGalaxies(!showGalaxies); }} 
             variant={showGalaxies ? 'default' : 'outline'}
             size="sm"
             className="flex-1 text-xs"
@@ -7057,10 +6318,6 @@ function CMBVisualization() {
 // ==================== DARK ENERGY VISUALIZATION ====================
 function DarkEnergyVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-<<<<<<< HEAD
-=======
-  const animationRef = useRef<number>(0)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [expansionRate, setExpansionRate] = useState(0.7) // Hubble parameter visualization
   const [darkEnergyFraction, setDarkEnergyFraction] = useState(68) // % of universe
   const [showMatter, setShowMatter] = useState(true)
@@ -7071,17 +6328,10 @@ function DarkEnergyVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
-=======
-    const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -7092,7 +6342,7 @@ function DarkEnergyVisualization() {
     const centerY = height / 2
 
     // Galaxy positions
-    const galaxies: { angle: number; distance: number; size: number; color: string }[] = []
+    const galaxies: Array<{ angle: number; distance: number; size: number; color: string }> = []
     for (let i = 0; i < 50; i++) {
       galaxies.push({
         angle: Math.random() * Math.PI * 2,
@@ -7224,22 +6474,14 @@ function DarkEnergyVisualization() {
       ctx.fillText(`H₀ ≈ 70 км/с/Мпк`, width - 125, height - 30)
       ctx.fillText(`Ускорение: +${(expansionRate * 100).toFixed(0)}%`, width - 125, height - 18)
 
-<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
-=======
-      animationRef.current = requestAnimationFrame(animate)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
-=======
-      cancelAnimationFrame(animationRef.current)
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [expansionRate, darkEnergyFraction, showMatter])
 
@@ -7253,20 +6495,20 @@ function DarkEnergyVisualization() {
             <span className="text-purple-400">Тёмная энергия %</span>
             <span className="text-white font-mono">{darkEnergyFraction}%</span>
           </div>
-          <Slider value={[darkEnergyFraction]} onValueChange={(v) => setDarkEnergyFraction(v[0])} min={50} max={80} step={1} />
+          <Slider value={[darkEnergyFraction]} onValueChange={(v) => { setDarkEnergyFraction(v[0]); }} min={50} max={80} step={1} />
         </div>
         <div className="space-y-1">
           <div className="flex justify-between text-xs">
             <span className="text-blue-400">Расширение H</span>
             <span className="text-white font-mono">{expansionRate.toFixed(1)}</span>
           </div>
-          <Slider value={[expansionRate]} onValueChange={(v) => setExpansionRate(v[0])} min={0.1} max={2} step={0.1} />
+          <Slider value={[expansionRate]} onValueChange={(v) => { setExpansionRate(v[0]); }} min={0.1} max={2} step={0.1} />
         </div>
       </div>
 
       <div className="flex gap-2">
         <Button 
-          onClick={() => setShowMatter(!showMatter)} 
+          onClick={() => { setShowMatter(!showMatter); }} 
           variant={showMatter ? 'default' : 'outline'}
           size="sm"
           className="text-xs"
@@ -7528,7 +6770,7 @@ function PhysicsQuiz() {
           {q.options.map((option, index) => (
             <button
               key={index}
-              onClick={() => handleAnswer(index)}
+              onClick={() => { handleAnswer(index); }}
               disabled={answered}
               className={`w-full text-left px-4 py-3 rounded-lg transition-all text-sm ${
                 answered
@@ -7777,7 +7019,7 @@ function ScientistsBiographies() {
         {currentScientists.map((scientist, index) => (
           <button
             key={index}
-            onClick={() => setSelectedScientist(selectedScientist === index ? null : index)}
+            onClick={() => { setSelectedScientist(selectedScientist === index ? null : index); }}
             className={`p-3 rounded-lg text-center transition-all ${
               selectedScientist === index 
                 ? 'bg-gradient-to-br from-purple-600/50 to-cyan-600/50 border-2' 
@@ -8004,7 +7246,7 @@ function FormulaCalculator() {
         {(Object.keys(formulas) as Array<keyof typeof formulas>).map((cat) => (
           <Button
             key={cat}
-            onClick={() => handleCategoryChange(cat)}
+            onClick={() => { handleCategoryChange(cat); }}
             variant={category === cat ? 'default' : 'outline'}
             size="sm"
             className={`text-xs ${category === cat ? 'bg-purple-600' : ''}`}
@@ -8041,7 +7283,7 @@ function FormulaCalculator() {
               type="number"
               step="any"
               value={inputs[input] || ''}
-              onChange={(e) => setInputs({ ...inputs, [input]: e.target.value })}
+              onChange={(e) => { setInputs({ ...inputs, [input]: e.target.value }); }}
               className="w-full px-3 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-white text-sm focus:border-cyan-500 focus:outline-none"
               placeholder={input}
             />
@@ -8132,7 +7374,7 @@ export default function Home() {
     }
     
     window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
+    return () => { window.removeEventListener('keydown', handleKeyDown); }
   }, [])
 
   const t = translations[language]
@@ -8160,7 +7402,7 @@ export default function Home() {
         <div className="p-6 h-full overflow-y-auto">
           {/* Close button */}
           <button 
-            onClick={() => setMenuOpen(false)}
+            onClick={() => { setMenuOpen(false); }}
             className={`absolute top-4 right-4 p-2 rounded-lg ${isDark ? 'hover:bg-gray-800 text-gray-400' : 'hover:bg-gray-100 text-gray-600'}`}
           >
             ✕
@@ -8262,7 +7504,7 @@ export default function Home() {
                     {(['ru', 'en', 'zh', 'he'] as Language[]).map((lang) => (
                       <Button
                         key={lang}
-                        onClick={() => setLanguage(lang)}
+                        onClick={() => { setLanguage(lang); }}
                         variant={language === lang ? 'default' : 'ghost'}
                         size="sm"
                         className={`text-xs px-2 ${language === lang ? 'bg-purple-600' : isDark ? 'text-gray-400' : 'text-gray-600'}`}
@@ -8278,7 +7520,7 @@ export default function Home() {
                   </label>
                   <div className="flex gap-2 mt-1">
                     <Button
-                      onClick={() => setTheme('dark')}
+                      onClick={() => { setTheme('dark'); }}
                       variant={theme === 'dark' ? 'default' : 'ghost'}
                       size="sm"
                       className={`text-xs ${theme === 'dark' ? 'bg-gray-700' : ''}`}
@@ -8286,7 +7528,7 @@ export default function Home() {
                       🌙 Dark
                     </Button>
                     <Button
-                      onClick={() => setTheme('light')}
+                      onClick={() => { setTheme('light'); }}
                       variant={theme === 'light' ? 'default' : 'ghost'}
                       size="sm"
                       className={`text-xs ${theme === 'light' ? 'bg-gray-200 text-gray-900' : ''}`}
@@ -8314,7 +7556,7 @@ export default function Home() {
       {menuOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-50 backdrop-blur-sm"
-          onClick={() => setMenuOpen(false)}
+          onClick={() => { setMenuOpen(false); }}
         />
       )}
 
@@ -8331,7 +7573,7 @@ export default function Home() {
                 {(['ru', 'en', 'zh', 'he'] as Language[]).map((lang) => (
                   <Button
                     key={lang}
-                    onClick={() => setLanguage(lang)}
+                    onClick={() => { setLanguage(lang); }}
                     variant={language === lang ? 'default' : 'ghost'}
                     size="sm"
                     className={`text-xs px-2 ${language === lang ? 'bg-purple-600' : isDark ? 'text-gray-400' : 'text-gray-600'}`}
@@ -8342,7 +7584,7 @@ export default function Home() {
               </div>
               {/* Theme toggle */}
               <Button
-                onClick={() => setTheme(isDark ? 'light' : 'dark')}
+                onClick={() => { setTheme(isDark ? 'light' : 'dark'); }}
                 variant="outline"
                 size="sm"
                 className={`text-xs ${isDark ? 'border-gray-700 text-gray-300' : 'border-gray-300 text-gray-700'}`}
@@ -8351,7 +7593,7 @@ export default function Home() {
               </Button>
               {/* Menu toggle */}
               <Button
-                onClick={() => setMenuOpen(true)}
+                onClick={() => { setMenuOpen(true); }}
                 variant="outline"
                 size="sm"
                 className={`text-xs ${isDark ? 'border-gray-700 text-gray-300' : 'border-gray-300 text-gray-700'}`}
@@ -8378,7 +7620,7 @@ export default function Home() {
             {navItems.map((tab, index) => (
               <Button
                 key={tab.id}
-                onClick={() => setActiveSection(tab.id)}
+                onClick={() => { setActiveSection(tab.id); }}
                 variant={activeSection === tab.id ? 'default' : 'ghost'}
                 title={`快捷键: ${index + 1} | Shortcut: ${index + 1}`}
                 className={`text-xs md:text-sm ${activeSection === tab.id ? `bg-gradient-to-r ${tab.color}` : isDark ? 'text-gray-400' : 'text-gray-600'}`}
@@ -8394,7 +7636,7 @@ export default function Home() {
       <main className="max-w-6xl mx-auto px-4 py-6 space-y-6">
         {activeSection === 'quantum' && (
           <>
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30' : 'bg-white border-purple-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30' : 'bg-white border-purple-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>{t.waveFunction}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.waveFunctionDesc}</CardDescription>
@@ -8402,7 +7644,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.waveFunction} isDark={isDark}><WaveFunctionVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-blue-500/30' : 'bg-white border-blue-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-blue-500/30' : 'bg-white border-blue-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>{t.uncertainty}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.uncertaintyDesc}</CardDescription>
@@ -8410,7 +7652,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.uncertainty} isDark={isDark}><UncertaintyVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-green-500/30' : 'bg-white border-green-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-green-500/30' : 'bg-white border-green-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-green-400' : 'text-green-600'}`}>{t.tunneling}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.tunnelingDesc}</CardDescription>
@@ -8422,7 +7664,7 @@ export default function Home() {
 
         {activeSection === 'relativity' && (
           <>
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-orange-500/30' : 'bg-white border-orange-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-orange-500/30' : 'bg-white border-orange-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-orange-400' : 'text-orange-600'}`}>{t.timeDilation}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.timeDilationDesc}</CardDescription>
@@ -8430,7 +7672,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.timeDilation} isDark={isDark}><TimeDilationVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30' : 'bg-white border-purple-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30' : 'bg-white border-purple-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>{t.lengthContraction}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.lengthContractionDesc}</CardDescription>
@@ -8438,7 +7680,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.lengthContraction} isDark={isDark}><LengthContractionVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-yellow-500/30' : 'bg-white border-yellow-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-yellow-500/30' : 'bg-white border-yellow-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-yellow-400' : 'text-yellow-600'}`}>{t.massEnergy}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.massEnergyDesc}</CardDescription>
@@ -8450,7 +7692,7 @@ export default function Home() {
 
         {activeSection === 'cosmos' && (
           <>
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-blue-500/30' : 'bg-white border-blue-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-blue-500/30' : 'bg-white border-blue-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>{t.hrDiagram}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.hrDiagramDesc}</CardDescription>
@@ -8458,7 +7700,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.hrDiagram} isDark={isDark}><HRDiagramVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-cyan-500/30' : 'bg-white border-cyan-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-cyan-500/30' : 'bg-white border-cyan-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`}>{t.neutronStar}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.neutronStarDesc}</CardDescription>
@@ -8466,7 +7708,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.neutronStar} isDark={isDark}><NeutronStarVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-red-500/30' : 'bg-white border-red-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-red-500/30' : 'bg-white border-red-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-red-400' : 'text-red-600'}`}>{t.blackHole}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.blackHoleDesc}</CardDescription>
@@ -8474,7 +7716,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.blackHole} isDark={isDark}><BlackHoleVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-cyan-500/30' : 'bg-white border-cyan-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-cyan-500/30' : 'bg-white border-cyan-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`}>{t.whiteHole}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.whiteHoleDesc}</CardDescription>
@@ -8482,7 +7724,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.whiteHole} isDark={isDark}><WhiteHoleVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-yellow-500/30' : 'bg-white border-yellow-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-yellow-500/30' : 'bg-white border-yellow-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-yellow-400' : 'text-yellow-600'}`}>{t.solarSystem}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.solarSystemDesc}</CardDescription>
@@ -8490,7 +7732,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.solarSystem} isDark={isDark}><SolarSystemVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-blue-500/30' : 'bg-white border-blue-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-blue-500/30' : 'bg-white border-blue-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>{t.cmb}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.cmbDesc}</CardDescription>
@@ -8498,7 +7740,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.cmb} isDark={isDark}><CMBVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30' : 'bg-white border-purple-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30' : 'bg-white border-purple-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>{t.darkEnergy}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.darkEnergyDesc}</CardDescription>
@@ -8510,7 +7752,7 @@ export default function Home() {
 
         {activeSection === 'advanced' && (
           <>
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-pink-500/30' : 'bg-white border-pink-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-pink-500/30' : 'bg-white border-pink-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-pink-400' : 'text-pink-600'}`}>{t.doubleSlit}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.doubleSlitDesc}</CardDescription>
@@ -8518,7 +7760,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.doubleSlit} isDark={isDark}><DoubleSlitVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30' : 'bg-white border-purple-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30' : 'bg-white border-purple-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>{t.darkMatter}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.darkMatterDesc}</CardDescription>
@@ -8526,7 +7768,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.darkMatter} isDark={isDark}><DarkMatterVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-green-500/30' : 'bg-white border-green-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-green-500/30' : 'bg-white border-green-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-green-400' : 'text-green-600'}`}>{t.schrodingersCat}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.schrodingersCatDesc}</CardDescription>
@@ -8534,7 +7776,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.schrodingersCat} isDark={isDark}><SchrodingersCatVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-orange-500/30' : 'bg-white border-orange-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-orange-500/30' : 'bg-white border-orange-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-orange-400' : 'text-orange-600'}`}>{t.bigBang}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.bigBangDesc}</CardDescription>
@@ -8542,7 +7784,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.bigBang} isDark={isDark}><BigBangVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-yellow-500/30' : 'bg-white border-yellow-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-yellow-500/30' : 'bg-white border-yellow-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-yellow-400' : 'text-yellow-600'}`}>{t.photoelectric}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.photoelectricDesc}</CardDescription>
@@ -8550,7 +7792,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.photoelectric} isDark={isDark}><PhotoelectricEffectVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-blue-500/30' : 'bg-white border-blue-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-blue-500/30' : 'bg-white border-blue-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>{t.brownianMotion}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.brownianMotionDesc}</CardDescription>
@@ -8558,7 +7800,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.brownianMotion} isDark={isDark}><BrownianMotionVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30' : 'bg-white border-purple-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30' : 'bg-white border-purple-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>{t.gravitationalWaves}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.gravitationalWavesDesc}</CardDescription>
@@ -8566,7 +7808,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.gravitationalWaves} isDark={isDark}><GravitationalWavesVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-pink-500/30' : 'bg-white border-pink-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-pink-500/30' : 'bg-white border-pink-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-pink-400' : 'text-pink-600'}`}>{t.quantumEntanglement}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.quantumEntanglementDesc}</CardDescription>
@@ -8574,7 +7816,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.quantumEntanglement} isDark={isDark}><QuantumEntanglementVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-cyan-500/30' : 'bg-white border-cyan-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-cyan-500/30' : 'bg-white border-cyan-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`}>{t.atomicModel}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.atomicModelDesc}</CardDescription>
@@ -8582,7 +7824,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.atomicModel} isDark={isDark}><AtomicModelVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-green-500/30' : 'bg-white border-green-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-green-500/30' : 'bg-white border-green-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-green-400' : 'text-green-600'}`}>{t.radioactiveDecay}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.radioactiveDecayDesc}</CardDescription>
@@ -8590,7 +7832,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.radioactiveDecay} isDark={isDark}><RadioactiveDecayVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-cyan-500/30' : 'bg-white border-cyan-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-cyan-500/30' : 'bg-white border-cyan-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`}>{t.superconductivity}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.superconductivityDesc}</CardDescription>
@@ -8598,7 +7840,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.superconductivity} isDark={isDark}><SuperconductivityVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-yellow-500/30' : 'bg-white border-yellow-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-yellow-500/30' : 'bg-white border-yellow-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-yellow-400' : 'text-yellow-600'}`}>{t.standardModel}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.standardModelDesc}</CardDescription>
@@ -8606,7 +7848,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.standardModel} isDark={isDark}><StandardModelVisualization /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30' : 'bg-white border-purple-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30' : 'bg-white border-purple-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>{t.calculator}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.calculatorDesc}</CardDescription>
@@ -8614,7 +7856,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.calculator} isDark={isDark}><FormulaCalculator /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30' : 'bg-white border-purple-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30' : 'bg-white border-purple-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>{t.timeline}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.timelineDesc}</CardDescription>
@@ -8622,7 +7864,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.timeline} isDark={isDark}><PhysicsTimeline /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-cyan-500/30' : 'bg-white border-cyan-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-cyan-500/30' : 'bg-white border-cyan-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-cyan-400' : 'text-cyan-600'}`}>{t.physicsQuiz}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.physicsQuizDesc}</CardDescription>
@@ -8630,7 +7872,7 @@ export default function Home() {
               <CardContent className="relative"><FullscreenWrapper title={t.physicsQuiz} isDark={isDark}><PhysicsQuiz /></FullscreenWrapper></CardContent>
             </Card>
 
-            <Card className={`${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-yellow-500/30' : 'bg-white border-yellow-300'}`}>
+            <Card className={isDark ? 'bg-gradient-to-br from-gray-900 to-gray-950 border-yellow-500/30' : 'bg-white border-yellow-300'}>
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? 'text-yellow-400' : 'text-yellow-600'}`}>{t.scientists}</CardTitle>
                 <CardDescription className={`text-xs ${isDark ? '' : 'text-gray-600'}`}>{t.scientistsDesc}</CardDescription>

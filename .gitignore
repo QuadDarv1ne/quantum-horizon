@@ -1,32 +1,3 @@
-<<<<<<< HEAD
-# Dependencies
-node_modules/
-.pnp
-.pnp.js
-
-# Testing
-coverage/
-*.lcov
-
-# Production
-.next/
-out/
-build/
-dist/
-
-# Misc
-.DS_Store
-*.pem
-
-# Debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Local env files
-.env*.local
-.env
-=======
 # ==================== ENVIRONMENT ====================
 .env
 .env.local
@@ -40,16 +11,55 @@ yarn-error.log*
 # ==================== QWEN CONTEXT ====================
 .qwen/
 
+# ==================== NODE.JS / NEXT.JS ====================
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Production
+.next/
+.nuxt/
+dist/
+build/
+output/
+out/
+
+# Next.js specific
+*.tsbuildinfo
+next-env.d.ts
+
+# Next.js cache directory
+.next/cache/
+
+# Storybook coverage
+coverage/
+
+# nyc test coverage
+.nyc_output/
+
+# Parcel
+.parcel-cache
+
+# Vercel
+.vercel
+
+# Turbopack
+.turbo
+
+# Docusaurus cache and generated files
+.docusaurus
+
 # ==================== PYTHON ====================
-# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-
-# C extensions
 *.so
-
-# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -58,8 +68,6 @@ downloads/
 eggs/
 .eggs/
 lib/
-!frontend/lib/
-!frontend/lib/**
 lib64/
 parts/
 sdist/
@@ -71,19 +79,11 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-
-# Requirements lock files (generated)
 requirements*.lock
-
-# PyInstaller
 *.manifest
 *.spec
-
-# Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
-
-# Unit test / coverage reports
 htmlcov/
 .tox/
 .nox/
@@ -100,173 +100,46 @@ test.db
 .hypothesis/
 .pytest_cache/
 .pytest_tmp/
-
-# Translations
 *.mo
 *.pot
-
-# Django stuff:
 *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-
-# Flask stuff:
 instance/
 .webassets-cache
-
-# Scrapy stuff:
 .scrapy
-
-# Sphinx documentation
 docs/_build/
-
-# PyBuilder
 target/
-
-# Jupyter Notebook
 .ipynb_checkpoints
-
-# IPython
 profile_default/
 ipython_config.py
-
-# pyenv
 .python-version
-
-# pipenv
 Pipfile.lock
-
-# PEP 582
 __pypackages__/
-
-# Celery stuff
 celerybeat-schedule
 celerybeat.pid
-
-# SageMath parsed files
 *.sage.py
-
-# Environments
 .venv
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
-
-# Spyder project settings
 .spyderproject
 .spyproject
-
-# Rope project settings
 .ropeproject
-
-# mkdocs documentation
 /site
-
-# mypy
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
-# Pyre type checker
 .pyre/
-
-# IDE specific Python
 .pylintrc
 .flake8
 .isort.cfg
 
-# ==================== NODE.JS / FRONTEND ====================
-# Dependencies
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-# Production
-.next/
-.nuxt/
-dist/
-build/
-output/
-
-# Next.js specific
-.next/
-out/
-*.tsbuildinfo
-
-# Next.js cache directory
-.next/cache/
-
-# Nuxt.js build / generate output
-dist/
-
-# Nest output
-dist/
-
-# Storybook coverage
-coverage/
-
-# nyc test coverage
-.nyc_output
-
-# Parcel
-.parcel-cache
-dist/
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
-
-# Vercel
-.vercel
-
-<<<<<<< HEAD
-# TypeScript
-*.tsbuildinfo
-next-env.d.ts
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# Logs
-*.log
-server.log
-dev.log
-
-# Prisma
-prisma/migrations/
-
-# Bun
-.bun
-=======
-# Turbopack
-.turbo
-
-# Docusaurus cache and generated files
-.docusaurus
-
-# Testing
-coverage/
-.nyc_output/
-
-# Temporary files
-tmp/
-temp/
-
-# Lock files (опционально)
-# package-lock.json
-# yarn.lock
-# pnpm-lock.yaml
-
 # ==================== IDE / EDITOR ====================
 # Visual Studio Code
-.vscode/
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -286,16 +159,6 @@ temp/
 *.iws
 *.ipr
 out/
-.DS_Store
-
-# WebStorm
-.idea/
-*.iml
-
-# PyCharm
-.idea/
-*.iml
-*.iws
 
 # Vim
 *.swp
@@ -313,9 +176,6 @@ out/
 
 # Neovim
 .nvimrc
-
-# VS Code
-.vscode
 
 # ==================== OS ====================
 # MacOS
@@ -341,7 +201,6 @@ $RECYCLE.BIN/
 .dockerignore
 docker-compose.override.yml
 .docker/
-*.log
 
 # ==================== DATABASE ====================
 *.db
@@ -355,11 +214,17 @@ redis_data/
 mongo_data/
 mysql_data/
 
+# Prisma (кроме схемы и миграций)
+prisma/*.db
+prisma/*.db-journal
+
 # ==================== LOGS ====================
 logs/
 *.log
 *.log.*
 log.txt
+server.log
+dev.log
 
 # ==================== CREDENTIALS & SECRETS ====================
 .aws/
@@ -379,16 +244,6 @@ user_uploads/
 static/uploads/
 public/uploads/
 tmp/uploads/
-*.jpg
-*.jpeg
-*.png
-*.gif
-*.mp4
-*.mov
-*.zip
-*.rar
-*.tar
-*.tar.gz
 
 # Исключения: разрешить img/ для README и документации
 !img/
@@ -396,100 +251,57 @@ tmp/uploads/
 !img/*.jpg
 !img/*.jpeg
 
-# ==================== BUILD & DISTRIBUTION ====================
-build/
-dist/
-*.egg
-*.egg-info
-.eggs/
-*.so
-*.o
-*.a
-*.lib
-*.dll
-*.exe
-*.out
-*.app
-
 # ==================== TEMPORARY FILES ====================
 *.tmp
 *.temp
 *.bak
 *.new
-*.swp
-*.swo
-*~
-.~*
 *.backup
 *.orig
 *.rej
 
 # ==================== PROJECT SPECIFIC ====================
-# Backend uploads
 backend/media/
 backend/static/
 backend/uploads/
-
-# Frontend build
 frontend/.next/
 frontend/out/
 frontend/build/
 frontend/.env.local
-
-# Alembic migrations (опционально игнорировать локальные)
-# alembic/versions/
-
-# Generated files
 generated/
 *.generated.ts
 *.generated.js
 
-# ==================== TESTING ====================
-.coverage
-.coverage.*
-htmlcov/
-.pytest_cache/
-.tox/
-pytest.ini
-.hypothesis/
+# Prisma migrations (should be committed)
+# prisma/migrations/ — НЕ игнорируем, миграции коммитятся
+
+# Legacy licence file (use LICENSE)
+LICENCE
 
 # ==================== CI/CD ====================
 .github/workflows/secrets.yml
 .gitlab-ci.yml.local
 .travis.yml.local
 
-# ==================== DOCUMENTATION ====================
-# docs/_build/
-# site/
-
 # ==================== MONOREPO ====================
-# turborepo
 .turbo/
-
-# lerna
 lerna-debug.log
-
-# Workspace specific
 .yarn/cache/
 .yarn/unplugged/
 .yarn/build-state.yml
 .yarn/install-state.gz
 
 # ==================== MISC ====================
-.DS_Store
-*.pem
-*.key
 .env.production
 config.local.js
 tsconfig.local.json
 babel.config.local.js
 jest.config.local.js
-
-# System files
 .system/
 system.conf
 
-# Keep important files in .gitignore but track specific ones
-# !.gitkeep
-# !important-file.txt
->>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
+# Prisma
+prisma/migrations/
+
+# Bun
+.bun

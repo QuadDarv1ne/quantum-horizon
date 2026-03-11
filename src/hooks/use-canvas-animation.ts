@@ -12,7 +12,7 @@ export function useCanvasAnimation(
   animate: (ctx: CanvasRenderingContext2D, width: number, height: number) => void,
   deps: React.DependencyList = []
 ) {
-  const animationFrameId = useRef<number>(0)
+  const animationFrameId = useRef<number>()
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
 
   const setupCanvasCallback = useCallback(() => {
@@ -47,9 +47,12 @@ export function useCanvasAnimation(
 
     return () => {
       window.removeEventListener('resize', handleResize)
-      cancelAnimationFrame(animationFrameId.current)
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current)
+      }
     }
-  }, [...deps, setupCanvasCallback, animate])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps)
 
   return ctxRef
 }
