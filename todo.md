@@ -51,16 +51,17 @@
 - ✅ `VisualizationCanvas` — базовый компонент для canvas рендеринга
 - ✅ `VisualizationControls` — контролы (play/pause, speed)
 - ✅ `VisualizationSelector` — селектор визуализаций
+- ✅ `FullscreenWrapper` — обёртка для полноэкранного режима
 - ✅ `WaveFunctionVisualization` — квантовая механика
+- ✅ `UncertaintyVisualization` — принцип неопределённости
+- ✅ `TunnelingVisualization` — квантовое туннелирование
 - ✅ `BlackHoleVisualization` — космология
 - ✅ `TimeDilationVisualization` — теория относительности
+- ✅ `LengthContractionVisualization` — сокращение длины
 - ✅ `MassEnergyVisualization` — теория относительности
 
 **Осталось создать:**
 
-- [ ] `UncertaintyPrincipleVisualization`
-- [ ] `QuantumTunnelingVisualization`
-- [ ] `LengthContractionVisualization`
 - [ ] `HRDiagramVisualization`
 - [ ] `NeutronStarVisualization`
 - [ ] `DoubleSlitVisualization`
@@ -315,8 +316,8 @@ src/
 
 | Метрика                  | Было | Стало | Цель            |
 | ------------------------ | ---- | ----- | --------------- |
-| Строк в page.tsx         | 9709 | 9709  | < 200           |
-| Компонентов визуализаций | 0    | 7     | 20+             |
+| Строк в page.tsx         | 9709 | 8784  | < 200           |
+| Компонентов визуализаций | 0    | 11    | 20+             |
 | Unit тестов              | 0    | 51    | 100+            |
 | E2E тестов               | 5    | 5     | 15+             |
 | Storybook stories        | 0    | 0     | 30+             |
@@ -333,18 +334,20 @@ src/
 
 1. ✅ Создан `VisualizationCanvas` — базовый компонент
 2. ✅ Созданы `VisualizationControls` и `VisualizationSelector`
-3. ✅ Выделены визуализации: `WaveFunction`, `BlackHole`, `TimeDilation`, `MassEnergy`
-4. ✅ Создана библиотека физических формул `physics.ts`
-5. ✅ Написано 51 тест (51 passing)
-6. ✅ Сборка проходит успешно
-7. ✅ Lint без ошибок (35 предупреждений)
+3. ✅ Создан `FullscreenWrapper` для полноэкранного режима
+4. ✅ Выделены визуализации: `WaveFunction`, `BlackHole`, `TimeDilation`, `MassEnergy`, `LengthContraction`, `Uncertainty`, `Tunneling`
+5. ✅ Создана библиотека физических формул `physics.ts`
+6. ✅ Написано 51 тест (51 passing)
+7. ✅ Сборка проходит успешно
+8. ✅ Lint без ошибок (35 предупреждений)
+9. ✅ page.tsx сокращён с 9709 до 8784 строк (-925 строк)
 
 ### 📋 Следующие задачи
 
-1. Продолжить декомпозицию page.tsx — выделить оставшиеся 13 визуализаций
-2. Интегрировать новые компоненты в main page
-3. Добавить тесты для Controls и Selector
-4. Удалить дублирующийся код из page.tsx
+1. Продолжить декомпозицию page.tsx — выделить оставшиеся 9 визуализаций
+2. Добавить тесты для Controls, Selector и новых визуализаций
+3. Удалить дублирующийся код из page.tsx
+4. Интегрировать все новые компоненты в main page
 
 ---
 
@@ -357,8 +360,12 @@ src/
 - `src/components/visualizations/base/visualization-canvas.tsx`
 - `src/components/visualizations/base/visualization-controls.tsx`
 - `src/components/visualizations/base/visualization-selector.tsx`
+- `src/components/visualizations/base/fullscreen-wrapper.tsx`
 - `src/components/visualizations/quantum/wave-function.tsx` + test
+- `src/components/visualizations/quantum/uncertainty.tsx`
+- `src/components/visualizations/quantum/tunneling.tsx`
 - `src/components/visualizations/relativity/time-dilation.tsx`
+- `src/components/visualizations/relativity/length-contraction.tsx`
 - `src/components/visualizations/relativity/mass-energy.tsx`
 - `src/components/visualizations/cosmos/black-hole.tsx` + test
 - `src/components/visualizations/index.ts`
@@ -369,8 +376,10 @@ src/
 **Статус:**
 
 - dev и main синхронизированы
-- Commit: `6ff8ad0` — feat:add-wavefunction-blackhole-physics
-- 8 files changed, 798 insertions(+)
+- Последний коммит: `e088d89`
+- 11 компонентов визуализаций создано
+- 51 тест passing
+- page.tsx сокращён на 925 строк (9709 → 8784)
 
 ### Технические долги
 
