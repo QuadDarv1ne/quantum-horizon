@@ -472,16 +472,14 @@ function WaveFunctionVisualization() {
     resize()
     window.addEventListener('resize', resize)
 
-    const width = canvas.offsetWidth
-    const height = canvas.offsetHeight
-    const L = width * 0.8
-    const offsetX = (width - L) / 2
-    const centerY = height / 2
-
     let time = 0
 
     const animate = () => {
       time += 0.03
+      const width = canvas.offsetWidth
+      const height = canvas.offsetHeight
+      const L = width * 0.8
+      const offsetX = (width - L) / 2
       ctx.clearRect(0, 0, width, height)
 
       // Background
@@ -718,19 +716,14 @@ function UncertaintyVisualization() {
     resize()
     window.addEventListener('resize', resize)
 
-    const width = canvas.offsetWidth
-    const height = canvas.offsetHeight
-    const centerX = width / 2
-    const centerY = height / 2
-
-    // Calculate momentum uncertainty
-    const deltaP = (h_bar / 2) / (deltaX * 1e-10) // Convert to meters
-    const deltaP_normalized = Math.min(deltaP / 1e-24, 100)
-
     let time = 0
 
     const animate = () => {
       time += 0.02
+      const width = canvas.offsetWidth
+      const height = canvas.offsetHeight
+      const centerX = width / 2
+      const centerY = height / 2
       ctx.clearRect(0, 0, width, height)
 
       // Background
@@ -906,13 +899,12 @@ function TunnelingVisualization() {
     resize()
     window.addEventListener('resize', resize)
 
-    const width = canvas.offsetWidth
-    const height = canvas.offsetHeight
-
     let time = 0
 
     const animate = () => {
       time += 0.015
+      const width = canvas.offsetWidth
+      const height = canvas.offsetHeight
       ctx.clearRect(0, 0, width, height)
 
       // Background
@@ -1097,10 +1089,6 @@ function TimeDilationVisualization() {
     resize()
     window.addEventListener('resize', resize)
 
-    const width = canvas.offsetWidth
-    const height = canvas.offsetHeight
-    const centerX = width / 2
-
     let time = 0
 
     // Lorentz factor
@@ -1108,6 +1096,9 @@ function TimeDilationVisualization() {
 
     const animate = () => {
       time += 0.016
+      const width = canvas.offsetWidth
+      const height = canvas.offsetHeight
+      const centerX = width / 2
       ctx.clearRect(0, 0, width, height)
 
       // Background
@@ -1482,127 +1473,130 @@ function HRDiagramVisualization() {
 
     const resize = () => {
       setupCanvasContext(canvas, ctx)
+      draw()
     }
+
+    const draw = () => {
+      const width = canvas.offsetWidth
+      const height = canvas.offsetHeight
+      const padding = { left: 50, right: 20, top: 20, bottom: 40 }
+      const plotWidth = width - padding.left - padding.right
+      const plotHeight = height - padding.top - padding.bottom
+
+      // Clear
+      ctx.fillStyle = '#050510'
+      ctx.fillRect(0, 0, width, height)
+
+      // Grid
+      ctx.strokeStyle = 'rgba(100, 100, 150, 0.1)'
+      ctx.lineWidth = 0.5
+      for (let i = 0; i <= 10; i++) {
+        const x = padding.left + (i / 10) * plotWidth
+        const y = padding.top + (i / 10) * plotHeight
+        ctx.beginPath()
+        ctx.moveTo(x, padding.top)
+        ctx.lineTo(x, height - padding.bottom)
+        ctx.stroke()
+        ctx.beginPath()
+        ctx.moveTo(padding.left, y)
+        ctx.lineTo(width - padding.right, y)
+        ctx.stroke()
+      }
+
+      // Main sequence band
+      ctx.fillStyle = 'rgba(100, 150, 255, 0.1)'
+      ctx.beginPath()
+      ctx.moveTo(padding.left, padding.top + plotHeight * 0.8)
+      ctx.quadraticCurveTo(padding.left + plotWidth * 0.5, padding.top + plotHeight * 0.4, width - padding.right, padding.top + plotHeight * 0.2)
+      ctx.lineTo(width - padding.right, padding.top + plotHeight * 0.4)
+      ctx.quadraticCurveTo(padding.left + plotWidth * 0.5, padding.top + plotHeight * 0.6, padding.left, padding.top + plotHeight * 0.95)
+      ctx.closePath()
+      ctx.fill()
+
+      // Regions labels
+      ctx.font = '9px sans-serif'
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
+      ctx.textAlign = 'center'
+      ctx.fillText('Главная', padding.left + plotWidth * 0.3, padding.top + plotHeight * 0.55)
+      ctx.fillText('последовательность', padding.left + plotWidth * 0.3, padding.top + plotHeight * 0.65)
+
+      ctx.fillText('Гиганты', padding.left + plotWidth * 0.2, padding.top + plotHeight * 0.2)
+      ctx.fillText('Сверхгиганты', padding.left + plotWidth * 0.15, padding.top + plotHeight * 0.08)
+      ctx.fillText('Белые карлики', padding.left + plotWidth * 0.85, padding.top + plotHeight * 0.85)
+
+      // Axes labels
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'
+      ctx.font = '10px sans-serif'
+
+      // Temperature (reversed)
+      ctx.textAlign = 'center'
+      ctx.fillText('Температура (K)', width / 2, height - 8)
+      ctx.font = '8px sans-serif'
+      ctx.fillText('40000', padding.left + 15, height - 25)
+      ctx.fillText('10000', padding.left + plotWidth * 0.5, height - 25)
+      ctx.fillText('3000', width - padding.right - 15, height - 25)
+
+      // Luminosity
+      ctx.save()
+      ctx.translate(12, height / 2)
+      ctx.rotate(-Math.PI / 2)
+      ctx.font = '10px sans-serif'
+      ctx.textAlign = 'center'
+      ctx.fillText('Светимость (L☉)', 0, 0)
+      ctx.restore()
+
+      ctx.font = '8px sans-serif'
+      ctx.textAlign = 'right'
+      ctx.fillText('10⁶', padding.left - 5, padding.top + 15)
+      ctx.fillText('1', padding.left - 5, padding.top + plotHeight * 0.5)
+      ctx.fillText('10⁻⁴', padding.left - 5, height - padding.bottom - 5)
+
+      // Draw stars
+      stars.forEach((star) => {
+        // Temperature to x (log scale, reversed)
+        const logTemp = Math.log10(star.temp)
+        const x = padding.left + plotWidth * (1 - (logTemp - 3.5) / 1.6)
+
+        // Luminosity to y (log scale)
+        const logLum = Math.log10(star.luminosity)
+        const y = padding.top + plotHeight * (1 - (logLum + 4) / 10)
+
+        // Glow
+        const gradient = ctx.createRadialGradient(x, y, 0, x, y, star.size * 3)
+        gradient.addColorStop(0, star.color)
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
+        ctx.fillStyle = gradient
+        ctx.beginPath()
+        ctx.arc(x, y, star.size * 3, 0, Math.PI * 2)
+        ctx.fill()
+
+        // Star
+        ctx.beginPath()
+        ctx.arc(x, y, star.size, 0, Math.PI * 2)
+        ctx.fillStyle = star.color
+        ctx.fill()
+      })
+
+      // Sun marker with label
+      const sunLogTemp = Math.log10(5778)
+      const sunX = padding.left + plotWidth * (1 - (sunLogTemp - 3.5) / 1.6)
+      const sunLogLum = Math.log10(1)
+      const sunY = padding.top + plotHeight * (1 - (sunLogLum + 4) / 10)
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
+      ctx.lineWidth = 1
+      ctx.beginPath()
+      ctx.arc(sunX, sunY, 12, 0, Math.PI * 2)
+      ctx.stroke()
+
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'
+      ctx.font = '9px sans-serif'
+      ctx.textAlign = 'left'
+      ctx.fillText('☉ Солнце', sunX + 15, sunY + 3)
+    }
+
     resize()
     window.addEventListener('resize', resize)
-
-    const width = canvas.offsetWidth
-    const height = canvas.offsetHeight
-    const padding = { left: 50, right: 20, top: 20, bottom: 40 }
-
-    const plotWidth = width - padding.left - padding.right
-    const plotHeight = height - padding.top - padding.bottom
-
-    // Clear
-    ctx.fillStyle = '#050510'
-    ctx.fillRect(0, 0, width, height)
-
-    // Grid
-    ctx.strokeStyle = 'rgba(100, 100, 150, 0.1)'
-    ctx.lineWidth = 0.5
-    for (let i = 0; i <= 10; i++) {
-      const x = padding.left + (i / 10) * plotWidth
-      const y = padding.top + (i / 10) * plotHeight
-      ctx.beginPath()
-      ctx.moveTo(x, padding.top)
-      ctx.lineTo(x, height - padding.bottom)
-      ctx.stroke()
-      ctx.beginPath()
-      ctx.moveTo(padding.left, y)
-      ctx.lineTo(width - padding.right, y)
-      ctx.stroke()
-    }
-
-    // Main sequence band
-    ctx.fillStyle = 'rgba(100, 150, 255, 0.1)'
-    ctx.beginPath()
-    ctx.moveTo(padding.left, padding.top + plotHeight * 0.8)
-    ctx.quadraticCurveTo(padding.left + plotWidth * 0.5, padding.top + plotHeight * 0.4, width - padding.right, padding.top + plotHeight * 0.2)
-    ctx.lineTo(width - padding.right, padding.top + plotHeight * 0.4)
-    ctx.quadraticCurveTo(padding.left + plotWidth * 0.5, padding.top + plotHeight * 0.6, padding.left, padding.top + plotHeight * 0.95)
-    ctx.closePath()
-    ctx.fill()
-
-    // Regions labels
-    ctx.font = '9px sans-serif'
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
-    ctx.textAlign = 'center'
-    ctx.fillText('Главная', padding.left + plotWidth * 0.3, padding.top + plotHeight * 0.55)
-    ctx.fillText('последовательность', padding.left + plotWidth * 0.3, padding.top + plotHeight * 0.65)
-    
-    ctx.fillText('Гиганты', padding.left + plotWidth * 0.2, padding.top + plotHeight * 0.2)
-    ctx.fillText('Сверхгиганты', padding.left + plotWidth * 0.15, padding.top + plotHeight * 0.08)
-    ctx.fillText('Белые карлики', padding.left + plotWidth * 0.85, padding.top + plotHeight * 0.85)
-
-    // Axes labels
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'
-    ctx.font = '10px sans-serif'
-    
-    // Temperature (reversed)
-    ctx.textAlign = 'center'
-    ctx.fillText('Температура (K)', width / 2, height - 8)
-    ctx.font = '8px sans-serif'
-    ctx.fillText('40000', padding.left + 15, height - 25)
-    ctx.fillText('10000', padding.left + plotWidth * 0.5, height - 25)
-    ctx.fillText('3000', width - padding.right - 15, height - 25)
-
-    // Luminosity
-    ctx.save()
-    ctx.translate(12, height / 2)
-    ctx.rotate(-Math.PI / 2)
-    ctx.font = '10px sans-serif'
-    ctx.textAlign = 'center'
-    ctx.fillText('Светимость (L☉)', 0, 0)
-    ctx.restore()
-
-    ctx.font = '8px sans-serif'
-    ctx.textAlign = 'right'
-    ctx.fillText('10⁶', padding.left - 5, padding.top + 15)
-    ctx.fillText('1', padding.left - 5, padding.top + plotHeight * 0.5)
-    ctx.fillText('10⁻⁴', padding.left - 5, height - padding.bottom - 5)
-
-    // Draw stars
-    stars.forEach((star) => {
-      // Temperature to x (log scale, reversed)
-      const logTemp = Math.log10(star.temp)
-      const x = padding.left + plotWidth * (1 - (logTemp - 3.5) / 1.6)
-      
-      // Luminosity to y (log scale)
-      const logLum = Math.log10(star.luminosity)
-      const y = padding.top + plotHeight * (1 - (logLum + 4) / 10)
-
-      // Glow
-      const gradient = ctx.createRadialGradient(x, y, 0, x, y, star.size * 3)
-      gradient.addColorStop(0, star.color)
-      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
-      ctx.fillStyle = gradient
-      ctx.beginPath()
-      ctx.arc(x, y, star.size * 3, 0, Math.PI * 2)
-      ctx.fill()
-
-      // Star
-      ctx.beginPath()
-      ctx.arc(x, y, star.size, 0, Math.PI * 2)
-      ctx.fillStyle = star.color
-      ctx.fill()
-    })
-
-    // Sun marker with label
-    const sunLogTemp = Math.log10(5778)
-    const sunX = padding.left + plotWidth * (1 - (sunLogTemp - 3.5) / 1.6)
-    const sunLogLum = Math.log10(1)
-    const sunY = padding.top + plotHeight * (1 - (sunLogLum + 4) / 10)
-    
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
-    ctx.lineWidth = 1
-    ctx.beginPath()
-    ctx.arc(sunX, sunY, 12, 0, Math.PI * 2)
-    ctx.stroke()
-    
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'
-    ctx.font = '9px sans-serif'
-    ctx.textAlign = 'left'
-    ctx.fillText('☉ Солнце', sunX + 15, sunY + 3)
 
     return () => {
       window.removeEventListener('resize', resize)
