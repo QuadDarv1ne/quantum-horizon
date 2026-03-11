@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react"
 import { Input } from "./input"
+import { Label } from "./label"
+import { Button } from "./button"
 
 const meta = {
   title: "UI/Input",
@@ -11,7 +13,7 @@ const meta = {
   argTypes: {
     type: {
       control: "select",
-      options: ["text", "email", "password", "number", "tel", "url", "search"],
+      options: ["text", "email", "password", "number", "search", "tel", "url"],
     },
   },
 } satisfies Meta<typeof Input>
@@ -19,17 +21,49 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Text: Story = {
+export const Default: Story = {
   args: {
-    type: "text",
     placeholder: "Enter text...",
   },
 }
 
-export const Email: Story = {
+export const WithLabel: Story = {
+  render: (args) => (
+    <div className="grid w-full max-w-sm items-center gap-1.5">
+      <Label htmlFor="email">{args.placeholder || "Email"}</Label>
+      <Input {...args} id="email" />
+    </div>
+  ),
   args: {
     type: "email",
-    placeholder: "email@example.com",
+    placeholder: "Email",
+  },
+}
+
+export const WithText: Story = {
+  render: (args) => (
+    <div className="grid w-full max-w-sm items-center gap-1.5">
+      <Label htmlFor="email-2">{args.placeholder || "Email"}</Label>
+      <Input {...args} id="email-2" />
+      <p className="text-sm text-muted-foreground">Enter your email address.</p>
+    </div>
+  ),
+  args: {
+    type: "email",
+    placeholder: "Email",
+  },
+}
+
+export const Disabled: Story = {
+  args: {
+    placeholder: "Disabled input...",
+    disabled: true,
+  },
+}
+
+export const File: Story = {
+  args: {
+    type: "file",
   },
 }
 
@@ -40,24 +74,16 @@ export const Password: Story = {
   },
 }
 
-export const Number: Story = {
+export const Invalid: Story = {
   args: {
-    type: "number",
-    placeholder: "Enter number...",
+    placeholder: "Invalid input...",
+    "aria-invalid": true,
   },
 }
 
-export const Disabled: Story = {
+export const Search: Story = {
   args: {
-    type: "text",
-    placeholder: "Disabled input...",
-    disabled: true,
-  },
-}
-
-export const WithDefaultValue: Story = {
-  args: {
-    type: "text",
-    defaultValue: "Pre-filled value",
+    type: "search",
+    placeholder: "Search...",
   },
 }

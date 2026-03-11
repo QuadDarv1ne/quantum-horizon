@@ -12,24 +12,26 @@ export function useCanvasAnimation(
   animate: (ctx: CanvasRenderingContext2D, width: number, height: number) => void,
   deps: React.DependencyList = []
 ) {
-  const animationFrameId = useRef<number>()
+  const animationFrameId = useRef<number | undefined>(undefined)
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
 
   const setupCanvasCallback = useCallback(() => {
     const canvas = canvasRef.current
-    if (!canvas) return null
+    if (!canvas) return
     const ctx = canvas.getContext("2d")
-    if (!ctx) return null
+    if (!ctx) return
 
     setupCanvas(canvas, ctx)
-    return { canvas, ctx }
   }, [canvasRef])
 
   useEffect(() => {
-    const result = setupCanvasCallback()
-    if (!result) return
+    const canvas = canvasRef.current
+    if (!canvas) return
 
-    const { canvas, ctx } = result
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    setupCanvas(canvas, ctx)
     ctxRef.current = ctx
 
     const handleResize = () => {

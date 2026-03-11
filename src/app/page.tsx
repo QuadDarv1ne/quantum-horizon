@@ -1,10 +1,11 @@
 "use client"
 
-import { useState, useEffect, useRef, createContext, useContext } from "react"
+import { useState, useEffect, useRef, createContext, useContext, useMemo, useCallback } from "react"
 import { useCanvasAnimation } from "@/hooks/use-canvas-animation"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { ErrorBoundary } from "@/components/ui/error-boundary"
 import { G, c, h, h_bar, k_B, M_SUN, eV, m_e, m_p } from "@/lib/constants"
 import { setupCanvas } from "@/hooks/use-canvas-animation"
 import { translations, type Language } from "@/lib/translations"
@@ -388,7 +389,12 @@ function WaveFunctionVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-56 rounded-lg"
+        aria-label="Визуализация волновой функции: частица в бесконечной потенциальной яме"
+        role="img"
+      />
 
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1">
@@ -593,11 +599,16 @@ function UncertaintyVisualization() {
     }
   }, [deltaX])
 
-  const deltaP = h_bar / 2 / (deltaX * 1e-10)
+  const deltaP = useMemo(() => h_bar / 2 / (deltaX * 1e-10), [deltaX])
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-44 rounded-lg" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-44 rounded-lg"
+        aria-label="Принцип неопределённости Гейзенберга: взаимосвязь между неопределённостями позиции и импульса"
+        role="img"
+      />
 
       <div className="space-y-1">
         <div className="flex justify-between text-xs">
@@ -810,7 +821,12 @@ function TunnelingVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-48 rounded-lg" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-48 rounded-lg"
+        aria-label="Квантовое туннелирование: прохождение частицы через потенциальный барьер"
+        role="img"
+      />
 
       <div className="grid grid-cols-3 gap-2 text-xs">
         <div className="space-y-1">
@@ -1042,11 +1058,11 @@ function TimeDilationVisualization() {
     }
   }, [velocity])
 
-  const gamma = 1 / Math.sqrt(1 - velocity * velocity)
+  const gamma = useMemo(() => 1 / Math.sqrt(1 - velocity * velocity), [velocity])
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-52 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-52 rounded-lg" aria-label="Замедление времени: сравнение хода часов для неподвижного и движущегося наблюдателей" role="img" />
 
       <div className="space-y-1">
         <div className="flex justify-between text-xs">
@@ -1101,8 +1117,8 @@ function LengthContractionVisualization() {
   const [velocity, setVelocity] = useState(0.8)
   const [showGrid, setShowGrid] = useState(true)
 
-  const gamma = 1 / Math.sqrt(1 - velocity * velocity)
-  const contractedLength = 100 / gamma
+  const gamma = useMemo(() => 1 / Math.sqrt(1 - velocity * velocity), [velocity])
+  const contractedLength = useMemo(() => 100 / gamma, [gamma])
 
   return (
     <div className="space-y-4">
@@ -1498,7 +1514,7 @@ function HRDiagramVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-72 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-72 rounded-lg" aria-label="Диаграмма Герцшпрунга-Рассела: классификация звёзд по светимости и температуре" role="img" />
 
       <div className="grid grid-cols-4 gap-1 text-[10px]">
         {stars.slice(0, 4).map((star) => (
@@ -1732,7 +1748,7 @@ function NeutronStarVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-64 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-64 rounded-lg" aria-label="Нейтронная звезда: вращающийся пульсар с магнитным полем" role="img" />
 
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1">
@@ -2014,7 +2030,7 @@ function DoubleSlitVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Эксперимент с двойной щелью: корпускулярно-волновой дуализм" role="img" />
 
       <div className="grid grid-cols-3 gap-2 text-xs">
         <div className="space-y-1">
@@ -2312,7 +2328,7 @@ function DarkMatterVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Тёмная материя: кривые вращения галактик" role="img" />
 
       <div className="space-y-1">
         <div className="flex justify-between text-xs">
@@ -2667,7 +2683,7 @@ function BlackHoleVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-72 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-72 rounded-lg" aria-label="Чёрная дыра: аккреционный диск и излучение Хокинга" role="img" />
 
       <div className="space-y-1">
         <div className="flex justify-between text-xs">
@@ -2943,7 +2959,7 @@ function WhiteHoleVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Белая дыра: теоретическая обратная сторона чёрной дыры" role="img" />
 
       <div className="space-y-1">
         <div className="flex justify-between text-xs">
@@ -3216,7 +3232,7 @@ function SchrodingersCatVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Кот Шрёдингера: квантовая суперпозиция" role="img" />
 
       <div className="flex gap-2">
         <Button
@@ -3439,7 +3455,7 @@ function BigBangVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Большой взрыв: расширение Вселенной" role="img" />
 
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div className="space-y-1">
@@ -3740,7 +3756,7 @@ function PhotoelectricEffectVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-48 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-48 rounded-lg" aria-label="Фотоэффект: выбивание электронов светом" role="img" />
 
       <div className="grid grid-cols-3 gap-2 text-xs">
         <div className="space-y-1">
@@ -3986,7 +4002,7 @@ function BrownianMotionVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-48 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-48 rounded-lg" aria-label="Броуновское движение: хаотичное движение частиц" role="img" />
 
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div className="space-y-1">
@@ -4236,7 +4252,7 @@ function GravitationalWavesVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Гравитационные волны: рябь пространства-времени" role="img" />
 
       <div className="grid grid-cols-3 gap-2 text-xs">
         <div className="space-y-1">
@@ -4530,7 +4546,7 @@ function QuantumEntanglementVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-48 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-48 rounded-lg" aria-label="Квантовая запутанность: спутанные частицы" role="img" />
 
       <div className="space-y-1">
         <div className="flex justify-between text-xs">
@@ -4836,7 +4852,7 @@ function AtomicModelVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Атомная модель Бора: электронные орбиты и переходы" role="img" />
 
       <div className="flex gap-2 flex-wrap">
         {Object.keys(elements).map((el) => (
@@ -5129,7 +5145,7 @@ function RadioactiveDecayVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-48 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-48 rounded-lg" aria-label="Радиоактивный распад: альфа, бета, гамма излучения" role="img" />
 
       <div className="grid grid-cols-3 gap-2 text-xs">
         <Button
@@ -5494,7 +5510,7 @@ function SuperconductivityVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Сверхпроводимость: эффект Мейсснера" role="img" />
 
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1">
@@ -5997,7 +6013,7 @@ function StandardModelVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg cursor-pointer" />
+      <canvas ref={canvasRef} className="w-full h-56 rounded-lg cursor-pointer" aria-label="Стандартная модель: кварки, лептоны, бозоны" role="img" />
 
       <div className="flex gap-2 flex-wrap">
         <Button
@@ -6530,7 +6546,7 @@ function PhysicsTimeline() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg cursor-pointer" />
+      <canvas ref={canvasRef} className="w-full h-56 rounded-lg cursor-pointer" aria-label="Реликтовое излучение: карта ранней Вселенной" role="img" />
 
       <div className="flex gap-2 flex-wrap">
         <Button
@@ -6865,7 +6881,7 @@ function SolarSystemVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg cursor-pointer" />
+      <canvas ref={canvasRef} className="w-full h-56 rounded-lg cursor-pointer" aria-label="Солнечная система: планеты и их орбиты" role="img" />
 
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1">
@@ -7093,7 +7109,7 @@ function CMBVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Эквивалентность массы и энергии: калькулятор E=mc²" role="img" />
 
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1">
@@ -7323,7 +7339,7 @@ function DarkEnergyVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" />
+      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Сокращение длины: лоренцево сокращение движущегося объекта" role="img" />
 
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1">
@@ -8984,7 +9000,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.waveFunction} isDark={isDark}>
-                  <WaveFunctionVisualization />
+                  <ErrorBoundary name="WaveFunctionVisualization">
+                    <WaveFunctionVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9006,7 +9024,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.uncertainty} isDark={isDark}>
-                  <UncertaintyVisualization />
+                  <ErrorBoundary name="UncertaintyVisualization">
+                    <UncertaintyVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9028,7 +9048,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.tunneling} isDark={isDark}>
-                  <TunnelingVisualization />
+                  <ErrorBoundary name="TunnelingVisualization">
+                    <TunnelingVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9054,7 +9076,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.timeDilation} isDark={isDark}>
-                  <TimeDilationVisualization />
+                  <ErrorBoundary name="TimeDilationVisualization">
+                    <TimeDilationVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9076,7 +9100,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.lengthContraction} isDark={isDark}>
-                  <LengthContractionVisualization />
+                  <ErrorBoundary name="LengthContractionVisualization">
+                    <LengthContractionVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9098,7 +9124,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.massEnergy} isDark={isDark}>
-                  <MassEnergyVisualization />
+                  <ErrorBoundary name="MassEnergyVisualization">
+                    <MassEnergyVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9124,7 +9152,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.hrDiagram} isDark={isDark}>
-                  <HRDiagramVisualization />
+                  <ErrorBoundary name="HRDiagramVisualization">
+                    <HRDiagramVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9146,7 +9176,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.neutronStar} isDark={isDark}>
-                  <NeutronStarVisualization />
+                  <ErrorBoundary name="NeutronStarVisualization">
+                    <NeutronStarVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9168,7 +9200,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.blackHole} isDark={isDark}>
-                  <BlackHoleVisualization />
+                  <ErrorBoundary name="BlackHoleVisualization">
+                    <BlackHoleVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9190,7 +9224,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.whiteHole} isDark={isDark}>
-                  <WhiteHoleVisualization />
+                  <ErrorBoundary name="WhiteHoleVisualization">
+                    <WhiteHoleVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9212,7 +9248,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.solarSystem} isDark={isDark}>
-                  <SolarSystemVisualization />
+                  <ErrorBoundary name="SolarSystemVisualization">
+                    <SolarSystemVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9234,7 +9272,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.cmb} isDark={isDark}>
-                  <CMBVisualization />
+                  <ErrorBoundary name="CMBVisualization">
+                    <CMBVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9256,7 +9296,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.darkEnergy} isDark={isDark}>
-                  <DarkEnergyVisualization />
+                  <ErrorBoundary name="DarkEnergyVisualization">
+                    <DarkEnergyVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9282,7 +9324,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.doubleSlit} isDark={isDark}>
-                  <DoubleSlitVisualization />
+                  <ErrorBoundary name="DoubleSlitVisualization">
+                    <DoubleSlitVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9304,7 +9348,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.darkMatter} isDark={isDark}>
-                  <DarkMatterVisualization />
+                  <ErrorBoundary name="DarkMatterVisualization">
+                    <DarkMatterVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9326,7 +9372,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.schrodingersCat} isDark={isDark}>
-                  <SchrodingersCatVisualization />
+                  <ErrorBoundary name="SchrodingersCatVisualization">
+                    <SchrodingersCatVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9348,7 +9396,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.bigBang} isDark={isDark}>
-                  <BigBangVisualization />
+                  <ErrorBoundary name="BigBangVisualization">
+                    <BigBangVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9370,7 +9420,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.photoelectric} isDark={isDark}>
-                  <PhotoelectricEffectVisualization />
+                  <ErrorBoundary name="PhotoelectricEffectVisualization">
+                    <PhotoelectricEffectVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9392,7 +9444,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.brownianMotion} isDark={isDark}>
-                  <BrownianMotionVisualization />
+                  <ErrorBoundary name="BrownianMotionVisualization">
+                    <BrownianMotionVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9414,7 +9468,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.gravitationalWaves} isDark={isDark}>
-                  <GravitationalWavesVisualization />
+                  <ErrorBoundary name="GravitationalWavesVisualization">
+                    <GravitationalWavesVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9436,7 +9492,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.quantumEntanglement} isDark={isDark}>
-                  <QuantumEntanglementVisualization />
+                  <ErrorBoundary name="QuantumEntanglementVisualization">
+                    <QuantumEntanglementVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9458,7 +9516,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.atomicModel} isDark={isDark}>
-                  <AtomicModelVisualization />
+                  <ErrorBoundary name="AtomicModelVisualization">
+                    <AtomicModelVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9480,7 +9540,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.radioactiveDecay} isDark={isDark}>
-                  <RadioactiveDecayVisualization />
+                  <ErrorBoundary name="RadioactiveDecayVisualization">
+                    <RadioactiveDecayVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9502,7 +9564,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.superconductivity} isDark={isDark}>
-                  <SuperconductivityVisualization />
+                  <ErrorBoundary name="SuperconductivityVisualization">
+                    <SuperconductivityVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>
@@ -9524,7 +9588,9 @@ export default function Home() {
               </CardHeader>
               <CardContent className="relative">
                 <FullscreenWrapper title={t.standardModel} isDark={isDark}>
-                  <StandardModelVisualization />
+                  <ErrorBoundary name="StandardModelVisualization">
+                    <StandardModelVisualization />
+                  </ErrorBoundary>
                 </FullscreenWrapper>
               </CardContent>
             </Card>

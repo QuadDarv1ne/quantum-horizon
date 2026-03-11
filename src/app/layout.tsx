@@ -1,7 +1,12 @@
 import { Geist, Geist_Mono } from "next/font/google"
+import { NextIntlClientProvider } from "next-intl"
+import { getLocale, getMessages } from "next-intl/server"
+import { notFound } from "next/navigation"
+import { ReactQueryProvider } from "@/components/providers/react-query-provider"
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
 import { metadata } from "./metadata"
+import { locales, type Locale } from "@/i18n/config"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,19 +20,30 @@ const geistMono = Geist_Mono({
 
 export { metadata }
 
-export default function RootLayout({
+function isValidLocale(locale: string): locale is Locale {
+  return locales.includes(locale as Locale)
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const locale = await getLocale()
+  
+  // Validate locale
+  if (!isValidLocale(locale)) {
+    notFound()
+  }
+
+  const messages = await getMessages()
+
   return (
-    <html lang="ru" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
-      >
+    <NextIntlClientProvider messages={messages}>
+      <ReactQueryProvider>
         {children}
         <Toaster />
-      </body>
-    </html>
+      </ReactQueryProvider>
+    </NextIntlClientProvider>
   )
 }

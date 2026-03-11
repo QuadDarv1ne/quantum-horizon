@@ -1,0 +1,10 @@
+feat: add i18n, React Query, Zustand, a11y, Storybook, CI/CD
+
+- next-intl: middleware, LanguageSwitcher, types
+- React Query: provider, hooks, devtools
+- Zustand: visualization store with persistence
+- a11y: utilities, keyboard navigation, focus trap
+- Storybook: stories for UI components
+- CI/CD: GitHub Actions workflows
+- Vitest + Playwright: test infrastructure
+- Visualizations: extracted to components

@@ -4,9 +4,9 @@ import {
   CardHeader,
   CardFooter,
   CardTitle,
-  CardAction,
   CardDescription,
   CardContent,
+  CardAction,
 } from "./card"
 import { Button } from "./button"
 
@@ -17,13 +17,6 @@ const meta = {
     layout: "centered",
   },
   tags: ["autodocs"],
-  decorators: [
-    (Story) => (
-      <div className="w-full max-w-md">
-        <Story />
-      </div>
-    ),
-  ],
 } satisfies Meta<typeof Card>
 
 export default meta
@@ -31,13 +24,13 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   render: () => (
-    <Card>
+    <Card className="w-[350px]">
       <CardHeader>
         <CardTitle>Card Title</CardTitle>
         <CardDescription>Card description goes here.</CardDescription>
       </CardHeader>
       <CardContent>
-        <p>Card content goes here. This is the main body of the card.</p>
+        <p>Card content goes here. You can put any content inside the card.</p>
       </CardContent>
       <CardFooter>
         <Button>Action</Button>
@@ -48,33 +41,35 @@ export const Default: Story = {
 
 export const WithAction: Story = {
   render: () => (
-    <Card>
+    <Card className="w-[350px]">
       <CardHeader>
-        <CardAction>
-          <Button variant="ghost" size="icon">
-            ⋮
-          </Button>
-        </CardAction>
         <CardTitle>Card with Action</CardTitle>
         <CardDescription>Card with action button in header.</CardDescription>
+        <CardAction>
+          <Button variant="ghost" size="icon">⋮</Button>
+        </CardAction>
       </CardHeader>
       <CardContent>
-        <p>This card has an action button in the top right corner.</p>
+        <p>This card has an action button in the header.</p>
       </CardContent>
     </Card>
   ),
 }
 
-export const BorderWithShadow: Story = {
+export const Interactive: Story = {
   render: () => (
-    <Card className="border-primary shadow-md">
+    <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle>Styled Card</CardTitle>
-        <CardDescription>Card with custom border and shadow.</CardDescription>
+        <CardTitle>Interactive Card</CardTitle>
+        <CardDescription>Click the button below</CardDescription>
       </CardHeader>
       <CardContent>
-        <p>This card has custom styling applied.</p>
+        <p>This card has interactive elements.</p>
       </CardContent>
+      <CardFooter className="gap-2">
+        <Button variant="outline">Cancel</Button>
+        <Button>Confirm</Button>
+      </CardFooter>
     </Card>
   ),
 }
