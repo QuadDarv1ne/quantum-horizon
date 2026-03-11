@@ -1,5 +1,6 @@
 'use client'
 
+<<<<<<< HEAD
 import { useState, useEffect, useRef, createContext, useContext } from 'react'
 import { useCanvasAnimation } from '@/hooks/use-canvas-animation'
 import { Button } from '@/components/ui/button'
@@ -7,6 +8,23 @@ import { Slider } from '@/components/ui/slider'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { G, c, h, h_bar, k_B, M_SUN, eV, m_e, m_p } from '@/lib/constants'
 import { setupCanvas } from '@/hooks/use-canvas-animation'
+=======
+import { useState, useEffect, useRef, useCallback, createContext, useContext } from 'react'
+import { Button } from '@/components/ui/button'
+import { Slider } from '@/components/ui/slider'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+
+// ==================== CONSTANTS ====================
+const G = 6.674e-11
+const c = 2.998e8
+const h = 6.626e-34
+const h_bar = h / (2 * Math.PI)
+const k_B = 1.381e-23
+const M_SUN = 1.989e30
+const eV = 1.602e-19
+const m_e = 9.109e-31
+const m_p = 1.673e-27
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
 
 // ==================== TRANSLATIONS ====================
 const translations = {
@@ -70,6 +88,11 @@ const translations = {
     calculatorDesc: 'Расчёты физических величин',
     mechanics: 'Механика',
     electromagnetism: 'Электричество',
+<<<<<<< HEAD
+=======
+    quantum: 'Квантовая физика',
+    relativity: 'Относительность',
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     calculate: 'Вычислить',
     result: 'Результат',
     timeline: '📅 Таймлайн открытий',
@@ -145,6 +168,11 @@ const translations = {
     calculatorDesc: 'Physical quantities calculations',
     mechanics: 'Mechanics',
     electromagnetism: 'Electricity',
+<<<<<<< HEAD
+=======
+    quantum: 'Quantum Physics',
+    relativity: 'Relativity',
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     calculate: 'Calculate',
     result: 'Result',
     timeline: '📅 Timeline of Discoveries',
@@ -220,6 +248,11 @@ const translations = {
     calculatorDesc: '物理量计算',
     mechanics: '力学',
     electromagnetism: '电学',
+<<<<<<< HEAD
+=======
+    quantum: '量子物理',
+    relativity: '相对论',
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     calculate: '计算',
     result: '结果',
     timeline: '📅 发现时间线',
@@ -295,6 +328,11 @@ const translations = {
     calculatorDesc: 'חישובי כמויות פיזיקליות',
     mechanics: 'מכניקה',
     electromagnetism: 'חשמל',
+<<<<<<< HEAD
+=======
+    quantum: 'פיזיקה קוונטית',
+    relativity: 'יחסות',
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     calculate: 'חשב',
     result: 'תוצאה',
     timeline: '📅 ציר הזמן של התגליות',
@@ -438,6 +476,10 @@ function FullscreenWrapper({
 // Wave Function Visualization
 function WaveFunctionVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [n, setN] = useState(1)
   const [showProbability, setShowProbability] = useState(true)
   const [particlePosition, setParticlePosition] = useState<number | null>(null)
@@ -448,6 +490,7 @@ function WaveFunctionVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
     let cachedWidth = 0
@@ -461,14 +504,30 @@ function WaveFunctionVisualization() {
       cachedHeight = canvas.offsetHeight
       bgGradient = null
       wellPath = null
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
 
+<<<<<<< HEAD
+=======
+    const width = canvas.offsetWidth
+    const height = canvas.offsetHeight
+    const L = width * 0.8
+    const offsetX = (width - L) / 2
+    const centerY = height / 2
+
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     let time = 0
 
     const animate = () => {
       time += 0.03
+<<<<<<< HEAD
       const width = canvas.offsetWidth
       const height = canvas.offsetHeight
       const L = width * 0.8
@@ -498,6 +557,26 @@ function WaveFunctionVisualization() {
       ctx.strokeStyle = 'rgba(100, 150, 255, 0.6)'
       ctx.lineWidth = 3
       ctx.stroke(wellPath)
+=======
+      ctx.clearRect(0, 0, width, height)
+
+      // Background
+      const bgGradient = ctx.createLinearGradient(0, 0, width, height)
+      bgGradient.addColorStop(0, '#0a0a1a')
+      bgGradient.addColorStop(1, '#151530')
+      ctx.fillStyle = bgGradient
+      ctx.fillRect(0, 0, width, height)
+
+      // Potential well
+      ctx.strokeStyle = 'rgba(100, 150, 255, 0.6)'
+      ctx.lineWidth = 3
+      ctx.beginPath()
+      ctx.moveTo(offsetX, 20)
+      ctx.lineTo(offsetX, height - 20)
+      ctx.lineTo(offsetX + L, height - 20)
+      ctx.lineTo(offsetX + L, 20)
+      ctx.stroke()
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
 
       // Well label
       ctx.fillStyle = 'rgba(100, 150, 255, 0.6)'
@@ -621,14 +700,22 @@ function WaveFunctionVisualization() {
       ctx.textAlign = 'center'
       ctx.fillText(`ψ${n}(x) = √(2/L)·sin(${n}πx/L)`, width / 2, 30)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [n, showProbability, particlePosition])
 
@@ -700,6 +787,10 @@ function WaveFunctionVisualization() {
 // Heisenberg Uncertainty Principle
 function UncertaintyVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [deltaX, setDeltaX] = useState(50)
 
   useEffect(() => {
@@ -708,20 +799,40 @@ function UncertaintyVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
       bgGradient = null
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
 
+<<<<<<< HEAD
+=======
+    const width = canvas.offsetWidth
+    const height = canvas.offsetHeight
+    const centerX = width / 2
+    const centerY = height / 2
+
+    // Calculate momentum uncertainty
+    const deltaP = (h_bar / 2) / (deltaX * 1e-10) // Convert to meters
+    const deltaP_normalized = Math.min(deltaP / 1e-24, 100)
+
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     let time = 0
 
     const animate = () => {
       time += 0.02
+<<<<<<< HEAD
       const width = canvas.offsetWidth
       const height = canvas.offsetHeight
       const centerX = width / 2
@@ -735,6 +846,12 @@ function UncertaintyVisualization() {
         bgGradient.addColorStop(1, '#151520')
       }
       ctx.fillStyle = bgGradient
+=======
+      ctx.clearRect(0, 0, width, height)
+
+      // Background
+      ctx.fillStyle = '#0a0a15'
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       ctx.fillRect(0, 0, width, height)
 
       // Position wave function (Gaussian)
@@ -833,14 +950,22 @@ function UncertaintyVisualization() {
       ctx.fillStyle = '#F472B6'
       ctx.fillText(`Δp ≥ ${deltaP.toExponential(1)} кг·м/с`, width * 0.75, centerY + 80)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [deltaX])
 
@@ -888,6 +1013,10 @@ function UncertaintyVisualization() {
 // Quantum Tunneling
 function TunnelingVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [barrierHeight, setBarrierHeight] = useState(50)
   const [barrierWidth, setBarrierWidth] = useState(30)
   const [energy, setEnergy] = useState(30)
@@ -898,20 +1027,34 @@ function TunnelingVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
       bgGradient = null
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
 
+<<<<<<< HEAD
+=======
+    const width = canvas.offsetWidth
+    const height = canvas.offsetHeight
+
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     let time = 0
 
     const animate = () => {
       time += 0.015
+<<<<<<< HEAD
       const width = canvas.offsetWidth
       const height = canvas.offsetHeight
       ctx.clearRect(0, 0, width, height)
@@ -923,6 +1066,12 @@ function TunnelingVisualization() {
         bgGradient.addColorStop(1, '#0a0a18')
       }
       ctx.fillStyle = bgGradient
+=======
+      ctx.clearRect(0, 0, width, height)
+
+      // Background
+      ctx.fillStyle = '#050510'
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       ctx.fillRect(0, 0, width, height)
 
       const baseY = height * 0.6
@@ -1029,14 +1178,22 @@ function TunnelingVisualization() {
       ctx.fillStyle = '#4ADE80'
       ctx.fillText('Прошедшая волна', width - 100, baseY + 20)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [barrierHeight, barrierWidth, energy])
 
@@ -1087,6 +1244,10 @@ function TunnelingVisualization() {
 // Time Dilation
 function TimeDilationVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [velocity, setVelocity] = useState(0.5) // fraction of c
 
   useEffect(() => {
@@ -1095,23 +1256,39 @@ function TimeDilationVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
       bgGradient = null
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
 
+<<<<<<< HEAD
     let time = 0
     let bgGradient: CanvasGradient | null = null
+=======
+    const width = canvas.offsetWidth
+    const height = canvas.offsetHeight
+    const centerX = width / 2
+
+    let time = 0
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
 
     // Lorentz factor
     const gamma = 1 / Math.sqrt(1 - velocity * velocity)
 
     const animate = () => {
       time += 0.016
+<<<<<<< HEAD
       const width = canvas.offsetWidth
       const height = canvas.offsetHeight
       const centerX = width / 2
@@ -1123,6 +1300,14 @@ function TimeDilationVisualization() {
         bgGradient.addColorStop(0, '#0a0515')
         bgGradient.addColorStop(1, '#150a20')
       }
+=======
+      ctx.clearRect(0, 0, width, height)
+
+      // Background
+      const bgGradient = ctx.createLinearGradient(0, 0, width, height)
+      bgGradient.addColorStop(0, '#0a0515')
+      bgGradient.addColorStop(1, '#150a20')
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
 
@@ -1242,14 +1427,22 @@ function TimeDilationVisualization() {
       ctx.stroke()
       ctx.setLineDash([])
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [velocity])
 
@@ -1468,7 +1661,11 @@ function MassEnergyVisualization() {
 // Hertzsprung-Russell Diagram
 function HRDiagramVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
   const [selectedStar, setSelectedStar] = useState<{name: string, temp: number, luminosity: number, type: string, color: string, size: number} | null>(null)
+=======
+  const [selectedStar, setSelectedStar] = useState<{name: string, temp: number, luminosity: number, type: string} | null>(null)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
 
   const stars = [
     { name: 'Солнце', temp: 5778, luminosity: 1, type: 'G2V', color: '#FFF4E0', size: 4 },
@@ -1487,6 +1684,7 @@ function HRDiagramVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
@@ -1621,6 +1819,134 @@ function HRDiagramVisualization() {
     resize()
     window.addEventListener('resize', resize)
 
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+    }
+    resize()
+    window.addEventListener('resize', resize)
+
+    const width = canvas.offsetWidth
+    const height = canvas.offsetHeight
+    const padding = { left: 50, right: 20, top: 20, bottom: 40 }
+
+    const plotWidth = width - padding.left - padding.right
+    const plotHeight = height - padding.top - padding.bottom
+
+    // Clear
+    ctx.fillStyle = '#050510'
+    ctx.fillRect(0, 0, width, height)
+
+    // Grid
+    ctx.strokeStyle = 'rgba(100, 100, 150, 0.1)'
+    ctx.lineWidth = 0.5
+    for (let i = 0; i <= 10; i++) {
+      const x = padding.left + (i / 10) * plotWidth
+      const y = padding.top + (i / 10) * plotHeight
+      ctx.beginPath()
+      ctx.moveTo(x, padding.top)
+      ctx.lineTo(x, height - padding.bottom)
+      ctx.stroke()
+      ctx.beginPath()
+      ctx.moveTo(padding.left, y)
+      ctx.lineTo(width - padding.right, y)
+      ctx.stroke()
+    }
+
+    // Main sequence band
+    ctx.fillStyle = 'rgba(100, 150, 255, 0.1)'
+    ctx.beginPath()
+    ctx.moveTo(padding.left, padding.top + plotHeight * 0.8)
+    ctx.quadraticCurveTo(padding.left + plotWidth * 0.5, padding.top + plotHeight * 0.4, width - padding.right, padding.top + plotHeight * 0.2)
+    ctx.lineTo(width - padding.right, padding.top + plotHeight * 0.4)
+    ctx.quadraticCurveTo(padding.left + plotWidth * 0.5, padding.top + plotHeight * 0.6, padding.left, padding.top + plotHeight * 0.95)
+    ctx.closePath()
+    ctx.fill()
+
+    // Regions labels
+    ctx.font = '9px sans-serif'
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)'
+    ctx.textAlign = 'center'
+    ctx.fillText('Главная', padding.left + plotWidth * 0.3, padding.top + plotHeight * 0.55)
+    ctx.fillText('последовательность', padding.left + plotWidth * 0.3, padding.top + plotHeight * 0.65)
+    
+    ctx.fillText('Гиганты', padding.left + plotWidth * 0.2, padding.top + plotHeight * 0.2)
+    ctx.fillText('Сверхгиганты', padding.left + plotWidth * 0.15, padding.top + plotHeight * 0.08)
+    ctx.fillText('Белые карлики', padding.left + plotWidth * 0.85, padding.top + plotHeight * 0.85)
+
+    // Axes labels
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'
+    ctx.font = '10px sans-serif'
+    
+    // Temperature (reversed)
+    ctx.textAlign = 'center'
+    ctx.fillText('Температура (K)', width / 2, height - 8)
+    ctx.font = '8px sans-serif'
+    ctx.fillText('40000', padding.left + 15, height - 25)
+    ctx.fillText('10000', padding.left + plotWidth * 0.5, height - 25)
+    ctx.fillText('3000', width - padding.right - 15, height - 25)
+
+    // Luminosity
+    ctx.save()
+    ctx.translate(12, height / 2)
+    ctx.rotate(-Math.PI / 2)
+    ctx.font = '10px sans-serif'
+    ctx.textAlign = 'center'
+    ctx.fillText('Светимость (L☉)', 0, 0)
+    ctx.restore()
+
+    ctx.font = '8px sans-serif'
+    ctx.textAlign = 'right'
+    ctx.fillText('10⁶', padding.left - 5, padding.top + 15)
+    ctx.fillText('1', padding.left - 5, padding.top + plotHeight * 0.5)
+    ctx.fillText('10⁻⁴', padding.left - 5, height - padding.bottom - 5)
+
+    // Draw stars
+    stars.forEach((star) => {
+      // Temperature to x (log scale, reversed)
+      const logTemp = Math.log10(star.temp)
+      const x = padding.left + plotWidth * (1 - (logTemp - 3.5) / 1.6)
+      
+      // Luminosity to y (log scale)
+      const logLum = Math.log10(star.luminosity)
+      const y = padding.top + plotHeight * (1 - (logLum + 4) / 10)
+
+      // Glow
+      const gradient = ctx.createRadialGradient(x, y, 0, x, y, star.size * 3)
+      gradient.addColorStop(0, star.color)
+      gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
+      ctx.fillStyle = gradient
+      ctx.beginPath()
+      ctx.arc(x, y, star.size * 3, 0, Math.PI * 2)
+      ctx.fill()
+
+      // Star
+      ctx.beginPath()
+      ctx.arc(x, y, star.size, 0, Math.PI * 2)
+      ctx.fillStyle = star.color
+      ctx.fill()
+    })
+
+    // Sun marker with label
+    const sunLogTemp = Math.log10(5778)
+    const sunX = padding.left + plotWidth * (1 - (sunLogTemp - 3.5) / 1.6)
+    const sunLogLum = Math.log10(1)
+    const sunY = padding.top + plotHeight * (1 - (sunLogLum + 4) / 10)
+    
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.arc(sunX, sunY, 12, 0, Math.PI * 2)
+    ctx.stroke()
+    
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)'
+    ctx.font = '9px sans-serif'
+    ctx.textAlign = 'left'
+    ctx.fillText('☉ Солнце', sunX + 15, sunY + 3)
+
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     return () => {
       window.removeEventListener('resize', resize)
     }
@@ -1676,6 +2002,10 @@ function HRDiagramVisualization() {
 // Neutron Star Visualization
 function NeutronStarVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [rotationPeriod, setRotationPeriod] = useState(33) // milliseconds
   const [magneticTilt, setMagneticTilt] = useState(45)
 
@@ -1685,10 +2015,17 @@ function NeutronStarVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -1834,14 +2171,22 @@ function NeutronStarVisualization() {
       ctx.fillText(`P = ${rotationPeriod} мс`, centerX, canvas.offsetHeight - 15)
       ctx.fillText(`f = ${(1000 / rotationPeriod).toFixed(1)} Гц`, centerX, canvas.offsetHeight - 3)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [rotationPeriod, magneticTilt])
 
@@ -1893,6 +2238,10 @@ function NeutronStarVisualization() {
 // ==================== DOUBLE-SLIT EXPERIMENT ====================
 function DoubleSlitVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [slitSeparation, setSlitSeparation] = useState(40)
   const [slitWidth, setSlitWidth] = useState(8)
   const [wavelength, setWavelength] = useState(15)
@@ -1906,12 +2255,19 @@ function DoubleSlitVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
       bgGradient = null
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -1929,6 +2285,7 @@ function DoubleSlitVisualization() {
       time += 0.016
       ctx.clearRect(0, 0, width, height)
 
+<<<<<<< HEAD
       // Background - cached gradient
       if (!bgGradient) {
         bgGradient = ctx.createLinearGradient(0, 0, width, height)
@@ -1936,6 +2293,10 @@ function DoubleSlitVisualization() {
         bgGradient.addColorStop(1, '#0a0a1a')
       }
       ctx.fillStyle = bgGradient
+=======
+      // Background
+      ctx.fillStyle = '#050510'
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       ctx.fillRect(0, 0, width, height)
 
       // Wave visualization from source
@@ -2086,14 +2447,22 @@ function DoubleSlitVisualization() {
       ctx.fillText('λ = ' + wavelength + ' (длина волны)', 10, height - 22)
       ctx.fillText('a = ' + slitWidth + ' (ширина щели)', 10, height - 9)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [slitSeparation, slitWidth, wavelength, showParticles, showWave])
 
@@ -2160,6 +2529,10 @@ function DoubleSlitVisualization() {
 // ==================== DARK MATTER VISUALIZATION ====================
 function DarkMatterVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [darkMatterFraction, setDarkMatterFraction] = useState(85)
   const [showDarkMatter, setShowDarkMatter] = useState(true)
 
@@ -2169,12 +2542,19 @@ function DarkMatterVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
       bgGradient = null
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2220,12 +2600,19 @@ function DarkMatterVisualization() {
       time += 0.016
       ctx.clearRect(0, 0, width, height)
 
+<<<<<<< HEAD
       // Background - cached gradient
       if (!bgGradient) {
         bgGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 120)
         bgGradient.addColorStop(0, '#0a0520')
         bgGradient.addColorStop(1, '#050510')
       }
+=======
+      // Background
+      const bgGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 120)
+      bgGradient.addColorStop(0, '#0a0520')
+      bgGradient.addColorStop(1, '#050510')
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
 
@@ -2349,14 +2736,22 @@ function DarkMatterVisualization() {
       ctx.fillStyle = 'rgba(100, 200, 255, 0.8)'
       ctx.fillText('С тёмной материей', graphX + graphW - 80, graphY + 20)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [darkMatterFraction, showDarkMatter])
 
@@ -2412,6 +2807,10 @@ function DarkMatterVisualization() {
 // ==================== BLACK HOLE (ENHANCED) ====================
 function BlackHoleVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [massSolar, setMassSolar] = useState(10)
 
   const mass = massSolar * M_SUN
@@ -2425,12 +2824,19 @@ function BlackHoleVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
       bgGradient = null
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2472,6 +2878,7 @@ function BlackHoleVisualization() {
       time += 0.016
       ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight)
 
+<<<<<<< HEAD
       // Background - cached gradient
       if (!bgGradient) {
         bgGradient = ctx.createLinearGradient(0, 0, canvas.offsetWidth, canvas.offsetHeight)
@@ -2479,6 +2886,9 @@ function BlackHoleVisualization() {
         bgGradient.addColorStop(1, '#0a0a10')
       }
       ctx.fillStyle = bgGradient
+=======
+      ctx.fillStyle = '#000002'
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight)
 
       // Stars with lensing
@@ -2660,14 +3070,22 @@ function BlackHoleVisualization() {
       })
       ctx.restore()
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [massSolar])
 
@@ -2732,6 +3150,10 @@ function BlackHoleVisualization() {
 // ==================== WHITE HOLE ====================
 function WhiteHoleVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [massSolar, setMassSolar] = useState(10)
 
   useEffect(() => {
@@ -2740,10 +3162,17 @@ function WhiteHoleVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2881,14 +3310,22 @@ function WhiteHoleVisualization() {
       ctx.textAlign = 'center'
       ctx.fillText('Белая дыра', centerX, canvas.offsetHeight - 15)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [massSolar])
 
@@ -2938,6 +3375,10 @@ function WhiteHoleVisualization() {
 // ==================== SCHRÖDINGER'S CAT ====================
 function SchrodingersCatVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [observationCount, setObservationCount] = useState(0)
   const [catState, setCatState] = useState<'alive' | 'dead' | 'superposition'>('superposition')
   const [isObserving, setIsObserving] = useState(false)
@@ -2948,10 +3389,17 @@ function SchrodingersCatVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -3125,14 +3573,22 @@ function SchrodingersCatVisualization() {
       }
       ctx.stroke()
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [catState, isObserving])
 
@@ -3198,6 +3654,10 @@ function SchrodingersCatVisualization() {
 // ==================== BIG BANG ====================
 function BigBangVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [expansionSpeed, setExpansionSpeed] = useState(50)
   const [timeScale, setTimeScale] = useState(0)
   const [isPlaying, setIsPlaying] = useState(true)
@@ -3208,10 +3668,17 @@ function BigBangVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -3346,14 +3813,22 @@ function BigBangVisualization() {
       ctx.fillStyle = 'rgba(100, 200, 255, 0.8)'
       ctx.fillText(`a(t) = ${expansionFactor.toFixed(2)}`, 10, height - 10)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [expansionSpeed, timeScale, isPlaying])
 
@@ -3409,6 +3884,10 @@ function BigBangVisualization() {
 // ==================== PHOTOELECTRIC EFFECT ====================
 function PhotoelectricEffectVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [frequency, setFrequency] = useState(50) // as % of threshold
   const [intensity, setIntensity] = useState(50)
   const [workFunction, setWorkFunction] = useState(2.5) // eV
@@ -3419,10 +3898,17 @@ function PhotoelectricEffectVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -3620,14 +4106,22 @@ function PhotoelectricEffectVisualization() {
         ctx.fillText(`Eкин = ${(kineticEnergy * 1.6e-19).toExponential(1)} Дж`, 10, 35)
       }
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [frequency, intensity, workFunction])
 
@@ -3684,6 +4178,10 @@ function PhotoelectricEffectVisualization() {
 // ==================== BROWNIAN MOTION ====================
 function BrownianMotionVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [particleCount, setParticleCount] = useState(5)
   const [temperature, setTemperature] = useState(300) // Kelvin
   const [showTrails, setShowTrails] = useState(true)
@@ -3694,10 +4192,17 @@ function BrownianMotionVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -3841,14 +4346,22 @@ function BrownianMotionVisualization() {
       ctx.fillText('H₂O молекулы: 200', 10, height - 20)
       ctx.fillText(`Частицы: ${particleCount}`, 10, height - 8)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [particleCount, temperature, showTrails])
 
@@ -3902,6 +4415,10 @@ function BrownianMotionVisualization() {
 // ==================== GRAVITATIONAL WAVES ====================
 function GravitationalWavesVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [mass1, setMass1] = useState(30) // Solar masses
   const [mass2, setMass2] = useState(30)
   const [distance, setDistance] = useState(50)
@@ -3914,10 +4431,17 @@ function GravitationalWavesVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4068,14 +4592,22 @@ function GravitationalWavesVisualization() {
       ctx.fillStyle = 'rgba(100, 200, 255, 0.8)'
       ctx.fillText(`f ≈ ${freq.toFixed(1)} Гц`, 10, height - 15)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [mass1, mass2, distance, isPlaying, timeScale])
 
@@ -4136,6 +4668,10 @@ function GravitationalWavesVisualization() {
 // ==================== QUANTUM ENTANGLEMENT ====================
 function QuantumEntanglementVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [entanglementStrength, setEntanglementStrength] = useState(80)
   const [measuredParticle, setMeasuredParticle] = useState<'left' | 'right' | null>(null)
   const [leftState, setLeftState] = useState<'superposition' | 'up' | 'down'>('superposition')
@@ -4147,10 +4683,17 @@ function QuantumEntanglementVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4308,14 +4851,22 @@ function QuantumEntanglementVisualization() {
       ctx.font = '11px monospace'
       ctx.fillText('|Ψ⟩ = (|↑↑⟩ + |↓↓⟩) / √2', width / 2, height - 15)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [entanglementStrength, leftState, rightState, measuredParticle])
 
@@ -4387,6 +4938,10 @@ function QuantumEntanglementVisualization() {
 // ==================== BOHR ATOMIC MODEL ====================
 function AtomicModelVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [element, setElement] = useState<'H' | 'He' | 'Li' | 'C' | 'Na'>('H')
   const [showTransitions, setShowTransitions] = useState(true)
   const [selectedTransition, setSelectedTransition] = useState<{from: number, to: number} | null>(null)
@@ -4408,10 +4963,17 @@ function AtomicModelVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4595,14 +5157,22 @@ function AtomicModelVisualization() {
       ctx.textAlign = 'center'
       ctx.fillText('E_n = -13.6 eV / n²', width / 2, height - 15)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [element, showTransitions, selectedTransition, currentElement])
 
@@ -4664,6 +5234,10 @@ function AtomicModelVisualization() {
 // ==================== RADIOACTIVE DECAY ====================
 function RadioactiveDecayVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [decayType, setDecayType] = useState<'alpha' | 'beta' | 'gamma'>('alpha')
   const [halfLife, setHalfLife] = useState(50)
   const [atomCount, setAtomCount] = useState(100)
@@ -4677,10 +5251,17 @@ function RadioactiveDecayVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4881,14 +5462,22 @@ function RadioactiveDecayVisualization() {
       ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
       ctx.fillText(decayLabel, 10, height - 15)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [decayType, halfLife, atomCount, isPlaying])
 
@@ -4968,6 +5557,10 @@ function RadioactiveDecayVisualization() {
 // ==================== SUPERCONDUCTIVITY ====================
 function SuperconductivityVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [temperature, setTemperature] = useState(100) // Kelvin
   const [criticalTemp, setCriticalTemp] = useState(90) // Tc for YBCO
   const [showMagneticField, setShowMagneticField] = useState(true)
@@ -4979,6 +5572,7 @@ function SuperconductivityVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
     let lastIsSuperconducting = false
@@ -4986,6 +5580,12 @@ function SuperconductivityVisualization() {
     const resize = () => {
       setupCanvas(canvas, ctx)
       bgGradient = null
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4997,19 +5597,28 @@ function SuperconductivityVisualization() {
     // Superconducting state
     const isSuperconducting = temperature < criticalTemp
     const targetHeight = isSuperconducting ? 40 : 0
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     let time = 0
     let currentHeight = levitationHeight
 
     const animate = () => {
       time += 0.03
+<<<<<<< HEAD
 
+=======
+      
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       // Smoothly animate levitation height
       currentHeight += (targetHeight - currentHeight) * 0.05
       setLevitationHeight(currentHeight)
 
       ctx.clearRect(0, 0, width, height)
 
+<<<<<<< HEAD
       // Background gradient - cached based on state
       if (!bgGradient || lastIsSuperconducting !== isSuperconducting) {
         bgGradient = ctx.createLinearGradient(0, 0, width, height)
@@ -5021,6 +5630,17 @@ function SuperconductivityVisualization() {
           bgGradient.addColorStop(1, '#402520')
         }
         lastIsSuperconducting = isSuperconducting
+=======
+      // Background gradient based on temperature
+      const tempRatio = temperature / 150
+      const bgGradient = ctx.createLinearGradient(0, 0, width, height)
+      if (isSuperconducting) {
+        bgGradient.addColorStop(0, '#0a1525')
+        bgGradient.addColorStop(1, '#152540')
+      } else {
+        bgGradient.addColorStop(0, '#251510')
+        bgGradient.addColorStop(1, '#402520')
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       }
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
@@ -5199,14 +5819,22 @@ function SuperconductivityVisualization() {
       ctx.textAlign = 'center'
       ctx.fillText('B = 0 внутри сверхпроводника (эффект Мейсснера)', centerX, height - 15)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [temperature, criticalTemp, showMagneticField, levitationHeight])
 
@@ -5272,6 +5900,10 @@ function SuperconductivityVisualization() {
 // ==================== STANDARD MODEL ====================
 function StandardModelVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [selectedParticle, setSelectedParticle] = useState<string | null>(null)
   const [showDecays, setShowDecays] = useState(false)
 
@@ -5294,11 +5926,19 @@ function StandardModelVisualization() {
       { name: 'ντ', fullName: 'Tau neutrino', mass: '< 18 MeV', charge: '0', color: '#F472B6', generation: 3 },
     ],
     bosons: [
+<<<<<<< HEAD
       { name: 'γ', fullName: 'Photon', mass: '0', charge: '0', color: '#FBBF24', spin: '1', generation: 0 },
       { name: 'g', fullName: 'Gluon', mass: '0', charge: '0', color: '#F59E0B', spin: '1', generation: 0 },
       { name: 'Z', fullName: 'Z boson', mass: '91.2 GeV', charge: '0', color: '#A855F7', spin: '1', generation: 0 },
       { name: 'W', fullName: 'W boson', mass: '80.4 GeV', charge: '±1', color: '#EF4444', spin: '1', generation: 0 },
       { name: 'H', fullName: 'Higgs', mass: '125 GeV', charge: '0', color: '#FFD700', spin: '0', generation: 0 },
+=======
+      { name: 'γ', fullName: 'Photon', mass: '0', charge: '0', color: '#FBBF24', spin: '1' },
+      { name: 'g', fullName: 'Gluon', mass: '0', charge: '0', color: '#F59E0B', spin: '1' },
+      { name: 'Z', fullName: 'Z boson', mass: '91.2 GeV', charge: '0', color: '#A855F7', spin: '1' },
+      { name: 'W', fullName: 'W boson', mass: '80.4 GeV', charge: '±1', color: '#EF4444', spin: '1' },
+      { name: 'H', fullName: 'Higgs', mass: '125 GeV', charge: '0', color: '#FFD700', spin: '0' },
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     ]
   }
 
@@ -5308,12 +5948,19 @@ function StandardModelVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
       bgGradient = null
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -5385,12 +6032,19 @@ function StandardModelVisualization() {
       time += 0.02
       ctx.clearRect(0, 0, width, height)
 
+<<<<<<< HEAD
       // Background - cached gradient
       if (!bgGradient) {
         bgGradient = ctx.createLinearGradient(0, 0, width, height)
         bgGradient.addColorStop(0, '#0a0a15')
         bgGradient.addColorStop(1, '#15152a')
       }
+=======
+      // Background
+      const bgGradient = ctx.createLinearGradient(0, 0, width, height)
+      bgGradient.addColorStop(0, '#0a0a15')
+      bgGradient.addColorStop(1, '#15152a')
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
 
@@ -5533,7 +6187,11 @@ function StandardModelVisualization() {
         }
       }
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
@@ -5562,7 +6220,11 @@ function StandardModelVisualization() {
     return () => {
       window.removeEventListener('resize', resize)
       canvas.removeEventListener('click', handleClick)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [selectedParticle, showDecays])
 
@@ -5686,6 +6348,10 @@ function PhysicsTimeline() {
   }
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -5693,6 +6359,7 @@ function PhysicsTimeline() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
     let bgGradient: CanvasGradient | null = null
     let timelineGradient: CanvasGradient | null = null
@@ -5701,6 +6368,12 @@ function PhysicsTimeline() {
       setupCanvas(canvas, ctx)
       bgGradient = null
       timelineGradient = null
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -5716,6 +6389,7 @@ function PhysicsTimeline() {
       time += 0.02
       ctx.clearRect(0, 0, width, height)
 
+<<<<<<< HEAD
       // Background - cached gradient
       if (!bgGradient) {
         bgGradient = ctx.createLinearGradient(0, 0, width, height)
@@ -5739,6 +6413,25 @@ function PhysicsTimeline() {
 
       // Draw timeline line
       const lineY = centerY
+=======
+      // Background
+      const bgGradient = ctx.createLinearGradient(0, 0, width, height)
+      bgGradient.addColorStop(0, '#0a0a18')
+      bgGradient.addColorStop(1, '#151530')
+      ctx.fillStyle = bgGradient
+      ctx.fillRect(0, 0, width, height)
+
+      // Draw timeline line
+      const lineY = centerY
+      const gradient = ctx.createLinearGradient(0, 0, width, 0)
+      gradient.addColorStop(0, '#8B5CF6')
+      gradient.addColorStop(0.25, '#3B82F6')
+      gradient.addColorStop(0.5, '#10B981')
+      gradient.addColorStop(0.75, '#EC4899')
+      gradient.addColorStop(1, '#F97316')
+      ctx.strokeStyle = gradient
+      ctx.lineWidth = 3
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
       ctx.beginPath()
       ctx.moveTo(0, lineY)
       ctx.lineTo(width, lineY)
@@ -5814,14 +6507,22 @@ function PhysicsTimeline() {
         ctx.fillText(year.toString(), x, height - 5)
       }
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [filteredEvents, hoveredEvent])
 
@@ -5866,6 +6567,10 @@ function PhysicsTimeline() {
 // ==================== SOLAR SYSTEM ====================
 function SolarSystemVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [speed, setSpeed] = useState(1)
   const [showOrbits, setShowOrbits] = useState(true)
   const [showLabels, setShowLabels] = useState(true)
@@ -5890,10 +6595,17 @@ function SolarSystemVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -6063,14 +6775,22 @@ function SolarSystemVisualization() {
       ctx.textAlign = 'right'
       ctx.fillText('Масштаб не сохранён', width - 10, height - 5)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [speed, showOrbits, showLabels, selectedPlanet, zoom])
 
@@ -6143,6 +6863,10 @@ function SolarSystemVisualization() {
 // ==================== COSMIC MICROWAVE BACKGROUND ====================
 function CMBVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [temperature, setTemperature] = useState(2.725) // Current CMB temperature in K
   const [showGalaxies, setShowGalaxies] = useState(true)
   const [timeScale, setTimeScale] = useState(1)
@@ -6153,10 +6877,17 @@ function CMBVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -6266,14 +6997,22 @@ function CMBVisualization() {
       ctx.fillText('Возраст: ~380 000 лет после БВ', 10, height - 25)
       ctx.fillText('ΔT/T ≈ 10⁻⁵ (флуктуации)', 10, height - 12)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [temperature, showGalaxies, timeScale])
 
@@ -6318,6 +7057,10 @@ function CMBVisualization() {
 // ==================== DARK ENERGY VISUALIZATION ====================
 function DarkEnergyVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+<<<<<<< HEAD
+=======
+  const animationRef = useRef<number>(0)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
   const [expansionRate, setExpansionRate] = useState(0.7) // Hubble parameter visualization
   const [darkEnergyFraction, setDarkEnergyFraction] = useState(68) // % of universe
   const [showMatter, setShowMatter] = useState(true)
@@ -6328,10 +7071,17 @@ function DarkEnergyVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+<<<<<<< HEAD
     let animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+=======
+    const resize = () => {
+      canvas.width = canvas.offsetWidth * 2
+      canvas.height = canvas.offsetHeight * 2
+      ctx.scale(2, 2)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
     resize()
     window.addEventListener('resize', resize)
@@ -6474,14 +7224,22 @@ function DarkEnergyVisualization() {
       ctx.fillText(`H₀ ≈ 70 км/с/Мпк`, width - 125, height - 30)
       ctx.fillText(`Ускорение: +${(expansionRate * 100).toFixed(0)}%`, width - 125, height - 18)
 
+<<<<<<< HEAD
       animationFrameId = requestAnimationFrame(animate)
+=======
+      animationRef.current = requestAnimationFrame(animate)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
+<<<<<<< HEAD
       cancelAnimationFrame(animationFrameId)
+=======
+      cancelAnimationFrame(animationRef.current)
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
     }
   }, [expansionRate, darkEnergyFraction, showMatter])
 

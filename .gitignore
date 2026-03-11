@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Dependencies
 node_modules/
 .pnp
@@ -25,10 +26,203 @@ yarn-error.log*
 # Local env files
 .env*.local
 .env
+=======
+# ==================== ENVIRONMENT ====================
+.env
+.env.local
+.env.*.local
+.env.production.local
+.env.development.local
+.env.test.local
+.env.*.example
+.env.render
+
+# ==================== QWEN CONTEXT ====================
+.qwen/
+
+# ==================== PYTHON ====================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+!frontend/lib/
+!frontend/lib/**
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Requirements lock files (generated)
+requirements*.lock
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.db-shm
+*.db-wal
+test.db
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+.pytest_tmp/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# IDE specific Python
+.pylintrc
+.flake8
+.isort.cfg
+
+# ==================== NODE.JS / FRONTEND ====================
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Production
+.next/
+.nuxt/
+dist/
+build/
+output/
+
+# Next.js specific
+.next/
+out/
+*.tsbuildinfo
+
+# Next.js cache directory
+.next/cache/
+
+# Nuxt.js build / generate output
+dist/
+
+# Nest output
+dist/
+
+# Storybook coverage
+coverage/
+
+# nyc test coverage
+.nyc_output
+
+# Parcel
+.parcel-cache
+dist/
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
 
 # Vercel
 .vercel
 
+<<<<<<< HEAD
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
@@ -50,3 +244,252 @@ prisma/migrations/
 
 # Bun
 .bun
+=======
+# Turbopack
+.turbo
+
+# Docusaurus cache and generated files
+.docusaurus
+
+# Testing
+coverage/
+.nyc_output/
+
+# Temporary files
+tmp/
+temp/
+
+# Lock files (опционально)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# ==================== IDE / EDITOR ====================
+# Visual Studio Code
+.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+.sublime/
+
+# IntelliJ IDEs
+.idea/
+.idea_modules/
+*.iml
+*.iws
+*.ipr
+out/
+.DS_Store
+
+# WebStorm
+.idea/
+*.iml
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+
+# Vim
+*.swp
+*.swo
+*~
+.vim/
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Atom
+.atom/
+
+# Neovim
+.nvimrc
+
+# VS Code
+.vscode
+
+# ==================== OS ====================
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.directory
+*~
+.~*
+
+# ==================== DOCKER ====================
+.dockerignore
+docker-compose.override.yml
+.docker/
+*.log
+
+# ==================== DATABASE ====================
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+data/
+db_data/
+postgres_data/
+redis_data/
+mongo_data/
+mysql_data/
+
+# ==================== LOGS ====================
+logs/
+*.log
+*.log.*
+log.txt
+
+# ==================== CREDENTIALS & SECRETS ====================
+.aws/
+.ssh/
+*.pem
+*.key
+private_key
+secret_key
+credentials.json
+token.json
+access_token.txt
+
+# ==================== UPLOADS & MEDIA ====================
+media/
+uploads/
+user_uploads/
+static/uploads/
+public/uploads/
+tmp/uploads/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.mp4
+*.mov
+*.zip
+*.rar
+*.tar
+*.tar.gz
+
+# Исключения: разрешить img/ для README и документации
+!img/
+!img/*.png
+!img/*.jpg
+!img/*.jpeg
+
+# ==================== BUILD & DISTRIBUTION ====================
+build/
+dist/
+*.egg
+*.egg-info
+.eggs/
+*.so
+*.o
+*.a
+*.lib
+*.dll
+*.exe
+*.out
+*.app
+
+# ==================== TEMPORARY FILES ====================
+*.tmp
+*.temp
+*.bak
+*.new
+*.swp
+*.swo
+*~
+.~*
+*.backup
+*.orig
+*.rej
+
+# ==================== PROJECT SPECIFIC ====================
+# Backend uploads
+backend/media/
+backend/static/
+backend/uploads/
+
+# Frontend build
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/.env.local
+
+# Alembic migrations (опционально игнорировать локальные)
+# alembic/versions/
+
+# Generated files
+generated/
+*.generated.ts
+*.generated.js
+
+# ==================== TESTING ====================
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+pytest.ini
+.hypothesis/
+
+# ==================== CI/CD ====================
+.github/workflows/secrets.yml
+.gitlab-ci.yml.local
+.travis.yml.local
+
+# ==================== DOCUMENTATION ====================
+# docs/_build/
+# site/
+
+# ==================== MONOREPO ====================
+# turborepo
+.turbo/
+
+# lerna
+lerna-debug.log
+
+# Workspace specific
+.yarn/cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# ==================== MISC ====================
+.DS_Store
+*.pem
+*.key
+.env.production
+config.local.js
+tsconfig.local.json
+babel.config.local.js
+jest.config.local.js
+
+# System files
+.system/
+system.conf
+
+# Keep important files in .gitignore but track specific ones
+# !.gitkeep
+# !important-file.txt
+>>>>>>> 15776b6b850b11046f7ae9c239aa6322a54d032a
