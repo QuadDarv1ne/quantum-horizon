@@ -1,12 +1,22 @@
-import js from "@eslint/js";
-import globals from "globals";
-import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
-import tseslint from "typescript-eslint";
-import eslintConfigPrettier from "eslint-config-prettier";
+import js from "@eslint/js"
+import globals from "globals"
+import reactHooks from "eslint-plugin-react-hooks"
+import reactRefresh from "eslint-plugin-react-refresh"
+import tseslint from "typescript-eslint"
+import eslintConfigPrettier from "eslint-config-prettier"
 
 export default tseslint.config(
-  { ignores: ["dist", ".next", "node_modules", "*.tsbuildinfo", "src/components/ui/**", "src/app/page.tsx"] },
+  {
+    ignores: [
+      "dist",
+      ".next",
+      "node_modules",
+      "*.tsbuildinfo",
+      "src/components/ui/**",
+      "src/app/page.tsx",
+      ".storybook/**",
+    ],
+  },
   {
     extends: [
       js.configs.recommended,
@@ -28,10 +38,7 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true },
-      ],
+      "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "@typescript-eslint/no-unused-vars": [
         "warn",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
@@ -72,4 +79,4 @@ export default tseslint.config(
     },
   },
   eslintConfigPrettier
-);
+)

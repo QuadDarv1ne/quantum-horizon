@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react'
+import { useEffect, useRef, useCallback } from "react"
 
 export function setupCanvas(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
   canvas.width = canvas.offsetWidth * 2
@@ -18,7 +18,7 @@ export function useCanvasAnimation(
   const setupCanvasCallback = useCallback(() => {
     const canvas = canvasRef.current
     if (!canvas) return null
-    const ctx = canvas.getContext('2d')
+    const ctx = canvas.getContext("2d")
     if (!ctx) return null
 
     setupCanvas(canvas, ctx)
@@ -37,7 +37,7 @@ export function useCanvasAnimation(
       animate(ctx, canvas.offsetWidth, canvas.offsetHeight)
     }
 
-    window.addEventListener('resize', handleResize)
+    window.addEventListener("resize", handleResize)
 
     const loop = () => {
       animate(ctx, canvas.offsetWidth, canvas.offsetHeight)
@@ -46,7 +46,7 @@ export function useCanvasAnimation(
     loop()
 
     return () => {
-      window.removeEventListener('resize', handleResize)
+      window.removeEventListener("resize", handleResize)
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current)
       }
