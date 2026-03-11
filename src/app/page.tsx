@@ -1549,7 +1549,8 @@ function HRDiagramVisualization() {
       ctx.fillText('1', padding.left - 5, padding.top + plotHeight * 0.5)
       ctx.fillText('10⁻⁴', padding.left - 5, height - padding.bottom - 5)
 
-      // Draw stars
+      // Draw stars - cache gradients
+      const starGradients: Map<string, CanvasGradient> = new Map()
       stars.forEach((star) => {
         // Temperature to x (log scale, reversed)
         const logTemp = Math.log10(star.temp)
@@ -1559,10 +1560,14 @@ function HRDiagramVisualization() {
         const logLum = Math.log10(star.luminosity)
         const y = padding.top + plotHeight * (1 - (logLum + 4) / 10)
 
-        // Glow
-        const gradient = ctx.createRadialGradient(x, y, 0, x, y, star.size * 3)
-        gradient.addColorStop(0, star.color)
-        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
+        // Glow - cache by star name
+        let gradient = starGradients.get(star.name)
+        if (!gradient) {
+          gradient = ctx.createRadialGradient(x, y, 0, x, y, star.size * 3)
+          gradient.addColorStop(0, star.color)
+          gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
+          starGradients.set(star.name, gradient)
+        }
         ctx.fillStyle = gradient
         ctx.beginPath()
         ctx.arc(x, y, star.size * 3, 0, Math.PI * 2)
