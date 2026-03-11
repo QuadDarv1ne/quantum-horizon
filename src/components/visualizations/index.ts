@@ -7,6 +7,7 @@ export { FullscreenWrapper } from "./base/fullscreen-wrapper"
 // Quantum visualizations
 export { WaveFunctionVisualization } from "./quantum/wave-function"
 export { UncertaintyVisualization } from "./quantum/uncertainty"
+export { TunnelingVisualization } from "./quantum/tunneling"
 
 // Relativity visualizations
 export { TimeDilationVisualization } from "./relativity/time-dilation"
