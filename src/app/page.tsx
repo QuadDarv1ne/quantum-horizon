@@ -9,6 +9,14 @@ import { ErrorBoundary } from "@/components/ui/error-boundary"
 import { G, c, h, h_bar, k_B, M_SUN, eV, m_e, m_p } from "@/lib/constants"
 import { setupCanvas } from "@/hooks/use-canvas-animation"
 import { translations, type Language } from "@/lib/translations"
+import { FullscreenWrapper } from "@/components/visualizations/base/fullscreen-wrapper"
+import {
+  WaveFunctionVisualization,
+  UncertaintyVisualization,
+  TimeDilationVisualization,
+  MassEnergyVisualization,
+  BlackHoleVisualization,
+} from "@/components/visualizations"
 
 type Theme = "dark" | "light"
 
@@ -39,618 +47,7 @@ function formatScientific(num: number): string {
   return num.toFixed(4)
 }
 
-// ==================== FULLSCREEN WRAPPER ====================
-function FullscreenWrapper({
-  children,
-  title,
-  isDark,
-}: {
-  children: React.ReactNode
-  title: string
-  isDark: boolean
-}) {
-  const [isFullscreen, setIsFullscreen] = useState(false)
-
-  // Handle F key for fullscreen toggle
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isFullscreen) {
-        setIsFullscreen(false)
-      }
-    }
-    window.addEventListener("keydown", handleKeyDown)
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [isFullscreen])
-
-  return (
-    <>
-      {/* Fullscreen button */}
-      <button
-        onClick={() => {
-          setIsFullscreen(true)
-        }}
-        className={`absolute top-2 right-2 z-10 p-1.5 rounded-lg transition-all ${
-          isDark
-            ? "bg-gray-800/80 hover:bg-gray-700 text-gray-400 hover:text-white"
-            : "bg-white/80 hover:bg-gray-100 text-gray-600 hover:text-gray-900"
-        } backdrop-blur-sm`}
-        title="Fullscreen (F)"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
-        </svg>
-      </button>
-
-      {/* Fullscreen modal */}
-      {isFullscreen && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-          onClick={() => {
-            setIsFullscreen(false)
-          }}
-        >
-          {/* Backdrop */}
-          <div
-            className={`absolute inset-0 ${isDark ? "bg-black/95" : "bg-white/95"} backdrop-blur-sm`}
-          />
-
-          {/* Content container */}
-          <div
-            className={`relative w-full max-w-6xl max-h-[90vh] overflow-auto rounded-xl shadow-2xl ${
-              isDark ? "bg-gray-900 border border-gray-700" : "bg-white border border-gray-200"
-            }`}
-            onClick={(e) => {
-              e.stopPropagation()
-            }}
-          >
-            {/* Header */}
-            <div
-              className={`sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b ${
-                isDark ? "bg-gray-900 border-gray-700" : "bg-white border-gray-200"
-              }`}
-            >
-              <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-900"}`}>
-                {title}
-              </h3>
-              <button
-                onClick={() => {
-                  setIsFullscreen(false)
-                }}
-                className={`p-2 rounded-lg transition-colors ${
-                  isDark
-                    ? "hover:bg-gray-800 text-gray-400 hover:text-white"
-                    : "hover:bg-gray-100 text-gray-600 hover:text-gray-900"
-                }`}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Visualization content - enlarged */}
-            <div className="p-4">
-              <div className="transform scale-100">{children}</div>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
-  )
-}
-
 // ==================== QUANTUM MECHANICS ====================
-
-// Wave Function Visualization
-function WaveFunctionVisualization() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [n, setN] = useState(1)
-  const [showProbability, setShowProbability] = useState(true)
-  const [particlePosition, setParticlePosition] = useState<number | null>(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
-
-    let animationFrameId: number
-    let bgGradient: CanvasGradient | null = null
-    let cachedWidth = 0
-    let cachedHeight = 0
-    let wellPath: Path2D | null = null
-    let wellL = 0
-
-    const resize = () => {
-      setupCanvas(canvas, ctx)
-      cachedWidth = canvas.offsetWidth
-      cachedHeight = canvas.offsetHeight
-      bgGradient = null
-      wellPath = null
-    }
-    resize()
-    window.addEventListener("resize", resize)
-
-    let time = 0
-
-    const animate = () => {
-      time += 0.03
-      const width = canvas.offsetWidth
-      const height = canvas.offsetHeight
-      const L = width * 0.8
-      const offsetX = (width - L) / 2
-      ctx.clearRect(0, 0, width, height)
-
-      // Background - cached gradient
-      if (!bgGradient || cachedWidth !== width || cachedHeight !== height) {
-        bgGradient = ctx.createLinearGradient(0, 0, width, height)
-        bgGradient.addColorStop(0, "#0a0a1a")
-        bgGradient.addColorStop(1, "#151530")
-        cachedWidth = width
-        cachedHeight = height
-      }
-      ctx.fillStyle = bgGradient
-      ctx.fillRect(0, 0, width, height)
-
-      // Potential well - cache path
-      if (!wellPath || wellL !== L) {
-        wellPath = new Path2D()
-        wellPath.moveTo(offsetX, 20)
-        wellPath.lineTo(offsetX, height - 20)
-        wellPath.lineTo(offsetX + L, height - 20)
-        wellPath.lineTo(offsetX + L, 20)
-        wellL = L
-      }
-      ctx.strokeStyle = "rgba(100, 150, 255, 0.6)"
-      ctx.lineWidth = 3
-      ctx.stroke(wellPath)
-
-      // Well label
-      ctx.fillStyle = "rgba(100, 150, 255, 0.6)"
-      ctx.font = "10px sans-serif"
-      ctx.textAlign = "center"
-      ctx.fillText("Бесконечная потенциальная яма", width / 2, 15)
-      ctx.fillText("x=0", offsetX, height - 8)
-      ctx.fillText("x=L", offsetX + L, height - 8)
-
-      // Energy levels
-      const maxN = 5
-      const energyHeight = (height - 60) / (maxN + 1)
-
-      for (let i = 1; i <= maxN; i++) {
-        const y = height - 30 - i * energyHeight
-
-        ctx.strokeStyle = i === n ? "rgba(255, 200, 100, 0.8)" : "rgba(100, 100, 150, 0.3)"
-        ctx.lineWidth = i === n ? 2 : 1
-        ctx.setLineDash(i === n ? [] : [3, 3])
-        ctx.beginPath()
-        ctx.moveTo(offsetX + 5, y)
-        ctx.lineTo(offsetX + L - 5, y)
-        ctx.stroke()
-        ctx.setLineDash([])
-
-        if (i <= 3) {
-          ctx.fillStyle = i === n ? "#FFCC66" : "rgba(150, 150, 200, 0.5)"
-          ctx.font = "9px sans-serif"
-          ctx.textAlign = "right"
-          ctx.fillText(`n=${i}`, offsetX - 8, y + 4)
-          ctx.fillText(`E${i}`, offsetX + L + 25, y + 4)
-        }
-      }
-
-      // Wave function ψ(x)
-      const amplitude = energyHeight * 0.35
-      const baseY = height - 30 - n * energyHeight
-
-      // Draw wave function
-      ctx.beginPath()
-      ctx.strokeStyle = "rgba(100, 200, 255, 0.9)"
-      ctx.lineWidth = 2
-
-      const points: Array<{ x: number; y: number }> = []
-
-      for (let px = 0; px <= L; px += 2) {
-        const x = px / L
-        // ψ_n(x) = sqrt(2/L) * sin(nπx/L)
-        const psi = Math.sin(n * Math.PI * x) * Math.cos(time * n * 0.5)
-        const y = baseY - psi * amplitude
-
-        points.push({ x: offsetX + px, y })
-
-        if (px === 0) ctx.moveTo(offsetX + px, y)
-        else ctx.lineTo(offsetX + px, y)
-      }
-      ctx.stroke()
-
-      // Probability density |ψ|²
-      if (showProbability) {
-        ctx.fillStyle = "rgba(255, 100, 150, 0.15)"
-        ctx.beginPath()
-        ctx.moveTo(offsetX, baseY)
-
-        for (let px = 0; px <= L; px += 2) {
-          const x = px / L
-          const probDensity = Math.pow(Math.sin(n * Math.PI * x), 2)
-          const y = baseY - probDensity * amplitude
-          ctx.lineTo(offsetX + px, y)
-        }
-        ctx.lineTo(offsetX + L, baseY)
-        ctx.closePath()
-        ctx.fill()
-
-        // Probability curve
-        ctx.strokeStyle = "rgba(255, 100, 150, 0.7)"
-        ctx.lineWidth = 1.5
-        ctx.beginPath()
-        for (let px = 0; px <= L; px += 2) {
-          const x = px / L
-          const probDensity = Math.pow(Math.sin(n * Math.PI * x), 2)
-          const y = baseY - probDensity * amplitude
-          if (px === 0) ctx.moveTo(offsetX + px, y)
-          else ctx.lineTo(offsetX + px, y)
-        }
-        ctx.stroke()
-      }
-
-      // Probability interpretation - measure particle
-      if (particlePosition !== null) {
-        const x = particlePosition / L
-        const probDensity = Math.pow(Math.sin(n * Math.PI * x), 2)
-
-        ctx.beginPath()
-        ctx.arc(offsetX + particlePosition, baseY, 8, 0, Math.PI * 2)
-        ctx.fillStyle = "#FFD700"
-        ctx.fill()
-        ctx.strokeStyle = "#FFF"
-        ctx.lineWidth = 2
-        ctx.stroke()
-
-        ctx.fillStyle = "rgba(255, 215, 0, 0.8)"
-        ctx.font = "9px sans-serif"
-        ctx.textAlign = "center"
-        ctx.fillText(
-          `P = ${(probDensity * 100).toFixed(1)}%`,
-          offsetX + particlePosition,
-          baseY - 20
-        )
-      }
-
-      // Legend
-      ctx.font = "10px sans-serif"
-      ctx.textAlign = "left"
-      ctx.fillStyle = "rgba(100, 200, 255, 0.9)"
-      ctx.fillText("ψ(x) — волновая функция", 10, height - 45)
-      if (showProbability) {
-        ctx.fillStyle = "rgba(255, 100, 150, 0.9)"
-        ctx.fillText("|ψ|² — плотность вероятности", 10, height - 32)
-      }
-
-      // Formula
-      ctx.fillStyle = "rgba(255, 255, 255, 0.7)"
-      ctx.font = "11px monospace"
-      ctx.textAlign = "center"
-      ctx.fillText(`ψ${n}(x) = √(2/L)·sin(${n}πx/L)`, width / 2, 30)
-
-      animationFrameId = requestAnimationFrame(animate)
-    }
-
-    animate()
-
-    return () => {
-      window.removeEventListener("resize", resize)
-      cancelAnimationFrame(animationFrameId)
-    }
-  }, [n, showProbability, particlePosition])
-
-  const measureParticle = () => {
-    // Quantum measurement - probabilistic position
-    const L = 100
-    let random = Math.random()
-    let position = 0
-
-    for (let px = 0; px <= L; px++) {
-      const x = px / L
-      const prob = Math.pow(Math.sin(n * Math.PI * x), 2)
-      random -= prob / (L / 2)
-      if (random <= 0) {
-        position = px * 3
-        break
-      }
-    }
-
-    setParticlePosition(position)
-    setTimeout(() => {
-      setParticlePosition(null)
-    }, 2000)
-  }
-
-  return (
-    <div className="space-y-3">
-      <canvas
-        ref={canvasRef}
-        className="w-full h-56 rounded-lg"
-        aria-label="Визуализация волновой функции: частица в бесконечной потенциальной яме"
-        role="img"
-      />
-
-      <div className="grid grid-cols-2 gap-3">
-        <div className="space-y-1">
-          <div className="flex justify-between text-xs">
-            <span className="text-cyan-400">Квантовое число n</span>
-            <span className="text-white font-mono">{n}</span>
-          </div>
-          <Slider
-            value={[n]}
-            onValueChange={(v) => {
-              setN(v[0])
-            }}
-            min={1}
-            max={5}
-            step={1}
-          />
-        </div>
-        <div className="flex gap-2">
-          <Button
-            onClick={() => {
-              setShowProbability(!showProbability)
-            }}
-            variant="outline"
-            size="sm"
-            className="flex-1 text-xs border-pink-500/50 text-pink-300"
-          >
-            |ψ|²
-          </Button>
-          <Button
-            onClick={measureParticle}
-            size="sm"
-            className="flex-1 text-xs bg-gradient-to-r from-yellow-600 to-orange-600"
-          >
-            🎲 Измерить
-          </Button>
-        </div>
-      </div>
-
-      <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-lg p-3 border border-blue-500/20 text-xs">
-        <div className="text-cyan-300 font-semibold mb-1">📐 Решение уравнения Шрёдингера:</div>
-        <div className="text-white font-mono text-center">E_n = n²π²ℏ² / 2mL²</div>
-        <p className="text-gray-400 mt-2">
-          Энергия квантуется! Частица не может иметь нулевую энергию (n≥1) — это принципиальное
-          отличие от классической физики.
-        </p>
-      </div>
-    </div>
-  )
-}
-
-// Heisenberg Uncertainty Principle
-function UncertaintyVisualization() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [deltaX, setDeltaX] = useState(50)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
-
-    let animationFrameId: number
-    let bgGradient: CanvasGradient | null = null
-
-    const resize = () => {
-      setupCanvas(canvas, ctx)
-      bgGradient = null
-    }
-    resize()
-    window.addEventListener("resize", resize)
-
-    let time = 0
-
-    const animate = () => {
-      time += 0.02
-      const width = canvas.offsetWidth
-      const height = canvas.offsetHeight
-      const centerX = width / 2
-      const centerY = height / 2
-      ctx.clearRect(0, 0, width, height)
-
-      // Background - cached gradient
-      if (!bgGradient) {
-        bgGradient = ctx.createLinearGradient(0, 0, width, height)
-        bgGradient.addColorStop(0, "#0a0a15")
-        bgGradient.addColorStop(1, "#151520")
-      }
-      ctx.fillStyle = bgGradient
-      ctx.fillRect(0, 0, width, height)
-
-      // Position wave function (Gaussian)
-      const drawGaussian = (
-        cx: number,
-        cy: number,
-        sigma: number,
-        color: string,
-        label: string,
-        isPosition: boolean
-      ) => {
-        const amplitude = 50
-        const widthPx = sigma * 2
-
-        // Fill
-        ctx.beginPath()
-        ctx.moveTo(cx - 100, cy)
-        for (let x = -100; x <= 100; x++) {
-          const gaussian = Math.exp(-(x * x) / (2 * sigma * sigma))
-          const y = cy - gaussian * amplitude
-          ctx.lineTo(cx + x, y)
-        }
-        ctx.lineTo(cx + 100, cy)
-        ctx.closePath()
-
-        const gradient = ctx.createLinearGradient(cx, cy - amplitude, cx, cy)
-        gradient.addColorStop(0, color)
-        gradient.addColorStop(1, "rgba(0, 0, 0, 0)")
-        ctx.fillStyle = gradient
-        ctx.globalAlpha = 0.3
-        ctx.fill()
-        ctx.globalAlpha = 1
-
-        // Curve
-        ctx.beginPath()
-        for (let x = -100; x <= 100; x++) {
-          const gaussian = Math.exp(-(x * x) / (2 * sigma * sigma))
-          const y = cy - gaussian * amplitude
-          if (x === -100) ctx.moveTo(cx + x, y)
-          else ctx.lineTo(cx + x, y)
-        }
-        ctx.strokeStyle = color
-        ctx.lineWidth = 2
-        ctx.stroke()
-
-        // Labels
-        ctx.fillStyle = color
-        ctx.font = "10px sans-serif"
-        ctx.textAlign = "center"
-        ctx.fillText(label, cx, cy + 65)
-
-        if (isPosition) {
-          ctx.strokeStyle = "rgba(255, 255, 255, 0.3)"
-          ctx.setLineDash([3, 3])
-          ctx.beginPath()
-          ctx.moveTo(cx - sigma, cy - 10)
-          ctx.lineTo(cx - sigma, cy + 10)
-          ctx.moveTo(cx + sigma, cy - 10)
-          ctx.lineTo(cx + sigma, cy + 10)
-          ctx.stroke()
-          ctx.setLineDash([])
-
-          ctx.beginPath()
-          ctx.moveTo(cx - sigma, cy)
-          ctx.lineTo(cx + sigma, cy)
-          ctx.stroke()
-          ctx.fillStyle = "rgba(255, 255, 255, 0.6)"
-          ctx.fillText("Δx", cx, cy + 25)
-        }
-      }
-
-      // Position space (left side)
-      drawGaussian(width * 0.25, centerY - 20, deltaX / 3, "#60A5FA", "Пространство (x)", true)
-
-      // Momentum space (right side) - inverse width
-      const momentumSigma = 150 / deltaX
-      drawGaussian(width * 0.75, centerY - 20, momentumSigma * 3, "#F472B6", "Импульс (p)", false)
-
-      // Arrow between
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.3)"
-      ctx.setLineDash([5, 5])
-      ctx.beginPath()
-      ctx.moveTo(width * 0.35, centerY - 20)
-      ctx.lineTo(width * 0.65, centerY - 20)
-      ctx.stroke()
-      ctx.setLineDash([])
-
-      // Transform label
-      ctx.fillStyle = "rgba(255, 255, 255, 0.5)"
-      ctx.font = "10px sans-serif"
-      ctx.textAlign = "center"
-      ctx.fillText("Преобразование Фурье", width / 2, centerY - 35)
-
-      // Formula
-      ctx.fillStyle = "rgba(255, 255, 255, 0.8)"
-      ctx.font = "bold 12px monospace"
-      ctx.fillText("Δx · Δp ≥ ℏ/2", width / 2, 25)
-
-      // Values
-      ctx.font = "10px sans-serif"
-      ctx.fillStyle = "#60A5FA"
-      ctx.fillText(`Δx = ${(deltaX * 1e-10).toExponential(1)} м`, width * 0.25, centerY + 80)
-      ctx.fillStyle = "#F472B6"
-      ctx.fillText(`Δp ≥ ${deltaP.toExponential(1)} кг·м/с`, width * 0.75, centerY + 80)
-
-      animationFrameId = requestAnimationFrame(animate)
-    }
-
-    animate()
-
-    return () => {
-      window.removeEventListener("resize", resize)
-      cancelAnimationFrame(animationFrameId)
-    }
-  }, [deltaX])
-
-  const deltaP = useMemo(() => h_bar / 2 / (deltaX * 1e-10), [deltaX])
-
-  return (
-    <div className="space-y-3">
-      <canvas
-        ref={canvasRef}
-        className="w-full h-44 rounded-lg"
-        aria-label="Принцип неопределённости Гейзенберга: взаимосвязь между неопределённостями позиции и импульса"
-        role="img"
-      />
-
-      <div className="space-y-1">
-        <div className="flex justify-between text-xs">
-          <span className="text-blue-400">Неопределённость позиции Δx</span>
-          <span className="text-white font-mono">
-            {deltaX * 1e-10} Å = {(deltaX * 1e-2).toFixed(1)} нм
-          </span>
-        </div>
-        <Slider
-          value={[deltaX]}
-          onValueChange={(v) => {
-            setDeltaX(v[0])
-          }}
-          min={5}
-          max={100}
-          step={1}
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-2 text-xs">
-        <div className="bg-blue-950/30 rounded p-2 border border-blue-500/20">
-          <div className="text-blue-400 font-semibold">Δx ↓</div>
-          <div className="text-gray-400">Точная позиция</div>
-          <div className="text-gray-400">Размытый импульс</div>
-        </div>
-        <div className="bg-pink-950/30 rounded p-2 border border-pink-500/20">
-          <div className="text-pink-400 font-semibold">Δp ≥ ℏ/(2Δx)</div>
-          <div className="text-white font-mono text-[10px]">{deltaP.toExponential(2)} кг·м/с</div>
-          <div className="text-gray-400">Мин. импульс</div>
-        </div>
-      </div>
-
-      <div className="bg-purple-900/20 rounded-lg p-2 border border-purple-500/20 text-xs">
-        <p className="text-gray-300">
-          <span className="text-purple-300 font-semibold">Философский смысл:</span> Природа
-          фундаментально вероятностна. Мы не можем одновременно знать и позицию, и импульс частицы —
-          это не ошибка измерения, а свойство самой реальности.
-        </p>
-      </div>
-    </div>
-  )
-}
 
 // Quantum Tunneling
 function TunnelingVisualization() {
@@ -889,229 +286,6 @@ function TunnelingVisualization() {
 
 // ==================== SPECIAL RELATIVITY ====================
 
-// Time Dilation
-function TimeDilationVisualization() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [velocity, setVelocity] = useState(0.5) // fraction of c
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
-
-    let animationFrameId: number
-
-    const resize = () => {
-      setupCanvas(canvas, ctx)
-      bgGradient = null
-    }
-    resize()
-    window.addEventListener("resize", resize)
-
-    let time = 0
-    let bgGradient: CanvasGradient | null = null
-
-    // Lorentz factor
-    const gamma = 1 / Math.sqrt(1 - velocity * velocity)
-
-    const animate = () => {
-      time += 0.016
-      const width = canvas.offsetWidth
-      const height = canvas.offsetHeight
-      const centerX = width / 2
-      ctx.clearRect(0, 0, width, height)
-
-      // Background - cached gradient
-      if (!bgGradient) {
-        bgGradient = ctx.createLinearGradient(0, 0, width, height)
-        bgGradient.addColorStop(0, "#0a0515")
-        bgGradient.addColorStop(1, "#150a20")
-      }
-      ctx.fillStyle = bgGradient
-      ctx.fillRect(0, 0, width, height)
-
-      // Reference frame - stationary observer
-      const leftX = width * 0.25
-      const rightX = width * 0.75
-      const topY = 40
-      const bottomY = height - 40
-
-      // Left clock (stationary)
-      ctx.strokeStyle = "rgba(100, 150, 255, 0.8)"
-      ctx.lineWidth = 2
-      ctx.beginPath()
-      ctx.arc(leftX, height / 2, 35, 0, Math.PI * 2)
-      ctx.stroke()
-
-      // Clock hands (stationary - normal time)
-      const angle1 = time * 2
-      ctx.beginPath()
-      ctx.moveTo(leftX, height / 2)
-      ctx.lineTo(leftX + Math.sin(angle1) * 25, height / 2 - Math.cos(angle1) * 25)
-      ctx.strokeStyle = "#60A5FA"
-      ctx.lineWidth = 3
-      ctx.stroke()
-
-      ctx.beginPath()
-      ctx.moveTo(leftX, height / 2)
-      ctx.lineTo(leftX + Math.sin(angle1 / 12) * 18, height / 2 - Math.cos(angle1 / 12) * 18)
-      ctx.strokeStyle = "#60A5FA"
-      ctx.lineWidth = 2
-      ctx.stroke()
-
-      ctx.fillStyle = "#60A5FA"
-      ctx.font = "10px sans-serif"
-      ctx.textAlign = "center"
-      ctx.fillText("Неподвижный", leftX, height / 2 + 55)
-      ctx.fillText("наблюдатель", leftX, height / 2 + 67)
-
-      // Right clock (moving - dilated time)
-      ctx.strokeStyle = "rgba(255, 150, 100, 0.8)"
-      ctx.lineWidth = 2
-      ctx.beginPath()
-      ctx.arc(rightX, height / 2, 35, 0, Math.PI * 2)
-      ctx.stroke()
-
-      // Clock hands (moving - slower time)
-      const dilatedTime = time / gamma
-      const angle2 = dilatedTime * 2
-      ctx.beginPath()
-      ctx.moveTo(rightX, height / 2)
-      ctx.lineTo(rightX + Math.sin(angle2) * 25, height / 2 - Math.cos(angle2) * 25)
-      ctx.strokeStyle = "#FF9966"
-      ctx.lineWidth = 3
-      ctx.stroke()
-
-      ctx.beginPath()
-      ctx.moveTo(rightX, height / 2)
-      ctx.lineTo(rightX + Math.sin(angle2 / 12) * 18, height / 2 - Math.cos(angle2 / 12) * 18)
-      ctx.strokeStyle = "#FF9966"
-      ctx.lineWidth = 2
-      ctx.stroke()
-
-      ctx.fillStyle = "#FF9966"
-      ctx.fillText("Движущийся", rightX, height / 2 + 55)
-      ctx.fillText(`v = ${(velocity * 100).toFixed(0)}% c`, rightX, height / 2 + 67)
-
-      // Moving spaceship
-      const shipY = height / 2 - 80
-      const shipX = ((time * 30 * velocity) % (width + 100)) - 50
-
-      // Ship trail
-      ctx.fillStyle = "rgba(255, 150, 100, 0.2)"
-      ctx.beginPath()
-      ctx.moveTo(shipX, shipY)
-      ctx.lineTo(shipX - 60, shipY + 5)
-      ctx.lineTo(shipX - 60, shipY - 5)
-      ctx.closePath()
-      ctx.fill()
-
-      // Ship body
-      ctx.fillStyle = "#FF9966"
-      ctx.beginPath()
-      ctx.moveTo(shipX + 15, shipY)
-      ctx.lineTo(shipX - 10, shipY + 8)
-      ctx.lineTo(shipX - 10, shipY - 8)
-      ctx.closePath()
-      ctx.fill()
-
-      // Lorentz factor display
-      ctx.fillStyle = "rgba(255, 255, 255, 0.9)"
-      ctx.font = "bold 12px monospace"
-      ctx.textAlign = "center"
-      ctx.fillText(`γ = ${gamma.toFixed(3)}`, centerX, 25)
-
-      ctx.font = "10px sans-serif"
-      ctx.fillText("Фактор Лоренца", centerX, 38)
-
-      // Time ratio
-      ctx.fillStyle = "rgba(100, 200, 255, 0.8)"
-      ctx.font = "10px sans-serif"
-      ctx.fillText(`Прошло времени:`, leftX, height / 2 - 50)
-      ctx.font = "bold 12px monospace"
-      ctx.fillText(`${((time * 10) % 60).toFixed(1)}с`, leftX, height / 2 - 35)
-
-      ctx.fillStyle = "rgba(255, 150, 100, 0.8)"
-      ctx.font = "10px sans-serif"
-      ctx.fillText(`Для путешественника:`, rightX, height / 2 - 50)
-      ctx.font = "bold 12px monospace"
-      ctx.fillText(`${((dilatedTime * 10) % 60).toFixed(1)}с`, rightX, height / 2 - 35)
-
-      // Arrow between clocks
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.3)"
-      ctx.setLineDash([5, 5])
-      ctx.beginPath()
-      ctx.moveTo(leftX + 45, height / 2)
-      ctx.lineTo(rightX - 45, height / 2)
-      ctx.stroke()
-      ctx.setLineDash([])
-
-      animationFrameId = requestAnimationFrame(animate)
-    }
-
-    animate()
-
-    return () => {
-      window.removeEventListener("resize", resize)
-      cancelAnimationFrame(animationFrameId)
-    }
-  }, [velocity])
-
-  const gamma = useMemo(() => 1 / Math.sqrt(1 - velocity * velocity), [velocity])
-
-  return (
-    <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-52 rounded-lg" aria-label="Замедление времени: сравнение хода часов для неподвижного и движущегося наблюдателей" role="img" />
-
-      <div className="space-y-1">
-        <div className="flex justify-between text-xs">
-          <span className="text-orange-400">Скорость v/c</span>
-          <span className="text-white font-mono">
-            {(velocity * 100).toFixed(0)}% скорости света
-          </span>
-        </div>
-        <Slider
-          value={[velocity * 100]}
-          onValueChange={(v) => {
-            setVelocity(v[0] / 100)
-          }}
-          min={0}
-          max={99}
-          step={1}
-        />
-      </div>
-
-      <div className="grid grid-cols-3 gap-2 text-xs text-center">
-        <div className="bg-blue-950/30 rounded p-2 border border-blue-500/20">
-          <div className="text-blue-400 font-bold">v = 0</div>
-          <div className="text-gray-400">γ = 1</div>
-          <div className="text-gray-500 text-[10px]">Нет замедления</div>
-        </div>
-        <div className="bg-yellow-950/30 rounded p-2 border border-yellow-500/20">
-          <div className="text-yellow-400 font-bold">v = 0.87c</div>
-          <div className="text-gray-400">γ = 2</div>
-          <div className="text-gray-500 text-[10px]">Время в 2 раза медленнее</div>
-        </div>
-        <div className="bg-red-950/30 rounded p-2 border border-red-500/20">
-          <div className="text-red-400 font-bold">v → c</div>
-          <div className="text-gray-400">γ → ∞</div>
-          <div className="text-gray-500 text-[10px]">Время останавливается</div>
-        </div>
-      </div>
-
-      <div className="bg-orange-900/20 rounded-lg p-2 border border-orange-500/20 text-xs">
-        <div className="text-orange-300 font-semibold mb-1">📐 Формула замедления времени:</div>
-        <div className="text-white font-mono text-center">Δt' = γ·Δt = Δt / √(1 - v²/c²)</div>
-        <p className="text-gray-400 mt-1">
-          Это реальный эффект! Частицы-мюоны, живущие 2.2 мкс, достигают поверхности Земли благодаря
-          замедлению времени.
-        </p>
-      </div>
-    </div>
-  )
-}
-
 // Length Contraction
 function LengthContractionVisualization() {
   const [velocity, setVelocity] = useState(0.8)
@@ -1212,105 +386,6 @@ function LengthContractionVisualization() {
         <div className="text-white font-mono text-center">L = L₀ / γ = L₀ · √(1 - v²/c²)</div>
         <p className="text-gray-400 mt-1">
           Объект сокращается только в направлении движения! Поперечные размеры не меняются.
-        </p>
-      </div>
-    </div>
-  )
-}
-
-// Mass-Energy Equivalence
-function MassEnergyVisualization() {
-  const [massKg, setMassKg] = useState(1)
-
-  const energyJ = massKg * c * c
-  const energyTNT = energyJ / 4.184e9 // TNT equivalent in tons
-  const energyHiroshima = energyJ / 6.3e13 // Hiroshima bomb equivalents
-
-  return (
-    <div className="space-y-4">
-      <div
-        className="relative h-48 rounded-lg overflow-hidden"
-        style={{ background: "radial-gradient(circle at center, #1a0a05 0%, #0a0510 100%)" }}
-      >
-        {/* Central energy visualization */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative">
-            {/* Mass sphere */}
-            <div
-              className="w-20 h-20 rounded-full animate-pulse"
-              style={{
-                background: "radial-gradient(circle at 30% 30%, #FFD700, #FF8C00, #FF4500)",
-                boxShadow: `0 0 ${30 + Math.min(energyHiroshima, 100) * 2}px rgba(255, 150, 0, 0.5)`,
-              }}
-            />
-
-            {/* Energy rays */}
-            {[...Array(12)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute top-1/2 left-1/2 h-1 bg-gradient-to-r from-yellow-400 to-transparent"
-                style={{
-                  width: `${20 + Math.min(energyHiroshima * 5, 100)}px`,
-                  transform: `translate(-50%, -50%) rotate(${i * 30}deg)`,
-                  animation: `pulse ${1 + i * 0.1}s infinite`,
-                }}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Formula */}
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-center">
-          <div className="text-2xl font-bold text-yellow-400 font-mono">E = mc²</div>
-        </div>
-
-        {/* Energy values */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center">
-          <div className="text-white font-mono text-sm">{formatScientific(energyJ)} Дж</div>
-        </div>
-      </div>
-
-      <div className="space-y-1">
-        <div className="flex justify-between text-xs">
-          <span className="text-yellow-400">Масса</span>
-          <span className="text-white font-mono">{formatScientific(massKg)} кг</span>
-        </div>
-        <Slider
-          value={[Math.log10(massKg) + 6]}
-          onValueChange={(v) => {
-            setMassKg(Math.pow(10, v[0] - 6))
-          }}
-          min={-3}
-          max={21}
-          step={0.5}
-        />
-        <div className="flex justify-between text-xs text-gray-500">
-          <span>1 мг</span>
-          <span>1 кг</span>
-          <span>1 тонна</span>
-          <span>1 кг U-235</span>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-2 text-xs">
-        <div className="bg-red-950/30 rounded p-2 border border-red-500/20">
-          <div className="text-red-400 font-semibold">Тротиловый эквивалент</div>
-          <div className="text-white font-mono">
-            {energyTNT < 1e6 ? energyTNT.toFixed(1) : formatScientific(energyTNT)} т
-          </div>
-        </div>
-        <div className="bg-orange-950/30 rounded p-2 border border-orange-500/20">
-          <div className="text-orange-400 font-semibold">Бомбы Хиросимы</div>
-          <div className="text-white font-mono">
-            {energyHiroshima < 1e6 ? energyHiroshima.toFixed(2) : formatScientific(energyHiroshima)}
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-yellow-900/20 rounded-lg p-2 border border-yellow-500/20 text-xs">
-        <p className="text-gray-300">
-          <span className="text-yellow-300 font-semibold">Примеры:</span> 1 грамм материи = 21 кт
-          тротила (Хиросима). Солнце преобразует 4 млн тонн материи в энергию каждую секунду!
         </p>
       </div>
     </div>
@@ -1514,7 +589,12 @@ function HRDiagramVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-72 rounded-lg" aria-label="Диаграмма Герцшпрунга-Рассела: классификация звёзд по светимости и температуре" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-72 rounded-lg"
+        aria-label="Диаграмма Герцшпрунга-Рассела: классификация звёзд по светимости и температуре"
+        role="img"
+      />
 
       <div className="grid grid-cols-4 gap-1 text-[10px]">
         {stars.slice(0, 4).map((star) => (
@@ -1748,7 +828,12 @@ function NeutronStarVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-64 rounded-lg" aria-label="Нейтронная звезда: вращающийся пульсар с магнитным полем" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-64 rounded-lg"
+        aria-label="Нейтронная звезда: вращающийся пульсар с магнитным полем"
+        role="img"
+      />
 
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1">
@@ -2030,7 +1115,12 @@ function DoubleSlitVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Эксперимент с двойной щелью: корпускулярно-волновой дуализм" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-56 rounded-lg"
+        aria-label="Эксперимент с двойной щелью: корпускулярно-волновой дуализм"
+        role="img"
+      />
 
       <div className="grid grid-cols-3 gap-2 text-xs">
         <div className="space-y-1">
@@ -2328,7 +1418,12 @@ function DarkMatterVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Тёмная материя: кривые вращения галактик" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-56 rounded-lg"
+        aria-label="Тёмная материя: кривые вращения галактик"
+        role="img"
+      />
 
       <div className="space-y-1">
         <div className="flex justify-between text-xs">
@@ -2378,389 +1473,6 @@ function DarkMatterVisualization() {
           вращаются слишком быстро! Без невидимой массы они бы разлетелись. Это и есть
           доказательство тёмной материи.
         </p>
-      </div>
-    </div>
-  )
-}
-
-// ==================== BLACK HOLE (ENHANCED) ====================
-function BlackHoleVisualization() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [massSolar, setMassSolar] = useState(10)
-
-  const mass = massSolar * M_SUN
-  const schwarzschildRadius = (2 * G * mass) / (c * c)
-  const hawkingTemp = (h * c * c * c) / (8 * Math.PI * G * mass * k_B)
-  const lifetime = (5120 * Math.PI * G * G * mass * mass * mass) / (h * c * c * c)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
-
-    let animationFrameId: number
-    let bgGradient: CanvasGradient | null = null
-
-    const resize = () => {
-      setupCanvas(canvas, ctx)
-      bgGradient = null
-    }
-    resize()
-    window.addEventListener("resize", resize)
-
-    const centerX = canvas.offsetWidth / 2
-    const centerY = canvas.offsetHeight / 2
-    const baseRadius = 20 + massSolar * 1.2
-    const schwarzschildRadius_visual = Math.min(baseRadius, 55)
-    const photonSphereRadius = schwarzschildRadius_visual * 1.5
-    const iscoRadius = schwarzschildRadius_visual * 3
-
-    const stars: Array<{ x: number; y: number; brightness: number }> = []
-    for (let i = 0; i < 200; i++) {
-      stars.push({
-        x: Math.random() * canvas.offsetWidth,
-        y: Math.random() * canvas.offsetHeight,
-        brightness: 0.3 + Math.random() * 0.7,
-      })
-    }
-
-    const diskParticles: Array<{
-      angle: number
-      radius: number
-      speed: number
-      size: number
-      temp: number
-    }> = []
-    for (let i = 0; i < 350; i++) {
-      const radius = iscoRadius + Math.random() * 80
-      diskParticles.push({
-        angle: Math.random() * Math.PI * 2,
-        radius,
-        speed: 0.012 / Math.sqrt(radius / iscoRadius),
-        size: 1 + Math.random() * 2,
-        temp: 1 - (radius - iscoRadius) / 80,
-      })
-    }
-
-    const jetParticles: Array<{
-      x: number
-      y: number
-      vx: number
-      vy: number
-      life: number
-      size: number
-    }> = []
-    const hawkingParticles: Array<{
-      x: number
-      y: number
-      vx: number
-      vy: number
-      life: number
-      size: number
-    }> = []
-
-    let time = 0
-
-    const animate = () => {
-      time += 0.016
-      ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight)
-
-      // Background - cached gradient
-      if (!bgGradient) {
-        bgGradient = ctx.createLinearGradient(0, 0, canvas.offsetWidth, canvas.offsetHeight)
-        bgGradient.addColorStop(0, "#000002")
-        bgGradient.addColorStop(1, "#0a0a10")
-      }
-      ctx.fillStyle = bgGradient
-      ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight)
-
-      // Stars with lensing
-      stars.forEach((star) => {
-        const dx = star.x - centerX
-        const dy = star.y - centerY
-        const dist = Math.sqrt(dx * dx + dy * dy)
-
-        let lensedX = star.x
-        let lensedY = star.y
-
-        if (dist < 150 && dist > schwarzschildRadius_visual) {
-          const lensStrength = Math.pow(150 / dist, 2) * 20
-          const angle = Math.atan2(dy, dx)
-          lensedX =
-            centerX + dx + Math.cos(angle + Math.PI / 2) * lensStrength * Math.sin(time * 1.2)
-          lensedY =
-            centerY + dy + Math.sin(angle + Math.PI / 2) * lensStrength * Math.sin(time * 1.2)
-        }
-
-        if (dist > photonSphereRadius - 5 && dist < photonSphereRadius + 10) {
-          const ringIntensity = 1 - Math.abs(dist - photonSphereRadius) / 10
-          ctx.fillStyle = `rgba(255, 220, 180, ${ringIntensity * 0.15})`
-          ctx.beginPath()
-          ctx.arc(lensedX, lensedY, 2, 0, Math.PI * 2)
-          ctx.fill()
-        }
-
-        ctx.fillStyle = `rgba(255, 255, 255, ${star.brightness * 0.3})`
-        ctx.beginPath()
-        ctx.arc(lensedX, lensedY, 0.6, 0, Math.PI * 2)
-        ctx.fill()
-      })
-
-      // Einstein ring
-      ctx.strokeStyle = "rgba(255, 220, 180, 0.1)"
-      ctx.lineWidth = 8
-      ctx.beginPath()
-      ctx.arc(centerX, centerY, photonSphereRadius + 2, 0, Math.PI * 2)
-      ctx.stroke()
-
-      // Space-time grid
-      ctx.strokeStyle = "rgba(60, 30, 150, 0.06)"
-      ctx.lineWidth = 0.5
-      for (let i = -10; i <= 10; i++) {
-        ctx.beginPath()
-        for (let x = 0; x <= canvas.offsetWidth; x += 4) {
-          const baseY = centerY + i * 16
-          const dx = x - centerX
-          const dy = baseY - centerY
-          const dist = Math.sqrt(dx * dx + dy * dy)
-          let warpedY = baseY
-          if (dist > schwarzschildRadius_visual && dist < 180) {
-            const warpStrength = Math.pow(180 / dist, 2) * 10
-            warpedY = baseY + (dy / dist) * warpStrength
-          }
-          if (x === 0) ctx.moveTo(x, warpedY)
-          else ctx.lineTo(x, warpedY)
-        }
-        ctx.stroke()
-      }
-
-      // Accretion disk (back)
-      ctx.save()
-      ctx.beginPath()
-      ctx.rect(0, 0, canvas.offsetWidth, centerY)
-      ctx.clip()
-
-      diskParticles.forEach((particle) => {
-        particle.angle += particle.speed
-        if (particle.radius > iscoRadius) particle.radius -= 0.006
-        else {
-          particle.radius = iscoRadius + Math.random() * 80
-          particle.angle = Math.random() * Math.PI * 2
-        }
-
-        const x = centerX + Math.cos(particle.angle) * particle.radius
-        const y = centerY + Math.sin(particle.angle) * particle.radius * 0.2
-
-        let hue = 25 + particle.temp * 30
-        if (Math.cos(particle.angle) > 0) hue -= 20
-        ctx.fillStyle = `hsla(${hue}, 100%, ${55 + particle.temp * 25}%, ${particle.temp * 0.5 + 0.2})`
-        ctx.beginPath()
-        ctx.arc(x, y, particle.size, 0, Math.PI * 2)
-        ctx.fill()
-      })
-      ctx.restore()
-
-      // Jets
-      if (Math.random() < 0.06) {
-        const dir = Math.random() < 0.5 ? -1 : 1
-        jetParticles.push({
-          x: centerX + (Math.random() - 0.5) * 6,
-          y: centerY,
-          vx: (Math.random() - 0.5) * 0.2,
-          vy: dir * (2 + Math.random() * 1.5),
-          life: 1,
-          size: 1 + Math.random() * 1.5,
-        })
-      }
-
-      for (let i = jetParticles.length - 1; i >= 0; i--) {
-        const p = jetParticles[i]
-        p.x += p.vx
-        p.y += p.vy
-        p.life -= 0.01
-        if (p.life <= 0 || p.y < 0 || p.y > canvas.offsetHeight) {
-          jetParticles.splice(i, 1)
-          continue
-        }
-        const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3)
-        gradient.addColorStop(0, `rgba(80, 150, 255, ${p.life})`)
-        gradient.addColorStop(1, "rgba(40, 80, 200, 0)")
-        ctx.fillStyle = gradient
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.size * 3, 0, Math.PI * 2)
-        ctx.fill()
-      }
-
-      // Hawking radiation
-      if (Math.random() < 0.015) {
-        const angle = Math.random() * Math.PI * 2
-        hawkingParticles.push({
-          x: centerX + Math.cos(angle) * (schwarzschildRadius_visual + 3),
-          y: centerY + Math.sin(angle) * (schwarzschildRadius_visual + 3),
-          vx: Math.cos(angle) * 1.2,
-          vy: Math.sin(angle) * 1.2,
-          life: 1,
-          size: 1.2,
-        })
-      }
-
-      for (let i = hawkingParticles.length - 1; i >= 0; i--) {
-        const p = hawkingParticles[i]
-        p.x += p.vx
-        p.y += p.vy
-        p.life -= 0.008
-        if (p.life <= 0) {
-          hawkingParticles.splice(i, 1)
-          continue
-        }
-        ctx.fillStyle = `rgba(150, 200, 255, ${p.life * 0.35})`
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2)
-        ctx.fill()
-      }
-
-      // Event horizon
-      const horizonGlow = ctx.createRadialGradient(
-        centerX,
-        centerY,
-        schwarzschildRadius_visual - 3,
-        centerX,
-        centerY,
-        schwarzschildRadius_visual + 10
-      )
-      horizonGlow.addColorStop(0, "rgba(0, 0, 0, 1)")
-      horizonGlow.addColorStop(0.5, "rgba(30, 8, 0, 0.3)")
-      horizonGlow.addColorStop(1, "rgba(0, 0, 0, 0)")
-      ctx.fillStyle = horizonGlow
-      ctx.beginPath()
-      ctx.arc(centerX, centerY, schwarzschildRadius_visual + 10, 0, Math.PI * 2)
-      ctx.fill()
-
-      const coreGradient = ctx.createRadialGradient(
-        centerX,
-        centerY,
-        0,
-        centerX,
-        centerY,
-        schwarzschildRadius_visual
-      )
-      coreGradient.addColorStop(0, "#000000")
-      coreGradient.addColorStop(0.95, "#000000")
-      coreGradient.addColorStop(1, "#100505")
-      ctx.fillStyle = coreGradient
-      ctx.beginPath()
-      ctx.arc(centerX, centerY, schwarzschildRadius_visual, 0, Math.PI * 2)
-      ctx.fill()
-
-      // Accretion disk (front)
-      ctx.save()
-      ctx.beginPath()
-      ctx.rect(0, centerY, canvas.offsetWidth, canvas.offsetHeight)
-      ctx.clip()
-      diskParticles.forEach((particle) => {
-        const x = centerX + Math.cos(particle.angle) * particle.radius
-        const y = centerY + Math.sin(particle.angle) * particle.radius * 0.2
-        let hue = 25 + particle.temp * 30
-        if (Math.cos(particle.angle) > 0) hue -= 20
-        ctx.fillStyle = `hsla(${hue}, 100%, ${55 + particle.temp * 25}%, ${particle.temp * 0.6 + 0.3})`
-        ctx.beginPath()
-        ctx.arc(x, y, particle.size, 0, Math.PI * 2)
-        ctx.fill()
-      })
-      ctx.restore()
-
-      animationFrameId = requestAnimationFrame(animate)
-    }
-
-    animate()
-
-    return () => {
-      window.removeEventListener("resize", resize)
-      cancelAnimationFrame(animationFrameId)
-    }
-  }, [massSolar])
-
-  return (
-    <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-72 rounded-lg" aria-label="Чёрная дыра: аккреционный диск и излучение Хокинга" role="img" />
-
-      <div className="space-y-1">
-        <div className="flex justify-between text-xs">
-          <span className="text-orange-400">Масса</span>
-          <span className="text-white font-mono">{massSolar} M☉</span>
-        </div>
-        <Slider
-          value={[massSolar]}
-          onValueChange={(v) => {
-            setMassSolar(v[0])
-          }}
-          min={1}
-          max={100}
-          step={1}
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-2 text-xs">
-        <div className="bg-red-950/30 rounded p-2 border border-red-500/20">
-          <div className="text-red-400 font-semibold">Rs</div>
-          <div className="text-white font-mono text-[10px]">
-            {schwarzschildRadius.toExponential(1)} м
-          </div>
-          <div className="text-gray-500">≈ {(schwarzschildRadius / 1000).toFixed(1)} км</div>
-        </div>
-        <div className="bg-blue-950/30 rounded p-2 border border-blue-500/20">
-          <div className="text-blue-400 font-semibold">T (Хокинг)</div>
-          <div className="text-white font-mono text-[10px]">{hawkingTemp.toExponential(1)} K</div>
-        </div>
-      </div>
-
-      <div className="bg-red-900/20 rounded-lg p-2 border border-red-500/20 text-xs">
-        <div className="text-orange-300 font-mono text-center mb-1">T = ℏc³ / 8πGMk_B</div>
-        <p className="text-gray-400">
-          Чёрные дыры испаряются! Время жизни: ~10^{Math.log10(lifetime / 3.15e7).toFixed(0)} лет
-        </p>
-      </div>
-
-      <div className="bg-gradient-to-r from-gray-800/50 to-gray-900/50 rounded-lg p-3 border border-gray-700/50 text-xs space-y-2">
-        <div className="text-cyan-300 font-semibold">📚 Как работает чёрная дыра:</div>
-        <div className="grid grid-cols-1 gap-2 text-gray-300">
-          <div className="flex items-start gap-2">
-            <span className="text-red-400">1.</span>
-            <span>
-              <strong>Горизонт событий</strong> — граница, откуда невозможен выход. Даже свет не
-              может покинуть область внутри Rs.
-            </span>
-          </div>
-          <div className="flex items-start gap-2">
-            <span className="text-orange-400">2.</span>
-            <span>
-              <strong>Сингулярность</strong> — точка в центре, где кривизна пространства-времени
-              бесконечна.
-            </span>
-          </div>
-          <div className="flex items-start gap-2">
-            <span className="text-yellow-400">3.</span>
-            <span>
-              <strong>Аккреционный диск</strong> — материя, вращающаяся вокруг дыры и разогретая до
-              миллионов градусов.
-            </span>
-          </div>
-          <div className="flex items-start gap-2">
-            <span className="text-green-400">4.</span>
-            <span>
-              <strong>Джеты</strong> — потоки частиц, выбрасываемые вдоль оси вращения со скоростью
-              близкой к c.
-            </span>
-          </div>
-          <div className="flex items-start gap-2">
-            <span className="text-blue-400">5.</span>
-            <span>
-              <strong>Излучение Хокинга</strong> — квантовый эффект испарения дыры через
-              туннелирование.
-            </span>
-          </div>
-        </div>
       </div>
     </div>
   )
@@ -2959,7 +1671,12 @@ function WhiteHoleVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Белая дыра: теоретическая обратная сторона чёрной дыры" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-56 rounded-lg"
+        aria-label="Белая дыра: теоретическая обратная сторона чёрной дыры"
+        role="img"
+      />
 
       <div className="space-y-1">
         <div className="flex justify-between text-xs">
@@ -3232,7 +1949,12 @@ function SchrodingersCatVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Кот Шрёдингера: квантовая суперпозиция" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-56 rounded-lg"
+        aria-label="Кот Шрёдингера: квантовая суперпозиция"
+        role="img"
+      />
 
       <div className="flex gap-2">
         <Button
@@ -3455,7 +2177,12 @@ function BigBangVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Большой взрыв: расширение Вселенной" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-56 rounded-lg"
+        aria-label="Большой взрыв: расширение Вселенной"
+        role="img"
+      />
 
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div className="space-y-1">
@@ -3756,7 +2483,12 @@ function PhotoelectricEffectVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-48 rounded-lg" aria-label="Фотоэффект: выбивание электронов светом" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-48 rounded-lg"
+        aria-label="Фотоэффект: выбивание электронов светом"
+        role="img"
+      />
 
       <div className="grid grid-cols-3 gap-2 text-xs">
         <div className="space-y-1">
@@ -4002,7 +2734,12 @@ function BrownianMotionVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-48 rounded-lg" aria-label="Броуновское движение: хаотичное движение частиц" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-48 rounded-lg"
+        aria-label="Броуновское движение: хаотичное движение частиц"
+        role="img"
+      />
 
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div className="space-y-1">
@@ -4252,7 +2989,12 @@ function GravitationalWavesVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Гравитационные волны: рябь пространства-времени" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-56 rounded-lg"
+        aria-label="Гравитационные волны: рябь пространства-времени"
+        role="img"
+      />
 
       <div className="grid grid-cols-3 gap-2 text-xs">
         <div className="space-y-1">
@@ -4546,7 +3288,12 @@ function QuantumEntanglementVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-48 rounded-lg" aria-label="Квантовая запутанность: спутанные частицы" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-48 rounded-lg"
+        aria-label="Квантовая запутанность: спутанные частицы"
+        role="img"
+      />
 
       <div className="space-y-1">
         <div className="flex justify-between text-xs">
@@ -4852,7 +3599,12 @@ function AtomicModelVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Атомная модель Бора: электронные орбиты и переходы" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-56 rounded-lg"
+        aria-label="Атомная модель Бора: электронные орбиты и переходы"
+        role="img"
+      />
 
       <div className="flex gap-2 flex-wrap">
         {Object.keys(elements).map((el) => (
@@ -5145,7 +3897,12 @@ function RadioactiveDecayVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-48 rounded-lg" aria-label="Радиоактивный распад: альфа, бета, гамма излучения" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-48 rounded-lg"
+        aria-label="Радиоактивный распад: альфа, бета, гамма излучения"
+        role="img"
+      />
 
       <div className="grid grid-cols-3 gap-2 text-xs">
         <Button
@@ -5510,7 +4267,12 @@ function SuperconductivityVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Сверхпроводимость: эффект Мейсснера" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-56 rounded-lg"
+        aria-label="Сверхпроводимость: эффект Мейсснера"
+        role="img"
+      />
 
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1">
@@ -6013,7 +4775,12 @@ function StandardModelVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg cursor-pointer" aria-label="Стандартная модель: кварки, лептоны, бозоны" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-56 rounded-lg cursor-pointer"
+        aria-label="Стандартная модель: кварки, лептоны, бозоны"
+        role="img"
+      />
 
       <div className="flex gap-2 flex-wrap">
         <Button
@@ -6546,7 +5313,12 @@ function PhysicsTimeline() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg cursor-pointer" aria-label="Реликтовое излучение: карта ранней Вселенной" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-56 rounded-lg cursor-pointer"
+        aria-label="Реликтовое излучение: карта ранней Вселенной"
+        role="img"
+      />
 
       <div className="flex gap-2 flex-wrap">
         <Button
@@ -6881,7 +5653,12 @@ function SolarSystemVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg cursor-pointer" aria-label="Солнечная система: планеты и их орбиты" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-56 rounded-lg cursor-pointer"
+        aria-label="Солнечная система: планеты и их орбиты"
+        role="img"
+      />
 
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1">
@@ -7109,7 +5886,12 @@ function CMBVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Эквивалентность массы и энергии: калькулятор E=mc²" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-56 rounded-lg"
+        aria-label="Эквивалентность массы и энергии: калькулятор E=mc²"
+        role="img"
+      />
 
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1">
@@ -7339,7 +6121,12 @@ function DarkEnergyVisualization() {
 
   return (
     <div className="space-y-3">
-      <canvas ref={canvasRef} className="w-full h-56 rounded-lg" aria-label="Сокращение длины: лоренцево сокращение движущегося объекта" role="img" />
+      <canvas
+        ref={canvasRef}
+        className="w-full h-56 rounded-lg"
+        aria-label="Сокращение длины: лоренцево сокращение движущегося объекта"
+        role="img"
+      />
 
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1">

@@ -10,6 +10,7 @@ export { UncertaintyVisualization } from "./quantum/uncertainty"
 
 // Relativity visualizations
 export { TimeDilationVisualization } from "./relativity/time-dilation"
+export { LengthContractionVisualization } from "./relativity/length-contraction"
 export { MassEnergyVisualization } from "./relativity/mass-energy"
 
 // Cosmos visualizations
