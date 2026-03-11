@@ -709,9 +709,11 @@ function UncertaintyVisualization() {
     if (!ctx) return
 
     let animationFrameId: number
+    let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+      bgGradient = null
     }
     resize()
     window.addEventListener('resize', resize)
@@ -726,8 +728,13 @@ function UncertaintyVisualization() {
       const centerY = height / 2
       ctx.clearRect(0, 0, width, height)
 
-      // Background
-      ctx.fillStyle = '#0a0a15'
+      // Background - cached gradient
+      if (!bgGradient) {
+        bgGradient = ctx.createLinearGradient(0, 0, width, height)
+        bgGradient.addColorStop(0, '#0a0a15')
+        bgGradient.addColorStop(1, '#151520')
+      }
+      ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
 
       // Position wave function (Gaussian)
@@ -892,9 +899,11 @@ function TunnelingVisualization() {
     if (!ctx) return
 
     let animationFrameId: number
+    let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+      bgGradient = null
     }
     resize()
     window.addEventListener('resize', resize)
@@ -907,8 +916,13 @@ function TunnelingVisualization() {
       const height = canvas.offsetHeight
       ctx.clearRect(0, 0, width, height)
 
-      // Background
-      ctx.fillStyle = '#050510'
+      // Background - cached gradient
+      if (!bgGradient) {
+        bgGradient = ctx.createLinearGradient(0, 0, width, height)
+        bgGradient.addColorStop(0, '#050510')
+        bgGradient.addColorStop(1, '#0a0a18')
+      }
+      ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
 
       const baseY = height * 0.6
@@ -2156,9 +2170,11 @@ function DarkMatterVisualization() {
     if (!ctx) return
 
     let animationFrameId: number
+    let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+      bgGradient = null
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2204,10 +2220,12 @@ function DarkMatterVisualization() {
       time += 0.016
       ctx.clearRect(0, 0, width, height)
 
-      // Background
-      const bgGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 120)
-      bgGradient.addColorStop(0, '#0a0520')
-      bgGradient.addColorStop(1, '#050510')
+      // Background - cached gradient
+      if (!bgGradient) {
+        bgGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 120)
+        bgGradient.addColorStop(0, '#0a0520')
+        bgGradient.addColorStop(1, '#050510')
+      }
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
 
