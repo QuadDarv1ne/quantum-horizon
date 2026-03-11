@@ -6,14 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { G, c, h, h_bar, k_B, M_SUN, eV, m_e, m_p } from '@/lib/constants'
-
-// ==================== HELPERS ====================
-function setupCanvasContext(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
-  canvas.width = canvas.offsetWidth * 2
-  canvas.height = canvas.offsetHeight * 2
-  ctx.resetTransform()
-  ctx.scale(2, 2)
-}
+import { setupCanvas } from '@/hooks/use-canvas-animation'
 
 // ==================== TRANSLATIONS ====================
 const translations = {
@@ -458,7 +451,7 @@ function WaveFunctionVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -702,7 +695,7 @@ function UncertaintyVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -885,7 +878,7 @@ function TunnelingVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -1075,7 +1068,7 @@ function TimeDilationVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -1463,7 +1456,7 @@ function HRDiagramVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
       draw()
     }
 
@@ -1656,7 +1649,7 @@ function NeutronStarVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -1877,7 +1870,7 @@ function DoubleSlitVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2133,7 +2126,7 @@ function DarkMatterVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2385,7 +2378,7 @@ function BlackHoleVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2692,7 +2685,7 @@ function WhiteHoleVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2900,7 +2893,7 @@ function SchrodingersCatVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -3160,7 +3153,7 @@ function BigBangVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -3371,7 +3364,7 @@ function PhotoelectricEffectVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -3646,7 +3639,7 @@ function BrownianMotionVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -3866,7 +3859,7 @@ function GravitationalWavesVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4099,7 +4092,7 @@ function QuantumEntanglementVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4360,7 +4353,7 @@ function AtomicModelVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4629,7 +4622,7 @@ function RadioactiveDecayVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4931,7 +4924,7 @@ function SuperconductivityVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -5255,7 +5248,7 @@ function StandardModelVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -5636,7 +5629,7 @@ function PhysicsTimeline() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -5823,7 +5816,7 @@ function SolarSystemVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -6086,7 +6079,7 @@ function CMBVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -6261,7 +6254,7 @@ function DarkEnergyVisualization() {
     let animationFrameId: number
 
     const resize = () => {
-      setupCanvasContext(canvas, ctx)
+      setupCanvas(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
