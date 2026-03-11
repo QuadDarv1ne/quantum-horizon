@@ -1079,11 +1079,13 @@ function TimeDilationVisualization() {
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+      bgGradient = null
     }
     resize()
     window.addEventListener('resize', resize)
 
     let time = 0
+    let bgGradient: CanvasGradient | null = null
 
     // Lorentz factor
     const gamma = 1 / Math.sqrt(1 - velocity * velocity)
@@ -1095,10 +1097,12 @@ function TimeDilationVisualization() {
       const centerX = width / 2
       ctx.clearRect(0, 0, width, height)
 
-      // Background
-      const bgGradient = ctx.createLinearGradient(0, 0, width, height)
-      bgGradient.addColorStop(0, '#0a0515')
-      bgGradient.addColorStop(1, '#150a20')
+      // Background - cached gradient
+      if (!bgGradient) {
+        bgGradient = ctx.createLinearGradient(0, 0, width, height)
+        bgGradient.addColorStop(0, '#0a0515')
+        bgGradient.addColorStop(1, '#150a20')
+      }
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
 
@@ -1878,9 +1882,11 @@ function DoubleSlitVisualization() {
     if (!ctx) return
 
     let animationFrameId: number
+    let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+      bgGradient = null
     }
     resize()
     window.addEventListener('resize', resize)
@@ -1898,8 +1904,13 @@ function DoubleSlitVisualization() {
       time += 0.016
       ctx.clearRect(0, 0, width, height)
 
-      // Background
-      ctx.fillStyle = '#050510'
+      // Background - cached gradient
+      if (!bgGradient) {
+        bgGradient = ctx.createLinearGradient(0, 0, width, height)
+        bgGradient.addColorStop(0, '#050510')
+        bgGradient.addColorStop(1, '#0a0a1a')
+      }
+      ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
 
       // Wave visualization from source
@@ -2386,9 +2397,11 @@ function BlackHoleVisualization() {
     if (!ctx) return
 
     let animationFrameId: number
+    let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+      bgGradient = null
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2430,7 +2443,13 @@ function BlackHoleVisualization() {
       time += 0.016
       ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight)
 
-      ctx.fillStyle = '#000002'
+      // Background - cached gradient
+      if (!bgGradient) {
+        bgGradient = ctx.createLinearGradient(0, 0, canvas.offsetWidth, canvas.offsetHeight)
+        bgGradient.addColorStop(0, '#000002')
+        bgGradient.addColorStop(1, '#0a0a10')
+      }
+      ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, canvas.offsetWidth, canvas.offsetHeight)
 
       // Stars with lensing
@@ -4932,9 +4951,12 @@ function SuperconductivityVisualization() {
     if (!ctx) return
 
     let animationFrameId: number
+    let bgGradient: CanvasGradient | null = null
+    let lastIsSuperconducting = false
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+      bgGradient = null
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4946,28 +4968,30 @@ function SuperconductivityVisualization() {
     // Superconducting state
     const isSuperconducting = temperature < criticalTemp
     const targetHeight = isSuperconducting ? 40 : 0
-    
+
     let time = 0
     let currentHeight = levitationHeight
 
     const animate = () => {
       time += 0.03
-      
+
       // Smoothly animate levitation height
       currentHeight += (targetHeight - currentHeight) * 0.05
       setLevitationHeight(currentHeight)
 
       ctx.clearRect(0, 0, width, height)
 
-      // Background gradient based on temperature
-      const tempRatio = temperature / 150
-      const bgGradient = ctx.createLinearGradient(0, 0, width, height)
-      if (isSuperconducting) {
-        bgGradient.addColorStop(0, '#0a1525')
-        bgGradient.addColorStop(1, '#152540')
-      } else {
-        bgGradient.addColorStop(0, '#251510')
-        bgGradient.addColorStop(1, '#402520')
+      // Background gradient - cached based on state
+      if (!bgGradient || lastIsSuperconducting !== isSuperconducting) {
+        bgGradient = ctx.createLinearGradient(0, 0, width, height)
+        if (isSuperconducting) {
+          bgGradient.addColorStop(0, '#0a1525')
+          bgGradient.addColorStop(1, '#152540')
+        } else {
+          bgGradient.addColorStop(0, '#251510')
+          bgGradient.addColorStop(1, '#402520')
+        }
+        lastIsSuperconducting = isSuperconducting
       }
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
@@ -5256,9 +5280,11 @@ function StandardModelVisualization() {
     if (!ctx) return
 
     let animationFrameId: number
+    let bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+      bgGradient = null
     }
     resize()
     window.addEventListener('resize', resize)
@@ -5330,10 +5356,12 @@ function StandardModelVisualization() {
       time += 0.02
       ctx.clearRect(0, 0, width, height)
 
-      // Background
-      const bgGradient = ctx.createLinearGradient(0, 0, width, height)
-      bgGradient.addColorStop(0, '#0a0a15')
-      bgGradient.addColorStop(1, '#15152a')
+      // Background - cached gradient
+      if (!bgGradient) {
+        bgGradient = ctx.createLinearGradient(0, 0, width, height)
+        bgGradient.addColorStop(0, '#0a0a15')
+        bgGradient.addColorStop(1, '#15152a')
+      }
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
 
@@ -5637,9 +5665,13 @@ function PhysicsTimeline() {
     if (!ctx) return
 
     let animationFrameId: number
+    let bgGradient: CanvasGradient | null = null
+    let timelineGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+      bgGradient = null
+      timelineGradient = null
     }
     resize()
     window.addEventListener('resize', resize)
@@ -5655,23 +5687,29 @@ function PhysicsTimeline() {
       time += 0.02
       ctx.clearRect(0, 0, width, height)
 
-      // Background
-      const bgGradient = ctx.createLinearGradient(0, 0, width, height)
-      bgGradient.addColorStop(0, '#0a0a18')
-      bgGradient.addColorStop(1, '#151530')
+      // Background - cached gradient
+      if (!bgGradient) {
+        bgGradient = ctx.createLinearGradient(0, 0, width, height)
+        bgGradient.addColorStop(0, '#0a0a18')
+        bgGradient.addColorStop(1, '#151530')
+      }
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
 
+      // Timeline gradient - cached
+      if (!timelineGradient) {
+        timelineGradient = ctx.createLinearGradient(0, 0, width, 0)
+        timelineGradient.addColorStop(0, '#8B5CF6')
+        timelineGradient.addColorStop(0.25, '#3B82F6')
+        timelineGradient.addColorStop(0.5, '#10B981')
+        timelineGradient.addColorStop(0.75, '#EC4899')
+        timelineGradient.addColorStop(1, '#F97316')
+      }
+      ctx.strokeStyle = timelineGradient
+      ctx.lineWidth = 3
+
       // Draw timeline line
       const lineY = centerY
-      const gradient = ctx.createLinearGradient(0, 0, width, 0)
-      gradient.addColorStop(0, '#8B5CF6')
-      gradient.addColorStop(0.25, '#3B82F6')
-      gradient.addColorStop(0.5, '#10B981')
-      gradient.addColorStop(0.75, '#EC4899')
-      gradient.addColorStop(1, '#F97316')
-      ctx.strokeStyle = gradient
-      ctx.lineWidth = 3
       ctx.beginPath()
       ctx.moveTo(0, lineY)
       ctx.lineTo(width, lineY)
