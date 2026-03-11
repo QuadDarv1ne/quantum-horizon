@@ -5,17 +5,7 @@ import { useCanvasAnimation } from '@/hooks/use-canvas-animation'
 import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-
-// ==================== CONSTANTS ====================
-const G = 6.674e-11
-const c = 2.998e8
-const h = 6.626e-34
-const h_bar = h / (2 * Math.PI)
-const k_B = 1.381e-23
-const M_SUN = 1.989e30
-const eV = 1.602e-19
-const m_e = 9.109e-31
-const m_p = 1.673e-27
+import { G, c, h, h_bar, k_B, M_SUN, eV, m_e, m_p } from '@/lib/constants'
 
 // ==================== HELPERS ====================
 function setupCanvasContext(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
