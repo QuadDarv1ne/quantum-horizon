@@ -449,9 +449,15 @@ function WaveFunctionVisualization() {
     if (!ctx) return
 
     let animationFrameId: number
+    let bgGradient: CanvasGradient | null = null
+    let cachedWidth = 0
+    let cachedHeight = 0
 
     const resize = () => {
       setupCanvas(canvas, ctx)
+      cachedWidth = canvas.offsetWidth
+      cachedHeight = canvas.offsetHeight
+      bgGradient = null
     }
     resize()
     window.addEventListener('resize', resize)
@@ -466,10 +472,14 @@ function WaveFunctionVisualization() {
       const offsetX = (width - L) / 2
       ctx.clearRect(0, 0, width, height)
 
-      // Background
-      const bgGradient = ctx.createLinearGradient(0, 0, width, height)
-      bgGradient.addColorStop(0, '#0a0a1a')
-      bgGradient.addColorStop(1, '#151530')
+      // Background - cached gradient
+      if (!bgGradient || cachedWidth !== width || cachedHeight !== height) {
+        bgGradient = ctx.createLinearGradient(0, 0, width, height)
+        bgGradient.addColorStop(0, '#0a0a1a')
+        bgGradient.addColorStop(1, '#151530')
+        cachedWidth = width
+        cachedHeight = height
+      }
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
 
