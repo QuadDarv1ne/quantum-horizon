@@ -16,6 +16,14 @@ const eV = 1.602e-19
 const m_e = 9.109e-31
 const m_p = 1.673e-27
 
+// ==================== HELPERS ====================
+function setupCanvasContext(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+  canvas.width = canvas.offsetWidth * 2
+  canvas.height = canvas.offsetHeight * 2
+  ctx.resetTransform()
+  ctx.scale(2, 2)
+}
+
 // ==================== TRANSLATIONS ====================
 const translations = {
   ru: {
@@ -446,7 +454,6 @@ function FullscreenWrapper({
 // Wave Function Visualization
 function WaveFunctionVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [n, setN] = useState(1)
   const [showProbability, setShowProbability] = useState(true)
   const [particlePosition, setParticlePosition] = useState<number | null>(null)
@@ -457,10 +464,10 @@ function WaveFunctionVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -616,14 +623,14 @@ function WaveFunctionVisualization() {
       ctx.textAlign = 'center'
       ctx.fillText(`ψ${n}(x) = √(2/L)·sin(${n}πx/L)`, width / 2, 30)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [n, showProbability, particlePosition])
 
@@ -695,7 +702,6 @@ function WaveFunctionVisualization() {
 // Heisenberg Uncertainty Principle
 function UncertaintyVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [deltaX, setDeltaX] = useState(50)
 
   useEffect(() => {
@@ -704,10 +710,10 @@ function UncertaintyVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -827,14 +833,14 @@ function UncertaintyVisualization() {
       ctx.fillStyle = '#F472B6'
       ctx.fillText(`Δp ≥ ${deltaP.toExponential(1)} кг·м/с`, width * 0.75, centerY + 80)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [deltaX])
 
@@ -882,7 +888,6 @@ function UncertaintyVisualization() {
 // Quantum Tunneling
 function TunnelingVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [barrierHeight, setBarrierHeight] = useState(50)
   const [barrierWidth, setBarrierWidth] = useState(30)
   const [energy, setEnergy] = useState(30)
@@ -893,10 +898,10 @@ function TunnelingVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -1018,14 +1023,14 @@ function TunnelingVisualization() {
       ctx.fillStyle = '#4ADE80'
       ctx.fillText('Прошедшая волна', width - 100, baseY + 20)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [barrierHeight, barrierWidth, energy])
 
@@ -1076,7 +1081,6 @@ function TunnelingVisualization() {
 // Time Dilation
 function TimeDilationVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [velocity, setVelocity] = useState(0.5) // fraction of c
 
   useEffect(() => {
@@ -1085,10 +1089,10 @@ function TimeDilationVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -1229,14 +1233,14 @@ function TimeDilationVisualization() {
       ctx.stroke()
       ctx.setLineDash([])
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [velocity])
 
@@ -1474,10 +1478,10 @@ function HRDiagramVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -1655,7 +1659,6 @@ function HRDiagramVisualization() {
 // Neutron Star Visualization
 function NeutronStarVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [rotationPeriod, setRotationPeriod] = useState(33) // milliseconds
   const [magneticTilt, setMagneticTilt] = useState(45)
 
@@ -1665,10 +1668,10 @@ function NeutronStarVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -1814,14 +1817,14 @@ function NeutronStarVisualization() {
       ctx.fillText(`P = ${rotationPeriod} мс`, centerX, canvas.offsetHeight - 15)
       ctx.fillText(`f = ${(1000 / rotationPeriod).toFixed(1)} Гц`, centerX, canvas.offsetHeight - 3)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [rotationPeriod, magneticTilt])
 
@@ -1873,7 +1876,6 @@ function NeutronStarVisualization() {
 // ==================== DOUBLE-SLIT EXPERIMENT ====================
 function DoubleSlitVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [slitSeparation, setSlitSeparation] = useState(40)
   const [slitWidth, setSlitWidth] = useState(8)
   const [wavelength, setWavelength] = useState(15)
@@ -1887,10 +1889,10 @@ function DoubleSlitVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2060,14 +2062,14 @@ function DoubleSlitVisualization() {
       ctx.fillText('λ = ' + wavelength + ' (длина волны)', 10, height - 22)
       ctx.fillText('a = ' + slitWidth + ' (ширина щели)', 10, height - 9)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [slitSeparation, slitWidth, wavelength, showParticles, showWave])
 
@@ -2134,7 +2136,6 @@ function DoubleSlitVisualization() {
 // ==================== DARK MATTER VISUALIZATION ====================
 function DarkMatterVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [darkMatterFraction, setDarkMatterFraction] = useState(85)
   const [showDarkMatter, setShowDarkMatter] = useState(true)
 
@@ -2144,10 +2145,10 @@ function DarkMatterVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2320,14 +2321,14 @@ function DarkMatterVisualization() {
       ctx.fillStyle = 'rgba(100, 200, 255, 0.8)'
       ctx.fillText('С тёмной материей', graphX + graphW - 80, graphY + 20)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [darkMatterFraction, showDarkMatter])
 
@@ -2383,7 +2384,6 @@ function DarkMatterVisualization() {
 // ==================== BLACK HOLE (ENHANCED) ====================
 function BlackHoleVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [massSolar, setMassSolar] = useState(10)
 
   const mass = massSolar * M_SUN
@@ -2397,10 +2397,10 @@ function BlackHoleVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2624,14 +2624,14 @@ function BlackHoleVisualization() {
       })
       ctx.restore()
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [massSolar])
 
@@ -2696,7 +2696,6 @@ function BlackHoleVisualization() {
 // ==================== WHITE HOLE ====================
 function WhiteHoleVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [massSolar, setMassSolar] = useState(10)
 
   useEffect(() => {
@@ -2705,10 +2704,10 @@ function WhiteHoleVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -2846,14 +2845,14 @@ function WhiteHoleVisualization() {
       ctx.textAlign = 'center'
       ctx.fillText('Белая дыра', centerX, canvas.offsetHeight - 15)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [massSolar])
 
@@ -2903,7 +2902,6 @@ function WhiteHoleVisualization() {
 // ==================== SCHRÖDINGER'S CAT ====================
 function SchrodingersCatVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [observationCount, setObservationCount] = useState(0)
   const [catState, setCatState] = useState<'alive' | 'dead' | 'superposition'>('superposition')
   const [isObserving, setIsObserving] = useState(false)
@@ -2914,10 +2912,10 @@ function SchrodingersCatVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -3091,14 +3089,14 @@ function SchrodingersCatVisualization() {
       }
       ctx.stroke()
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [catState, isObserving])
 
@@ -3164,7 +3162,6 @@ function SchrodingersCatVisualization() {
 // ==================== BIG BANG ====================
 function BigBangVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [expansionSpeed, setExpansionSpeed] = useState(50)
   const [timeScale, setTimeScale] = useState(0)
   const [isPlaying, setIsPlaying] = useState(true)
@@ -3175,10 +3172,10 @@ function BigBangVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -3313,14 +3310,14 @@ function BigBangVisualization() {
       ctx.fillStyle = 'rgba(100, 200, 255, 0.8)'
       ctx.fillText(`a(t) = ${expansionFactor.toFixed(2)}`, 10, height - 10)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [expansionSpeed, timeScale, isPlaying])
 
@@ -3376,7 +3373,6 @@ function BigBangVisualization() {
 // ==================== PHOTOELECTRIC EFFECT ====================
 function PhotoelectricEffectVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [frequency, setFrequency] = useState(50) // as % of threshold
   const [intensity, setIntensity] = useState(50)
   const [workFunction, setWorkFunction] = useState(2.5) // eV
@@ -3387,10 +3383,10 @@ function PhotoelectricEffectVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -3588,14 +3584,14 @@ function PhotoelectricEffectVisualization() {
         ctx.fillText(`Eкин = ${(kineticEnergy * 1.6e-19).toExponential(1)} Дж`, 10, 35)
       }
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [frequency, intensity, workFunction])
 
@@ -3652,7 +3648,6 @@ function PhotoelectricEffectVisualization() {
 // ==================== BROWNIAN MOTION ====================
 function BrownianMotionVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [particleCount, setParticleCount] = useState(5)
   const [temperature, setTemperature] = useState(300) // Kelvin
   const [showTrails, setShowTrails] = useState(true)
@@ -3663,10 +3658,10 @@ function BrownianMotionVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -3810,14 +3805,14 @@ function BrownianMotionVisualization() {
       ctx.fillText('H₂O молекулы: 200', 10, height - 20)
       ctx.fillText(`Частицы: ${particleCount}`, 10, height - 8)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [particleCount, temperature, showTrails])
 
@@ -3871,7 +3866,6 @@ function BrownianMotionVisualization() {
 // ==================== GRAVITATIONAL WAVES ====================
 function GravitationalWavesVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [mass1, setMass1] = useState(30) // Solar masses
   const [mass2, setMass2] = useState(30)
   const [distance, setDistance] = useState(50)
@@ -3884,10 +3878,10 @@ function GravitationalWavesVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4038,14 +4032,14 @@ function GravitationalWavesVisualization() {
       ctx.fillStyle = 'rgba(100, 200, 255, 0.8)'
       ctx.fillText(`f ≈ ${freq.toFixed(1)} Гц`, 10, height - 15)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [mass1, mass2, distance, isPlaying, timeScale])
 
@@ -4106,7 +4100,6 @@ function GravitationalWavesVisualization() {
 // ==================== QUANTUM ENTANGLEMENT ====================
 function QuantumEntanglementVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [entanglementStrength, setEntanglementStrength] = useState(80)
   const [measuredParticle, setMeasuredParticle] = useState<'left' | 'right' | null>(null)
   const [leftState, setLeftState] = useState<'superposition' | 'up' | 'down'>('superposition')
@@ -4118,10 +4111,10 @@ function QuantumEntanglementVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4279,14 +4272,14 @@ function QuantumEntanglementVisualization() {
       ctx.font = '11px monospace'
       ctx.fillText('|Ψ⟩ = (|↑↑⟩ + |↓↓⟩) / √2', width / 2, height - 15)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [entanglementStrength, leftState, rightState, measuredParticle])
 
@@ -4358,7 +4351,6 @@ function QuantumEntanglementVisualization() {
 // ==================== BOHR ATOMIC MODEL ====================
 function AtomicModelVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [element, setElement] = useState<'H' | 'He' | 'Li' | 'C' | 'Na'>('H')
   const [showTransitions, setShowTransitions] = useState(true)
   const [selectedTransition, setSelectedTransition] = useState<{from: number, to: number} | null>(null)
@@ -4380,10 +4372,10 @@ function AtomicModelVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4567,14 +4559,14 @@ function AtomicModelVisualization() {
       ctx.textAlign = 'center'
       ctx.fillText('E_n = -13.6 eV / n²', width / 2, height - 15)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [element, showTransitions, selectedTransition, currentElement])
 
@@ -4636,7 +4628,6 @@ function AtomicModelVisualization() {
 // ==================== RADIOACTIVE DECAY ====================
 function RadioactiveDecayVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [decayType, setDecayType] = useState<'alpha' | 'beta' | 'gamma'>('alpha')
   const [halfLife, setHalfLife] = useState(50)
   const [atomCount, setAtomCount] = useState(100)
@@ -4650,10 +4641,10 @@ function RadioactiveDecayVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -4854,14 +4845,14 @@ function RadioactiveDecayVisualization() {
       ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
       ctx.fillText(decayLabel, 10, height - 15)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [decayType, halfLife, atomCount, isPlaying])
 
@@ -4941,7 +4932,6 @@ function RadioactiveDecayVisualization() {
 // ==================== SUPERCONDUCTIVITY ====================
 function SuperconductivityVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [temperature, setTemperature] = useState(100) // Kelvin
   const [criticalTemp, setCriticalTemp] = useState(90) // Tc for YBCO
   const [showMagneticField, setShowMagneticField] = useState(true)
@@ -4953,10 +4943,10 @@ function SuperconductivityVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -5168,14 +5158,14 @@ function SuperconductivityVisualization() {
       ctx.textAlign = 'center'
       ctx.fillText('B = 0 внутри сверхпроводника (эффект Мейсснера)', centerX, height - 15)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [temperature, criticalTemp, showMagneticField, levitationHeight])
 
@@ -5241,7 +5231,6 @@ function SuperconductivityVisualization() {
 // ==================== STANDARD MODEL ====================
 function StandardModelVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [selectedParticle, setSelectedParticle] = useState<string | null>(null)
   const [showDecays, setShowDecays] = useState(false)
 
@@ -5278,10 +5267,10 @@ function StandardModelVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -5499,7 +5488,7 @@ function StandardModelVisualization() {
         }
       }
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
@@ -5528,7 +5517,7 @@ function StandardModelVisualization() {
     return () => {
       window.removeEventListener('resize', resize)
       canvas.removeEventListener('click', handleClick)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [selectedParticle, showDecays])
 
@@ -5652,7 +5641,6 @@ function PhysicsTimeline() {
   }
 
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -5660,10 +5648,10 @@ function PhysicsTimeline() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -5771,14 +5759,14 @@ function PhysicsTimeline() {
         ctx.fillText(year.toString(), x, height - 5)
       }
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [filteredEvents, hoveredEvent])
 
@@ -5823,7 +5811,6 @@ function PhysicsTimeline() {
 // ==================== SOLAR SYSTEM ====================
 function SolarSystemVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [speed, setSpeed] = useState(1)
   const [showOrbits, setShowOrbits] = useState(true)
   const [showLabels, setShowLabels] = useState(true)
@@ -5848,10 +5835,10 @@ function SolarSystemVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -6021,14 +6008,14 @@ function SolarSystemVisualization() {
       ctx.textAlign = 'right'
       ctx.fillText('Масштаб не сохранён', width - 10, height - 5)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [speed, showOrbits, showLabels, selectedPlanet, zoom])
 
@@ -6101,7 +6088,6 @@ function SolarSystemVisualization() {
 // ==================== COSMIC MICROWAVE BACKGROUND ====================
 function CMBVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [temperature, setTemperature] = useState(2.725) // Current CMB temperature in K
   const [showGalaxies, setShowGalaxies] = useState(true)
   const [timeScale, setTimeScale] = useState(1)
@@ -6112,10 +6098,10 @@ function CMBVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -6225,14 +6211,14 @@ function CMBVisualization() {
       ctx.fillText('Возраст: ~380 000 лет после БВ', 10, height - 25)
       ctx.fillText('ΔT/T ≈ 10⁻⁵ (флуктуации)', 10, height - 12)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [temperature, showGalaxies, timeScale])
 
@@ -6277,7 +6263,6 @@ function CMBVisualization() {
 // ==================== DARK ENERGY VISUALIZATION ====================
 function DarkEnergyVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationRef = useRef<number>(0)
   const [expansionRate, setExpansionRate] = useState(0.7) // Hubble parameter visualization
   const [darkEnergyFraction, setDarkEnergyFraction] = useState(68) // % of universe
   const [showMatter, setShowMatter] = useState(true)
@@ -6288,10 +6273,10 @@ function DarkEnergyVisualization() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    let animationFrameId: number
+
     const resize = () => {
-      canvas.width = canvas.offsetWidth * 2
-      canvas.height = canvas.offsetHeight * 2
-      ctx.scale(2, 2)
+      setupCanvasContext(canvas, ctx)
     }
     resize()
     window.addEventListener('resize', resize)
@@ -6434,14 +6419,14 @@ function DarkEnergyVisualization() {
       ctx.fillText(`H₀ ≈ 70 км/с/Мпк`, width - 125, height - 30)
       ctx.fillText(`Ускорение: +${(expansionRate * 100).toFixed(0)}%`, width - 125, height - 18)
 
-      animationRef.current = requestAnimationFrame(animate)
+      animationFrameId = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationRef.current)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [expansionRate, darkEnergyFraction, showMatter])
 
