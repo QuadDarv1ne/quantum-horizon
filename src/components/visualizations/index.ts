@@ -2,7 +2,15 @@
 export { VisualizationCanvas } from "./base/visualization-canvas"
 export { VisualizationControls } from "./base/visualization-controls"
 export { VisualizationSelector } from "./base/visualization-selector"
+export { FullscreenWrapper } from "./base/fullscreen-wrapper"
+
+// Quantum visualizations
+export { WaveFunctionVisualization } from "./quantum/wave-function"
+export { UncertaintyVisualization } from "./quantum/uncertainty"
 
 // Relativity visualizations
 export { TimeDilationVisualization } from "./relativity/time-dilation"
 export { MassEnergyVisualization } from "./relativity/mass-energy"
+
+// Cosmos visualizations
+export { BlackHoleVisualization } from "./cosmos/black-hole"
