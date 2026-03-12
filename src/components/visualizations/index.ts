@@ -30,6 +30,9 @@ export { DarkMatterVisualization } from "./cosmos/dark-matter"
 export { WhiteHoleVisualization } from "./cosmos/white-hole"
 export { BigBangVisualization } from "./cosmos/big-bang"
 export { StandardModelVisualization } from "./cosmos/standard-model"
+export { SolarSystemVisualization } from "./cosmos/solar-system"
+export { CMBVisualization } from "./cosmos/cmb"
+export { DarkEnergyVisualization } from "./cosmos/dark-energy"
 
 // Advanced visualizations
 export { GravitationalWavesVisualization } from "./advanced/gravitational-waves"

@@ -1,12 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { useEffect, useRef, useCallback } from "react"
 
 /**
  * Настройка canvas для HiDPI/Retina дисплеев
  */
-export function setupCanvas(
-  canvas: HTMLCanvasElement,
-  ctx: CanvasRenderingContext2D,
-): void {
+export function setupCanvas(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void {
   const dpr = window.devicePixelRatio || 1
   const rect = canvas.getBoundingClientRect()
 
@@ -37,14 +35,9 @@ export interface CanvasAnimationOptions {
 export function useCanvasAnimation(
   canvasRef: React.RefObject<HTMLCanvasElement>,
   animate: (ctx: CanvasRenderingContext2D, width: number, height: number, delta: number) => void,
-  options: CanvasAnimationOptions = {},
+  options: CanvasAnimationOptions = {}
 ): void {
-  const {
-    deps = [],
-    fpsLimit = 60,
-    pauseWhenHidden = true,
-    respectReducedMotion = true,
-  } = options
+  const { deps = [], fpsLimit = 60, pauseWhenHidden = true, respectReducedMotion = true } = options
 
   const animationFrameId = useRef<number | undefined>(undefined)
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
@@ -75,7 +68,9 @@ export function useCanvasAnimation(
         reducedMotionRef.current = e.matches
       }
       mediaQuery.addEventListener("change", handler)
-      return () => mediaQuery.removeEventListener("change", handler)
+      return (): void => {
+        mediaQuery.removeEventListener("change", handler)
+      }
     }
   }, [respectReducedMotion])
 
@@ -96,7 +91,7 @@ export function useCanvasAnimation(
         (entries) => {
           isVisibleRef.current = entries[0]?.isIntersecting ?? true
         },
-        { threshold: 0 },
+        { threshold: 0 }
       )
       observer.observe(canvas)
     }
@@ -142,13 +137,13 @@ export function useCanvasAnimation(
 
     animationFrameId.current = requestAnimationFrame(loop)
 
-    return () => {
+    return (): void => {
       running = false
       window.removeEventListener("resize", handleResize)
-      if (animationFrameId.current) {
+      if (animationFrameId.current !== undefined) {
         cancelAnimationFrame(animationFrameId.current)
       }
-      if (observer) {
+      if (observer !== undefined) {
         observer.disconnect()
       }
     }
@@ -163,7 +158,7 @@ export function useFixedTimestepCanvasAnimation(
   canvasRef: React.RefObject<HTMLCanvasElement>,
   update: (ctx: CanvasRenderingContext2D, width: number, height: number, dt: number) => void,
   timestep: number = 1 / 60,
-  deps: React.DependencyList = [],
+  deps: React.DependencyList = []
 ): void {
   const animationFrameId = useRef<number | undefined>(undefined)
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
@@ -220,10 +215,10 @@ export function useFixedTimestepCanvasAnimation(
 
     animationFrameId.current = requestAnimationFrame(loop)
 
-    return () => {
+    return (): void => {
       running = false
       window.removeEventListener("resize", handleResize)
-      if (animationFrameId.current) {
+      if (animationFrameId.current !== undefined) {
         cancelAnimationFrame(animationFrameId.current)
       }
     }

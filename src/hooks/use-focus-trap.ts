@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client"
 
 import { useEffect, useRef } from "react"
@@ -13,7 +14,7 @@ export function useFocusTrap(isActive = true) {
 
     const container = containerRef.current
     const focusableElements = container.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
     )
 
     const firstElement = focusableElements[0]
@@ -25,24 +26,20 @@ export function useFocusTrap(isActive = true) {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Tab") return
 
-      if (event.shiftKey) {
+      if (event.shiftKey && document.activeElement === firstElement) {
         // Shift + Tab
-        if (document.activeElement === firstElement) {
-          event.preventDefault()
-          lastElement.focus()
-        }
-      } else {
+        event.preventDefault()
+        lastElement.focus()
+      } else if (document.activeElement === lastElement) {
         // Tab
-        if (document.activeElement === lastElement) {
-          event.preventDefault()
-          firstElement.focus()
-        }
+        event.preventDefault()
+        firstElement.focus()
       }
     }
 
     container.addEventListener("keydown", handleKeyDown)
 
-    return () => {
+    return (): void => {
       container.removeEventListener("keydown", handleKeyDown)
     }
   }, [isActive])

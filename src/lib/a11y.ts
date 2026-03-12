@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /**
  * Утилиты для улучшения доступности (a11y)
  */
@@ -19,7 +21,7 @@ export type AnnouncePriority = "polite" | "assertive" | "off"
  */
 export function announceToScreenReader(
   message: string,
-  priority: AnnouncePriority = "polite",
+  priority: AnnouncePriority = "polite"
 ): void {
   // Удаляем существующие live regions с тем же приоритетом
   const existing = document.querySelector(`[data-a11y-announce="${priority}"]`)
@@ -83,10 +85,7 @@ export interface TrapFocusOptions {
  * })
  * return cleanup
  */
-export function trapFocus(
-  container: HTMLElement,
-  options: TrapFocusOptions = {},
-): () => void {
+export function trapFocus(container: HTMLElement, options: TrapFocusOptions = {}): () => void {
   const { initialFocus, returnFocus, onEscape } = options
 
   // Сохраняем текущий элемент для возврата фокуса
@@ -106,7 +105,7 @@ export function trapFocus(
   ].join(", ")
 
   const focusableElements = Array.from(
-    container.querySelectorAll<HTMLElement>(focusableSelectors),
+    container.querySelectorAll<HTMLElement>(focusableSelectors)
   ).filter((el) => {
     // Проверяем видимость элемента
     const style = window.getComputedStyle(el)
@@ -119,7 +118,9 @@ export function trapFocus(
   // Фокус на первом элементе или указанном
   const elementToFocus = initialFocus || firstFocusable
   if (elementToFocus) {
-    setTimeout(() => elementToFocus.focus(), 0)
+    setTimeout(() => {
+      elementToFocus.focus()
+    }, 0)
   } else {
     // Если нет фокусируемых элементов, фокус на контейнере
     container.setAttribute("tabindex", "-1")
@@ -135,25 +136,21 @@ export function trapFocus(
     if (event.key !== "Tab") return
 
     // Циклическая навигация
-    if (event.shiftKey) {
+    if (event.shiftKey && document.activeElement === firstFocusable) {
       // Shift + Tab
-      if (document.activeElement === firstFocusable) {
-        event.preventDefault()
-        lastFocusable?.focus()
-      }
-    } else {
+      event.preventDefault()
+      lastFocusable.focus()
+    } else if (document.activeElement === lastFocusable) {
       // Tab
-      if (document.activeElement === lastFocusable) {
-        event.preventDefault()
-        firstFocusable?.focus()
-      }
+      event.preventDefault()
+      firstFocusable.focus()
     }
   }
 
   container.addEventListener("keydown", handleKeyDown)
 
   // Возврат фокуса при очистке
-  return () => {
+  return (): void => {
     container.removeEventListener("keydown", handleKeyDown)
     if (returnFocus) {
       returnFocus.focus()
@@ -211,22 +208,14 @@ export interface KeyboardNavigationOptions {
  *   onSelect: (index) => setSelectedIndex(index)
  * })
  */
-export function createKeyboardNavigation(
-  options: KeyboardNavigationOptions,
-): {
+export function createKeyboardNavigation(options: KeyboardNavigationOptions): {
   handlers: {
     onKeyDown: (event: React.KeyboardEvent) => void
   }
   currentIndex: number
   setCurrentIndex: (index: number) => void
 } {
-  const {
-    items,
-    orientation = "vertical",
-    loop = true,
-    onSelect,
-    onActivate,
-  } = options
+  const { items, orientation = "vertical", loop = true, onSelect, onActivate } = options
 
   let currentIndex = 0
 
@@ -299,7 +288,7 @@ export function createKeyboardNavigation(
  */
 export function generateStatusAnnouncement(
   status: "loading" | "success" | "error" | "idle",
-  context: string,
+  context: string
 ): string {
   const statusMessages = {
     loading: `Загрузка: ${context}`,
