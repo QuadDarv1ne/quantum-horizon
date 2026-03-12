@@ -64,7 +64,9 @@ export default function AuthErrorPage() {
             </Button>
             <Button
               className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600"
-              onClick={() => (window.location.href = "/auth/signin")}
+              onClick={() => {
+                window.location.href = "/auth/signin"
+              }}
             >
               Попробовать снова
             </Button>

@@ -152,9 +152,9 @@ export const useVisualizationStore = create<VisualizationState>()(
       setIsPlaying: (value) => set({ isPlaying: value }),
 
       setAnimationSpeed: (speed) =>
-        set({
+        set(() => ({
           animationSpeed: Math.max(0.1, Math.min(2.0, speed)),
-        }),
+        })),
 
       // waveFunction actions
       setQuantumNumber: (n) =>

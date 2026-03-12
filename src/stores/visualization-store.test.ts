@@ -120,7 +120,7 @@ describe("useVisualizationStore", () => {
       expect(useVisualizationStore.getState().animationSpeed).toBe(0.1)
 
       useVisualizationStore.getState().setAnimationSpeed(3.0)
-      expect(useVisualizationStore.getState().animationSpeed).toBe(1.0)
+      expect(useVisualizationStore.getState().animationSpeed).toBe(2.0)
 
       useVisualizationStore.getState().setAnimationSpeed(1.5)
       expect(useVisualizationStore.getState().animationSpeed).toBe(1.5)

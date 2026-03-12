@@ -35,7 +35,9 @@ export default function SignOutPage() {
             <Button
               variant="outline"
               className="flex-1 bg-slate-800 border-slate-600 hover:bg-slate-700"
-              onClick={() => window.history.back()}
+              onClick={() => {
+                window.history.back()
+              }}
               disabled={isLoading}
             >
               Отмена

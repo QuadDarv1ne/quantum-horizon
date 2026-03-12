@@ -1,13 +1,10 @@
 ﻿"use client"
 
-import { useState, useEffect, useRef, createContext, useContext, useMemo, useCallback } from "react"
-import { useCanvasAnimation } from "@/hooks/use-canvas-animation"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ErrorBoundary } from "@/components/ui/error-boundary"
-import { G, c, h, h_bar, k_B, M_SUN, eV, m_e, m_p } from "@/lib/constants"
-import { setupCanvas } from "@/hooks/use-canvas-animation"
 import { translations, type Language } from "@/lib/translations"
 import { FullscreenWrapper } from "@/components/visualizations/base/fullscreen-wrapper"
 import {
@@ -33,33 +30,6 @@ import {
 
 type Theme = "dark" | "light"
 
-// ==================== CONTEXTS ====================
-const LanguageContext = createContext<{
-  language: Language
-  setLanguage: (lang: Language) => void
-  t: typeof translations.ru
-}>({
-  language: "ru",
-  setLanguage: () => {},
-  t: translations.ru,
-})
-
-const ThemeContext = createContext<{
-  theme: Theme
-  setTheme: (theme: Theme) => void
-}>({
-  theme: "dark",
-  setTheme: () => {},
-})
-
-function formatScientific(num: number): string {
-  if (num === 0) return "0"
-  if (Math.abs(num) < 0.001 || Math.abs(num) > 1e6) {
-    return num.toExponential(2)
-  }
-  return num.toFixed(4)
-}
-
 // ==================== QUANTUM MECHANICS ====================
 
 // ==================== SPECIAL RELATIVITY ====================
@@ -75,7 +45,6 @@ function formatScientific(num: number): string {
 // ==================== PHYSICS TIMELINE ====================
 function PhysicsTimeline() {
   const [selectedEra, setSelectedEra] = useState<string | null>(null)
-  const [hoveredEvent, setHoveredEvent] = useState<number | null>(null)
 
   const events = [
     {
@@ -863,9 +832,9 @@ function SolarSystemVisualization() {
 
           ctx.fillStyle = "#AAAAAA"
           ctx.font = "9px sans-serif"
-          ctx.fillText(`РћСЂР±РёС‚Р°: ${planet.distance} Р°.Рµ.`, 15, height - 35)
-          ctx.fillText(`РџРµСЂРёРѕРґ: ${planet.period} РіРѕРґР°`, 15, height - 22)
-          ctx.fillText(`РЎРїСѓС‚РЅРёРєРё: ${planet.moons}`, 15, height - 9)
+          ctx.fillText(`РћСЂР±РёС‚Р°: ${String(planet.distance)} Р°.Рµ.`, 15, height - 35)
+          ctx.fillText(`РџРµСЂРёРѕРґ: ${String(planet.period)} РіРѕРґР°`, 15, height - 22)
+          ctx.fillText(`РЎРїСѓС‚РЅРёРєРё: ${String(planet.moons)}`, 15, height - 9)
         }
       }
 
@@ -1232,7 +1201,7 @@ function DarkEnergyVisualization() {
       for (let i = 0; i < 20; i++) {
         const radius = (time * 50 + i * 20) % (width / 2)
         const alpha = 1 - radius / (width / 2)
-        ctx.strokeStyle = `rgba(138, 43, 226, ${alpha * 0.3})`
+        ctx.strokeStyle = `rgba(138, 43, 226, ${String(alpha * 0.3)})`
         ctx.lineWidth = 2
         ctx.beginPath()
         ctx.arc(centerX, centerY, radius, 0, Math.PI * 2)
@@ -1334,7 +1303,7 @@ function DarkEnergyVisualization() {
       ctx.fillStyle = "#FFF"
       ctx.font = "7px sans-serif"
       ctx.textAlign = "left"
-      ctx.fillText(`О©_О› = ${darkEnergyFraction}%`, 95, 40)
+      ctx.fillText(`О©_О› = ${String(darkEnergyFraction)}%`, 95, 40)
       ctx.fillText("О©_dm = 27%", 95, 52)
       ctx.fillText("О©_m = 5%", 95, 64)
 
@@ -1345,7 +1314,7 @@ function DarkEnergyVisualization() {
       ctx.font = "8px sans-serif"
       ctx.textAlign = "left"
       ctx.fillText(`Hв‚Ђ в‰€ 70 РєРј/СЃ/РњРїРє`, width - 125, height - 30)
-      ctx.fillText(`РЈСЃРєРѕСЂРµРЅРёРµ: +${(expansionRate * 100).toFixed(0)}%`, width - 125, height - 18)
+      ctx.fillText(`РЈСЃРєРѕСЂРµРЅРёРµ: +${String((expansionRate * 100).toFixed(0))}%`, width - 125, height - 18)
 
       animationFrameId = requestAnimationFrame(animate)
     }
@@ -1373,7 +1342,7 @@ function DarkEnergyVisualization() {
         <div className="space-y-1">
           <div className="flex justify-between text-xs">
             <span className="text-purple-400">РўС‘РјРЅР°СЏ СЌРЅРµСЂРіРёСЏ %</span>
-            <span className="text-white font-mono">{darkEnergyFraction}%</span>
+            <span className="text-white font-mono">{String(darkEnergyFraction)}%</span>
           </div>
           <Slider
             value={[darkEnergyFraction]}
@@ -1435,7 +1404,7 @@ function PhysicsQuiz() {
   const [showResult, setShowResult] = useState(false)
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null)
   const [answered, setAnswered] = useState(false)
-  const [language, setLanguage] = useState<Language>(() => {
+  const [language, _setLanguage] = useState<Language>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("physics-lang") as Language
       return saved || "ru"
@@ -1815,7 +1784,7 @@ function PhysicsQuiz() {
 // ==================== SCIENTISTS BIOGRAPHIES ====================
 function ScientistsBiographies() {
   const [selectedScientist, setSelectedScientist] = useState<number | null>(null)
-  const [language, setLanguage] = useState<Language>(() => {
+  const [language, _setLanguage] = useState<Language>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("physics-lang") as Language
       if (saved && ["ru", "en", "zh", "he"].includes(saved)) {

@@ -101,19 +101,26 @@ describe("trapFocus", () => {
     document.body.innerHTML = ""
   })
 
-  it("should focus first focusable element by default", () => {
-    const focusSpy = vi.spyOn(container.querySelector("#first") as HTMLElement, "focus")
+  it("should focus first focusable element by default", async () => {
+    const firstButton = container.querySelector("#first") as HTMLButtonElement
+    const focusSpy = vi.spyOn(firstButton, "focus")
 
     trapFocus(container)
+
+    // Wait for setTimeout in trapFocus
+    await new Promise((resolve) => setTimeout(resolve, 10))
 
     expect(focusSpy).toHaveBeenCalled()
   })
 
-  it("should focus initialFocus element if specified", () => {
+  it("should focus initialFocus element if specified", async () => {
     const middleInput = container.querySelector("#middle") as HTMLInputElement
     const focusSpy = vi.spyOn(middleInput, "focus")
 
     trapFocus(container, { initialFocus: middleInput })
+
+    // Wait for setTimeout in trapFocus
+    await new Promise((resolve) => setTimeout(resolve, 10))
 
     expect(focusSpy).toHaveBeenCalled()
   })

@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
 
   // Security headers
-  async headers() {
+  headers() {
     return [
       {
         source: "/:path*",

@@ -8,6 +8,17 @@ describe("useIsMobile", () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
+    // Setup default matchMedia mock for each test
+    window.matchMedia = vi.fn().mockImplementation((query) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }))
   })
 
   afterEach(() => {
@@ -19,10 +30,16 @@ describe("useIsMobile", () => {
     window.matchMedia = originalMatchMedia
   })
 
-  it("should return undefined initially", () => {
+  it("should return false for desktop initially", () => {
+    Object.defineProperty(window, "innerWidth", {
+      writable: true,
+      configurable: true,
+      value: 1024,
+    })
     const { result } = renderHook(() => useIsMobile())
 
-    expect(result.current).toBeUndefined()
+    // useIsMobile returns false initially when innerWidth > breakpoint
+    expect(result.current).toBe(false)
   })
 
   it("should return true for mobile screen sizes", async () => {
@@ -123,6 +140,7 @@ describe("useIsMobile", () => {
 
   it("should handle window resize", async () => {
     let currentMatches = true
+    let changeCallback: ((event: MediaQueryListEvent) => void) | null = null
 
     window.matchMedia = vi.fn().mockImplementation(() => ({
       get matches() {
@@ -132,13 +150,25 @@ describe("useIsMobile", () => {
       onchange: null,
       addListener: vi.fn(),
       removeListener: vi.fn(),
-      addEventListener: vi.fn(),
+      addEventListener: vi.fn().mockImplementation((event, callback) => {
+        if (event === "change") {
+          changeCallback = callback
+        }
+      }),
       removeEventListener: vi.fn(),
       dispatchEvent: vi.fn(),
     }))
 
+    // Start with mobile
+    Object.defineProperty(window, "innerWidth", {
+      writable: true,
+      configurable: true,
+      value: 375,
+    })
+
     const { result, rerender } = renderHook(() => useIsMobile())
 
+    // Wait for initial effect
     await waitFor(() => expect(result.current).toBe(true))
 
     // Simulate resize to desktop
@@ -149,6 +179,12 @@ describe("useIsMobile", () => {
       value: 1024,
     })
 
+    // Trigger change event
+    if (changeCallback) {
+      changeCallback({ matches: false, media: "(max-width: 767px)" } as MediaQueryListEvent)
+    }
+
+    // Rerender to get updated state
     rerender()
 
     await waitFor(() => expect(result.current).toBe(false))

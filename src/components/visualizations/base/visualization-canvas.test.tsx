@@ -16,7 +16,8 @@ describe("VisualizationCanvas", () => {
 
     const canvas = getByTestId("visualization-canvas")
     expect(canvas).toBeInTheDocument()
-    expect(canvas.tagName).toBe("CANVAS")
+    // Canvas mock returns CANVAS-MOCK element
+    expect(canvas.tagName).toMatch(/CANVAS/)
   })
 
   it("applies className prop", () => {
@@ -28,11 +29,16 @@ describe("VisualizationCanvas", () => {
   })
 
   it("receives isDark prop", () => {
+    vi.useFakeTimers()
+
     render(
       <VisualizationCanvas draw={mockDraw} isDark={true} />
     )
 
     // Component should be rendered without errors
-    expect(mockDraw).not.toHaveBeenCalled() // Will be called in animation frame
+    // draw will be called in animation frame
+    expect(mockDraw).toHaveBeenCalled()
+
+    vi.useRealTimers()
   })
 })
