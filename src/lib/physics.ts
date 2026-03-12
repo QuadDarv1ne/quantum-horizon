@@ -1,6 +1,6 @@
 // Физические формулы и расчёты
 
-import { G, c, h_bar, k_B } from "./constants"
+import { G, c, h_bar, k_B, m_e, e, epsilon_0, R_H, a_0 } from "./constants"
 
 /**
  * Расчёт фактора Лоренца
@@ -92,4 +92,77 @@ export function deBroglieWavelength(momentum: number): number {
  */
 export function uncertaintyPrinciple(deltaX: number): number {
   return h_bar / (2 * deltaX)
+}
+
+/**
+ * Расчёт энергии фотона
+ * E = hf = ℏω
+ */
+export function photonEnergy(frequency: number): number {
+  return h_bar * 2 * Math.PI * frequency
+}
+
+/**
+ * Расчёт энергии электрона в атоме водорода
+ * E_n = -13.6 eV / n²
+ */
+export function hydrogenEnergy(n: number): number {
+  return -13.6 / (n * n)
+}
+
+/**
+ * Расчёт радиуса Бора для атома водорода
+ * r_n = n² · a₀
+ */
+export function bohrRadius(n: number): number {
+  return n * n * a_0
+}
+
+/**
+ * Расчёт длины волны спектральной линии водорода
+ * 1/λ = R_H · (1/n₁² - 1/n₂²)
+ */
+export function hydrogenWavelength(n1: number, n2: number): number {
+  const invLambda = R_H * (1 / (n1 * n1) - 1 / (n2 * n2))
+  return 1 / invLambda
+}
+
+/**
+ * Расчёт циклотронной частоты
+ * ω_c = qB / m
+ */
+export function cyclotronFrequency(magneticField: number): number {
+  return (e * magneticField) / m_e
+}
+
+/**
+ * Расчёт ларморовского радиуса
+ * r_L = mv⊥ / (qB)
+ */
+export function larmorRadius(perpVelocity: number, magneticField: number): number {
+  return (m_e * perpVelocity) / (e * magneticField)
+}
+
+/**
+ * Расчёт комптоновской длины волны
+ * λ_c = h / (m_e·c)
+ */
+export function comptonWavelength(): number {
+  return (h_bar * 2 * Math.PI) / (m_e * c)
+}
+
+/**
+ * Расчёт классического радиуса электрона
+ * r_e = e² / (4πε₀m_ec²)
+ */
+export function classicalElectronRadius(): number {
+  return (e * e) / (4 * Math.PI * epsilon_0 * m_e * c * c)
+}
+
+/**
+ * Расчёт постоянной тонкой структуры
+ * α = e² / (4πε₀ℏc) ≈ 1/137
+ */
+export function fineStructureConstant(): number {
+  return (e * e) / (4 * Math.PI * epsilon_0 * h_bar * c)
 }

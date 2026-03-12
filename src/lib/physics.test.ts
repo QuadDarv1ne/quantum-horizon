@@ -11,8 +11,17 @@ import {
   particleInBoxEnergy,
   deBroglieWavelength,
   uncertaintyPrinciple,
+  photonEnergy,
+  hydrogenEnergy,
+  bohrRadius,
+  hydrogenWavelength,
+  cyclotronFrequency,
+  larmorRadius,
+  comptonWavelength,
+  classicalElectronRadius,
+  fineStructureConstant,
 } from "./physics"
-import { c, G, h_bar, M_SUN, m_e } from "./constants"
+import { c, G, h_bar, M_SUN, m_e, a_0 } from "./constants"
 
 describe("Physics formulas", () => {
   describe("lorentzFactor", () => {
@@ -172,6 +181,114 @@ describe("Physics formulas", () => {
       const deltaP1 = uncertaintyPrinciple(1e-10)
       const deltaP2 = uncertaintyPrinciple(2e-10)
       expect(deltaP2).toBeCloseTo(deltaP1 / 2, 5)
+    })
+  })
+
+  describe("photonEnergy", () => {
+    it("increases with frequency", () => {
+      const E1 = photonEnergy(1e14)
+      const E2 = photonEnergy(2e14)
+      expect(E2).toBeCloseTo(2 * E1, 5)
+    })
+
+    it("returns positive energy for positive frequency", () => {
+      expect(photonEnergy(1e14)).toBeGreaterThan(0)
+    })
+  })
+
+  describe("hydrogenEnergy", () => {
+    it("returns -13.6 eV for n=1", () => {
+      expect(hydrogenEnergy(1)).toBeCloseTo(-13.6, 5)
+    })
+
+    it("approaches 0 as n increases", () => {
+      expect(hydrogenEnergy(10)).toBeCloseTo(-0.136, 5)
+    })
+  })
+
+  describe("bohrRadius", () => {
+    it("returns a₀ for n=1", () => {
+      expect(bohrRadius(1)).toBeCloseTo(a_0, 5)
+    })
+
+    it("increases with n²", () => {
+      expect(bohrRadius(2)).toBeCloseTo(4 * a_0, 5)
+    })
+  })
+
+  describe("hydrogenWavelength", () => {
+    it("returns positive wavelength for n2 > n1", () => {
+      const lambda = hydrogenWavelength(2, 3)
+      expect(lambda).toBeGreaterThan(0)
+    })
+
+    it("decreases as n2 increases", () => {
+      const lambda1 = hydrogenWavelength(2, 3)
+      const lambda2 = hydrogenWavelength(2, 4)
+      expect(lambda2).toBeLessThan(lambda1)
+    })
+  })
+
+  describe("cyclotronFrequency", () => {
+    it("increases with magnetic field", () => {
+      const omega1 = cyclotronFrequency(1)
+      const omega2 = cyclotronFrequency(2)
+      expect(omega2).toBeCloseTo(2 * omega1, 5)
+    })
+
+    it("returns positive frequency for positive field", () => {
+      expect(cyclotronFrequency(1)).toBeGreaterThan(0)
+    })
+  })
+
+  describe("larmorRadius", () => {
+    it("increases with velocity", () => {
+      const r1 = larmorRadius(1e6, 1)
+      const r2 = larmorRadius(2e6, 1)
+      expect(r2).toBeCloseTo(2 * r1, 5)
+    })
+
+    it("decreases with magnetic field", () => {
+      const r1 = larmorRadius(1e6, 1)
+      const r2 = larmorRadius(1e6, 2)
+      expect(r2).toBeCloseTo(r1 / 2, 5)
+    })
+  })
+
+  describe("comptonWavelength", () => {
+    it("returns constant value", () => {
+      const lambda1 = comptonWavelength()
+      const lambda2 = comptonWavelength()
+      expect(lambda1).toBeCloseTo(lambda2, 10)
+    })
+
+    it("returns positive value", () => {
+      expect(comptonWavelength()).toBeGreaterThan(0)
+    })
+  })
+
+  describe("classicalElectronRadius", () => {
+    it("returns constant value", () => {
+      const r1 = classicalElectronRadius()
+      const r2 = classicalElectronRadius()
+      expect(r1).toBeCloseTo(r2, 10)
+    })
+
+    it("returns positive value", () => {
+      expect(classicalElectronRadius()).toBeGreaterThan(0)
+    })
+  })
+
+  describe("fineStructureConstant", () => {
+    it("returns approximately 1/137", () => {
+      const alpha = fineStructureConstant()
+      expect(alpha).toBeCloseTo(1 / 137, 3)
+    })
+
+    it("is dimensionless", () => {
+      const alpha1 = fineStructureConstant()
+      const alpha2 = fineStructureConstant()
+      expect(alpha1).toBe(alpha2)
     })
   })
 })
