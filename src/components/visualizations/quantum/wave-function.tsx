@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useCallback } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Button } from "@/components/ui/button"
@@ -16,202 +16,267 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
   const { isPlaying, animationSpeed, setQuantumNumber, togglePlaying, setAnimationSpeed } =
     useVisualizationStore()
   const [particlePosition, setParticlePosition] = useState<number | null>(null)
+  const [measurementMode, setMeasurementMode] = useState(false)
 
   const timeRef = useRef(0)
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
 
-  // Сброс времени при смене квантового числа
-  useEffect(() => {
-    timeRef.current = 0
-  }, [quantumNumber])
+  const draw = useCallback(
+    (
+      ctx: CanvasRenderingContext2D,
+      width: number,
+      height: number,
+      _isDark: boolean,
+      delta: number
+    ) => {
+      if (isPlaying) {
+        timeRef.current += (delta / 1000) * animationSpeed
+      }
+      const time = timeRef.current
+      const isDarkMode = _isDark
 
-  const draw = (
-    ctx: CanvasRenderingContext2D,
-    width: number,
-    height: number,
-    _isDark: boolean,
-    delta: number
-  ) => {
-    timeRef.current += (delta / 1000) * animationSpeed
-    const time = timeRef.current
-    const isDark = _isDark
+      // Store canvas ref for click handler
+      canvasRef.current = ctx.canvas
 
-    const L = width * 0.8
-    const offsetX = (width - L) / 2
+      const L = width * 0.8
+      const offsetX = (width - L) / 2
 
-    // Clear canvas
-    ctx.fillStyle = isDark ? "#0a0a1a" : "#f8fafc"
-    ctx.fillRect(0, 0, width, height)
+      // Clear canvas
+      ctx.fillStyle = isDarkMode ? "#0a0a1a" : "#f8fafc"
+      ctx.fillRect(0, 0, width, height)
 
-    // Potential well
-    ctx.strokeStyle = isDark ? "rgba(100, 150, 255, 0.6)" : "rgba(50, 100, 200, 0.6)"
-    ctx.lineWidth = 3
-    ctx.beginPath()
-    ctx.moveTo(offsetX, 20)
-    ctx.lineTo(offsetX, height - 20)
-    ctx.lineTo(offsetX + L, height - 20)
-    ctx.lineTo(offsetX + L, 20)
-    ctx.stroke()
-
-    // Well label
-    ctx.fillStyle = isDark ? "rgba(100, 150, 255, 0.6)" : "rgba(50, 100, 200, 0.6)"
-    ctx.font = "10px sans-serif"
-    ctx.textAlign = "center"
-    ctx.fillText("Infinite Potential Well", width / 2, 15)
-    ctx.fillText("x=0", offsetX, height - 8)
-    ctx.fillText("x=L", offsetX + L, height - 8)
-
-    // Energy levels
-    const maxN = 5
-    const energyHeight = (height - 60) / (maxN + 1)
-
-    for (let i = 1; i <= maxN; i++) {
-      const y = height - 30 - i * energyHeight
-
-      ctx.strokeStyle =
-        i === quantumNumber
-          ? isDark
-            ? "rgba(255, 200, 100, 0.8)"
-            : "rgba(255, 150, 50, 0.8)"
-          : isDark
-            ? "rgba(100, 100, 150, 0.3)"
-            : "rgba(150, 150, 200, 0.3)"
-      ctx.lineWidth = i === quantumNumber ? 2 : 1
-      ctx.setLineDash(i === quantumNumber ? [] : [3, 3])
+      // Potential well
+      ctx.strokeStyle = isDarkMode ? "rgba(100, 150, 255, 0.6)" : "rgba(50, 100, 200, 0.6)"
+      ctx.lineWidth = 3
       ctx.beginPath()
-      ctx.moveTo(offsetX + 5, y)
-      ctx.lineTo(offsetX + L - 5, y)
+      ctx.moveTo(offsetX, 20)
+      ctx.lineTo(offsetX, height - 20)
+      ctx.lineTo(offsetX + L, height - 20)
+      ctx.lineTo(offsetX + L, 20)
       ctx.stroke()
-      ctx.setLineDash([])
 
-      if (i <= 3) {
-        ctx.fillStyle =
+      // Well label
+      ctx.fillStyle = isDarkMode ? "rgba(100, 150, 255, 0.6)" : "rgba(50, 100, 200, 0.6)"
+      ctx.font = "10px sans-serif"
+      ctx.textAlign = "center"
+      ctx.fillText("Infinite Potential Well", width / 2, 15)
+      ctx.fillText("x=0", offsetX, height - 8)
+      ctx.fillText("x=L", offsetX + L, height - 8)
+
+      // Energy levels with proper physics
+      const maxN = 5
+      const energyHeight = (height - 60) / (maxN + 1)
+
+      for (let i = 1; i <= maxN; i++) {
+        const y = height - 30 - i * energyHeight
+
+        ctx.strokeStyle =
           i === quantumNumber
-            ? isDark
-              ? "#FFCC66"
-              : "#FF9900"
-            : isDark
-              ? "rgba(150, 150, 200, 0.5)"
-              : "rgba(100, 100, 150, 0.5)"
-        ctx.font = "9px sans-serif"
-        ctx.textAlign = "right"
-        ctx.fillText(`n=${String(i)}`, offsetX - 8, y + 4)
-        ctx.fillText(`E${String(i)}`, offsetX + L + 25, y + 4)
+            ? isDarkMode
+              ? "rgba(255, 200, 100, 0.8)"
+              : "rgba(255, 150, 50, 0.8)"
+            : isDarkMode
+              ? "rgba(100, 100, 150, 0.3)"
+              : "rgba(150, 150, 200, 0.3)"
+        ctx.lineWidth = i === quantumNumber ? 2 : 1
+        ctx.setLineDash(i === quantumNumber ? [] : [3, 3])
+        ctx.beginPath()
+        ctx.moveTo(offsetX + 5, y)
+        ctx.lineTo(offsetX + L - 5, y)
+        ctx.stroke()
+        ctx.setLineDash([])
+
+        if (i <= 3) {
+          ctx.fillStyle =
+            i === quantumNumber
+              ? isDarkMode
+                ? "#FFCC66"
+                : "#FF9900"
+              : isDarkMode
+                ? "rgba(150, 150, 200, 0.5)"
+                : "rgba(100, 100, 150, 0.5)"
+          ctx.font = "9px sans-serif"
+          ctx.textAlign = "right"
+          ctx.fillText(`n=${String(i)}`, offsetX - 8, y + 4)
+          ctx.fillText(`E${String(i)}`, offsetX + L + 25, y + 4)
+        }
       }
-    }
 
-    // Wave function ψ(x)
-    const amplitude = energyHeight * 0.35
-    const baseY = height - 30 - quantumNumber * energyHeight
+      // Wave function ψ(x,t) with proper time evolution
+      // ψ(x,t) = ψ(x) · e^(-iE_n*t/ℏ) = ψ(x) · cos(ω_n·t) where ω_n = E_n/ℏ
+      // For visualization, we show Re[ψ(x,t)] = ψ(x) · cos(E_n·t/ℏ)
+      const amplitude = energyHeight * 0.35
+      const baseY = height - 30 - quantumNumber * energyHeight
 
-    // Draw wave function
-    ctx.beginPath()
-    ctx.strokeStyle = isDark ? "rgba(100, 200, 255, 0.9)" : "rgba(50, 150, 200, 0.9)"
-    ctx.lineWidth = 2
+      // Energy for this quantum number: E_n = n²π²ℏ²/2mL²
+      // Angular frequency: ω_n = E_n/ℏ = n²π²ℏ/2mL²
+      // For visualization, use scaled frequency
+      const angularFrequency = quantumNumber * 2 // Scaled for visualization
+      const phaseFactor = Math.cos(angularFrequency * time)
 
-    for (let px = 0; px <= L; px += 2) {
-      const x = px / L
-      const psi = Math.sin(quantumNumber * Math.PI * x) * Math.cos(time * quantumNumber * 0.5)
-      const y = baseY - psi * amplitude
-
-      if (px === 0) ctx.moveTo(offsetX + px, y)
-      else ctx.lineTo(offsetX + px, y)
-    }
-    ctx.stroke()
-
-    // Probability density |ψ|²
-    if (showProbability) {
-      ctx.fillStyle = isDark ? "rgba(255, 100, 150, 0.15)" : "rgba(255, 100, 150, 0.1)"
+      // Draw wave function with time evolution
       ctx.beginPath()
-      ctx.moveTo(offsetX, baseY)
+      ctx.strokeStyle = isDarkMode ? "rgba(100, 200, 255, 0.9)" : "rgba(50, 150, 200, 0.9)"
+      ctx.lineWidth = 2
 
       for (let px = 0; px <= L; px += 2) {
         const x = px / L
-        const probDensity = Math.pow(Math.sin(quantumNumber * Math.PI * x), 2)
-        const y = baseY - probDensity * amplitude
-        ctx.lineTo(offsetX + px, y)
-      }
-      ctx.lineTo(offsetX + L, baseY)
-      ctx.closePath()
-      ctx.fill()
+        // Spatial part: ψ_n(x) = √(2/L) · sin(nπx/L)
+        const psi = Math.sin(quantumNumber * Math.PI * x)
+        // Time evolution: multiply by cos(E_n*t/ℏ)
+        const psiT = psi * phaseFactor
+        const y = baseY - psiT * amplitude
 
-      // Probability curve
-      ctx.strokeStyle = isDark ? "rgba(255, 100, 150, 0.7)" : "rgba(255, 100, 150, 0.6)"
-      ctx.lineWidth = 1.5
-      ctx.beginPath()
-      for (let px = 0; px <= L; px += 2) {
-        const x = px / L
-        const probDensity = Math.pow(Math.sin(quantumNumber * Math.PI * x), 2)
-        const y = baseY - probDensity * amplitude
         if (px === 0) ctx.moveTo(offsetX + px, y)
         else ctx.lineTo(offsetX + px, y)
       }
       ctx.stroke()
-    }
 
-    // Probability interpretation - measure particle
-    if (particlePosition !== null) {
-      const x = particlePosition / L
-      const probDensity = Math.pow(Math.sin(quantumNumber * Math.PI * x), 2)
+      // Probability density |ψ|² (time-independent for stationary states!)
+      if (showProbability) {
+        ctx.fillStyle = isDarkMode ? "rgba(255, 100, 150, 0.15)" : "rgba(255, 100, 150, 0.1)"
+        ctx.beginPath()
+        ctx.moveTo(offsetX, baseY)
 
-      ctx.beginPath()
-      ctx.arc(offsetX + particlePosition, baseY, 8, 0, Math.PI * 2)
-      ctx.fillStyle = "#FFD700"
-      ctx.fill()
-      ctx.strokeStyle = "#FFF"
-      ctx.lineWidth = 2
-      ctx.stroke()
+        for (let px = 0; px <= L; px += 2) {
+          const x = px / L
+          // |ψ|² is time-independent for stationary states
+          const probDensity = Math.pow(Math.sin(quantumNumber * Math.PI * x), 2)
+          const y = baseY - probDensity * amplitude
+          ctx.lineTo(offsetX + px, y)
+        }
+        ctx.lineTo(offsetX + L, baseY)
+        ctx.closePath()
+        ctx.fill()
 
-      ctx.fillStyle = "rgba(255, 215, 0, 0.8)"
-      ctx.font = "9px sans-serif"
+        // Probability curve
+        ctx.strokeStyle = isDarkMode ? "rgba(255, 100, 150, 0.7)" : "rgba(255, 100, 150, 0.6)"
+        ctx.lineWidth = 1.5
+        ctx.beginPath()
+        for (let px = 0; px <= L; px += 2) {
+          const x = px / L
+          const probDensity = Math.pow(Math.sin(quantumNumber * Math.PI * x), 2)
+          const y = baseY - probDensity * amplitude
+          if (px === 0) ctx.moveTo(offsetX + px, y)
+          else ctx.lineTo(offsetX + px, y)
+        }
+        ctx.stroke()
+      }
+
+      // Measurement - click to measure position
+      if (particlePosition !== null) {
+        const x = particlePosition / L
+        const probDensity = Math.pow(Math.sin(quantumNumber * Math.PI * x), 2)
+
+        ctx.beginPath()
+        ctx.arc(offsetX + particlePosition, baseY, 8, 0, Math.PI * 2)
+        ctx.fillStyle = "#FFD700"
+        ctx.fill()
+        ctx.strokeStyle = "#FFF"
+        ctx.lineWidth = 2
+        ctx.stroke()
+
+        ctx.fillStyle = "rgba(255, 215, 0, 0.8)"
+        ctx.font = "9px sans-serif"
+        ctx.textAlign = "center"
+        ctx.fillText(
+          `P = ${(probDensity * 100).toFixed(1)}%`,
+          offsetX + particlePosition,
+          baseY - 20
+        )
+
+        // Collapse indicator
+        ctx.fillStyle = isDarkMode ? "rgba(255, 100, 100, 0.8)" : "rgba(200, 50, 50, 0.8)"
+        ctx.font = "10px sans-serif"
+        ctx.textAlign = "center"
+        ctx.fillText("Wave function collapsed!", width / 2, baseY - 40)
+      }
+
+      // Measurement mode indicator
+      if (measurementMode) {
+        ctx.fillStyle = isDarkMode ? "rgba(255, 200, 0, 0.3)" : "rgba(255, 150, 0, 0.3)"
+        ctx.fillRect(0, 0, width, height)
+        ctx.fillStyle = isDarkMode ? "#FFD700" : "#FFA500"
+        ctx.font = "12px sans-serif"
+        ctx.textAlign = "center"
+        ctx.fillText("Click anywhere to measure position", width / 2, height / 2)
+      }
+
+      // Legend
+      ctx.font = "10px sans-serif"
+      ctx.textAlign = "left"
+      ctx.fillStyle = isDarkMode ? "rgba(100, 200, 255, 0.9)" : "rgba(50, 150, 200, 0.9)"
+      ctx.fillText("ψ(x) — wave function", 10, height - 45)
+      if (showProbability) {
+        ctx.fillStyle = isDarkMode ? "rgba(255, 100, 150, 0.9)" : "rgba(255, 100, 150, 0.9)"
+        ctx.fillText("|ψ|² — probability density (time-independent)", 10, height - 32)
+      }
+
+      // Formula with proper physics
+      ctx.fillStyle = isDarkMode ? "rgba(255, 255, 255, 0.7)" : "rgba(50, 50, 50, 0.7)"
+      ctx.font = "11px monospace"
       ctx.textAlign = "center"
-      ctx.fillText(`P = ${(probDensity * 100).toFixed(1)}%`, offsetX + particlePosition, baseY - 20)
-    }
+      ctx.fillText(
+        `ψ_${String(quantumNumber)}(x,t) = √(2/L)·sin(${String(quantumNumber)}πx/L)·e^(-iE${String(quantumNumber)}t/ℏ)`,
+        width / 2,
+        30
+      )
+    },
+    [quantumNumber, showProbability, isPlaying, animationSpeed, measurementMode, particlePosition]
+  )
 
-    // Legend
-    ctx.font = "10px sans-serif"
-    ctx.textAlign = "left"
-    ctx.fillStyle = isDark ? "rgba(100, 200, 255, 0.9)" : "rgba(50, 150, 200, 0.9)"
-    ctx.fillText("ψ(x) — wave function", 10, height - 45)
-    if (showProbability) {
-      ctx.fillStyle = isDark ? "rgba(255, 100, 150, 0.9)" : "rgba(255, 100, 150, 0.9)"
-      ctx.fillText("|ψ|² — probability density", 10, height - 32)
-    }
+  const handleCanvasClick = useCallback(
+    (e: React.MouseEvent<HTMLCanvasElement>) => {
+      if (!measurementMode) return
 
-    // Formula
-    ctx.fillStyle = isDark ? "rgba(255, 255, 255, 0.7)" : "rgba(50, 50, 50, 0.7)"
-    ctx.font = "11px monospace"
-    ctx.textAlign = "center"
-    ctx.fillText(
-      `ψ_${String(quantumNumber)}(x) = √(2/L)·sin(${String(quantumNumber)}πx/L)`,
-      width / 2,
-      30
-    )
-  }
+      const canvas = e.currentTarget
+      const rect = canvas.getBoundingClientRect()
+      const clickX = e.clientX - rect.left
+      const width = canvas.offsetWidth
+
+      // Convert click to position in the well
+      const L = width * 0.8
+      const offsetX = (width - L) / 2
+      const relativeX = clickX - offsetX
+
+      // Check if click is within the well
+      if (relativeX >= 0 && relativeX <= L) {
+        // Quantum measurement: collapse to position eigenstate
+        // Probability of finding particle at position x is |ψ(x)|²
+        const x = relativeX / L
+        const probDensity = Math.pow(Math.sin(quantumNumber * Math.PI * x), 2)
+
+        // Monte Carlo acceptance
+        if (Math.random() < probDensity) {
+          setParticlePosition(relativeX)
+          setTimeout(() => {
+            setParticlePosition(null)
+          }, 2000)
+        } else {
+          // Particle not found at this position
+          setParticlePosition(null)
+        }
+      }
+    },
+    [measurementMode, quantumNumber]
+  )
 
   const measureParticle = () => {
-    const L = 100
-    let random = Math.random()
-    let position = 0
-
-    for (let px = 0; px <= L; px++) {
-      const x = px / L
-      const prob = Math.pow(Math.sin(quantumNumber * Math.PI * x), 2)
-      random -= prob / (L / 2)
-      if (random <= 0) {
-        position = px * 3
-        break
-      }
-    }
-
-    setParticlePosition(position)
-    setTimeout(() => {
+    setMeasurementMode(!measurementMode)
+    if (measurementMode) {
       setParticlePosition(null)
-    }, 2000)
+    }
   }
 
   return (
     <div className="space-y-4">
-      <VisualizationCanvas draw={draw} isDark={isDark} className="h-[400px]" />
+      <VisualizationCanvas
+        draw={draw}
+        isDark={isDark}
+        className="h-[400px]"
+        onClick={handleCanvasClick}
+        style={{ cursor: measurementMode ? "crosshair" : "default" }}
+      />
       <VisualizationControls
         isPlaying={isPlaying}
         animationSpeed={animationSpeed}
@@ -253,9 +318,13 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
           <Button
             onClick={measureParticle}
             size="sm"
-            className="flex-1 text-xs bg-gradient-to-r from-yellow-600 to-orange-600"
+            className={`flex-1 text-xs ${
+              measurementMode
+                ? "bg-gradient-to-r from-yellow-600 to-orange-600 text-white"
+                : "bg-gradient-to-r from-yellow-600 to-orange-600"
+            }`}
           >
-            🎲 Measure
+            {measurementMode ? "✋ Click to Measure" : "🎲 Measure Mode"}
           </Button>
         </div>
       </div>
@@ -276,6 +345,12 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
           Energy is quantized! The particle cannot have zero energy (n≥1) — this is a fundamental
           difference from classical physics.
         </p>
+        {measurementMode && (
+          <p className="mt-2 text-xs text-yellow-600 dark:text-yellow-400">
+            💡 Click on the canvas to measure the particle position. The probability of detection
+            follows |ψ|² distribution.
+          </p>
+        )}
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useCallback } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { useVisualizationStore } from "@/stores/visualization-store"
@@ -10,6 +10,12 @@ interface BlackHoleVisualizationProps {
   isDark: boolean
 }
 
+interface GradientCache {
+  gradient: CanvasGradient
+  innerRadius: number
+  outerRadius: number
+}
+
 export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) {
   const { isPlaying, animationSpeed } = useVisualizationStore()
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
@@ -17,83 +23,95 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
   const [mass, setMass] = useState(10)
   const [showAccretion, setShowAccretion] = useState(true)
   const [showHawking, setShowHawking] = useState(false)
+  const [showDoppler, setShowDoppler] = useState(true)
   const rotationRef = useRef(0)
-  const gradientRef = useRef<CanvasGradient | null>(null)
+  const gradientCache = useRef<GradientCache | null>(null)
 
-  const draw = (
-    ctx: CanvasRenderingContext2D,
-    width: number,
-    height: number,
-    _isDark: boolean,
-    delta: number
-  ) => {
-    const centerX = width / 2
-    const centerY = height / 2
-    const isDark = _isDark
+  const draw = useCallback(
+    (
+      ctx: CanvasRenderingContext2D,
+      width: number,
+      height: number,
+      _isDark: boolean,
+      delta: number
+    ) => {
+      const centerX = width / 2
+      const centerY = height / 2
+      const isDarkMode = _isDark
 
-    // Clear canvas
-    ctx.fillStyle = isDark ? "#000000" : "#0f172a"
-    ctx.fillRect(0, 0, width, height)
+      // Clear canvas
+      ctx.fillStyle = isDarkMode ? "#000000" : "#0f172a"
+      ctx.fillRect(0, 0, width, height)
 
-    // Schwarzschild radius: r_s = 2GM/c²
-    const M = mass * M_SUN
-    const r_s = (2 * G * M) / (c * c)
-    const scale = 50 / r_s
-    const eventHorizonRadius = 30 * scale
+      // Schwarzschild radius: r_s = 2GM/c²
+      const M = mass * M_SUN
+      const r_s = (2 * G * M) / (c * c)
+      const scale = 50 / r_s
+      const eventHorizonRadius = 30 * scale
 
-    // Update rotation
-    if (isPlaying) {
-      rotationRef.current += (delta / 1000) * animationSpeed
-    }
+      // Update rotation
+      if (isPlaying) {
+        rotationRef.current += (delta / 1000) * animationSpeed
+      }
 
-    // Draw accretion disk
-    if (showAccretion) {
-      drawAccretionDisk(ctx, centerX, centerY, eventHorizonRadius, rotationRef.current, gradientRef)
-    }
+      // Draw accretion disk with optimized gradient
+      if (showAccretion) {
+        drawAccretionDisk(
+          ctx,
+          centerX,
+          centerY,
+          eventHorizonRadius,
+          rotationRef.current,
+          gradientCache,
+          showDoppler
+        )
+      }
 
-    // Draw event horizon (black circle)
-    ctx.beginPath()
-    ctx.arc(centerX, centerY, eventHorizonRadius, 0, Math.PI * 2)
-    ctx.fillStyle = "#000000"
-    ctx.fill()
+      // Draw event horizon (black circle)
+      ctx.beginPath()
+      ctx.arc(centerX, centerY, eventHorizonRadius, 0, Math.PI * 2)
+      ctx.fillStyle = "#000000"
+      ctx.fill()
 
-    // Draw photon sphere glow
-    const photonGlow = ctx.createRadialGradient(
-      centerX,
-      centerY,
-      eventHorizonRadius,
-      centerX,
-      centerY,
-      eventHorizonRadius * 1.5
-    )
-    photonGlow.addColorStop(0, "rgba(255, 255, 255, 0.3)")
-    photonGlow.addColorStop(1, "rgba(255, 255, 255, 0)")
-    ctx.beginPath()
-    ctx.arc(centerX, centerY, eventHorizonRadius * 1.5, 0, Math.PI * 2)
-    ctx.fillStyle = photonGlow
-    ctx.fill()
+      // Draw photon sphere glow
+      const photonGlow = ctx.createRadialGradient(
+        centerX,
+        centerY,
+        eventHorizonRadius,
+        centerX,
+        centerY,
+        eventHorizonRadius * 1.5
+      )
+      photonGlow.addColorStop(0, "rgba(255, 255, 255, 0.3)")
+      photonGlow.addColorStop(1, "rgba(255, 255, 255, 0)")
+      ctx.beginPath()
+      ctx.arc(centerX, centerY, eventHorizonRadius * 1.5, 0, Math.PI * 2)
+      ctx.fillStyle = photonGlow
+      ctx.fill()
 
-    // Draw Hawking radiation
-    if (showHawking) {
-      drawHawkingRadiation(ctx, centerX, centerY, eventHorizonRadius, rotationRef.current)
-    }
+      // Draw Hawking radiation
+      if (showHawking) {
+        drawHawkingRadiation(ctx, centerX, centerY, eventHorizonRadius, rotationRef.current)
+      }
 
-    // Labels
-    ctx.fillStyle = isDark ? "#e2e8f0" : "#ffffff"
-    ctx.font = "14px sans-serif"
-    ctx.textAlign = "center"
-    ctx.fillText(`Mass: ${mass.toFixed(1)} M☉`, centerX, height - 80)
-    ctx.fillText(
-      `Schwarzschild Radius: ${((r_s * scale) / 1000).toFixed(2)} km`,
-      centerX,
-      height - 55
-    )
+      // Labels
+      ctx.fillStyle = isDarkMode ? "#e2e8f0" : "#ffffff"
+      ctx.font = "14px sans-serif"
+      ctx.textAlign = "center"
+      ctx.fillText(`Mass: ${mass.toFixed(1)} M☉`, centerX, height - 80)
+      ctx.fillText(
+        `Schwarzschild Radius: ${((r_s * scale) / 1000).toFixed(2)} km`,
+        centerX,
+        height - 55
+      )
 
-    // Formula
-    ctx.fillStyle = isDark ? "#94a3b8" : "#cbd5e1"
-    ctx.font = "12px monospace"
-    ctx.fillText("r_s = 2GM/c²", centerX, 30)
-  }
+      // Formula
+      ctx.fillStyle = isDarkMode ? "#94a3b8" : "#cbd5e1"
+      ctx.font = "12px monospace"
+      ctx.fillText("r_s = 2GM/c²", centerX, 30)
+    },
+    [mass, isPlaying, animationSpeed, showAccretion, showHawking, showDoppler]
+  )
 
   return (
     <div className="space-y-4">
@@ -124,7 +142,7 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
           }}
           className="w-full"
         />
-        <div className="flex gap-4 mt-3">
+        <div className="flex gap-4 mt-3 flex-wrap">
           <label className="flex items-center gap-2 text-sm">
             <input
               type="checkbox"
@@ -145,6 +163,16 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
             />
             Hawking Radiation
           </label>
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={showDoppler}
+              onChange={(e) => {
+                setShowDoppler(e.target.checked)
+              }}
+            />
+            Doppler Effect
+          </label>
         </div>
       </div>
     </div>
@@ -157,17 +185,25 @@ function drawAccretionDisk(
   centerY: number,
   innerRadius: number,
   rotation: number,
-  gradientRef: React.RefObject<CanvasGradient | null>
+  gradientCache: React.RefObject<GradientCache | null>,
+  showDoppler: boolean
 ) {
   const outerRadius = innerRadius * 3
 
-  // Мемоизация градиента
-  if (!gradientRef.current) {
-    gradientRef.current = ctx.createLinearGradient(-outerRadius, 0, outerRadius, 0)
-    gradientRef.current.addColorStop(0, "rgba(251, 191, 36, 0)")
-    gradientRef.current.addColorStop(0.5, "rgba(251, 191, 36, 0.6)")
-    gradientRef.current.addColorStop(1, "rgba(251, 191, 36, 0)")
+  // Мемоизация градиента с проверкой изменения параметров
+  if (
+    !gradientCache.current?.gradient ||
+    gradientCache.current.innerRadius !== innerRadius ||
+    gradientCache.current.outerRadius !== outerRadius
+  ) {
+    const gradient = ctx.createLinearGradient(-outerRadius, 0, outerRadius, 0)
+    gradient.addColorStop(0, "rgba(251, 191, 36, 0)")
+    gradient.addColorStop(0.5, "rgba(251, 191, 36, 0.6)")
+    gradient.addColorStop(1, "rgba(251, 191, 36, 0)")
+    gradientCache.current = { gradient, innerRadius, outerRadius }
   }
+
+  const gradientToUse = gradientCache.current.gradient
 
   for (let i = 0; i < 3; i++) {
     const radius = innerRadius + (outerRadius - innerRadius) * (i / 3)
@@ -179,7 +215,21 @@ function drawAccretionDisk(
 
     ctx.beginPath()
     ctx.arc(0, 0, radius, 0, Math.PI * 2)
-    ctx.strokeStyle = gradientRef.current
+
+    // Doppler beaming effect - one side brighter due to relativistic motion
+    if (showDoppler) {
+      // Create asymmetric gradient for Doppler effect
+      const dopplerGradient = ctx.createLinearGradient(-radius, -radius, radius, radius)
+      dopplerGradient.addColorStop(0, "rgba(255, 200, 100, 0.8)") // Approaching side (brighter)
+      dopplerGradient.addColorStop(0.3, "rgba(251, 191, 36, 0.4)")
+      dopplerGradient.addColorStop(0.5, "rgba(251, 191, 36, 0.3)")
+      dopplerGradient.addColorStop(0.7, "rgba(200, 100, 50, 0.3)") // Receding side (dimmer)
+      dopplerGradient.addColorStop(1, "rgba(150, 50, 20, 0.2)")
+      ctx.strokeStyle = dopplerGradient
+    } else {
+      ctx.strokeStyle = gradientToUse
+    }
+
     ctx.lineWidth = (outerRadius - innerRadius) / 3
     ctx.stroke()
 

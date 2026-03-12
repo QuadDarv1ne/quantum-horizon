@@ -2,71 +2,82 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client"
 
-import { useRef, useState, useEffect } from "react"
-import { setupCanvas } from "@/hooks/use-canvas-animation"
+import { useRef, useState, useCallback } from "react"
+import { VisualizationCanvas } from "../base/visualization-canvas"
+import { VisualizationControls } from "../base/visualization-controls"
 import { Slider } from "@/components/ui/slider"
 import { Button } from "@/components/ui/button"
+import { useVisualizationStore } from "@/stores/visualization-store"
 
 interface DoubleSlitVisualizationProps {
   isDark: boolean
 }
 
+interface Particle {
+  x: number
+  y: number
+  targetY: number
+  speed: number
+  phase: number
+}
+
 export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const { isPlaying, animationSpeed } = useVisualizationStore()
+  const { togglePlaying, setAnimationSpeed } = useVisualizationStore()
+
   const [slitSeparation, setSlitSeparation] = useState(40)
   const [slitWidth, setSlitWidth] = useState(8)
   const [wavelength, setWavelength] = useState(15)
   const [showParticles, setShowParticles] = useState(false)
   const [showWave, setShowWave] = useState(true)
+
   const particleHitsRef = useRef<number[]>(new Array(100).fill(0))
+  const particlesRef = useRef<Particle[]>([])
+  const timeRef = useRef(0)
+  const bgGradientRef = useRef<CanvasGradient | null>(null)
 
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
+  // Reset particle hits when switching modes
+  const resetParticleHits = useCallback(() => {
+    particleHitsRef.current = new Array(100).fill(0)
+    particlesRef.current = []
+  }, [])
 
-    let animationFrameId: number
-    let bgGradient: CanvasGradient | null = null
+  const draw = useCallback(
+    (
+      ctx: CanvasRenderingContext2D,
+      width: number,
+      height: number,
+      _isDark: boolean,
+      delta: number
+    ) => {
+      const isDarkMode = _isDark
+      const slitX = width * 0.3
+      const screenX = width * 0.85
+      const centerY = height / 2
 
-    const resize = () => {
-      setupCanvas(canvas, ctx)
-      bgGradient = null
-    }
-    resize()
-    window.addEventListener("resize", resize)
+      timeRef.current += (delta / 1000) * animationSpeed
+      const time = timeRef.current
 
-    const width = canvas.offsetWidth
-    const height = canvas.offsetHeight
-    const slitX = width * 0.3
-    const screenX = width * 0.85
-    const centerY = height / 2
+      // Limit particles array to prevent memory leak
+      if (particlesRef.current.length > 200) {
+        particlesRef.current.splice(0, particlesRef.current.length - 100)
+      }
 
-    let time = 0
-    const particles: Array<{
-      x: number
-      y: number
-      targetY: number
-      speed: number
-      phase: number
-    }> = []
-
-    const animate = () => {
-      time += 0.016
       ctx.clearRect(0, 0, width, height)
 
       // Background - cached gradient
-      if (!bgGradient) {
-        bgGradient = ctx.createLinearGradient(0, 0, width, height)
-        bgGradient.addColorStop(0, isDark ? "#050510" : "#f0f4ff")
-        bgGradient.addColorStop(1, isDark ? "#0a0a1a" : "#e8efff")
+      if (!bgGradientRef.current) {
+        const gradient = ctx.createLinearGradient(0, 0, width, height)
+        gradient.addColorStop(0, isDarkMode ? "#050510" : "#f0f4ff")
+        gradient.addColorStop(1, isDarkMode ? "#0a0a1a" : "#e8efff")
+        bgGradientRef.current = gradient
       }
-      ctx.fillStyle = bgGradient
+      ctx.fillStyle = bgGradientRef.current
       ctx.fillRect(0, 0, width, height)
 
       // Wave visualization from source
       if (showWave && !showParticles) {
-        ctx.strokeStyle = isDark ? "rgba(100, 150, 255, 0.3)" : "rgba(50, 100, 200, 0.3)"
+        ctx.strokeStyle = isDarkMode ? "rgba(100, 150, 255, 0.3)" : "rgba(50, 100, 200, 0.3)"
         ctx.lineWidth = 1
         for (let r = 0; r < 200; r += 10) {
           const waveR = (r + time * 50) % 200
@@ -77,17 +88,17 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
       }
 
       // Source
-      ctx.fillStyle = isDark ? "#FFD700" : "#FFA500"
+      ctx.fillStyle = isDarkMode ? "#FFD700" : "#FFA500"
       ctx.beginPath()
       ctx.arc(30, centerY, 8, 0, Math.PI * 2)
       ctx.fill()
-      ctx.fillStyle = isDark ? "#FFD70080" : "#FFA50080"
+      ctx.fillStyle = isDarkMode ? "#FFD70080" : "#FFA50080"
       ctx.font = "10px sans-serif"
       ctx.textAlign = "center"
       ctx.fillText("Source", 30, centerY + 25)
 
       // Barrier with slits
-      ctx.fillStyle = isDark ? "#333" : "#ccc"
+      ctx.fillStyle = isDarkMode ? "#333" : "#ccc"
       ctx.fillRect(slitX - 4, 0, 8, centerY - slitSeparation / 2 - slitWidth / 2)
       ctx.fillRect(
         slitX - 4,
@@ -103,7 +114,7 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
       )
 
       // Slit labels
-      ctx.fillStyle = isDark ? "#888" : "#666"
+      ctx.fillStyle = isDarkMode ? "#888" : "#666"
       ctx.font = "8px sans-serif"
       ctx.textAlign = "left"
       ctx.fillText("Slit 1", slitX + 8, centerY - slitSeparation / 2)
@@ -114,7 +125,6 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
         // Interference pattern calculation
         for (let y = 20; y < height - 20; y++) {
           const dy = y - centerY
-          // Path difference from two slits
           const d1 = Math.sqrt(Math.pow(slitSeparation / 2, 2) + Math.pow(dy, 2))
           const d2 = Math.sqrt(Math.pow(-slitSeparation / 2, 2) + Math.pow(dy, 2))
           const pathDiff = d1 - d2
@@ -142,11 +152,10 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
 
       // Particle mode
       if (showParticles) {
-        // Spawn particles
-        if (Math.random() < 0.3 && particles.length < 100) {
-          // Quantum interference - particle goes through both slits probabilistically
+        // Spawn particles with limit
+        if (Math.random() < 0.3 && particlesRef.current.length < 100) {
           const targetY = centerY + (Math.random() - 0.5) * height * 0.8
-          particles.push({
+          particlesRef.current.push({
             x: 30,
             y: centerY,
             targetY: targetY,
@@ -156,24 +165,21 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
         }
 
         // Update and draw particles
-        for (let i = particles.length - 1; i >= 0; i--) {
-          const p = particles[i]
+        for (let i = particlesRef.current.length - 1; i >= 0; i--) {
+          const p = particlesRef.current[i]
           p.x += p.speed
 
           if (p.x < slitX) {
-            // Moving towards slits
-            ctx.fillStyle = isDark ? "#FFD700" : "#FFA500"
+            ctx.fillStyle = isDarkMode ? "#FFD700" : "#FFA500"
             ctx.beginPath()
             ctx.arc(p.x, p.y, 3, 0, Math.PI * 2)
             ctx.fill()
           } else if (p.x < screenX) {
-            // After slits - quantum behavior
-            ctx.fillStyle = isDark ? "rgba(100, 200, 255, 0.8)" : "rgba(50, 150, 200, 0.8)"
+            ctx.fillStyle = isDarkMode ? "rgba(100, 200, 255, 0.8)" : "rgba(50, 150, 200, 0.8)"
             ctx.beginPath()
             ctx.arc(p.x, p.y, 2, 0, Math.PI * 2)
             ctx.fill()
           } else {
-            // Hit screen - record position based on interference
             const dy = p.targetY - centerY
             const d1 = Math.sqrt(Math.pow(slitSeparation / 2, 2) + Math.pow(dy, 2))
             const d2 = Math.sqrt(Math.pow(-slitSeparation / 2, 2) + Math.pow(dy, 2))
@@ -187,7 +193,7 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
                 particleHitsRef.current[hitY]++
               }
             }
-            particles.splice(i, 1)
+            particlesRef.current.splice(i, 1)
           }
         }
 
@@ -203,43 +209,42 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
       }
 
       // Detection screen
-      ctx.strokeStyle = isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)"
+      ctx.strokeStyle = isDarkMode ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)"
       ctx.lineWidth = 2
       ctx.beginPath()
       ctx.moveTo(screenX, 10)
       ctx.lineTo(screenX, height - 10)
       ctx.stroke()
-      ctx.fillStyle = isDark ? "#888" : "#666"
+      ctx.fillStyle = isDarkMode ? "#888" : "#666"
       ctx.font = "10px sans-serif"
       ctx.textAlign = "center"
       ctx.fillText("Screen", screenX, height - 5)
 
       // Legend
-      ctx.fillStyle = isDark ? "#888" : "#666"
+      ctx.fillStyle = isDarkMode ? "#888" : "#666"
       ctx.font = "9px sans-serif"
       ctx.textAlign = "left"
-      ctx.fillText("d = " + String(slitSeparation) + " (slit separation)", 10, height - 35)
-      ctx.fillText("λ = " + String(wavelength) + " (wavelength)", 10, height - 22)
-      ctx.fillText("a = " + String(slitWidth) + " (slit width)", 10, height - 9)
+      ctx.fillText(`d = ${String(slitSeparation)} (slit separation)`, 10, height - 35)
+      ctx.fillText(`λ = ${String(wavelength)} (wavelength)`, 10, height - 22)
+      ctx.fillText(`a = ${String(slitWidth)} (slit width)`, 10, height - 9)
+    },
+    [slitSeparation, slitWidth, wavelength, showParticles, showWave, animationSpeed]
+  )
 
-      animationFrameId = requestAnimationFrame(animate)
-    }
-
-    animate()
-
-    return () => {
-      window.removeEventListener("resize", resize)
-      cancelAnimationFrame(animationFrameId)
-    }
-  }, [slitSeparation, slitWidth, wavelength, showParticles, showWave, isDark])
+  const handleReset = useCallback(() => {
+    resetParticleHits()
+  }, [resetParticleHits])
 
   return (
     <div className="space-y-4">
-      <canvas
-        ref={canvasRef}
-        className="w-full h-[350px] rounded-lg"
-        aria-label="Double-slit experiment: wave-particle duality"
-        role="img"
+      <VisualizationCanvas draw={draw} isDark={isDark} className="h-[350px]" />
+      <VisualizationControls
+        isPlaying={isPlaying}
+        animationSpeed={animationSpeed}
+        onTogglePlay={togglePlaying}
+        onSpeedChange={setAnimationSpeed}
+        isDark={isDark}
+        onReset={handleReset}
       />
 
       <div className="grid grid-cols-3 gap-2 text-xs">
@@ -301,7 +306,7 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
           onClick={() => {
             setShowWave(true)
             setShowParticles(false)
-            particleHitsRef.current = new Array(100).fill(0)
+            resetParticleHits()
           }}
           variant={showWave && !showParticles ? "default" : "outline"}
           size="sm"
@@ -313,7 +318,7 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
           onClick={() => {
             setShowParticles(true)
             setShowWave(true)
-            particleHitsRef.current = new Array(100).fill(0)
+            resetParticleHits()
           }}
           variant={showParticles ? "default" : "outline"}
           size="sm"

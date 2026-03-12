@@ -1,24 +1,48 @@
 "use client"
 
-import { useEffect, useRef, useState, useMemo } from "react"
-import { setupCanvas } from "@/hooks/use-canvas-animation"
+import { useCallback, useMemo, useRef, useState } from "react"
+import { VisualizationCanvas } from "../base/visualization-canvas"
+import { VisualizationControls } from "../base/visualization-controls"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
+import { useVisualizationStore } from "@/stores/visualization-store"
 
 interface SolarSystemVisualizationProps {
   isDark: boolean
 }
 
+interface Planet {
+  name: string
+  nameEn: string
+  distance: number
+  period: number
+  radius: number
+  color: string
+  moons: number
+  rings?: boolean
+}
+
+interface StarPosition {
+  x: number
+  y: number
+}
+
 export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const { isPlaying, animationSpeed } = useVisualizationStore()
+  const { togglePlaying, setAnimationSpeed } = useVisualizationStore()
+
   const [speed, setSpeed] = useState(1)
   const [showOrbits, setShowOrbits] = useState(true)
   const [showLabels, setShowLabels] = useState(true)
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null)
   const [zoom, setZoom] = useState(1)
 
+  const timeRef = useRef(0)
+  const bgGradientRef = useRef<CanvasGradient | null>(null)
+  const sunGlowRef = useRef<CanvasGradient | null>(null)
+
   // Planet data (relative to Earth)
-  const planets = useMemo(
+  const planets = useMemo<Planet[]>(
     () => [
       {
         name: "Меркурий",
@@ -97,43 +121,49 @@ export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationPro
     []
   )
 
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
+  // Pre-calculate star positions once (optimization)
+  const starPositions = useMemo<StarPosition[]>(
+    () =>
+      Array.from({ length: 100 }, (_, i) => ({
+        x: Math.sin(i * 123.456) * 0.5 + 0.5,
+        y: Math.cos(i * 789.012) * 0.5 + 0.5,
+      })),
+    []
+  )
 
-    let animationFrameId: number
+  const draw = useCallback(
+    (
+      ctx: CanvasRenderingContext2D,
+      width: number,
+      height: number,
+      _isDark: boolean,
+      _delta: number
+    ) => {
+      const isDarkMode = _isDark
+      const centerX = width / 2
+      const centerY = height / 2
 
-    const resize = () => {
-      setupCanvas(canvas, ctx)
-    }
-    resize()
-    window.addEventListener("resize", resize)
+      timeRef.current += 0.01 * animationSpeed * speed
+      const time = timeRef.current
 
-    const width = canvas.offsetWidth
-    const height = canvas.offsetHeight
-    const centerX = width / 2
-    const centerY = height / 2
-
-    let time = 0
-
-    const animate = () => {
-      time += 0.01 * speed
       ctx.clearRect(0, 0, width, height)
 
-      // Background - space
-      const bgGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, width / 2)
-      bgGradient.addColorStop(0, isDark ? "#0a0a20" : "#1a1a3e")
-      bgGradient.addColorStop(1, isDark ? "#000005" : "#0a0a1a")
-      ctx.fillStyle = bgGradient
+      // Background - cached gradient
+      if (!bgGradientRef.current) {
+        const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, width / 2)
+        gradient.addColorStop(0, isDarkMode ? "#0a0a20" : "#1a1a3e")
+        gradient.addColorStop(1, isDarkMode ? "#000005" : "#0a0a1a")
+        bgGradientRef.current = gradient
+      }
+      ctx.fillStyle = bgGradientRef.current
       ctx.fillRect(0, 0, width, height)
 
-      // Stars
-      ctx.fillStyle = isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(255, 255, 255, 0.3)"
+      // Stars - pre-calculated positions (no Math.sin/cos per frame)
+      ctx.fillStyle = isDarkMode ? "rgba(255, 255, 255, 0.5)" : "rgba(255, 255, 255, 0.3)"
       for (let i = 0; i < 100; i++) {
-        const x = (Math.sin(i * 123.456) * 0.5 + 0.5) * width
-        const y = (Math.cos(i * 789.012) * 0.5 + 0.5) * height
+        const star = starPositions[i]
+        const x = star.x * width
+        const y = star.y * height
         const size = (Math.sin(time + i) * 0.5 + 0.5) * 1.5 + 0.5
         ctx.beginPath()
         ctx.arc(x, y, size, 0, Math.PI * 2)
@@ -146,7 +176,7 @@ export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationPro
       if (showOrbits) {
         planets.forEach((planet) => {
           const orbitRadius = baseOrbitRadius + planet.distance * 35 * zoom
-          ctx.strokeStyle = isDark ? "rgba(100, 150, 200, 0.2)" : "rgba(100, 150, 200, 0.3)"
+          ctx.strokeStyle = isDarkMode ? "rgba(100, 150, 200, 0.2)" : "rgba(100, 150, 200, 0.3)"
           ctx.lineWidth = 1
           ctx.setLineDash([5, 5])
           ctx.beginPath()
@@ -156,14 +186,17 @@ export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationPro
         })
       }
 
-      // Draw Sun
+      // Draw Sun - cached glow
       const sunRadius = 15 * zoom
-      const sunGlow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, sunRadius * 3)
-      sunGlow.addColorStop(0, "#FFD700")
-      sunGlow.addColorStop(0.3, "#FFA500")
-      sunGlow.addColorStop(0.6, "rgba(255, 100, 0, 0.3)")
-      sunGlow.addColorStop(1, "rgba(255, 50, 0, 0)")
-      ctx.fillStyle = sunGlow
+      if (!sunGlowRef.current) {
+        const glow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, sunRadius * 3)
+        glow.addColorStop(0, "#FFD700")
+        glow.addColorStop(0.3, "#FFA500")
+        glow.addColorStop(0.6, "rgba(255, 100, 0, 0.3)")
+        glow.addColorStop(1, "rgba(255, 50, 0, 0)")
+        sunGlowRef.current = glow
+      }
+      ctx.fillStyle = sunGlowRef.current
       ctx.beginPath()
       ctx.arc(centerX, centerY, sunRadius * 3, 0, Math.PI * 2)
       ctx.fill()
@@ -257,7 +290,7 @@ export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationPro
           ctx.fillStyle =
             selectedPlanet === planet.nameEn
               ? "#FFFFFF"
-              : isDark
+              : isDarkMode
                 ? "rgba(255, 255, 255, 0.7)"
                 : "rgba(255, 255, 255, 0.9)"
           ctx.font = `${selectedPlanet === planet.nameEn ? "bold " : ""}9px sans-serif`
@@ -270,7 +303,7 @@ export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationPro
       if (selectedPlanet) {
         const planet = planets.find((p) => p.nameEn === selectedPlanet)
         if (planet) {
-          ctx.fillStyle = isDark ? "rgba(0, 0, 0, 0.8)" : "rgba(255, 255, 255, 0.9)"
+          ctx.fillStyle = isDarkMode ? "rgba(0, 0, 0, 0.8)" : "rgba(255, 255, 255, 0.9)"
           ctx.fillRect(10, height - 65, 130, 55)
           ctx.strokeStyle = planet.color
           ctx.lineWidth = 1
@@ -281,41 +314,32 @@ export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationPro
           ctx.textAlign = "left"
           ctx.fillText(planet.name, 15, height - 50)
 
-          ctx.fillStyle = isDark ? "#AAAAAA" : "#555555"
+          ctx.fillStyle = isDarkMode ? "#AAAAAA" : "#555555"
           ctx.font = "9px sans-serif"
           ctx.fillText(`Орбита: ${String(planet.distance)} а.е.`, 15, height - 35)
-          ctx.fillText(`Период: ${String(planet.period)} года`, 15, height - 22)
-          ctx.fillText(`Спутники: ${String(planet.moons)}`, 15, height - 9)
+          ctx.fillText(`Период: ${String(planet.period)} года`, 15, height - 32)
+          ctx.fillText(`Спутники: ${String(planet.moons)}`, 15, height - 19)
         }
       }
 
       // Scale indicator
-      ctx.fillStyle = isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)"
+      ctx.fillStyle = isDarkMode ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)"
       ctx.font = "8px sans-serif"
       ctx.textAlign = "right"
       ctx.fillText("Масштаб не сохранён", width - 10, height - 5)
-
-      animationFrameId = requestAnimationFrame(animate)
-    }
-
-    animate()
-
-    return () => {
-      window.removeEventListener("resize", resize)
-      cancelAnimationFrame(animationFrameId)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [speed, showOrbits, showLabels, selectedPlanet, zoom, isDark])
+    },
+    [planets, starPositions, speed, showOrbits, showLabels, selectedPlanet, zoom, animationSpeed]
+  )
 
   return (
-    <div className="space-y-3">
-      <canvas
-        ref={canvasRef}
-        className="w-full h-56 rounded-lg cursor-pointer"
-        aria-label="Солнечная система: планеты и их орбиты"
-        role="img"
-        aria-live="polite"
-        aria-atomic="true"
+    <div className="space-y-4">
+      <VisualizationCanvas draw={draw} isDark={isDark} className="h-[350px]" />
+      <VisualizationControls
+        isPlaying={isPlaying}
+        animationSpeed={animationSpeed}
+        onTogglePlay={togglePlaying}
+        onSpeedChange={setAnimationSpeed}
+        isDark={isDark}
       />
 
       <div className="grid grid-cols-2 gap-3">

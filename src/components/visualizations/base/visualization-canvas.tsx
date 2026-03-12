@@ -16,6 +16,8 @@ interface VisualizationCanvasProps {
   fpsLimit?: number
   pauseWhenHidden?: boolean
   respectReducedMotion?: boolean
+  onClick?: (e: React.MouseEvent<HTMLCanvasElement>) => void
+  style?: React.CSSProperties
 }
 
 export function VisualizationCanvas({
@@ -25,6 +27,8 @@ export function VisualizationCanvas({
   fpsLimit = 60,
   pauseWhenHidden = true,
   respectReducedMotion = true,
+  onClick,
+  style,
 }: VisualizationCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -67,10 +71,11 @@ export function VisualizationCanvas({
       <canvas
         ref={canvasRef}
         className="w-full h-full"
-        style={{ display: "block" }}
+        style={{ display: "block", ...style }}
         data-testid="visualization-canvas"
         aria-label="Interactive physics visualization"
         role="img"
+        onClick={onClick}
       />
     </div>
   )
