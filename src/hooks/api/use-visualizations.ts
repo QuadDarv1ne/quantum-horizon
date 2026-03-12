@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /**
@@ -7,7 +5,26 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import type { UserProgress, Bookmark } from "@prisma/client"
+
+// Types (до генерации Prisma)
+interface UserProgress {
+  id: string
+  userId: string
+  topic: string
+  completedCount: number
+  lastCompleted: Date
+  createdAt: Date
+  updatedAt: Date
+}
+
+interface Bookmark {
+  id: string
+  userId: string
+  topic: string
+  title: string
+  createdAt: Date
+  updatedAt: Date
+}
 
 // ==================== TYPES ====================
 

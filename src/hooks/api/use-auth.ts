@@ -219,13 +219,15 @@ export function useHasRole(requiredRole: string | string[]) {
   const { user, isAuthenticated } = useAuth()
 
   const hasRole = (): boolean => {
-    if (!isAuthenticated || !user?.role) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+    if (!isAuthenticated || !(user as any)?.role) {
       return false
     }
 
     const roles = Array.isArray(requiredRole) ? requiredRole : [requiredRole]
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    return roles.includes(user.role ?? "")
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+    const userRole: string = (user as any).role
+    return roles.includes(userRole)
   }
 
   return {

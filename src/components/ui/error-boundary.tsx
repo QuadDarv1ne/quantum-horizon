@@ -27,14 +27,14 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error }
+    return { hasError: true, error, errorInfo: null }
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error(
       `[ErrorBoundary${this.props.name ? `: ${this.props.name}` : ""}]`,
       error,
-      errorInfo,
+      errorInfo
     )
 
     // Логирование в аналитику
@@ -145,14 +145,10 @@ export function ErrorBoundaryFallback({
   return (
     <Card className="border-red-500/50 bg-red-950/20">
       <CardHeader>
-        <CardTitle className="text-red-400">
-          ⚠️ Ошибка{title ? `: ${title}` : ""}
-        </CardTitle>
+        <CardTitle className="text-red-400">⚠️ Ошибка{title ? `: ${title}` : ""}</CardTitle>
         <CardDescription className="text-red-300/70">
           <p>{error.message}</p>
-          {error.digest && (
-            <p className="text-xs mt-2 text-red-300/50">Error ID: {error.digest}</p>
-          )}
+          {error.digest && <p className="text-xs mt-2 text-red-300/50">Error ID: {error.digest}</p>}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex gap-2">
@@ -169,7 +165,7 @@ export function ErrorBoundaryFallback({
  */
 export function withErrorBoundary<P extends object>(
   WrappedComponent: React.ComponentType<P>,
-  options: { name?: string; fallback?: ReactNode } = {},
+  options: { name?: string; fallback?: ReactNode } = {}
 ) {
   return function WithErrorBoundary(props: P) {
     return (

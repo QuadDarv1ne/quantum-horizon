@@ -183,26 +183,26 @@ global.IntersectionObserver = IntersectionObserverPolyfill as unknown as typeof 
 const localStorageMock = {
   store: {} as Record<string, string>,
   clear() {
-    this.store = {}
+    localStorageMock.store = {}
   },
-  getItem(key: string) {
+  getItem(key: string): string | null {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return this.store[key] || null
+    return localStorageMock.store[key] || null
   },
   setItem(key: string, value: string) {
-    this.store[key] = value
+    localStorageMock.store[key] = value
   },
   removeItem(key: string) {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete this.store[key]
+    delete localStorageMock.store[key]
   },
   get length() {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    return Object.keys(this.store).length
+    return Object.keys(localStorageMock.store).length
   },
   key(index: number) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    return Object.keys(this.store)[index] || null
+    return Object.keys(localStorageMock.store)[index] || null
   },
 } as unknown as Storage
 

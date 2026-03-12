@@ -14,11 +14,13 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user?.id) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (!session?.user || !(session.user as any).id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const userId = session.user.id as string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const userId = (session.user as any).id as string
 
     // Получить весь прогресс пользователя
     const progress = await db.userProgress.findMany({
@@ -44,11 +46,13 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.user?.id) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (!session?.user || !(session.user as any).id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const userId = session.user.id as string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const userId = (session.user as any).id as string
     const body = (await request.json()) as { topic?: string; completedCount?: number }
     const { topic, completedCount = 1 } = body
 

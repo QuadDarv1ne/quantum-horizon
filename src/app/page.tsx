@@ -1,12 +1,11 @@
-﻿/* eslint-disable @typescript-eslint/no-unsafe-call */
-
-/* eslint-disable react-hooks/exhaustive-deps */
+﻿/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable no-irregular-whitespace */
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { setupCanvas } from "@/hooks/use-canvas-animation"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -420,6 +419,7 @@ function PhysicsTimeline() {
 
     let _time = 0
     const _scrollOffset = 0
+    const hoveredEvent = -1
 
     const animate = () => {
       _time += 0.02
@@ -532,7 +532,7 @@ function PhysicsTimeline() {
       window.removeEventListener("resize", resize)
       cancelAnimationFrame(animationFrameId)
     }
-  }, [filteredEvents, hoveredEvent])
+  }, [filteredEvents])
 
   return (
     <div className="space-y-3">

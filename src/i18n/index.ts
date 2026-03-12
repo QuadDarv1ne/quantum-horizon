@@ -13,10 +13,13 @@ export { useTranslations } from "next-intl"
 export { getTranslations, getLocale, getMessages } from "next-intl/server"
 
 // Request config for next.config.ts
+
 export default getRequestConfig(async ({ locale }) => {
-  const messages = await import(`./messages/${String(locale)}.json`)
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const messages = await import(`./messages/${locale!}.json`)
   return {
-    locale,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    locale: locale!,
     messages: messages.default,
   }
 })

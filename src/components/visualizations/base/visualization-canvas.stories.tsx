@@ -19,7 +19,7 @@ const drawRotatingSquare = (
   width: number,
   height: number,
   isDark: boolean,
-  time: number,
+  time: number
 ) => {
   ctx.clearRect(0, 0, width, height)
 
@@ -50,12 +50,16 @@ const drawRotatingSquare = (
 }
 
 export const Default: Story = {
+  args: {
+    draw: () => undefined,
+    isDark: true,
+  },
   render: () => {
     const drawFn = (
       ctx: CanvasRenderingContext2D,
       width: number,
       height: number,
-      isDark: boolean,
+      isDark: boolean
     ) => {
       const time = Date.now() * 0.001
       drawRotatingSquare(ctx, width, height, isDark, time)
@@ -70,12 +74,16 @@ export const Default: Story = {
 }
 
 export const LightMode: Story = {
+  args: {
+    draw: () => undefined,
+    isDark: false,
+  },
   render: () => {
     const drawFn = (
       ctx: CanvasRenderingContext2D,
       width: number,
       height: number,
-      isDark: boolean,
+      isDark: boolean
     ) => {
       const time = Date.now() * 0.001
       drawRotatingSquare(ctx, width, height, isDark, time)
@@ -90,12 +98,16 @@ export const LightMode: Story = {
 }
 
 export const WithCustomDraw: Story = {
+  args: {
+    draw: () => undefined,
+    isDark: true,
+  },
   render: () => {
     const drawWave = (
       ctx: CanvasRenderingContext2D,
       width: number,
       height: number,
-      isDark: boolean,
+      isDark: boolean
     ) => {
       ctx.clearRect(0, 0, width, height)
 

@@ -90,14 +90,17 @@ export const authOptions: NextAuthOptions = {
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (user) {
         token.id = user.id
-        token.role = user.role as string
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+        token.role = (user as any).role as string
       }
       return token
     },
     session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string
-        session.user.role = token.role as string
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+        ;(session.user as any).id = token.id as string
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+        ;(session.user as any).role = token.role as string
       }
       return session
     },
