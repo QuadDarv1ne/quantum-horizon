@@ -3,7 +3,9 @@
 import { useState, useRef, useCallback, useEffect } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
+import { Button } from "@/components/ui/button"
 import { useVisualizationStore } from "@/stores/visualization-store"
+import { QueryParam } from "@/hooks/use-url-sync"
 import { G, c, M_SUN } from "@/lib/constants"
 
 interface BlackHoleVisualizationProps {
@@ -20,14 +22,25 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
   const { isPlaying, animationSpeed } = useVisualizationStore()
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
-  const [mass, setMass] = useState(10)
-  const [showAccretion, setShowAccretion] = useState(true)
-  const [showHawking, setShowHawking] = useState(false)
-  const [showDoppler, setShowDoppler] = useState(true)
-  const [showLensing, setShowLensing] = useState(true)
+  const [mass, setMass] = useState(() => QueryParam.getNumber("bh.mass", 10))
+  const [showAccretion, setShowAccretion] = useState(() =>
+    QueryParam.getBoolean("bh.accretion", true)
+  )
+  const [showHawking, setShowHawking] = useState(() => QueryParam.getBoolean("bh.hawking", false))
+  const [showDoppler, setShowDoppler] = useState(() => QueryParam.getBoolean("bh.doppler", true))
+  const [showLensing, setShowLensing] = useState(() => QueryParam.getBoolean("bh.lensing", true))
   const rotationRef = useRef(0)
   const gradientCache = useRef<GradientCache | null>(null)
   const starsRef = useRef<Array<{ x: number; y: number; size: number }>>([])
+
+  // Update URL when state changes
+  useEffect(() => {
+    QueryParam.setNumber("bh.mass", mass)
+    QueryParam.setBoolean("bh.accretion", showAccretion)
+    QueryParam.setBoolean("bh.hawking", showHawking)
+    QueryParam.setBoolean("bh.doppler", showDoppler)
+    QueryParam.setBoolean("bh.lensing", showLensing)
+  }, [mass, showAccretion, showHawking, showDoppler, showLensing])
 
   // Generate background stars once
   useEffect(() => {
@@ -200,6 +213,17 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
             Gravitational Lensing
           </label>
         </div>
+        <Button
+          onClick={() => {
+            const url = window.location.href
+            void navigator.clipboard.writeText(url)
+          }}
+          variant="outline"
+          size="sm"
+          className="w-full mt-2"
+        >
+          🔗 Copy URL
+        </Button>
       </div>
     </div>
   )
