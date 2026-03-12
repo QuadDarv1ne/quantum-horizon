@@ -6,13 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast"
 
@@ -66,15 +60,14 @@ export default function SignInPage() {
   const handleOAuthSignIn = async (provider: string) => {
     setIsLoading(true)
     await signIn(provider, { callbackUrl })
+    setIsLoading(false)
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 p-4">
       <Card className="w-full max-w-md bg-slate-900/80 border-slate-700 text-white backdrop-blur-sm">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
-            ⧫ Quantum Horizon
-          </CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">⧫ Quantum Horizon</CardTitle>
           <CardDescription className="text-slate-400 text-center">
             Войдите для сохранения прогресса
           </CardDescription>
@@ -85,9 +78,7 @@ export default function SignInPage() {
             <Button
               variant="outline"
               className="w-full bg-slate-800 border-slate-600 hover:bg-slate-700"
-              onClick={async () => {
-                await handleOAuthSignIn("google")
-              }}
+              onClick={() => void handleOAuthSignIn("google")}
               disabled={isLoading}
             >
               <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
@@ -113,9 +104,7 @@ export default function SignInPage() {
             <Button
               variant="outline"
               className="w-full bg-slate-800 border-slate-600 hover:bg-slate-700"
-              onClick={async () => {
-                await handleOAuthSignIn("github")
-              }}
+              onClick={() => void handleOAuthSignIn("github")}
               disabled={isLoading}
             >
               <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -130,14 +119,12 @@ export default function SignInPage() {
               <div className="w-full border-t border-slate-700" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-slate-900 px-2 text-slate-400">
-                Или войдите с Email
-              </span>
+              <span className="bg-slate-900 px-2 text-slate-400">Или войдите с Email</span>
             </div>
           </div>
 
           {/* Форма входа */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -145,7 +132,9 @@ export default function SignInPage() {
                 type="email"
                 placeholder="name@example.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                }}
                 required
                 disabled={isLoading}
                 className="bg-slate-800 border-slate-600"
@@ -157,7 +146,9 @@ export default function SignInPage() {
                 id="password"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value)
+                }}
                 required
                 disabled={isLoading}
                 className="bg-slate-800 border-slate-600"
@@ -167,9 +158,10 @@ export default function SignInPage() {
               type="submit"
               className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
               disabled={isLoading}
-              onClick={async (e) => {
-                if (e.target.closest("button[type='submit']")) {
-                  await handleSubmit(e as unknown as React.SyntheticEvent)
+              onClick={(e) => {
+                const button = e.target as HTMLElement
+                if (button.closest("button[type='submit']")) {
+                  void handleSubmit(e as unknown as React.SyntheticEvent)
                 }
               }}
             >
@@ -189,7 +181,8 @@ export default function SignInPage() {
           )}
 
           <p className="text-xs text-center text-slate-500">
-            Продолжая, вы соглашаетесь с нашими Условиями использования и Политикой конфиденциальности
+            Продолжая, вы соглашаетесь с нашими Условиями использования и Политикой
+            конфиденциальности
           </p>
         </CardContent>
       </Card>

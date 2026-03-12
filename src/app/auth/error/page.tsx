@@ -2,13 +2,7 @@
 
 import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
 const errorMessages: Record<string, { title: string; description: string }> = {
@@ -40,12 +34,8 @@ export default function AuthErrorPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 p-4">
       <Card className="w-full max-w-md bg-slate-900/80 border-slate-700 text-white backdrop-blur-sm">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">
-            ⚠️ {errorConfig.title}
-          </CardTitle>
-          <CardDescription className="text-slate-400 text-center">
-            Quantum Horizon
-          </CardDescription>
+          <CardTitle className="text-2xl font-bold text-center">⚠️ {errorConfig.title}</CardTitle>
+          <CardDescription className="text-slate-400 text-center">Quantum Horizon</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Alert variant="destructive" className="bg-red-950/50 border-red-800">
@@ -58,13 +48,15 @@ export default function AuthErrorPage() {
             <Button
               variant="outline"
               className="flex-1 bg-slate-800 border-slate-600 hover:bg-slate-700"
-              onClick={() => window.history.back()}
+              onClick={() => {
+                window.history.back()
+              }}
             >
               Назад
             </Button>
             <Button
               className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600"
-              onClick={() => {
+              onClick={(): void => {
                 window.location.href = "/auth/signin"
               }}
             >
@@ -72,11 +64,7 @@ export default function AuthErrorPage() {
             </Button>
           </div>
 
-          {error && (
-            <p className="text-xs text-center text-slate-500">
-              Код ошибки: {error}
-            </p>
-          )}
+          {error && <p className="text-xs text-center text-slate-500">Код ошибки: {error}</p>}
         </CardContent>
       </Card>
     </div>

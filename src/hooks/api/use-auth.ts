@@ -33,7 +33,9 @@ export function useAuth() {
   const user = session?.user
 
   const redirectToSignIn = (callbackUrl?: string) => {
-    const url = callbackUrl ? `/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}` : "/auth/signin"
+    const url = callbackUrl
+      ? `/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`
+      : "/auth/signin"
     router.push(url)
   }
 
@@ -53,8 +55,7 @@ export function useAuth() {
     isUnauthenticated: status === "unauthenticated",
 
     // Действия
-    signIn: (provider?: string, options?: { callbackUrl?: string }) =>
-      signIn(provider, options),
+    signIn: (provider?: string, options?: { callbackUrl?: string }) => signIn(provider, options),
     signOut: handleSignOut,
     update,
     redirectToSignIn,
@@ -105,9 +106,12 @@ export function useSignIn() {
     setError(null)
 
     try {
-      await signIn(provider, { callbackUrl: callbackUrl || "/" })
+      await signIn(provider, { callbackUrl: callbackUrl ?? "/" })
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to sign in"
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : String(err instanceof Error ? err : "Failed to sign in")
       setError(errorMessage)
       setIsLoading(false)
     }
@@ -118,7 +122,9 @@ export function useSignIn() {
     error,
     signInWithEmail,
     signInWithProvider,
-    clearError: () => setError(null),
+    clearError: (): void => {
+      setError(null)
+    },
   }
 }
 
@@ -143,10 +149,10 @@ export function useSignUp() {
         body: JSON.stringify({ email, password, name }),
       })
 
-      const data = await response.json()
+      const data = (await response.json()) as { error?: string }
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to register")
+        throw new Error(data.error ?? "Failed to register")
       }
 
       // Автоматический вход после регистрации
@@ -170,7 +176,9 @@ export function useSignUp() {
     isLoading,
     error,
     signUp,
-    clearError: () => setError(null),
+    clearError: (): void => {
+      setError(null)
+    },
   }
 }
 
@@ -186,7 +194,9 @@ export function useProtectedRoute() {
 
   const requireAuth = (callbackUrl?: string) => {
     if (!isLoading && !isAuthenticated) {
-      const url = callbackUrl ? `/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}` : "/auth/signin"
+      const url = callbackUrl
+        ? `/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`
+        : "/auth/signin"
       router.push(url)
       return false
     }
@@ -208,13 +218,14 @@ export function useProtectedRoute() {
 export function useHasRole(requiredRole: string | string[]) {
   const { user, isAuthenticated } = useAuth()
 
-  const hasRole = () => {
+  const hasRole = (): boolean => {
     if (!isAuthenticated || !user?.role) {
       return false
     }
 
     const roles = Array.isArray(requiredRole) ? requiredRole : [requiredRole]
-    return roles.includes(user.role)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    return roles.includes(user.role ?? "")
   }
 
   return {
