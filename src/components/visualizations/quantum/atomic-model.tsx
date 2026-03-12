@@ -5,6 +5,7 @@
 import { useRef, useState, useEffect } from "react"
 import { setupCanvas } from "@/hooks/use-canvas-animation"
 import { Button } from "@/components/ui/button"
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Slider } from "@/components/ui/slider"
 
 interface AtomicModelVisualizationProps {

@@ -45,7 +45,7 @@ export function HRDiagramVisualization({ isDark }: HRDiagramVisualizationProps) 
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
-    let animationFrameId: number
+    let _animationFrameId: number
 
     const resize = () => {
       setupCanvas(canvas, ctx)

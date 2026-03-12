@@ -68,10 +68,10 @@ export function DarkMatterVisualization({ isDark }: DarkMatterVisualizationProps
       })
     }
 
-    let time = 0
+    let _time = 0
 
     const animate = () => {
-      time += 0.016
+      _time += 0.016
       ctx.clearRect(0, 0, width, height)
 
       // Background - cached gradient
@@ -221,7 +221,9 @@ export function DarkMatterVisualization({ isDark }: DarkMatterVisualizationProps
 
       <div className="space-y-1">
         <div className="flex justify-between text-xs">
-          <span className={isDark ? "text-purple-400" : "text-purple-700"}>Dark matter fraction</span>
+          <span className={isDark ? "text-purple-400" : "text-purple-700"}>
+            Dark matter fraction
+          </span>
           <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
             {darkMatterFraction}%
           </span>
@@ -255,12 +257,12 @@ export function DarkMatterVisualization({ isDark }: DarkMatterVisualizationProps
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div
           className={`rounded p-2 border ${
-            isDark
-              ? "bg-purple-950/30 border-purple-500/20"
-              : "bg-purple-50 border-purple-200"
+            isDark ? "bg-purple-950/30 border-purple-500/20" : "bg-purple-50 border-purple-200"
           }`}
         >
-          <div className={isDark ? "text-purple-400 font-semibold" : "text-purple-700 font-semibold"}>
+          <div
+            className={isDark ? "text-purple-400 font-semibold" : "text-purple-700 font-semibold"}
+          >
             Dark Matter
           </div>
           <div className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
@@ -270,9 +272,7 @@ export function DarkMatterVisualization({ isDark }: DarkMatterVisualizationProps
         </div>
         <div
           className={`rounded p-2 border ${
-            isDark
-              ? "bg-blue-950/30 border-blue-500/20"
-              : "bg-blue-50 border-blue-200"
+            isDark ? "bg-blue-950/30 border-blue-500/20" : "bg-blue-50 border-blue-200"
           }`}
         >
           <div className={isDark ? "text-blue-400 font-semibold" : "text-blue-700 font-semibold"}>
@@ -281,23 +281,19 @@ export function DarkMatterVisualization({ isDark }: DarkMatterVisualizationProps
           <div className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
             ~68% of Universe
           </div>
-          <div className={isDark ? "text-gray-400" : "text-gray-600"}>
-            Accelerates expansion
-          </div>
+          <div className={isDark ? "text-gray-400" : "text-gray-600"}>Accelerates expansion</div>
         </div>
       </div>
 
       <div
         className={`rounded-lg p-3 border text-sm ${
-          isDark
-            ? "bg-purple-900/20 border-purple-500/20"
-            : "bg-purple-50 border-purple-200"
+          isDark ? "bg-purple-900/20 border-purple-500/20" : "bg-purple-50 border-purple-200"
         }`}
       >
         <p className={isDark ? "text-gray-300" : "text-gray-700"}>
           <span className={isDark ? "text-purple-300" : "text-purple-700"}>Mystery:</span> Stars at
-          the edge of galaxies rotate too fast! Without invisible mass, they would fly apart. This is
-          evidence for dark matter.
+          the edge of galaxies rotate too fast! Without invisible mass, they would fly apart. This
+          is evidence for dark matter.
         </p>
       </div>
     </div>

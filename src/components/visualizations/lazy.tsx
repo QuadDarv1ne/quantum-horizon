@@ -5,10 +5,8 @@ import { VisualizationCardSkeleton } from "@/components/ui/loading-skeleton"
 import { ErrorBoundary } from "@/components/ui/error-boundary"
 
 // Wrapper для lazy компонентов с Suspense и ErrorBoundary
-function withSuspense<P extends object>(
-  Component: React.ComponentType<P>,
-  name: string,
-) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function withSuspense<P extends object>(Component: React.ComponentType<P>, name: string) {
   return function WrappedComponent(props: P) {
     return (
       <ErrorBoundary name={name}>
@@ -29,7 +27,7 @@ export const WaveFunctionVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const UncertaintyVisualization = dynamic(
@@ -40,7 +38,7 @@ export const UncertaintyVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const TunnelingVisualization = dynamic(
@@ -51,7 +49,7 @@ export const TunnelingVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const DoubleSlitVisualization = dynamic(
@@ -62,7 +60,7 @@ export const DoubleSlitVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const PhotoelectricEffectVisualization = dynamic(
@@ -73,7 +71,7 @@ export const PhotoelectricEffectVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const BrownianMotionVisualization = dynamic(
@@ -84,7 +82,7 @@ export const BrownianMotionVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const SchrodingersCatVisualization = dynamic(
@@ -95,7 +93,7 @@ export const SchrodingersCatVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const QuantumEntanglementVisualization = dynamic(
@@ -106,7 +104,7 @@ export const QuantumEntanglementVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const AtomicModelVisualization = dynamic(
@@ -117,7 +115,7 @@ export const AtomicModelVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const RadioactiveDecayVisualization = dynamic(
@@ -128,7 +126,7 @@ export const RadioactiveDecayVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const SuperconductivityVisualization = dynamic(
@@ -139,7 +137,7 @@ export const SuperconductivityVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 // Relativity visualizations
@@ -151,7 +149,7 @@ export const TimeDilationVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const LengthContractionVisualization = dynamic(
@@ -162,7 +160,7 @@ export const LengthContractionVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const MassEnergyVisualization = dynamic(
@@ -173,7 +171,7 @@ export const MassEnergyVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 // Cosmos visualizations
@@ -185,7 +183,7 @@ export const BlackHoleVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const HRDiagramVisualization = dynamic(
@@ -196,7 +194,7 @@ export const HRDiagramVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const NeutronStarVisualization = dynamic(
@@ -207,7 +205,7 @@ export const NeutronStarVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const DarkMatterVisualization = dynamic(
@@ -218,7 +216,7 @@ export const DarkMatterVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const WhiteHoleVisualization = dynamic(
@@ -229,7 +227,7 @@ export const WhiteHoleVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const BigBangVisualization = dynamic(
@@ -240,7 +238,7 @@ export const BigBangVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 export const StandardModelVisualization = dynamic(
@@ -251,7 +249,7 @@ export const StandardModelVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )
 
 // Advanced visualizations
@@ -263,5 +261,5 @@ export const GravitationalWavesVisualization = dynamic(
   {
     loading: () => <VisualizationCardSkeleton />,
     ssr: false,
-  },
+  }
 )

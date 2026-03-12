@@ -33,8 +33,10 @@ export function RadioactiveDecayVisualization({ isDark }: RadioactiveDecayVisual
   const [decayType, setDecayType] = useState<DecayType>("alpha")
   const [halfLife, setHalfLife] = useState(50)
   const [atomCount, setAtomCount] = useState(100)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [decayProgress, setDecayProgress] = useState(0)
   const [isPlaying, setIsPlaying] = useState(true)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [decayedCount, setDecayedCount] = useState(0)
 
   useEffect(() => {

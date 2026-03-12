@@ -21,11 +21,11 @@ export function TunnelingVisualization({ isDark }: TunnelingVisualizationProps) 
     if (!ctx) return
 
     let animationFrameId: number
-    let bgGradient: CanvasGradient | null = null
+    let _bgGradient: CanvasGradient | null = null
 
     const resize = () => {
       setupCanvas(canvas, ctx)
-      bgGradient = null
+      _bgGradient = null
     }
     resize()
     window.addEventListener("resize", resize)

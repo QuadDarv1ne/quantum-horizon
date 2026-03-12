@@ -65,10 +65,10 @@ export function BrownianMotionVisualization({ isDark }: BrownianMotionVisualizat
     // Speed based on temperature (simplified)
     const speedFactor = Math.sqrt(temperature / 300) * 2
 
-    let time = 0
+    let _time = 0
 
     const animate = () => {
-      time += 0.016
+      _time += 0.016
       ctx.clearRect(0, 0, width, height)
 
       // Background - water

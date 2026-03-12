@@ -98,19 +98,16 @@ export const selectVisualizationSettings = (state: VisualizationState) => ({
   selectedVisualization: state.selectedVisualization,
 })
 
-export const selectWaveFunctionSettings = (state: VisualizationState) =>
-  state.waveFunction
+export const selectWaveFunctionSettings = (state: VisualizationState) => state.waveFunction
 
-export const selectTimeDilationSettings = (state: VisualizationState) =>
-  state.timeDilation
+export const selectTimeDilationSettings = (state: VisualizationState) => state.timeDilation
 
-export const selectBlackHoleSettings = (state: VisualizationState) =>
-  state.blackHole
+export const selectBlackHoleSettings = (state: VisualizationState) => state.blackHole
 
 // Сравнение для wave function настроек (для использования с shallow)
 export const waveFunctionComparer = (
   a: ReturnType<typeof selectWaveFunctionSettings>,
-  b: ReturnType<typeof selectWaveFunctionSettings>,
+  b: ReturnType<typeof selectWaveFunctionSettings>
 ) =>
   a.quantumNumber === b.quantumNumber &&
   a.showProbability === b.showProbability &&
@@ -119,13 +116,13 @@ export const waveFunctionComparer = (
 // Сравнение для time dilation настроек
 export const timeDilationComparer = (
   a: ReturnType<typeof selectTimeDilationSettings>,
-  b: ReturnType<typeof selectTimeDilationSettings>,
+  b: ReturnType<typeof selectTimeDilationSettings>
 ) => a.velocity === b.velocity && a.showClock === b.showClock
 
 // Сравнение для black hole настроек
 export const blackHoleComparer = (
   a: ReturnType<typeof selectBlackHoleSettings>,
-  b: ReturnType<typeof selectBlackHoleSettings>,
+  b: ReturnType<typeof selectBlackHoleSettings>
 ) =>
   a.mass === b.mass &&
   a.showAccretionDisk === b.showAccretionDisk &&
@@ -133,21 +130,18 @@ export const blackHoleComparer = (
 
 export const useVisualizationStore = create<VisualizationState>()(
   persist(
-    (set, get) => ({
+    (set, _get) => ({
       selectedVisualization: null,
       ...defaultSettings,
 
       // Общие actions
-      setSelectedVisualization: (type) =>
-        set({ selectedVisualization: type }),
+      setSelectedVisualization: (type) => set({ selectedVisualization: type }),
 
-      toggleFullscreen: () =>
-        set((state) => ({ isFullscreen: !state.isFullscreen })),
+      toggleFullscreen: () => set((state) => ({ isFullscreen: !state.isFullscreen })),
 
       setIsFullscreen: (value) => set({ isFullscreen: value }),
 
-      togglePlaying: () =>
-        set((state) => ({ isPlaying: !state.isPlaying })),
+      togglePlaying: () => set((state) => ({ isPlaying: !state.isPlaying })),
 
       setIsPlaying: (value) => set({ isPlaying: value }),
 
@@ -242,8 +236,8 @@ export const useVisualizationStore = create<VisualizationState>()(
         timeDilation: state.timeDilation,
         blackHole: state.blackHole,
       }),
-    },
-  ),
+    }
+  )
 )
 
 // Экспортируем shallow для использования в компонентах

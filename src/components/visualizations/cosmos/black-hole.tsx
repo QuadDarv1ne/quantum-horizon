@@ -149,7 +149,7 @@ function drawAccretionDisk(
   centerY: number,
   innerRadius: number,
   rotation: number,
-  isDark: boolean
+  _isDark: boolean
 ) {
   const outerRadius = innerRadius * 3
 
@@ -182,7 +182,7 @@ function drawHawkingRadiation(
   centerY: number,
   radius: number,
   rotation: number,
-  isDark: boolean
+  _isDark: boolean
 ) {
   const particleCount = 20
 

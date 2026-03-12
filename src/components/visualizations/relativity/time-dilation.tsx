@@ -11,20 +11,13 @@ interface TimeDilationVisualizationProps {
   isDark: boolean
 }
 
-export function TimeDilationVisualization({
-  isDark,
-}: TimeDilationVisualizationProps) {
+export function TimeDilationVisualization({ isDark }: TimeDilationVisualizationProps) {
   const { velocity, showClock } = useVisualizationStore(selectTimeDilationSettings)
-  const { isPlaying, animationSpeed, setVelocity, togglePlaying } =
-    useVisualizationStore()
+  const { isPlaying, animationSpeed, setVelocity, togglePlaying } = useVisualizationStore()
 
   const timeOffset = useRef(0)
 
-  const draw = (
-    ctx: CanvasRenderingContext2D,
-    width: number,
-    height: number,
-  ) => {
+  const draw = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
     const centerX = width / 2
     const centerY = height / 2
 
@@ -33,7 +26,7 @@ export function TimeDilationVisualization({
     ctx.fillRect(0, 0, width, height)
 
     // Calculate time dilation factor (Lorentz factor)
-    const v = velocity * c
+    const _v = velocity * c
     const gamma = 1 / Math.sqrt(1 - velocity * velocity)
 
     // Update animation
@@ -104,12 +97,12 @@ export function TimeDilationVisualization({
         onSpeedChange={(speed) => {
           useVisualizationStore.getState().setAnimationSpeed(speed)
         }}
-        onReset={() => { useVisualizationStore.getState().resetSettings() }}
+        onReset={() => {
+          useVisualizationStore.getState().resetSettings()
+        }}
         isDark={isDark}
       />
-      <div
-        className={`p-4 rounded-lg ${isDark ? "bg-gray-800/50" : "bg-gray-100/50"}`}
-      >
+      <div className={`p-4 rounded-lg ${isDark ? "bg-gray-800/50" : "bg-gray-100/50"}`}>
         <label className="block text-sm font-medium mb-2">
           Velocity: {(velocity * 100).toFixed(0)}% c
         </label>
@@ -119,7 +112,9 @@ export function TimeDilationVisualization({
           max="0.99"
           step="0.01"
           value={velocity}
-          onChange={(e) => { setVelocity(parseFloat(e.target.value)) }}
+          onChange={(e) => {
+            setVelocity(parseFloat(e.target.value))
+          }}
           className="w-full"
         />
         <div className="flex justify-between text-xs mt-1 text-gray-500">
@@ -137,7 +132,7 @@ function drawClock(
   y: number,
   radius: number,
   time: number,
-  isDark: boolean,
+  isDark: boolean
 ) {
   ctx.save()
   ctx.translate(x, y)

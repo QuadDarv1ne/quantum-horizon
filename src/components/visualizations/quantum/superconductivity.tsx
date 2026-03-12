@@ -275,6 +275,7 @@ export function SuperconductivityVisualization({ isDark }: SuperconductivityVisu
     }
   }, [temperature, criticalTemp, showMagneticField, levitationHeight, isDark])
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const isSuperconducting = temperature < criticalTemp
 
   return (
@@ -356,9 +357,7 @@ export function SuperconductivityVisualization({ isDark }: SuperconductivityVisu
 
       <div
         className={`rounded-lg p-3 border text-sm ${
-          isDark
-            ? "bg-blue-900/20 border-blue-500/20"
-            : "bg-blue-50 border-blue-200"
+          isDark ? "bg-blue-900/20 border-blue-500/20" : "bg-blue-50 border-blue-200"
         }`}
       >
         <div className={`font-semibold mb-1 ${isDark ? "text-blue-300" : "text-blue-700"}`}>

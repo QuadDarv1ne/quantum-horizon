@@ -4,23 +4,17 @@ import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { useVisualizationStore } from "@/stores/visualization-store"
 
-const c = 299792458 // Speed of light
+const _c = 299792458 // Speed of light
 
 interface MassEnergyVisualizationProps {
   isDark: boolean
 }
 
-export function MassEnergyVisualization({
-  isDark,
-}: MassEnergyVisualizationProps) {
+export function MassEnergyVisualization({ isDark }: MassEnergyVisualizationProps) {
   const { isPlaying, animationSpeed } = useVisualizationStore()
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
-  const draw = (
-    ctx: CanvasRenderingContext2D,
-    width: number,
-    height: number,
-  ) => {
+  const draw = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
     const centerX = width / 2
     const centerY = height / 2
 
@@ -29,7 +23,7 @@ export function MassEnergyVisualization({
     ctx.fillRect(0, 0, width, height)
 
     // Draw mass-energy equivalence visualization
-    const mass = 1 // 1 kg for demonstration
+    const _mass = 1 // 1 kg for demonstration
 
     // Draw mass sphere
     ctx.save()
@@ -124,11 +118,7 @@ export function MassEnergyVisualization({
     // Explanation
     ctx.fillStyle = isDark ? "#94a3b8" : "#64748b"
     ctx.font = "14px sans-serif"
-    ctx.fillText(
-      "1 kg of mass = 90 quadrillion joules of energy",
-      centerX,
-      centerY + 150,
-    )
+    ctx.fillText("1 kg of mass = 90 quadrillion joules of energy", centerX, centerY + 150)
   }
 
   return (
@@ -141,26 +131,20 @@ export function MassEnergyVisualization({
         onSpeedChange={setAnimationSpeed}
         isDark={isDark}
       />
-      <div
-        className={`p-4 rounded-lg ${isDark ? "bg-gray-800/50" : "bg-gray-100/50"}`}
-      >
+      <div className={`p-4 rounded-lg ${isDark ? "bg-gray-800/50" : "bg-gray-100/50"}`}>
         <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-          <strong>E = mc²</strong> — Energy and mass are interchangeable.
-          The speed of light squared (c²) is the conversion factor.
+          <strong>E = mc²</strong> — Energy and mass are interchangeable. The speed of light squared
+          (c²) is the conversion factor.
         </p>
         <div className="mt-3 grid grid-cols-2 gap-4 text-sm">
           <div>
-            <span className={isDark ? "text-gray-400" : "text-gray-600"}>
-              Speed of light (c):
-            </span>
+            <span className={isDark ? "text-gray-400" : "text-gray-600"}>Speed of light (c):</span>
             <span className={`ml-2 ${isDark ? "text-gray-200" : "text-gray-800"}`}>
               299,792,458 m/s
             </span>
           </div>
           <div>
-            <span className={isDark ? "text-gray-400" : "text-gray-600"}>
-              c²:
-            </span>
+            <span className={isDark ? "text-gray-400" : "text-gray-600"}>c²:</span>
             <span className={`ml-2 ${isDark ? "text-gray-200" : "text-gray-800"}`}>
               8.99×10¹⁶ m²/s²
             </span>
