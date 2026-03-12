@@ -121,7 +121,7 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
 
           // Draw interference pattern on screen
           const alpha = intensity * 0.8
-          ctx.fillStyle = `rgba(100, 200, 255, ${alpha})`
+          ctx.fillStyle = `rgba(100, 200, 255, ${String(alpha)})`
           ctx.fillRect(screenX - 3, y, 6, 1)
 
           // Wave propagation
@@ -129,7 +129,7 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
             for (let x = slitX + 10; x < screenX - 10; x += 5) {
               const progress = (x - slitX) / (screenX - slitX)
               const waveIntensity = Math.sin(phase + time * 3 - progress * 10) * 0.5 + 0.5
-              ctx.fillStyle = `rgba(100, 150, 255, ${waveIntensity * intensity * 0.15})`
+              ctx.fillStyle = `rgba(100, 150, 255, ${String(waveIntensity * intensity * 0.15)})`
               ctx.beginPath()
               ctx.arc(x, y, 2, 0, Math.PI * 2)
               ctx.fill()
@@ -194,7 +194,7 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
           const hits = particleHitsRef.current[i]
           if (hits > 0) {
             const intensity = Math.min(hits / 20, 1)
-            ctx.fillStyle = `rgba(100, 200, 255, ${intensity})`
+            ctx.fillStyle = `rgba(100, 200, 255, ${String(intensity)})`
             ctx.fillRect(screenX - 3, (i / 100) * height, 6, height / 100)
           }
         }
@@ -216,9 +216,9 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
       ctx.fillStyle = isDark ? "#888" : "#666"
       ctx.font = "9px sans-serif"
       ctx.textAlign = "left"
-      ctx.fillText("d = " + slitSeparation + " (slit separation)", 10, height - 35)
-      ctx.fillText("λ = " + wavelength + " (wavelength)", 10, height - 22)
-      ctx.fillText("a = " + slitWidth + " (slit width)", 10, height - 9)
+      ctx.fillText("d = " + String(slitSeparation) + " (slit separation)", 10, height - 35)
+      ctx.fillText("λ = " + String(wavelength) + " (wavelength)", 10, height - 22)
+      ctx.fillText("a = " + String(slitWidth) + " (slit width)", 10, height - 9)
 
       animationFrameId = requestAnimationFrame(animate)
     }

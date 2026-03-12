@@ -84,7 +84,7 @@ export function PhotoelectricEffectVisualization({ isDark }: PhotoelectricEffect
       ctx.fill()
 
       // Light rays
-      ctx.strokeStyle = `rgba(255, 200, 50, ${0.3 + intensity / 200})`
+      ctx.strokeStyle = `rgba(255, 200, 50, ${String(0.3 + intensity / 200)})`
       ctx.lineWidth = 1
       for (let i = 0; i < 5; i++) {
         ctx.beginPath()
@@ -157,13 +157,13 @@ export function PhotoelectricEffectVisualization({ isDark }: PhotoelectricEffect
         }
 
         // Draw electron
-        ctx.fillStyle = `rgba(100, 200, 255, ${e.life})`
+        ctx.fillStyle = `rgba(100, 200, 255, ${String(e.life)})`
         ctx.beginPath()
         ctx.arc(e.x, e.y, 4, 0, Math.PI * 2)
         ctx.fill()
 
         // Electron trail
-        ctx.strokeStyle = `rgba(100, 200, 255, ${e.life * 0.3})`
+        ctx.strokeStyle = `rgba(100, 200, 255, ${String(e.life * 0.3)})`
         ctx.lineWidth = 1
         ctx.beginPath()
         ctx.moveTo(e.x, e.y)
