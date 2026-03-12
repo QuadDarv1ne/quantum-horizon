@@ -31,11 +31,11 @@ describe("VisualizationCanvas", () => {
   it("receives isDark prop", () => {
     vi.useFakeTimers()
 
-    render(
-      <VisualizationCanvas draw={mockDraw} isDark={true} />
-    )
+    render(<VisualizationCanvas draw={mockDraw} isDark={true} />)
 
-    // Component should be rendered without errors
+    // Advance timers to allow animation frame to execute
+    vi.advanceTimersByTime(100)
+
     // draw will be called in animation frame
     expect(mockDraw).toHaveBeenCalled()
 
