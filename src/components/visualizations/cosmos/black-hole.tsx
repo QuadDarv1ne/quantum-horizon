@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef, useCallback } from "react"
+import { useState, useRef, useCallback, useEffect } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { useVisualizationStore } from "@/stores/visualization-store"
@@ -24,8 +24,19 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
   const [showAccretion, setShowAccretion] = useState(true)
   const [showHawking, setShowHawking] = useState(false)
   const [showDoppler, setShowDoppler] = useState(true)
+  const [showLensing, setShowLensing] = useState(true)
   const rotationRef = useRef(0)
   const gradientCache = useRef<GradientCache | null>(null)
+  const starsRef = useRef<Array<{ x: number; y: number; size: number }>>([])
+
+  // Generate background stars once
+  useEffect(() => {
+    starsRef.current = Array.from({ length: 150 }, () => ({
+      x: Math.random(),
+      y: Math.random(),
+      size: Math.random() * 1.5 + 0.5,
+    }))
+  }, [])
 
   const draw = useCallback(
     (
@@ -42,6 +53,11 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
       // Clear canvas
       ctx.fillStyle = isDarkMode ? "#000000" : "#0f172a"
       ctx.fillRect(0, 0, width, height)
+
+      // Draw gravitationally lensed background stars
+      if (showLensing) {
+        drawLensedStars(ctx, centerX, centerY, eventHorizonRadius, starsRef.current)
+      }
 
       // Schwarzschild radius: r_s = 2GM/c²
       const M = mass * M_SUN
@@ -110,7 +126,7 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
       ctx.font = "12px monospace"
       ctx.fillText("r_s = 2GM/c²", centerX, 30)
     },
-    [mass, isPlaying, animationSpeed, showAccretion, showHawking, showDoppler]
+    [mass, isPlaying, animationSpeed, showAccretion, showHawking, showDoppler, showLensing]
   )
 
   return (
@@ -172,6 +188,16 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
               }}
             />
             Doppler Effect
+          </label>
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={showLensing}
+              onChange={(e) => {
+                setShowLensing(e.target.checked)
+              }}
+            />
+            Gravitational Lensing
           </label>
         </div>
       </div>
@@ -258,4 +284,56 @@ function drawHawkingRadiation(
     ctx.fillStyle = "rgba(139, 92, 246, 0.8)"
     ctx.fill()
   }
+}
+
+function drawLensedStars(
+  ctx: CanvasRenderingContext2D,
+  centerX: number,
+  centerY: number,
+  blackHoleRadius: number,
+  stars: Array<{ x: number; y: number; size: number }>
+) {
+  const lensingRadius = blackHoleRadius * 2.5
+
+  ctx.fillStyle = "rgba(255, 255, 255, 0.6)"
+  for (const star of stars) {
+    const starX = star.x * ctx.canvas.width
+    const starY = star.y * ctx.canvas.height
+
+    const dx = starX - centerX
+    const dy = starY - centerY
+    const distance = Math.sqrt(dx * dx + dy * dy)
+
+    if (distance < blackHoleRadius) continue
+
+    const bendFactor = Math.max(0, 1 - distance / (lensingRadius * 2))
+    const bendAmount = bendFactor * blackHoleRadius * 0.5
+
+    const angle = Math.atan2(dy, dx)
+    const lensedX = centerX + Math.cos(angle) * (distance + bendAmount)
+    const lensedY = centerY + Math.sin(angle) * (distance + bendAmount)
+
+    const stretchedSize = star.size * (1 + bendFactor * 0.5)
+
+    ctx.beginPath()
+    ctx.arc(lensedX, lensedY, stretchedSize, 0, Math.PI * 2)
+    ctx.fill()
+  }
+
+  const photonRingGradient = ctx.createRadialGradient(
+    centerX,
+    centerY,
+    blackHoleRadius * 1.2,
+    centerX,
+    centerY,
+    lensingRadius
+  )
+  photonRingGradient.addColorStop(0, "rgba(255, 255, 255, 0.15)")
+  photonRingGradient.addColorStop(0.5, "rgba(255, 255, 255, 0.05)")
+  photonRingGradient.addColorStop(1, "rgba(255, 255, 255, 0)")
+
+  ctx.fillStyle = photonRingGradient
+  ctx.beginPath()
+  ctx.arc(centerX, centerY, lensingRadius, 0, Math.PI * 2)
+  ctx.fill()
 }
