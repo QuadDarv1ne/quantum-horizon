@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { signIn } from "next-auth/react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -10,66 +10,75 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast"
 
-export default function SignInPage() {
+export default function SignUpPage() {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const { toast } = useToast()
 
   const [isLoading, setIsLoading] = useState(false)
+  const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-
-  const callbackUrl = searchParams.get("callbackUrl") ?? "/"
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError(null)
 
     try {
-      const result = await signIn("credentials", {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      })
+
+      const data = (await response.json()) as { error?: string }
+
+      if (!response.ok) {
+        throw new Error(data.error ?? "Ошибка регистрации")
+      }
+
+      toast({
+        title: "Успешно",
+        description: "Аккаунт создан. Теперь войдите.",
+      })
+
+      // Автоматический вход
+      const signInResult = await signIn("credentials", {
         email,
         password,
         redirect: false,
       })
 
-      if (result?.error) {
-        toast({
-          variant: "destructive",
-          title: "Ошибка входа",
-          description: result.error,
-        })
+      if (signInResult?.error) {
+        router.push("/auth/signin")
       } else {
-        toast({
-          title: "Успешный вход",
-          description: "Добро пожаловать!",
-        })
-        router.push(callbackUrl)
-        router.refresh()
+        router.push("/")
       }
-    } catch {
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Ошибка регистрации")
       toast({
         variant: "destructive",
         title: "Ошибка",
-        description: "Произошла ошибка при входе",
+        description: err instanceof Error ? err.message : "Ошибка регистрации",
       })
     } finally {
       setIsLoading(false)
     }
   }
 
-  const handleOAuthSignIn = async (provider: string) => {
+  const handleOAuthSignUp = async (provider: string) => {
     setIsLoading(true)
-    await signIn(provider, { callbackUrl })
-    setIsLoading(false)
+    await signIn(provider, { callbackUrl: "/" })
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 p-4">
       <Card className="w-full max-w-md bg-slate-900/80 border-slate-700 text-white backdrop-blur-sm">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">⧫ Quantum Horizon</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">⧫ Регистрация</CardTitle>
           <CardDescription className="text-slate-400 text-center">
-            Войдите для сохранения прогресса
+            Создайте аккаунт для сохранения прогресса
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -78,7 +87,9 @@ export default function SignInPage() {
             <Button
               variant="outline"
               className="w-full bg-slate-800 border-slate-600 hover:bg-slate-700"
-              onClick={() => void handleOAuthSignIn("google")}
+              onClick={() => {
+                void handleOAuthSignUp("google")
+              }}
               disabled={isLoading}
             >
               <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
@@ -104,7 +115,9 @@ export default function SignInPage() {
             <Button
               variant="outline"
               className="w-full bg-slate-800 border-slate-600 hover:bg-slate-700"
-              onClick={() => void handleOAuthSignIn("github")}
+              onClick={() => {
+                void handleOAuthSignUp("github")
+              }}
               disabled={isLoading}
             >
               <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -119,12 +132,31 @@ export default function SignInPage() {
               <div className="w-full border-t border-slate-700" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-slate-900 px-2 text-slate-400">Или войдите с Email</span>
+              <span className="bg-slate-900 px-2 text-slate-400">Или через Email</span>
             </div>
           </div>
 
-          {/* Форма входа */}
-          <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
+          {/* Форма регистрации */}
+          <form
+            onSubmit={(e) => {
+              void handleSubmit(e)
+            }}
+            className="space-y-4"
+          >
+            <div className="space-y-2">
+              <Label htmlFor="name">Имя (необязательно)</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Иван Иванов"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value)
+                }}
+                disabled={isLoading}
+                className="bg-slate-800 border-slate-600"
+              />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -150,46 +182,42 @@ export default function SignInPage() {
                   setPassword(e.target.value)
                 }}
                 required
+                minLength={8}
                 disabled={isLoading}
                 className="bg-slate-800 border-slate-600"
               />
+              <p className="text-xs text-slate-400">Минимум 8 символов</p>
             </div>
+
+            {error && (
+              <Alert variant="destructive" className="bg-red-950/50 border-red-800">
+                <AlertDescription className="text-slate-300">{error}</AlertDescription>
+              </Alert>
+            )}
+
             <Button
               type="submit"
               className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
               disabled={isLoading}
               onClick={(e) => {
-                const button = e.target as HTMLElement
-                if (button.closest("button[type='submit']")) {
-                  void handleSubmit(e as unknown as React.SyntheticEvent)
-                }
+                void handleSubmit(e)
               }}
             >
-              {isLoading ? "Вход..." : "Войти"}
+              {isLoading ? "Регистрация..." : "Зарегистрироваться"}
             </Button>
           </form>
 
-          {/* Сообщения об ошибках */}
-          {searchParams.get("error") && (
-            <Alert variant="destructive" className="bg-red-950/50 border-red-800">
-              <AlertDescription>
-                {searchParams.get("error") === "OAuthAccountNotLinked"
-                  ? "Этот email уже используется другим способом входа"
-                  : "Произошла ошибка при входе"}
-              </AlertDescription>
-            </Alert>
-          )}
-
-          <div className="text-center">
-            <a href="/auth/forgot-password" className="text-xs text-indigo-400 hover:underline">
-              Забыли пароль?
-            </a>
-          </div>
-
           <p className="text-xs text-center text-slate-500">
-            Нет аккаунта?{" "}
-            <a href="/auth/signup" className="text-indigo-400 hover:underline">
-              Зарегистрироваться
+            Уже есть аккаунт?{" "}
+            <a
+              href="/auth/signin"
+              onClick={(e) => {
+                e.preventDefault()
+                router.push("/auth/signin")
+              }}
+              className="text-indigo-400 hover:underline"
+            >
+              Войти
             </a>
           </p>
 
