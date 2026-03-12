@@ -1,11 +1,12 @@
 "use client"
 
-import { useRef, useState, useCallback } from "react"
+import { useRef, useState, useCallback, useEffect } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { useVisualizationStore, selectWaveFunctionSettings } from "@/stores/visualization-store"
+import { QueryParam } from "@/hooks/use-url-sync"
 
 interface WaveFunctionVisualizationProps {
   isDark: boolean
@@ -20,6 +21,13 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
 
   const timeRef = useRef(0)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
+
+  useEffect(() => {
+    const n = QueryParam.getNumber("wf.n", quantumNumber)
+    if (n !== quantumNumber) setQuantumNumber(n as 1 | 2 | 3 | 4 | 5)
+    QueryParam.setNumber("wf.n", quantumNumber)
+    QueryParam.setBoolean("wf.prob", showProbability)
+  }, [quantumNumber, showProbability, setQuantumNumber])
 
   const draw = useCallback(
     (
@@ -351,6 +359,17 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
             follows |ψ|² distribution.
           </p>
         )}
+        <Button
+          onClick={() => {
+            const url = window.location.href
+            void navigator.clipboard.writeText(url)
+          }}
+          variant="outline"
+          size="sm"
+          className="w-full mt-2"
+        >
+          🔗 Copy URL
+        </Button>
       </div>
     </div>
   )

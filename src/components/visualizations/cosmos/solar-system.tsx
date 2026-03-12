@@ -1,11 +1,12 @@
 "use client"
 
-import { useCallback, useMemo, useRef, useState } from "react"
+import { useCallback, useMemo, useRef, useState, useEffect } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { useVisualizationStore } from "@/stores/visualization-store"
+import { QueryParam } from "@/hooks/use-url-sync"
 
 interface SolarSystemVisualizationProps {
   isDark: boolean
@@ -40,6 +41,14 @@ export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationPro
   const timeRef = useRef(0)
   const bgGradientRef = useRef<CanvasGradient | null>(null)
   const sunGlowRef = useRef<CanvasGradient | null>(null)
+
+  useEffect(() => {
+    QueryParam.setNumber("ss.speed", speed)
+    QueryParam.setNumber("ss.zoom", zoom)
+    QueryParam.setBoolean("ss.orbits", showOrbits)
+    QueryParam.setBoolean("ss.labels", showLabels)
+    if (selectedPlanet) QueryParam.setString("ss.planet", selectedPlanet)
+  }, [speed, zoom, showOrbits, showLabels, selectedPlanet])
 
   // Planet data (relative to Earth)
   const planets = useMemo<Planet[]>(
@@ -428,6 +437,17 @@ export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationPro
         <p className="text-cyan-400 mt-1">
           Период обращения Земли = 1 год. Нептун делает оборот за ~165 лет!
         </p>
+        <Button
+          onClick={() => {
+            const url = window.location.href
+            void navigator.clipboard.writeText(url)
+          }}
+          variant="outline"
+          size="sm"
+          className="w-full mt-2"
+        >
+          🔗 Copy URL
+        </Button>
       </div>
     </div>
   )
