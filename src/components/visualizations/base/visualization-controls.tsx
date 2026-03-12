@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 
@@ -20,6 +21,26 @@ export function VisualizationControls({
   onReset,
   isDark,
 }: VisualizationControlsProps) {
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.code === "Space") {
+        e.preventDefault()
+        onTogglePlay()
+      } else if (e.code === "KeyR" && onReset) {
+        e.preventDefault()
+        onReset()
+      }
+      return
+    },
+    [onTogglePlay, onReset]
+  )
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown)
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [handleKeyDown])
   return (
     <div
       className={`flex items-center gap-4 p-3 rounded-lg ${
@@ -29,7 +50,9 @@ export function VisualizationControls({
       <Button
         variant="outline"
         size="sm"
-        onClick={() => { onTogglePlay() }}
+        onClick={() => {
+          onTogglePlay()
+        }}
         className={isDark ? "bg-gray-700 hover:bg-gray-600" : ""}
       >
         {isPlaying ? (
@@ -65,7 +88,9 @@ export function VisualizationControls({
           min={0.1}
           max={2}
           step={0.1}
-          onValueChange={(v) => { onSpeedChange(v[0]) }}
+          onValueChange={(v) => {
+            onSpeedChange(v[0])
+          }}
           className="flex-1"
         />
       </div>
@@ -80,6 +105,15 @@ export function VisualizationControls({
           Reset
         </Button>
       )}
+      <div className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}>
+        <kbd className="px-1.5 py-0.5 rounded bg-gray-700/50">Space</kbd> Play/Pause
+        {onReset && (
+          <>
+            {" "}
+            |<kbd className="px-1.5 py-0.5 rounded bg-gray-700/50">R</kbd> Reset
+          </>
+        )}
+      </div>
     </div>
   )
 }
