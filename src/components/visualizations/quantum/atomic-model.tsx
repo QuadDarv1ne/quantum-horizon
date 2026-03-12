@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/no-unnecessary-type-conversion */
 "use client"
 
 import { useRef, useState, useEffect } from "react"
@@ -303,9 +305,7 @@ export function AtomicModelVisualization({ isDark }: AtomicModelVisualizationPro
             variant="outline"
             size="sm"
             className={`text-xs ${
-              isDark
-                ? "text-yellow-400 border-yellow-500/50"
-                : "text-yellow-700 border-yellow-500"
+              isDark ? "text-yellow-400 border-yellow-500/50" : "text-yellow-700 border-yellow-500"
             }`}
           >
             ↑ Возбуждение

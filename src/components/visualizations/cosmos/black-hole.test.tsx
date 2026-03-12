@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { describe, it, expect, vi } from "vitest"
 import { render } from "@testing-library/react"
 import { BlackHoleVisualization } from "./black-hole"

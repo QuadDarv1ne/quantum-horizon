@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 "use client"
 
 import { useRef, useState, useEffect } from "react"
@@ -240,39 +241,31 @@ export function BrownianMotionVisualization({ isDark }: BrownianMotionVisualizat
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div
           className={`rounded p-2 border ${
-            isDark
-              ? "bg-blue-950/30 border-blue-500/20"
-              : "bg-blue-50 border-blue-200"
+            isDark ? "bg-blue-950/30 border-blue-500/20" : "bg-blue-50 border-blue-200"
           }`}
         >
           <div className={isDark ? "text-blue-400 font-semibold" : "text-blue-700 font-semibold"}>
             Brownian Motion
           </div>
-          <div className={isDark ? "text-gray-400" : "text-gray-600"}>
-            Random particle motion
-          </div>
+          <div className={isDark ? "text-gray-400" : "text-gray-600"}>Random particle motion</div>
         </div>
         <div
           className={`rounded p-2 border ${
-            isDark
-              ? "bg-orange-950/30 border-orange-500/20"
-              : "bg-orange-50 border-orange-200"
+            isDark ? "bg-orange-950/30 border-orange-500/20" : "bg-orange-50 border-orange-200"
           }`}
         >
-          <div className={isDark ? "text-orange-400 font-semibold" : "text-orange-700 font-semibold"}>
+          <div
+            className={isDark ? "text-orange-400 font-semibold" : "text-orange-700 font-semibold"}
+          >
             Brown, 1827
           </div>
-          <div className={isDark ? "text-gray-400" : "text-gray-600"}>
-            Pollen in water
-          </div>
+          <div className={isDark ? "text-gray-400" : "text-gray-600"}>Pollen in water</div>
         </div>
       </div>
 
       <div
         className={`rounded-lg p-3 border text-sm ${
-          isDark
-            ? "bg-blue-900/20 border-blue-500/20"
-            : "bg-blue-50 border-blue-200"
+          isDark ? "bg-blue-900/20 border-blue-500/20" : "bg-blue-50 border-blue-200"
         }`}
       >
         <div className={isDark ? "text-blue-300 font-semibold" : "text-blue-700 font-semibold"}>

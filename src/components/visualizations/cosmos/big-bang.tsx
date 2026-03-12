@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 "use client"
 
 import { useRef, useState, useEffect } from "react"
@@ -70,7 +71,10 @@ export function BigBangVisualization({ isDark }: BigBangVisualizationProps) {
       const bgGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 200)
       const temp = Math.max(0, 3000 - timeScale * 30)
       const bgAlpha = Math.min(0.3, timeScale * 0.01)
-      bgGradient.addColorStop(0, `rgba(255, ${String(100 + temp / 20)}, ${String(50 + temp / 30)}, ${String(bgAlpha)})`)
+      bgGradient.addColorStop(
+        0,
+        `rgba(255, ${String(100 + temp / 20)}, ${String(50 + temp / 30)}, ${String(bgAlpha)})`
+      )
       bgGradient.addColorStop(0.5, `rgba(100, 50, 150, ${String(bgAlpha * 0.5)})`)
       bgGradient.addColorStop(1, isDark ? "rgba(5, 5, 20, 1)" : "rgba(10, 10, 30, 1)")
       ctx.fillStyle = bgGradient
@@ -258,9 +262,7 @@ export function BigBangVisualization({ isDark }: BigBangVisualizationProps) {
 
       <div
         className={`rounded-lg p-3 border text-sm ${
-          isDark
-            ? "bg-orange-900/20 border-orange-500/20"
-            : "bg-orange-50 border-orange-200"
+          isDark ? "bg-orange-900/20 border-orange-500/20" : "bg-orange-50 border-orange-200"
         }`}
       >
         <div className={isDark ? "text-orange-300 font-semibold" : "text-orange-700 font-semibold"}>

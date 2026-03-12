@@ -1,4 +1,9 @@
 // Vitest setup file
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-deprecated */
+
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import "@testing-library/jest-dom/vitest"
 import { afterEach, vi } from "vitest"
 import { cleanup } from "@testing-library/react"
@@ -130,15 +135,14 @@ if (typeof customElements !== "undefined" && !customElements.get("canvas-mock"))
 }
 
 // Override createElement to return canvas mock for canvas elements
-// eslint-disable-next-line @typescript-eslint/unbound-method
+
 const originalCreateElement = document.createElement.bind(document)
 
-// eslint-disable-next-line @typescript-eslint/no-deprecated
 document.createElement = function (tagName: string, options?: ElementCreationOptions) {
   if (tagName.toLowerCase() === "canvas") {
     return new HTMLCanvasElementMock()
   }
-  // eslint-disable-next-line @typescript-eslint/no-deprecated
+
   return originalCreateElement(tagName, options)
 } as typeof document.createElement
 
@@ -159,15 +163,14 @@ Object.defineProperty(global, "matchMedia", {
 
 // Polyfill for IntersectionObserver
 class IntersectionObserverPolyfill {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   observe() {
     // Polyfill for testing
   }
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+
   unobserve() {
     // Polyfill for testing
   }
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+
   disconnect() {
     // Polyfill for testing
   }
@@ -176,22 +179,21 @@ class IntersectionObserverPolyfill {
 global.IntersectionObserver = IntersectionObserverPolyfill as unknown as typeof IntersectionObserver
 
 // Polyfill for localStorage
-// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+
 const localStorageMock = {
   store: {} as Record<string, string>,
   clear() {
     this.store = {}
   },
   getItem(key: string) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/prefer-nullish-coalescing
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return this.store[key] || null
   },
   setItem(key: string, value: string) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     this.store[key] = value
   },
   removeItem(key: string) {
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete, @typescript-eslint/no-unsafe-member-access
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete this.store[key]
   },
   get length() {
@@ -199,7 +201,7 @@ const localStorageMock = {
     return Object.keys(this.store).length
   },
   key(index: number) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return Object.keys(this.store)[index] || null
   },
 } as unknown as Storage

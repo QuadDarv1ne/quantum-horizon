@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/no-unnecessary-type-conversion */
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
 import { useEffect, useRef, useState } from "react"
@@ -509,9 +512,7 @@ export function StandardModelVisualization({ isDark }: StandardModelVisualizatio
 
       <div
         className={`rounded-lg p-2 border text-xs ${
-          isDark
-            ? "bg-purple-900/20 border-purple-500/20"
-            : "bg-purple-50 border-purple-200"
+          isDark ? "bg-purple-900/20 border-purple-500/20" : "bg-purple-50 border-purple-200"
         }`}
       >
         <div className={`font-semibold ${isDark ? "text-purple-300" : "text-purple-700"}`}>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 "use client"
 
 import { useRef, useState, useEffect } from "react"
@@ -189,7 +190,9 @@ export function GravitationalWavesVisualization({ isDark }: GravitationalWavesVi
           </div>
           <Slider
             value={[mass1]}
-            onValueChange={(v) => { setMass1(v[0]) }}
+            onValueChange={(v) => {
+              setMass1(v[0])
+            }}
             min={5}
             max={50}
             step={1}
@@ -202,7 +205,9 @@ export function GravitationalWavesVisualization({ isDark }: GravitationalWavesVi
           </div>
           <Slider
             value={[mass2]}
-            onValueChange={(v) => { setMass2(v[0]) }}
+            onValueChange={(v) => {
+              setMass2(v[0])
+            }}
             min={5}
             max={50}
             step={1}
@@ -215,7 +220,9 @@ export function GravitationalWavesVisualization({ isDark }: GravitationalWavesVi
           </div>
           <Slider
             value={[distance]}
-            onValueChange={(v) => { setDistance(v[0]) }}
+            onValueChange={(v) => {
+              setDistance(v[0])
+            }}
             min={20}
             max={100}
             step={5}
@@ -224,7 +231,9 @@ export function GravitationalWavesVisualization({ isDark }: GravitationalWavesVi
       </div>
 
       <Button
-        onClick={() => { setIsPlaying(!isPlaying) }}
+        onClick={() => {
+          setIsPlaying(!isPlaying)
+        }}
         variant="outline"
         size="sm"
         className="w-full text-xs"

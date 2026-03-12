@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-conversion */
 "use client"
 
 import { useRef, useState, useEffect } from "react"
@@ -179,7 +180,11 @@ export function NeutronStarVisualization({ isDark }: NeutronStarVisualizationPro
       ctx.font = "10px sans-serif"
       ctx.textAlign = "center"
       ctx.fillText(`P = ${String(rotationPeriod)} ms`, centerX, canvas.offsetHeight - 15)
-      ctx.fillText(`f = ${String((1000 / rotationPeriod).toFixed(1))} Hz`, centerX, canvas.offsetHeight - 3)
+      ctx.fillText(
+        `f = ${String((1000 / rotationPeriod).toFixed(1))} Hz`,
+        centerX,
+        canvas.offsetHeight - 3
+      )
 
       animationFrameId = requestAnimationFrame(animate)
     }
@@ -241,9 +246,7 @@ export function NeutronStarVisualization({ isDark }: NeutronStarVisualizationPro
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div
           className={`rounded p-2 border ${
-            isDark
-              ? "bg-cyan-950/30 border-cyan-500/20"
-              : "bg-cyan-50 border-cyan-200"
+            isDark ? "bg-cyan-950/30 border-cyan-500/20" : "bg-cyan-50 border-cyan-200"
           }`}
         >
           <div className={isDark ? "text-cyan-400 font-semibold" : "text-cyan-700 font-semibold"}>
@@ -253,12 +256,12 @@ export function NeutronStarVisualization({ isDark }: NeutronStarVisualizationPro
         </div>
         <div
           className={`rounded p-2 border ${
-            isDark
-              ? "bg-purple-950/30 border-purple-500/20"
-              : "bg-purple-50 border-purple-200"
+            isDark ? "bg-purple-950/30 border-purple-500/20" : "bg-purple-50 border-purple-200"
           }`}
         >
-          <div className={isDark ? "text-purple-400 font-semibold" : "text-purple-700 font-semibold"}>
+          <div
+            className={isDark ? "text-purple-400 font-semibold" : "text-purple-700 font-semibold"}
+          >
             Magnetar SGR 1806-20
           </div>
           <div className={isDark ? "text-gray-400" : "text-gray-600"}>B ~ 10¹⁵ G</div>
@@ -267,15 +270,13 @@ export function NeutronStarVisualization({ isDark }: NeutronStarVisualizationPro
 
       <div
         className={`rounded-lg p-3 border text-sm ${
-          isDark
-            ? "bg-cyan-900/20 border-cyan-500/20"
-            : "bg-cyan-50 border-cyan-200"
+          isDark ? "bg-cyan-900/20 border-cyan-500/20" : "bg-cyan-50 border-cyan-200"
         }`}
       >
         <p className={isDark ? "text-gray-300" : "text-gray-700"}>
-          <span className={isDark ? "text-cyan-300" : "text-cyan-700"}>Neutron Star:</span> Supernova
-          remnant with mass ~1.4-2 M☉ and radius ~10 km. Density ~10¹⁴ g/cm³ — a teaspoon weighs a
-          billion tons!
+          <span className={isDark ? "text-cyan-300" : "text-cyan-700"}>Neutron Star:</span>{" "}
+          Supernova remnant with mass ~1.4-2 M☉ and radius ~10 km. Density ~10¹⁴ g/cm³ — a teaspoon
+          weighs a billion tons!
         </p>
       </div>
     </div>

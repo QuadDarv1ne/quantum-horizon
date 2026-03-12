@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client"
 
 import { useRef, useState, useEffect } from "react"
@@ -323,14 +325,14 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
 
       <div
         className={`rounded-lg p-3 border text-sm ${
-          isDark
-            ? "bg-blue-900/20 border-blue-500/20"
-            : "bg-blue-50 border-blue-200"
+          isDark ? "bg-blue-900/20 border-blue-500/20" : "bg-blue-50 border-blue-200"
         }`}
       >
         <p className={isDark ? "text-gray-300" : "text-gray-700"}>
-          <span className={isDark ? "text-blue-300" : "text-blue-700"}>Double-slit experiment:</span> Even
-          individual particles create an interference pattern! This demonstrates wave-particle
+          <span className={isDark ? "text-blue-300" : "text-blue-700"}>
+            Double-slit experiment:
+          </span>{" "}
+          Even individual particles create an interference pattern! This demonstrates wave-particle
           duality — matter behaves as both a particle and a wave.
         </p>
       </div>

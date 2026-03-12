@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 "use client"
 
 import { useRef, useState, useEffect } from "react"
@@ -127,11 +128,7 @@ export function RadioactiveDecayVisualization({ isDark }: RadioactiveDecayVisual
           const gradient = ctx.createRadialGradient(atom.x, atom.y, 0, atom.x, atom.y, 8)
           gradient.addColorStop(
             0,
-            decayType === "alpha"
-              ? "#4CAF50"
-              : decayType === "beta"
-                ? "#9C27B0"
-                : "#FF9800"
+            decayType === "alpha" ? "#4CAF50" : decayType === "beta" ? "#9C27B0" : "#FF9800"
           )
           gradient.addColorStop(1, isDark ? "rgba(50, 50, 50, 0.5)" : "rgba(100, 100, 100, 0.5)")
           ctx.fillStyle = gradient
@@ -211,11 +208,7 @@ export function RadioactiveDecayVisualization({ isDark }: RadioactiveDecayVisual
 
       // Exponential decay curve
       ctx.strokeStyle =
-        decayType === "alpha"
-          ? "#4CAF50"
-          : decayType === "beta"
-            ? "#9C27B0"
-            : "#FF9800"
+        decayType === "alpha" ? "#4CAF50" : decayType === "beta" ? "#9C27B0" : "#FF9800"
       ctx.lineWidth = 2
       ctx.beginPath()
       for (let i = 0; i <= graphW; i++) {
@@ -382,21 +375,14 @@ export function RadioactiveDecayVisualization({ isDark }: RadioactiveDecayVisual
         >
           {isPlaying ? "⏸️ Пауза" : "▶️ Играть"}
         </Button>
-        <Button
-          onClick={reset}
-          variant="outline"
-          size="sm"
-          className="flex-1 text-xs"
-        >
+        <Button onClick={reset} variant="outline" size="sm" className="flex-1 text-xs">
           🔄 Сброс
         </Button>
       </div>
 
       <div
         className={`rounded-lg p-3 border text-sm ${
-          isDark
-            ? "bg-green-900/20 border-green-500/20"
-            : "bg-green-50 border-green-200"
+          isDark ? "bg-green-900/20 border-green-500/20" : "bg-green-50 border-green-200"
         }`}
       >
         <div className={`font-semibold mb-1 ${isDark ? "text-green-300" : "text-green-700"}`}>

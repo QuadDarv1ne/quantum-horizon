@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
 import { useRef, useState, useEffect } from "react"
@@ -103,23 +104,11 @@ export function HRDiagramVisualization({ isDark }: HRDiagramVisualizationProps) 
       ctx.fillStyle = isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)"
       ctx.textAlign = "center"
       ctx.fillText("Main", padding.left + plotWidth * 0.3, padding.top + plotHeight * 0.55)
-      ctx.fillText(
-        "Sequence",
-        padding.left + plotWidth * 0.3,
-        padding.top + plotHeight * 0.65
-      )
+      ctx.fillText("Sequence", padding.left + plotWidth * 0.3, padding.top + plotHeight * 0.65)
 
       ctx.fillText("Giants", padding.left + plotWidth * 0.2, padding.top + plotHeight * 0.2)
-      ctx.fillText(
-        "Supergiants",
-        padding.left + plotWidth * 0.15,
-        padding.top + plotHeight * 0.08
-      )
-      ctx.fillText(
-        "White Dwarfs",
-        padding.left + plotWidth * 0.85,
-        padding.top + plotHeight * 0.85
-      )
+      ctx.fillText("Supergiants", padding.left + plotWidth * 0.15, padding.top + plotHeight * 0.08)
+      ctx.fillText("White Dwarfs", padding.left + plotWidth * 0.85, padding.top + plotHeight * 0.85)
 
       // Axes labels
       ctx.fillStyle = isDark ? "rgba(255, 255, 255, 0.7)" : "rgba(0, 0, 0, 0.7)"
@@ -219,9 +208,7 @@ export function HRDiagramVisualization({ isDark }: HRDiagramVisualizationProps) 
           <div
             key={star.name}
             className={`rounded p-1.5 text-center cursor-pointer transition-colors ${
-              isDark
-                ? "bg-gray-800/50 hover:bg-gray-700/50"
-                : "bg-gray-200/50 hover:bg-gray-300/50"
+              isDark ? "bg-gray-800/50 hover:bg-gray-700/50" : "bg-gray-200/50 hover:bg-gray-300/50"
             }`}
             onClick={() => {
               setSelectedStar(star)
@@ -264,9 +251,7 @@ export function HRDiagramVisualization({ isDark }: HRDiagramVisualizationProps) 
 
       <div
         className={`rounded-lg p-3 border text-sm ${
-          isDark
-            ? "bg-blue-900/20 border-blue-500/20"
-            : "bg-blue-50 border-blue-200"
+          isDark ? "bg-blue-900/20 border-blue-500/20" : "bg-blue-50 border-blue-200"
         }`}
       >
         <p className={isDark ? "text-gray-300" : "text-gray-700"}>

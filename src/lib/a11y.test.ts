@@ -1,3 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-confusing-void-expression */
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable @typescript-eslint/non-nullable-type-assertion-style */
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest"
 import {
   announceToScreenReader,

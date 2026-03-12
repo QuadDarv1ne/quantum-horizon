@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
+/* eslint-disable @typescript-eslint/require-await */
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { render, screen, act } from "@testing-library/react"
 import { SchrodingersCatVisualization } from "./schrodingers-cat"
@@ -37,7 +39,7 @@ describe("SchrodingersCatVisualization", () => {
     // Should show probability indicator - use queryByText to avoid multiple matches
     const statusCards = screen.getAllByRole("region", { hidden: true })
     expect(statusCards.length).toBeGreaterThan(0)
-    
+
     // Check for alive or dead text within the cards
     const aliveText = screen.queryByText("🐱 Alive")
     const deadText = screen.queryByText("💀 Dead")

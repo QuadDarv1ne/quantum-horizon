@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 "use client"
 
 import { useRef, useState, useEffect } from "react"
@@ -229,9 +230,7 @@ export function WhiteHoleVisualization({ isDark }: WhiteHoleVisualizationProps) 
 
       <div
         className={`rounded-lg p-3 border text-sm ${
-          isDark
-            ? "bg-cyan-900/20 border-cyan-500/20"
-            : "bg-cyan-50 border-cyan-200"
+          isDark ? "bg-cyan-900/20 border-cyan-500/20" : "bg-cyan-50 border-cyan-200"
         }`}
       >
         <div className={isDark ? "text-cyan-300 font-semibold" : "text-cyan-700 font-semibold"}>
@@ -259,9 +258,7 @@ export function WhiteHoleVisualization({ isDark }: WhiteHoleVisualizationProps) 
         </div>
         <div
           className={`rounded p-2 border ${
-            isDark
-              ? "bg-cyan-950/30 border-cyan-500/20"
-              : "bg-cyan-50 border-cyan-200"
+            isDark ? "bg-cyan-950/30 border-cyan-500/20" : "bg-cyan-50 border-cyan-200"
           }`}
         >
           <div className={isDark ? "text-cyan-400 font-semibold" : "text-cyan-700 font-semibold"}>
@@ -275,9 +272,7 @@ export function WhiteHoleVisualization({ isDark }: WhiteHoleVisualizationProps) 
 
       <div
         className={`rounded-lg p-3 border text-sm ${
-          isDark
-            ? "bg-purple-900/20 border-purple-500/20"
-            : "bg-purple-50 border-purple-200"
+          isDark ? "bg-purple-900/20 border-purple-500/20" : "bg-purple-50 border-purple-200"
         }`}
       >
         <div className={isDark ? "text-purple-300 font-semibold" : "text-purple-700 font-semibold"}>

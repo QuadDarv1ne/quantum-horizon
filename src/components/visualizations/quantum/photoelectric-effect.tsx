@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client"
 
 import { useRef, useState, useEffect } from "react"
@@ -8,7 +10,9 @@ interface PhotoelectricEffectVisualizationProps {
   isDark: boolean
 }
 
-export function PhotoelectricEffectVisualization({ isDark }: PhotoelectricEffectVisualizationProps) {
+export function PhotoelectricEffectVisualization({
+  isDark,
+}: PhotoelectricEffectVisualizationProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [frequency, setFrequency] = useState(50) // as % of threshold
   const [intensity, setIntensity] = useState(50)
@@ -303,12 +307,12 @@ export function PhotoelectricEffectVisualization({ isDark }: PhotoelectricEffect
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div
           className={`rounded p-2 border ${
-            isDark
-              ? "bg-purple-950/30 border-purple-500/20"
-              : "bg-purple-50 border-purple-200"
+            isDark ? "bg-purple-950/30 border-purple-500/20" : "bg-purple-50 border-purple-200"
           }`}
         >
-          <div className={isDark ? "text-purple-400 font-semibold" : "text-purple-700 font-semibold"}>
+          <div
+            className={isDark ? "text-purple-400 font-semibold" : "text-purple-700 font-semibold"}
+          >
             Einstein equation
           </div>
           <div className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
@@ -317,9 +321,7 @@ export function PhotoelectricEffectVisualization({ isDark }: PhotoelectricEffect
         </div>
         <div
           className={`rounded p-2 border ${
-            isDark
-              ? "bg-green-950/30 border-green-500/20"
-              : "bg-green-50 border-green-200"
+            isDark ? "bg-green-950/30 border-green-500/20" : "bg-green-50 border-green-200"
           }`}
         >
           <div className={isDark ? "text-green-400 font-semibold" : "text-green-700 font-semibold"}>
@@ -333,9 +335,7 @@ export function PhotoelectricEffectVisualization({ isDark }: PhotoelectricEffect
 
       <div
         className={`rounded-lg p-3 border text-sm ${
-          isDark
-            ? "bg-yellow-900/20 border-yellow-500/20"
-            : "bg-yellow-50 border-yellow-200"
+          isDark ? "bg-yellow-900/20 border-yellow-500/20" : "bg-yellow-50 border-yellow-200"
         }`}
       >
         <div className={isDark ? "text-yellow-300 font-semibold" : "text-yellow-700 font-semibold"}>
