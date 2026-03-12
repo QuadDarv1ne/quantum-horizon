@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import NextAuth, { type NextAuthOptions } from "next-auth"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { db } from "@/lib/db"
 
 // Адаптер для Prisma (отключён до настройки схемы)
+// import { PrismaAdapter } from "@auth/prisma-adapter"
+// import { db } from "@/lib/db"
 // const prismaAdapter = PrismaAdapter(db)
 
 export const authOptions: NextAuthOptions = {
@@ -52,13 +53,11 @@ export const authOptions: NextAuthOptions = {
     //     }
     //   },
     // }),
-
     // Google OAuth
     // {
     //   clientId: process.env.GOOGLE_CLIENT_ID!,
     //   clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     // },
-
     // GitHub OAuth
     // {
     //   clientId: process.env.GITHUB_CLIENT_ID!,
@@ -87,14 +86,15 @@ export const authOptions: NextAuthOptions = {
 
   // Callbacks
   callbacks: {
-    async jwt({ token, user }) {
+    jwt({ token, user }) {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (user) {
         token.id = user.id
-        token.role = user.role
+        token.role = user.role as string
       }
       return token
     },
-    async session({ session, token }) {
+    session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
         session.user.role = token.role as string
@@ -105,7 +105,7 @@ export const authOptions: NextAuthOptions = {
 
   // События
   events: {
-    async createUser({ user }) {
+    createUser() {
       // Создание записи прогресса для нового пользователя
       // await db.userProgress.create({
       //   data: {
