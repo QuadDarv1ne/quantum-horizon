@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { Geist, Geist_Mono } from "next/font/google"
 import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
