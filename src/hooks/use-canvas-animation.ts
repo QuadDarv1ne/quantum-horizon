@@ -84,6 +84,12 @@ export function useCanvasAnimation(
     setupCanvas(canvas, ctx)
     ctxRef.current = ctx
 
+    // ResizeObserver для отслеживания размера canvas
+    const resizeObserver = new ResizeObserver(() => {
+      setupCanvasCallback()
+    })
+    resizeObserver.observe(canvas)
+
     // IntersectionObserver для паузы когда не виден
     let observer: IntersectionObserver | undefined
     if (pauseWhenHidden) {
@@ -95,12 +101,6 @@ export function useCanvasAnimation(
       )
       observer.observe(canvas)
     }
-
-    const handleResize = () => {
-      setupCanvasCallback()
-    }
-
-    window.addEventListener("resize", handleResize)
 
     let running = true
 
@@ -139,13 +139,13 @@ export function useCanvasAnimation(
 
     return (): void => {
       running = false
-      window.removeEventListener("resize", handleResize)
       if (animationFrameId.current !== undefined) {
         cancelAnimationFrame(animationFrameId.current)
       }
       if (observer !== undefined) {
         observer.disconnect()
       }
+      resizeObserver.disconnect()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps)
