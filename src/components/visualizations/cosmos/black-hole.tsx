@@ -48,15 +48,7 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
 
     // Draw accretion disk
     if (showAccretion) {
-      drawAccretionDisk(
-        ctx,
-        centerX,
-        centerY,
-        eventHorizonRadius,
-        rotationRef.current,
-        isDark,
-        gradientRef
-      )
+      drawAccretionDisk(ctx, centerX, centerY, eventHorizonRadius, rotationRef.current, gradientRef)
     }
 
     // Draw event horizon (black circle)
@@ -83,7 +75,7 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
 
     // Draw Hawking radiation
     if (showHawking) {
-      drawHawkingRadiation(ctx, centerX, centerY, eventHorizonRadius, rotationRef.current, isDark)
+      drawHawkingRadiation(ctx, centerX, centerY, eventHorizonRadius, rotationRef.current)
     }
 
     // Labels
@@ -165,7 +157,6 @@ function drawAccretionDisk(
   centerY: number,
   innerRadius: number,
   rotation: number,
-  _isDark: boolean,
   gradientRef: React.RefObject<CanvasGradient | null>
 ) {
   const outerRadius = innerRadius * 3
@@ -201,8 +192,7 @@ function drawHawkingRadiation(
   centerX: number,
   centerY: number,
   radius: number,
-  rotation: number,
-  _isDark: boolean
+  rotation: number
 ) {
   const particleCount = 20
 
