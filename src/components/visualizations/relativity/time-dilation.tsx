@@ -1,9 +1,11 @@
 "use client"
 
-import { useRef } from "react"
+import { useRef, useEffect } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
+import { Button } from "@/components/ui/button"
 import { useVisualizationStore, selectTimeDilationSettings } from "@/stores/visualization-store"
+import { QueryParam } from "@/hooks/use-url-sync"
 
 const c = 299792458 // Speed of light
 
@@ -16,6 +18,13 @@ export function TimeDilationVisualization({ isDark }: TimeDilationVisualizationP
   const { isPlaying, animationSpeed, setVelocity, togglePlaying } = useVisualizationStore()
 
   const timeOffset = useRef(0)
+
+  useEffect(() => {
+    const v = QueryParam.getNumber("td.velocity", velocity)
+    if (v !== velocity) setVelocity(Math.min(Math.max(v, 0.1), 0.99))
+    QueryParam.setNumber("td.velocity", velocity)
+    QueryParam.setBoolean("td.clock", showClock)
+  }, [velocity, showClock, setVelocity])
 
   const draw = (
     ctx: CanvasRenderingContext2D,
@@ -128,6 +137,17 @@ export function TimeDilationVisualization({ isDark }: TimeDilationVisualizationP
           <span>0%</span>
           <span>99%</span>
         </div>
+        <Button
+          onClick={() => {
+            const url = window.location.href
+            void navigator.clipboard.writeText(url)
+          }}
+          variant="outline"
+          size="sm"
+          className="w-full mt-2"
+        >
+          🔗 Copy URL
+        </Button>
       </div>
     </div>
   )

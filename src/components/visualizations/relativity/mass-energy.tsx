@@ -1,8 +1,11 @@
 "use client"
 
+import { useEffect } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
+import { Button } from "@/components/ui/button"
 import { useVisualizationStore } from "@/stores/visualization-store"
+import { QueryParam } from "@/hooks/use-url-sync"
 
 const _c = 299792458 // Speed of light
 
@@ -13,6 +16,10 @@ interface MassEnergyVisualizationProps {
 export function MassEnergyVisualization({ isDark }: MassEnergyVisualizationProps) {
   const { isPlaying, animationSpeed } = useVisualizationStore()
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
+
+  useEffect(() => {
+    QueryParam.setBoolean("me.playing", isPlaying)
+  }, [isPlaying])
 
   const draw = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
     const centerX = width / 2
@@ -150,6 +157,17 @@ export function MassEnergyVisualization({ isDark }: MassEnergyVisualizationProps
             </span>
           </div>
         </div>
+        <Button
+          onClick={() => {
+            const url = window.location.href
+            void navigator.clipboard.writeText(url)
+          }}
+          variant="outline"
+          size="sm"
+          className="w-full mt-2"
+        >
+          🔗 Copy URL
+        </Button>
       </div>
     </div>
   )
