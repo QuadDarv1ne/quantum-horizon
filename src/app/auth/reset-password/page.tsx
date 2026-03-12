@@ -87,11 +87,12 @@ export default function ResetPasswordPage() {
 
       router.push("/auth/signin")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Ошибка сброса пароля")
+      const errorMessage = err instanceof Error ? err.message : "Ошибка сброса пароля"
+      setError(errorMessage)
       toast({
         variant: "destructive",
         title: "Ошибка",
-        description: err instanceof Error ? err.message : "Ошибка сброса пароля",
+        description: errorMessage,
       })
     } finally {
       setIsLoading(false)
@@ -150,12 +151,7 @@ export default function ResetPasswordPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <form
-            onSubmit={(e) => {
-              void handleSubmit(e)
-            }}
-            className="space-y-4"
-          >
+          <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="password">Новый пароль</Label>
               <Input
@@ -169,6 +165,7 @@ export default function ResetPasswordPage() {
                 minLength={8}
                 disabled={isLoading}
                 className="bg-slate-800 border-slate-600"
+                autoComplete="new-password"
               />
             </div>
             <div className="space-y-2">
@@ -184,6 +181,7 @@ export default function ResetPasswordPage() {
                 minLength={8}
                 disabled={isLoading}
                 className="bg-slate-800 border-slate-600"
+                autoComplete="new-password"
               />
             </div>
 

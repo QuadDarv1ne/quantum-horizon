@@ -7,29 +7,64 @@ interface SendEmailOptions {
   text?: string
 }
 
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_SERVER_HOST,
-  port: Number(process.env.EMAIL_SERVER_PORT),
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_SERVER_USER,
-    pass: process.env.EMAIL_SERVER_PASSWORD,
-  },
-})
+// Проверка, включена ли отправка email
+const isEmailEnabled =
+  process.env.EMAIL_ENABLED === "true" &&
+  process.env.EMAIL_SERVER_HOST &&
+  process.env.EMAIL_SERVER_USER
+
+let transporter: nodemailer.Transporter | null = null
+
+if (isEmailEnabled) {
+  transporter = nodemailer.createTransport({
+    host: process.env.EMAIL_SERVER_HOST,
+    port: Number(process.env.EMAIL_SERVER_PORT) || 587,
+    secure: false,
+    auth: {
+      user: process.env.EMAIL_SERVER_USER,
+      pass: process.env.EMAIL_SERVER_PASSWORD,
+    },
+  })
+}
 
 export async function sendEmail({ to, subject, html, text }: SendEmailOptions) {
-  const mailOptions = {
-    from: process.env.EMAIL_FROM ?? "noreply@quantum-horizon.app",
-    to,
-    subject,
-    html,
-    text,
+  // Mock-режим для разработки (вывод в консоль)
+  if (!transporter) {
+    console.log("\n" + "=".repeat(60))
+    console.log("📧 EMAIL (MOCK MODE) - Письмо не отправлено")
+    console.log("=".repeat(60))
+    console.log(`Кому: ${to}`)
+    console.log(`Тема: ${subject}`)
+    console.log("-".repeat(60))
+    console.log(text ?? html.substring(0, 500) + "...")
+    console.log("=".repeat(60) + "\n")
+
+    // Вывод ссылки для сброса пароля (если есть)
+    const resetLinkMatch = /href="([^"]*reset-password[^"]*)"/.exec(html)
+    if (resetLinkMatch) {
+      console.log("🔗 Ссылка для сброса пароля:")
+      console.log(resetLinkMatch[1])
+      console.log("")
+    }
+
+    return { success: true, messageId: `mock-${String(Date.now())}` }
   }
 
+  // Реальная отправка
   try {
+    const mailOptions = {
+      from: process.env.EMAIL_FROM ?? "noreply@quantum-horizon.app",
+      to,
+      subject,
+      html,
+      text,
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const info = await transporter.sendMail(mailOptions)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     console.log("Email sent:", info.messageId)
-    return { success: true, messageId: info.messageId }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    return { success: true, messageId: String(info.messageId) }
   } catch (error) {
     console.error("Email error:", error)
     return { success: false, error: error instanceof Error ? error.message : "Unknown error" }

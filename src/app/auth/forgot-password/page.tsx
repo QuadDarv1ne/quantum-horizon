@@ -42,11 +42,12 @@ export default function ForgotPasswordPage() {
         description: "Письмо со сбросом пароля отправлено",
       })
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Ошибка запроса")
+      const errorMessage = err instanceof Error ? err.message : "Ошибка запроса"
+      setError(errorMessage)
       toast({
         variant: "destructive",
         title: "Ошибка",
-        description: err instanceof Error ? err.message : "Ошибка запроса",
+        description: errorMessage,
       })
     } finally {
       setIsLoading(false)
@@ -104,12 +105,7 @@ export default function ForgotPasswordPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <form
-            onSubmit={(e) => {
-              void handleSubmit(e)
-            }}
-            className="space-y-4"
-          >
+          <form onSubmit={(e) => void handleSubmit(e)} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -123,6 +119,7 @@ export default function ForgotPasswordPage() {
                 required
                 disabled={isLoading}
                 className="bg-slate-800 border-slate-600"
+                autoComplete="email"
               />
             </div>
 
@@ -136,9 +133,6 @@ export default function ForgotPasswordPage() {
               type="submit"
               className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
               disabled={isLoading}
-              onClick={(e) => {
-                void handleSubmit(e)
-              }}
             >
               {isLoading ? "Отправка..." : "Отправить инструкцию"}
             </Button>
