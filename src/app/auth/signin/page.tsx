@@ -46,7 +46,7 @@ export default function SignInPage() {
         router.push(callbackUrl)
         router.refresh()
       }
-    } catch (_error) {
+    } catch {
       toast({
         variant: "destructive",
         title: "Ошибка",

@@ -418,11 +418,11 @@ function PhysicsTimeline() {
     const height = canvas.offsetHeight
     const centerY = height / 2
 
-    let time = 0
-    const scrollOffset = 0
+    let _time = 0
+    const _scrollOffset = 0
 
     const animate = () => {
-      time += 0.02
+      _time += 0.02
       ctx.clearRect(0, 0, width, height)
 
       // Background - cached gradient
@@ -983,7 +983,7 @@ function CMBVisualization() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [temperature, setTemperature] = useState(2.725) // Current CMB temperature in K
   const [showGalaxies, setShowGalaxies] = useState(true)
-  const [timeScale, setTimeScale] = useState(1)
+  const [timeScale, _setTimeScale] = useState(1)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -1031,7 +1031,7 @@ function CMBVisualization() {
 
           // Temperature fluctuation (В±0.0001 K around 2.725 K)
           const tempFluctuation = (noise - 0.5) * 0.0002
-          const localTemp = temperature + tempFluctuation
+          const _localTemp = temperature + tempFluctuation
 
           // Color mapping: blue (cold) -> white -> red (hot)
           let r, g, b

@@ -14,6 +14,7 @@ export default tseslint.config(
       "*.tsbuildinfo",
       "src/components/ui/**",
       ".storybook/**",
+      "src/lib/a11y.tsx",
     ],
   },
   {

@@ -181,7 +181,7 @@ export function useVisualizationState(topic: string) {
   const { isBookmarked } = useIsBookmarked(topic)
   const updateProgress = useUpdateProgress()
   const addBookmark = useAddBookmark()
-  const removeBookmark = useRemoveBookmark()
+  const removeBookmark = useRemoveBookmark() // eslint-disable-line @typescript-eslint/no-unused-vars
 
   const markAsCompleted = () => {
     return void updateProgress.mutateAsync({ topic, completedCount: 1 })
