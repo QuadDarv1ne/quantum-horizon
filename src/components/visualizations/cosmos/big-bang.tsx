@@ -60,10 +60,15 @@ export function BigBangVisualization({ isDark }: BigBangVisualizationProps) {
     }
 
     let time = 0
+    let lastTime = 0
 
-    const animate = () => {
+    const animate = (timestamp: number) => {
+      if (!lastTime) lastTime = timestamp
+      const deltaTime = timestamp - lastTime
+      lastTime = timestamp
+
       if (isPlaying) {
-        time += 0.016
+        time += deltaTime / 1000
       }
       ctx.clearRect(0, 0, width, height)
 
@@ -173,7 +178,7 @@ export function BigBangVisualization({ isDark }: BigBangVisualizationProps) {
       animationFrameId = requestAnimationFrame(animate)
     }
 
-    animate()
+    animate(0)
 
     return () => {
       window.removeEventListener("resize", resize)
