@@ -18,6 +18,7 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
   const [showAccretion, setShowAccretion] = useState(true)
   const [showHawking, setShowHawking] = useState(false)
   const rotationRef = useRef(0)
+  const gradientRef = useRef<CanvasGradient | null>(null)
 
   const draw = (
     ctx: CanvasRenderingContext2D,
@@ -47,7 +48,15 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
 
     // Draw accretion disk
     if (showAccretion) {
-      drawAccretionDisk(ctx, centerX, centerY, eventHorizonRadius, rotationRef.current, isDark)
+      drawAccretionDisk(
+        ctx,
+        centerX,
+        centerY,
+        eventHorizonRadius,
+        rotationRef.current,
+        isDark,
+        gradientRef
+      )
     }
 
     // Draw event horizon (black circle)
@@ -156,9 +165,18 @@ function drawAccretionDisk(
   centerY: number,
   innerRadius: number,
   rotation: number,
-  _isDark: boolean
+  _isDark: boolean,
+  gradientRef: React.RefObject<CanvasGradient | null>
 ) {
   const outerRadius = innerRadius * 3
+
+  // Мемоизация градиента
+  if (!gradientRef.current) {
+    gradientRef.current = ctx.createLinearGradient(-outerRadius, 0, outerRadius, 0)
+    gradientRef.current.addColorStop(0, "rgba(251, 191, 36, 0)")
+    gradientRef.current.addColorStop(0.5, "rgba(251, 191, 36, 0.6)")
+    gradientRef.current.addColorStop(1, "rgba(251, 191, 36, 0)")
+  }
 
   for (let i = 0; i < 3; i++) {
     const radius = innerRadius + (outerRadius - innerRadius) * (i / 3)
@@ -168,14 +186,9 @@ function drawAccretionDisk(
     ctx.translate(centerX, centerY)
     ctx.rotate(rotation * speed)
 
-    const gradient = ctx.createLinearGradient(-outerRadius, 0, outerRadius, 0)
-    gradient.addColorStop(0, "rgba(251, 191, 36, 0)")
-    gradient.addColorStop(0.5, "rgba(251, 191, 36, 0.6)")
-    gradient.addColorStop(1, "rgba(251, 191, 36, 0)")
-
     ctx.beginPath()
     ctx.arc(0, 0, radius, 0, Math.PI * 2)
-    ctx.strokeStyle = gradient
+    ctx.strokeStyle = gradientRef.current
     ctx.lineWidth = (outerRadius - innerRadius) / 3
     ctx.stroke()
 
