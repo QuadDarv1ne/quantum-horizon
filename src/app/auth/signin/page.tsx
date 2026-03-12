@@ -52,7 +52,7 @@ export default function SignInPage() {
         router.push(callbackUrl)
         router.refresh()
       }
-    } catch (error) {
+    } catch (_error) {
       toast({
         variant: "destructive",
         title: "Ошибка",
@@ -85,7 +85,9 @@ export default function SignInPage() {
             <Button
               variant="outline"
               className="w-full bg-slate-800 border-slate-600 hover:bg-slate-700"
-              onClick={() => handleOAuthSignIn("google")}
+              onClick={async () => {
+                await handleOAuthSignIn("google")
+              }}
               disabled={isLoading}
             >
               <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
@@ -111,7 +113,9 @@ export default function SignInPage() {
             <Button
               variant="outline"
               className="w-full bg-slate-800 border-slate-600 hover:bg-slate-700"
-              onClick={() => handleOAuthSignIn("github")}
+              onClick={async () => {
+                await handleOAuthSignIn("github")
+              }}
               disabled={isLoading}
             >
               <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -163,6 +167,11 @@ export default function SignInPage() {
               type="submit"
               className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
               disabled={isLoading}
+              onClick={async (e) => {
+                if (e.target.closest("button[type='submit']")) {
+                  await handleSubmit(e as unknown as React.SyntheticEvent)
+                }
+              }}
             >
               {isLoading ? "Вход..." : "Войти"}
             </Button>

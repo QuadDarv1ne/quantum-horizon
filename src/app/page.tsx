@@ -743,7 +743,7 @@ function SolarSystemVisualization() {
       for (let i = 0; i < 12; i++) {
         const angle = time * 0.5 + (i * Math.PI) / 6
         const len = sunRadius + Math.sin(time * 3 + i * 2) * 5 + 5
-        ctx.strokeStyle = `rgba(255, 200, 0, ${0.3 + Math.sin(time * 2 + i) * 0.2})`
+        ctx.strokeStyle = `rgba(255, 200, 0, ${String(0.3 + Math.sin(time * 2 + i) * 0.2)})`
         ctx.lineWidth = 2
         ctx.beginPath()
         ctx.moveTo(centerX + Math.cos(angle) * sunRadius, centerY + Math.sin(angle) * sunRadius)
@@ -1178,7 +1178,7 @@ function DarkEnergyVisualization() {
         angle: Math.random() * Math.PI * 2,
         distance: 20 + Math.random() * 100,
         size: 1 + Math.random() * 2,
-        color: `hsl(${200 + Math.random() * 60}, 70%, ${60 + Math.random() * 30}%)`,
+        color: `hsl(${String(200 + Math.random() * 60)}, 70%, ${String(60 + Math.random() * 30)}%)`,
       })
     }
 
@@ -1314,7 +1314,7 @@ function DarkEnergyVisualization() {
       ctx.font = "8px sans-serif"
       ctx.textAlign = "left"
       ctx.fillText(`Hв‚Ђ в‰€ 70 РєРј/СЃ/РњРїРє`, width - 125, height - 30)
-      ctx.fillText(`РЈСЃРєРѕСЂРµРЅРёРµ: +${String((expansionRate * 100).toFixed(0))}%`, width - 125, height - 18)
+      ctx.fillText(`РЈСЃРєРѕСЂРµРЅРёРµ: +${(expansionRate * 100).toFixed(0)}%`, width - 125, height - 18)
 
       animationFrameId = requestAnimationFrame(animate)
     }
@@ -2966,7 +2966,7 @@ export default function Home() {
                   setActiveSection(tab.id)
                 }}
                 variant={activeSection === tab.id ? "default" : "ghost"}
-                title={`еї«жЌ·й”®: ${index + 1} | Shortcut: ${index + 1}`}
+                title={`еї«жЌ·й”®: ${String(index + 1)} | Shortcut: ${String(index + 1)}`}
                 className={`text-xs md:text-sm ${activeSection === tab.id ? `bg-gradient-to-r ${tab.color}` : isDark ? "text-gray-400" : "text-gray-600"}`}
               >
                 {tab.label}

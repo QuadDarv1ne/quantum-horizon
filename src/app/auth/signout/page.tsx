@@ -45,7 +45,9 @@ export default function SignOutPage() {
             <Button
               variant="destructive"
               className="flex-1"
-              onClick={handleSignOut}
+              onClick={async () => {
+                await handleSignOut()
+              }}
               disabled={isLoading}
             >
               {isLoading ? "Выход..." : "Выйти"}
