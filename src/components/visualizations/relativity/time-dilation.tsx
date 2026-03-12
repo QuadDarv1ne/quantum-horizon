@@ -17,9 +17,16 @@ export function TimeDilationVisualization({ isDark }: TimeDilationVisualizationP
 
   const timeOffset = useRef(0)
 
-  const draw = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
+  const draw = (
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    _isDark: boolean,
+    delta: number
+  ) => {
     const centerX = width / 2
     const centerY = height / 2
+    const isDark = _isDark
 
     // Clear canvas
     ctx.fillStyle = isDark ? "#0f172a" : "#f8fafc"
@@ -31,7 +38,7 @@ export function TimeDilationVisualization({ isDark }: TimeDilationVisualizationP
 
     // Update animation
     if (isPlaying) {
-      timeOffset.current += 0.016 * animationSpeed
+      timeOffset.current += (delta / 1000) * animationSpeed
     }
 
     // Draw stationary frame (observer)

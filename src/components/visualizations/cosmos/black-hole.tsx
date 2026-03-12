@@ -19,9 +19,16 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
   const [showHawking, setShowHawking] = useState(false)
   const rotationRef = useRef(0)
 
-  const draw = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
+  const draw = (
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    _isDark: boolean,
+    delta: number
+  ) => {
     const centerX = width / 2
     const centerY = height / 2
+    const isDark = _isDark
 
     // Clear canvas
     ctx.fillStyle = isDark ? "#000000" : "#0f172a"
@@ -35,7 +42,7 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
 
     // Update rotation
     if (isPlaying) {
-      rotationRef.current += 0.02 * animationSpeed
+      rotationRef.current += (delta / 1000) * animationSpeed
     }
 
     // Draw accretion disk

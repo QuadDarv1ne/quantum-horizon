@@ -4,7 +4,13 @@ import { useRef, useCallback } from "react"
 import { setupCanvas, useCanvasAnimation } from "@/hooks/use-canvas-animation"
 
 interface VisualizationCanvasProps {
-  draw: (ctx: CanvasRenderingContext2D, width: number, height: number, isDark: boolean) => void
+  draw: (
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    isDark: boolean,
+    delta: number
+  ) => void
   isDark: boolean
   className?: string
   fpsLimit?: number
@@ -24,24 +30,24 @@ export function VisualizationCanvas({
   const containerRef = useRef<HTMLDivElement>(null)
   const sizeRef = useRef({ width: 0, height: 0 })
 
-  const animate = useCallback(() => {
-    const canvas = canvasRef.current
-    const container = containerRef.current
-    if (!canvas || !container) return
+  const animate = useCallback(
+    (ctx: CanvasRenderingContext2D, width: number, height: number, delta: number) => {
+      const canvas = canvasRef.current
+      const container = containerRef.current
+      if (!canvas || !container) return
 
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
+      const rect = container.getBoundingClientRect()
 
-    const rect = container.getBoundingClientRect()
+      // Проверка изменения размера
+      if (sizeRef.current.width !== rect.width || sizeRef.current.height !== rect.height) {
+        sizeRef.current = { width: rect.width, height: rect.height }
+        setupCanvas(canvas, ctx)
+      }
 
-    // Проверка изменения размера
-    if (sizeRef.current.width !== rect.width || sizeRef.current.height !== rect.height) {
-      sizeRef.current = { width: rect.width, height: rect.height }
-      setupCanvas(canvas, ctx)
-    }
-
-    drawFn(ctx, rect.width, rect.height, isDark)
-  }, [drawFn, isDark])
+      drawFn(ctx, rect.width, rect.height, isDark, delta)
+    },
+    [drawFn, isDark]
+  )
 
   useCanvasAnimation(canvasRef, animate, {
     deps: [animate],

@@ -19,9 +19,16 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
 
   const timeRef = useRef(0)
 
-  const draw = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
-    timeRef.current += 0.03 * animationSpeed
+  const draw = (
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    _isDark: boolean,
+    delta: number
+  ) => {
+    timeRef.current += (delta / 1000) * animationSpeed
     const time = timeRef.current
+    const isDark = _isDark
 
     const L = width * 0.8
     const offsetX = (width - L) / 2
