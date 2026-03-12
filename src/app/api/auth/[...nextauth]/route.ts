@@ -13,7 +13,8 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials.email || !credentials.password) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (!credentials?.email || !credentials?.password) {
           throw new Error("Введите email и пароль")
         }
 

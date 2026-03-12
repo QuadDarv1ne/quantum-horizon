@@ -63,6 +63,12 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
       const centerY = height / 2
       const isDarkMode = _isDark
 
+      // Schwarzschild radius: r_s = 2GM/c²
+      const M = mass * M_SUN
+      const r_s = (2 * G * M) / (c * c)
+      const scale = 50 / r_s
+      const eventHorizonRadius = 30 * scale
+
       // Clear canvas
       ctx.fillStyle = isDarkMode ? "#000000" : "#0f172a"
       ctx.fillRect(0, 0, width, height)
@@ -71,12 +77,6 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
       if (showLensing) {
         drawLensedStars(ctx, centerX, centerY, eventHorizonRadius, starsRef.current)
       }
-
-      // Schwarzschild radius: r_s = 2GM/c²
-      const M = mass * M_SUN
-      const r_s = (2 * G * M) / (c * c)
-      const scale = 50 / r_s
-      const eventHorizonRadius = 30 * scale
 
       // Update rotation
       if (isPlaying) {
