@@ -23,6 +23,9 @@
     "test:ui": "vitest --ui",
     "test:e2e": "playwright test"
   },
+  "prisma": {
+    "seed": "node --loader ts-node/esm prisma/seed.ts"
+  },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
       "eslint --fix",
@@ -131,8 +134,9 @@
     "sharp": "^0.34.5",
     "storybook": "^10.2.17",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
     "tw-animate-css": "^1.3.5",
-    "typescript": "^5",
+    "typescript": "^5.9.3",
     "typescript-eslint": "^8.57.0",
     "vitest": "^4.0.18"
   }
