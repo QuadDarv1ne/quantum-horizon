@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Button } from "@/components/ui/button"
@@ -18,6 +18,11 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
   const [particlePosition, setParticlePosition] = useState<number | null>(null)
 
   const timeRef = useRef(0)
+
+  // Сброс времени при смене квантового числа
+  useEffect(() => {
+    timeRef.current = 0
+  }, [quantumNumber])
 
   const draw = (
     ctx: CanvasRenderingContext2D,
