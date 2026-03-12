@@ -1,15 +1,25 @@
 "use client"
 
-import { useRef, useEffect, useCallback } from "react"
-import { setupCanvas } from "@/hooks/use-canvas-animation"
+import { useRef, useCallback } from "react"
+import { setupCanvas, useCanvasAnimation } from "@/hooks/use-canvas-animation"
 
 interface VisualizationCanvasProps {
   draw: (ctx: CanvasRenderingContext2D, width: number, height: number, isDark: boolean) => void
   isDark: boolean
   className?: string
+  fpsLimit?: number
+  pauseWhenHidden?: boolean
+  respectReducedMotion?: boolean
 }
 
-export function VisualizationCanvas({ draw: drawFn, isDark, className }: VisualizationCanvasProps) {
+export function VisualizationCanvas({
+  draw: drawFn,
+  isDark,
+  className,
+  fpsLimit = 60,
+  pauseWhenHidden = true,
+  respectReducedMotion = true,
+}: VisualizationCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const sizeRef = useRef({ width: 0, height: 0 })
@@ -33,21 +43,12 @@ export function VisualizationCanvas({ draw: drawFn, isDark, className }: Visuali
     drawFn(ctx, rect.width, rect.height, isDark)
   }, [drawFn, isDark])
 
-  useEffect(() => {
-    let animationId: number
-
-    const loop = () => {
-      animate()
-      animationId = requestAnimationFrame(loop)
-    }
-    loop()
-
-    return () => {
-      if (animationId) {
-        cancelAnimationFrame(animationId)
-      }
-    }
-  }, [animate])
+  useCanvasAnimation(canvasRef, animate, {
+    deps: [animate],
+    fpsLimit,
+    pauseWhenHidden,
+    respectReducedMotion,
+  })
 
   return (
     <div

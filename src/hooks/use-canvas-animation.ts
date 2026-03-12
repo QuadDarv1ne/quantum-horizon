@@ -33,7 +33,7 @@ export interface CanvasAnimationOptions {
  * Хук для анимации canvas с оптимизацией производительности
  */
 export function useCanvasAnimation(
-  canvasRef: React.RefObject<HTMLCanvasElement>,
+  canvasRef: React.RefObject<HTMLCanvasElement | null>,
   animate: (ctx: CanvasRenderingContext2D, width: number, height: number, delta: number) => void,
   options: CanvasAnimationOptions = {}
 ): void {
