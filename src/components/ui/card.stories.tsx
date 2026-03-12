@@ -1,14 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import {
-  Card,
-  CardHeader,
-  CardFooter,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardAction,
-} from "./card"
-import { Button } from "./button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./card"
 
 const meta = {
   title: "UI/Card",
@@ -27,49 +18,48 @@ export const Default: Story = {
     <Card className="w-[350px]">
       <CardHeader>
         <CardTitle>Card Title</CardTitle>
-        <CardDescription>Card description goes here.</CardDescription>
+        <CardDescription>Card Description</CardDescription>
       </CardHeader>
       <CardContent>
-        <p>Card content goes here. You can put any content inside the card.</p>
-      </CardContent>
-      <CardFooter>
-        <Button>Action</Button>
-      </CardFooter>
-    </Card>
-  ),
-}
-
-export const WithAction: Story = {
-  render: () => (
-    <Card className="w-[350px]">
-      <CardHeader>
-        <CardTitle>Card with Action</CardTitle>
-        <CardDescription>Card with action button in header.</CardDescription>
-        <CardAction>
-          <Button variant="ghost" size="icon">⋮</Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <p>This card has an action button in the header.</p>
+        <p>Card Content goes here.</p>
       </CardContent>
     </Card>
   ),
 }
 
-export const Interactive: Story = {
+export const WithMultipleContent: Story = {
   render: () => (
     <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle>Interactive Card</CardTitle>
-        <CardDescription>Click the button below</CardDescription>
+        <CardTitle>Quantum Physics</CardTitle>
+        <CardDescription>Explore the quantum world</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-2">
+        <div className="flex justify-between">
+          <span className="text-sm text-muted-foreground">Status</span>
+          <span className="text-sm font-medium">Active</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-sm text-muted-foreground">Progress</span>
+          <span className="text-sm font-medium">75%</span>
+        </div>
+      </CardContent>
+    </Card>
+  ),
+}
+
+export const Dark: Story = {
+  render: () => (
+    <Card className="w-[350px] bg-slate-900 border-slate-700">
+      <CardHeader>
+        <CardTitle className="text-white">Dark Theme</CardTitle>
+        <CardDescription className="text-slate-400">
+          Card with dark styling
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <p>This card has interactive elements.</p>
+        <p className="text-slate-300">Content in dark mode.</p>
       </CardContent>
-      <CardFooter className="gap-2">
-        <Button variant="outline">Cancel</Button>
-        <Button>Confirm</Button>
-      </CardFooter>
     </Card>
   ),
 }

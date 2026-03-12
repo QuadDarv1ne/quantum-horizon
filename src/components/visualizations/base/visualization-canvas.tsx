@@ -62,12 +62,14 @@ export function VisualizationCanvas({
   }, [animate])
 
   return (
-    <div ref={containerRef} className={`relative ${className ?? ""}`}>
+    <div ref={containerRef} className={`relative ${className ?? ""}`} role="img" aria-live="polite" aria-atomic="true">
       <canvas
         ref={canvasRef}
         className="w-full h-full"
         style={{ display: "block" }}
         data-testid="visualization-canvas"
+        aria-label="Interactive physics visualization"
+        role="img"
       />
     </div>
   )

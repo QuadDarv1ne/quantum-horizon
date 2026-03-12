@@ -29,7 +29,7 @@ export function VisualizationControls({
       <Button
         variant="outline"
         size="sm"
-        onClick={() => onTogglePlay()}
+        onClick={() => { onTogglePlay() }}
         className={isDark ? "bg-gray-700 hover:bg-gray-600" : ""}
       >
         {isPlaying ? (
@@ -65,7 +65,7 @@ export function VisualizationControls({
           min={0.1}
           max={2}
           step={0.1}
-          onValueChange={(v) => onSpeedChange(v[0])}
+          onValueChange={(v) => { onSpeedChange(v[0]) }}
           className="flex-1"
         />
       </div>

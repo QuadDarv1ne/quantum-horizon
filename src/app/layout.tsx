@@ -30,7 +30,7 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   const locale = await getLocale()
-  
+
   // Validate locale
   if (!isValidLocale(locale)) {
     notFound()
@@ -39,11 +39,24 @@ export default async function RootLayout({
   const messages = await getMessages()
 
   return (
-    <NextIntlClientProvider messages={messages}>
-      <ReactQueryProvider>
-        {children}
-        <Toaster />
-      </ReactQueryProvider>
-    </NextIntlClientProvider>
+    <html lang={locale} suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <meta name="theme-color" content="#6366f1" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Quantum Horizon" />
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <NextIntlClientProvider messages={messages}>
+          <ReactQueryProvider>
+            {children}
+            <Toaster />
+          </ReactQueryProvider>
+        </NextIntlClientProvider>
+      </body>
+    </html>
   )
 }

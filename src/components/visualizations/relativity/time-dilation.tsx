@@ -101,10 +101,10 @@ export function TimeDilationVisualization({
         isPlaying={isPlaying}
         animationSpeed={animationSpeed}
         onTogglePlay={togglePlaying}
-        onSpeedChange={(speed) =>
+        onSpeedChange={(speed) => {
           useVisualizationStore.getState().setAnimationSpeed(speed)
-        }
-        onReset={() => useVisualizationStore.getState().resetSettings()}
+        }}
+        onReset={() => { useVisualizationStore.getState().resetSettings() }}
         isDark={isDark}
       />
       <div
@@ -119,7 +119,7 @@ export function TimeDilationVisualization({
           max="0.99"
           step="0.01"
           value={velocity}
-          onChange={(e) => setVelocity(parseFloat(e.target.value))}
+          onChange={(e) => { setVelocity(parseFloat(e.target.value)) }}
           className="w-full"
         />
         <div className="flex justify-between text-xs mt-1 text-gray-500">

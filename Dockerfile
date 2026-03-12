@@ -1,23 +1,39 @@
-# ==================== BUILD STAGE ====================
-FROM node:20-alpine AS base
-
-# Install dependencies only when needed
-FROM base AS deps
-RUN apk add --no-cache libc6-compat
+# ==================== DEVELOPMENT STAGE ====================
+FROM node:20-alpine AS development
 
 WORKDIR /app
 
-# Copy package files
-COPY package.json package-lock.json* ./
-
 # Install dependencies
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+# Copy source code
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+ENV NODE_ENV=development
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+CMD ["npm", "run", "dev"]
+
+# ==================== BUILD STAGE ====================
+FROM node:20-alpine AS base
+RUN apk add --no-cache libc6-compat
+
+# Install dependencies only when needed
+FROM base AS deps
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
 RUN npm ci
 
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
 
-# Copy dependencies and source
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 

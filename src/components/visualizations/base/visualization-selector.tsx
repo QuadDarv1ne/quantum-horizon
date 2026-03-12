@@ -67,7 +67,7 @@ export function VisualizationSelector({
               key={viz.id}
               variant="ghost"
               size="sm"
-              onClick={() => onSelect(viz.id)}
+              onClick={() => { onSelect(viz.id) }}
               className={buttonClass(selected === viz.id)}
             >
               <span>{viz.icon}</span>
@@ -91,7 +91,7 @@ export function VisualizationSelector({
               key={viz.id}
               variant="ghost"
               size="sm"
-              onClick={() => onSelect(viz.id)}
+              onClick={() => { onSelect(viz.id) }}
               className={buttonClass(selected === viz.id)}
             >
               <span>{viz.icon}</span>
@@ -115,7 +115,7 @@ export function VisualizationSelector({
               key={viz.id}
               variant="ghost"
               size="sm"
-              onClick={() => onSelect(viz.id)}
+              onClick={() => { onSelect(viz.id) }}
               className={buttonClass(selected === viz.id)}
             >
               <span>{viz.icon}</span>

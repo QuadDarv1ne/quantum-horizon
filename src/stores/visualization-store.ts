@@ -1,5 +1,6 @@
 import { create } from "zustand"
 import { persist, createJSONStorage } from "zustand/middleware"
+import { shallow } from "zustand/shallow"
 
 // Типы для настроек визуализаций
 export type VisualizationType =
@@ -39,7 +40,7 @@ export interface VisualizationSettings {
   }
 }
 
-interface VisualizationState extends VisualizationSettings {
+interface VisualizationActions {
   // Actions - общие
   setSelectedVisualization: (type: VisualizationType | null) => void
   toggleFullscreen: () => void
@@ -66,9 +67,10 @@ interface VisualizationState extends VisualizationSettings {
   resetSettings: () => void
 }
 
+interface VisualizationState extends VisualizationSettings, VisualizationActions {}
+
 // Начальные значения
-const defaultSettings: VisualizationSettings = {
-  selectedVisualization: null,
+const defaultSettings: Omit<VisualizationSettings, "selectedVisualization"> = {
   isFullscreen: false,
   isPlaying: true,
   animationSpeed: 1.0,
@@ -89,28 +91,78 @@ const defaultSettings: VisualizationSettings = {
   },
 }
 
+// Селекторы для оптимизации ререндеров
+export const selectVisualizationSettings = (state: VisualizationState) => ({
+  isPlaying: state.isPlaying,
+  animationSpeed: state.animationSpeed,
+  selectedVisualization: state.selectedVisualization,
+})
+
+export const selectWaveFunctionSettings = (state: VisualizationState) =>
+  state.waveFunction
+
+export const selectTimeDilationSettings = (state: VisualizationState) =>
+  state.timeDilation
+
+export const selectBlackHoleSettings = (state: VisualizationState) =>
+  state.blackHole
+
+// Сравнение для wave function настроек (для использования с shallow)
+export const waveFunctionComparer = (
+  a: ReturnType<typeof selectWaveFunctionSettings>,
+  b: ReturnType<typeof selectWaveFunctionSettings>,
+) =>
+  a.quantumNumber === b.quantumNumber &&
+  a.showProbability === b.showProbability &&
+  a.showWaveFunction === b.showWaveFunction
+
+// Сравнение для time dilation настроек
+export const timeDilationComparer = (
+  a: ReturnType<typeof selectTimeDilationSettings>,
+  b: ReturnType<typeof selectTimeDilationSettings>,
+) => a.velocity === b.velocity && a.showClock === b.showClock
+
+// Сравнение для black hole настроек
+export const blackHoleComparer = (
+  a: ReturnType<typeof selectBlackHoleSettings>,
+  b: ReturnType<typeof selectBlackHoleSettings>,
+) =>
+  a.mass === b.mass &&
+  a.showAccretionDisk === b.showAccretionDisk &&
+  a.showHawkingRadiation === b.showHawkingRadiation
+
 export const useVisualizationStore = create<VisualizationState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
+      selectedVisualization: null,
       ...defaultSettings,
 
       // Общие actions
       setSelectedVisualization: (type) =>
         set({ selectedVisualization: type }),
 
-      toggleFullscreen: () => set((state) => ({ isFullscreen: !state.isFullscreen })),
+      toggleFullscreen: () =>
+        set((state) => ({ isFullscreen: !state.isFullscreen })),
+
       setIsFullscreen: (value) => set({ isFullscreen: value }),
 
-      togglePlaying: () => set((state) => ({ isPlaying: !state.isPlaying })),
+      togglePlaying: () =>
+        set((state) => ({ isPlaying: !state.isPlaying })),
+
       setIsPlaying: (value) => set({ isPlaying: value }),
 
       setAnimationSpeed: (speed) =>
-        set({ animationSpeed: Math.max(0.1, Math.min(2.0, speed)) }),
+        set({
+          animationSpeed: Math.max(0.1, Math.min(2.0, speed)),
+        }),
 
       // waveFunction actions
       setQuantumNumber: (n) =>
         set((state) => ({
-          waveFunction: { ...state.waveFunction, quantumNumber: Math.max(1, n) },
+          waveFunction: {
+            ...state.waveFunction,
+            quantumNumber: Math.max(1, n),
+          },
         })),
 
       toggleShowProbability: () =>
@@ -132,7 +184,10 @@ export const useVisualizationStore = create<VisualizationState>()(
       // timeDilation actions
       setVelocity: (v) =>
         set((state) => ({
-          timeDilation: { ...state.timeDilation, velocity: Math.max(0, Math.min(0.99, v)) },
+          timeDilation: {
+            ...state.timeDilation,
+            velocity: Math.max(0, Math.min(0.99, v)),
+          },
         })),
 
       toggleShowClock: () =>
@@ -146,7 +201,10 @@ export const useVisualizationStore = create<VisualizationState>()(
       // blackHole actions
       setBlackHoleMass: (mass) =>
         set((state) => ({
-          blackHole: { ...state.blackHole, mass: Math.max(1, mass) },
+          blackHole: {
+            ...state.blackHole,
+            mass: Math.max(1, mass),
+          },
         })),
 
       toggleAccretionDisk: () =>
@@ -166,7 +224,11 @@ export const useVisualizationStore = create<VisualizationState>()(
         })),
 
       // Reset
-      resetSettings: () => set(defaultSettings),
+      resetSettings: () =>
+        set({
+          selectedVisualization: null,
+          ...defaultSettings,
+        }),
     }),
     {
       name: "visualization-settings",
@@ -184,18 +246,5 @@ export const useVisualizationStore = create<VisualizationState>()(
   ),
 )
 
-// Селекторы для оптимизации ререндеров
-export const selectVisualizationSettings = (state: VisualizationState) => ({
-  isPlaying: state.isPlaying,
-  animationSpeed: state.animationSpeed,
-  selectedVisualization: state.selectedVisualization,
-})
-
-export const selectWaveFunctionSettings = (state: VisualizationState) =>
-  state.waveFunction
-
-export const selectTimeDilationSettings = (state: VisualizationState) =>
-  state.timeDilation
-
-export const selectBlackHoleSettings = (state: VisualizationState) =>
-  state.blackHole
+// Экспортируем shallow для использования в компонентах
+export { shallow }

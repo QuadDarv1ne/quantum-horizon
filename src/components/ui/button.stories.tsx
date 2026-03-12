@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react"
-import { fn } from "@storybook/test"
 import { Button } from "./button"
 
 const meta = {
@@ -19,7 +18,6 @@ const meta = {
       options: ["default", "sm", "lg", "icon"],
     },
   },
-  args: { onClick: fn() },
 } satisfies Meta<typeof Button>
 
 export default meta
@@ -29,69 +27,88 @@ export const Default: Story = {
   args: {
     children: "Button",
     variant: "default",
-    size: "default",
   },
 }
 
 export const Destructive: Story = {
   args: {
-    ...Default.args,
+    children: "Delete",
     variant: "destructive",
   },
 }
 
 export const Outline: Story = {
   args: {
-    ...Default.args,
+    children: "Outline",
     variant: "outline",
   },
 }
 
 export const Secondary: Story = {
   args: {
-    ...Default.args,
+    children: "Secondary",
     variant: "secondary",
   },
 }
 
 export const Ghost: Story = {
   args: {
-    ...Default.args,
+    children: "Ghost",
     variant: "ghost",
   },
 }
 
 export const Link: Story = {
   args: {
-    ...Default.args,
+    children: "Link",
     variant: "link",
   },
 }
 
 export const Small: Story = {
   args: {
-    ...Default.args,
+    children: "Small",
     size: "sm",
   },
 }
 
 export const Large: Story = {
   args: {
-    ...Default.args,
+    children: "Large",
     size: "lg",
   },
 }
 
 export const Icon: Story = {
   args: {
-    children: "🔍",
     size: "icon",
+    children: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      >
+        <path d="M5 12h14" />
+        <path d="M12 5v14" />
+      </svg>
+    ),
   },
 }
 
 export const Disabled: Story = {
   args: {
-    ...Default.args,
+    children: "Disabled",
+    disabled: true,
+  },
+}
+
+export const Loading: Story = {
+  args: {
+    children: "Loading...",
     disabled: true,
   },
 }

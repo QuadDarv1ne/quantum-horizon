@@ -31,9 +31,9 @@ export function LengthContractionVisualization({ isDark }: LengthContractionVisu
             {[...Array(20)].map((_, i) => (
               <line
                 key={`v${i}`}
-                x1={`${i * 5}%`}
+                x1={`${String(i * 5)}%`}
                 y1="0"
-                x2={`${i * 5}%`}
+                x2={`${String(i * 5)}%`}
                 y2="100%"
                 stroke={isDark ? "#444" : "#888"}
                 strokeWidth="0.5"
@@ -43,9 +43,9 @@ export function LengthContractionVisualization({ isDark }: LengthContractionVisu
               <line
                 key={`h${i}`}
                 x1="0"
-                y1={`${i * 10}%`}
+                y1={`${String(i * 10)}%`}
                 x2="100%"
-                y2={`${i * 10}%`}
+                y2={`${String(i * 10)}%`}
                 stroke={isDark ? "#444" : "#888"}
                 strokeWidth="0.5"
               />
@@ -61,7 +61,7 @@ export function LengthContractionVisualization({ isDark }: LengthContractionVisu
                 ? "bg-gradient-to-r from-blue-500 to-blue-400"
                 : "bg-gradient-to-r from-blue-600 to-blue-400"
             }`}
-            style={{ width: `${contractedLength}px` }}
+            style={{ width: `${String(contractedLength)}px` }}
           />
           <div className={`text-center text-xs mt-1 ${isDark ? "text-blue-300" : "text-blue-700"}`}>
             Moving: {contractedLength.toFixed(1)} m
@@ -91,7 +91,7 @@ export function LengthContractionVisualization({ isDark }: LengthContractionVisu
             isDark ? "text-orange-400" : "text-orange-600"
           }`}
         >
-          → v = {(velocity * 100).toFixed(0)}% c
+          → v = {String((velocity * 100).toFixed(0))}% c
         </div>
       </div>
 
@@ -99,7 +99,7 @@ export function LengthContractionVisualization({ isDark }: LengthContractionVisu
         <div className="flex justify-between text-xs">
           <span className={isDark ? "text-orange-400" : "text-orange-700"}>Velocity</span>
           <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
-            {(velocity * 100).toFixed(0)}% c
+            {String((velocity * 100).toFixed(0))}% c
           </span>
         </div>
         <Slider

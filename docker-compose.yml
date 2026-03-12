@@ -1,0 +1,79 @@
+version: "3.8"
+
+services:
+  # PostgreSQL база данных
+  postgres:
+    image: postgres:15-alpine
+    container_name: quantum-horizon-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: quantum
+      POSTGRES_PASSWORD: quantum_password
+      POSTGRES_DB: quantum_horizon
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - quantum-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U quantum -d quantum_horizon"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Приложение Next.js
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: quantum-horizon-app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://quantum:quantum_password@postgres:5432/quantum_horizon?schema=public
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-dev_secret_change_in_production}
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - quantum-network
+    command: npm run dev
+
+  # pgAdmin для управления БД (опционально)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: quantum-horizon-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@quantum-horizon.local
+      PGADMIN_DEFAULT_PASSWORD: admin_password
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - quantum-network
+    depends_on:
+      - postgres
+    profiles:
+      - tools
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  quantum-network:
+    driver: bridge
