@@ -18,7 +18,7 @@ describe("useIsMobile", () => {
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
       dispatchEvent: vi.fn(),
-    }))
+    }) as MediaQueryList)
   })
 
   afterEach(() => {
@@ -58,7 +58,7 @@ describe("useIsMobile", () => {
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
       dispatchEvent: vi.fn(),
-    }))
+    }) as MediaQueryList)
 
     const { result } = renderHook(() => useIsMobile())
 
@@ -82,7 +82,7 @@ describe("useIsMobile", () => {
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
       dispatchEvent: vi.fn(),
-    }))
+    }) as MediaQueryList)
 
     const { result } = renderHook(() => useIsMobile())
 
@@ -107,7 +107,7 @@ describe("useIsMobile", () => {
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
       dispatchEvent: vi.fn(),
-    }))
+    }) as MediaQueryList)
 
     const { result } = renderHook(() => useIsMobile())
 
@@ -127,7 +127,7 @@ describe("useIsMobile", () => {
       addEventListener: addEventListenerMock,
       removeEventListener: removeEventListenerMock,
       dispatchEvent: vi.fn(),
-    }))
+    }) as MediaQueryList)
 
     const { unmount } = renderHook(() => useIsMobile())
 
@@ -157,7 +157,7 @@ describe("useIsMobile", () => {
       }),
       removeEventListener: vi.fn(),
       dispatchEvent: vi.fn(),
-    }))
+    }) as MediaQueryList)
 
     // Start with mobile
     Object.defineProperty(window, "innerWidth", {
@@ -180,9 +180,7 @@ describe("useIsMobile", () => {
     })
 
     // Trigger change event
-    if (changeCallback) {
-      changeCallback({ matches: false, media: "(max-width: 767px)" } as MediaQueryListEvent)
-    }
+    changeCallback?.({ matches: false, media: "(max-width: 767px)" } as MediaQueryListEvent)
 
     // Rerender to get updated state
     rerender()

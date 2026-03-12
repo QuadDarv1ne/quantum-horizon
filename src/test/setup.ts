@@ -80,10 +80,6 @@ const canvasContextMock = {
 }
 
 class HTMLCanvasElementMock extends HTMLElement {
-  constructor() {
-    super()
-  }
-
   getContext(contextType: string) {
     if (contextType === "2d") {
       return canvasContextMock
@@ -99,16 +95,16 @@ class HTMLCanvasElementMock extends HTMLElement {
     return 800
   }
 
-  set width(value: number) {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
+  set width(_value: number) {
+    // Empty setter for compatibility
   }
 
   get height() {
     return 600
   }
 
-  set height(value: number) {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
+  set height(_value: number) {
+    // Empty setter for compatibility
   }
 
   getBoundingClientRect() {
@@ -157,17 +153,18 @@ Object.defineProperty(global, "matchMedia", {
 
 // Polyfill for IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
-  // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-empty-function
-  constructor() {}
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  observe() {}
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  unobserve() {}
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  disconnect() {}
+  constructor() {
+    // Polyfill for testing
+  }
+  observe() {
+    // Polyfill for testing
+  }
+  unobserve() {
+    // Polyfill for testing
+  }
+  disconnect() {
+    // Polyfill for testing
+  }
 } as unknown as typeof IntersectionObserver
 
 // Polyfill for localStorage
@@ -180,9 +177,10 @@ const localStorageMock = {
     return this.store[key] || null
   },
   setItem(key: string, value: string) {
-    this.store[key] = String(value)
+    this.store[key] = value
   },
   removeItem(key: string) {
+    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete this.store[key]
   },
 }
