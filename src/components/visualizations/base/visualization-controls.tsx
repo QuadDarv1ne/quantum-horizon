@@ -3,6 +3,7 @@
 import { useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
+import { cn, themeClasses } from "@/lib/utils"
 
 interface VisualizationControlsProps {
   isPlaying: boolean
@@ -30,7 +31,6 @@ export function VisualizationControls({
         e.preventDefault()
         onReset()
       }
-      return
     },
     [onTogglePlay, onReset]
   )
@@ -41,18 +41,20 @@ export function VisualizationControls({
       window.removeEventListener("keydown", handleKeyDown)
     }
   }, [handleKeyDown])
+
+  const theme = themeClasses(isDark)
+
   return (
     <div
-      className={`flex items-center gap-4 p-3 rounded-lg ${
+      className={cn(
+        "flex items-center gap-4 rounded-lg p-3 backdrop-blur-sm",
         isDark ? "bg-gray-800/50" : "bg-gray-100/50"
-      } backdrop-blur-sm`}
+      )}
     >
       <Button
         variant="outline"
         size="sm"
-        onClick={() => {
-          onTogglePlay()
-        }}
+        onClick={onTogglePlay}
         className={isDark ? "bg-gray-700 hover:bg-gray-600" : ""}
       >
         {isPlaying ? (
@@ -79,10 +81,8 @@ export function VisualizationControls({
         )}
       </Button>
 
-      <div className="flex items-center gap-2 flex-1">
-        <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-          Speed: {animationSpeed.toFixed(1)}x
-        </span>
+      <div className="flex flex-1 items-center gap-2">
+        <span className={theme.textSecondary}>Speed: {animationSpeed.toFixed(1)}x</span>
         <Slider
           value={[animationSpeed]}
           min={0.1}
@@ -105,12 +105,12 @@ export function VisualizationControls({
           Reset
         </Button>
       )}
-      <div className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}>
-        <kbd className="px-1.5 py-0.5 rounded bg-gray-700/50">Space</kbd> Play/Pause
+      <div className={theme.textMuted}>
+        <kbd className="rounded bg-gray-700/50 px-1.5 py-0.5">Space</kbd> Play/Pause
         {onReset && (
           <>
             {" "}
-            |<kbd className="px-1.5 py-0.5 rounded bg-gray-700/50">R</kbd> Reset
+            |<kbd className="rounded bg-gray-700/50 px-1.5 py-0.5">R</kbd> Reset
           </>
         )}
       </div>
