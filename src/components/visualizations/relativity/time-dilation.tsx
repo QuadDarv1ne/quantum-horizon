@@ -6,8 +6,7 @@ import { VisualizationControls } from "../base/visualization-controls"
 import { Button } from "@/components/ui/button"
 import { useVisualizationStore, selectTimeDilationSettings } from "@/stores/visualization-store"
 import { QueryParam } from "@/hooks/use-url-sync"
-
-const c = 299792458 // Speed of light
+import { c } from "@/lib/constants"
 
 interface TimeDilationVisualizationProps {
   isDark: boolean
@@ -118,8 +117,8 @@ export function TimeDilationVisualization({ isDark }: TimeDilationVisualizationP
         }}
         isDark={isDark}
       />
-      <div className={`p-4 rounded-lg ${isDark ? "bg-gray-800/50" : "bg-gray-100/50"}`}>
-        <label className="block text-sm font-medium mb-2">
+      <div className={`rounded-lg p-4 ${isDark ? "bg-gray-800/50" : "bg-gray-100/50"}`}>
+        <label className="mb-2 block text-sm font-medium">
           Velocity: {(velocity * 100).toFixed(0)}% c
         </label>
         <input
@@ -133,7 +132,7 @@ export function TimeDilationVisualization({ isDark }: TimeDilationVisualizationP
           }}
           className="w-full"
         />
-        <div className="flex justify-between text-xs mt-1 text-gray-500">
+        <div className="mt-1 flex justify-between text-xs text-gray-500">
           <span>0%</span>
           <span>99%</span>
         </div>
@@ -144,7 +143,7 @@ export function TimeDilationVisualization({ isDark }: TimeDilationVisualizationP
           }}
           variant="outline"
           size="sm"
-          className="w-full mt-2"
+          className="mt-2 w-full"
         >
           🔗 Copy URL
         </Button>
