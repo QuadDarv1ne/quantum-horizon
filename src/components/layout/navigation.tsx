@@ -10,6 +10,18 @@ interface NavigationProps {
 }
 
 export function Navigation({ activeSection, onSectionChange, isDark }: NavigationProps) {
+  const handleClick = (section: Section) => {
+    onSectionChange(section)
+  }
+
+  const getButtonClass = (tab: (typeof NAV_ITEMS)[number]) => {
+    const base = "text-xs md:text-sm"
+    if (activeSection === tab.id) {
+      return `${base} bg-gradient-to-r ${tab.color}`
+    }
+    return `${base} ${isDark ? "text-gray-400" : "text-gray-600"}`
+  }
+
   return (
     <nav
       className={`sticky top-0 z-50 border-b backdrop-blur-md ${
@@ -22,17 +34,11 @@ export function Navigation({ activeSection, onSectionChange, isDark }: Navigatio
             <Button
               key={tab.id}
               onClick={() => {
-                onSectionChange(tab.id)
+                handleClick(tab.id)
               }}
               variant={activeSection === tab.id ? "default" : "ghost"}
               title={`Shortcut: ${String(index + 1)}`}
-              className={`text-xs md:text-sm ${
-                activeSection === tab.id
-                  ? `bg-gradient-to-r ${tab.color}`
-                  : isDark
-                    ? "text-gray-400"
-                    : "text-gray-600"
-              }`}
+              className={getButtonClass(tab)}
             >
               {tab.label}
             </Button>
