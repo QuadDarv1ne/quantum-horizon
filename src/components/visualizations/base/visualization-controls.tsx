@@ -3,7 +3,7 @@
 import { useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
-import { cn, themeClasses } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 
 interface VisualizationControlsProps {
   isPlaying: boolean
@@ -42,21 +42,14 @@ export function VisualizationControls({
     }
   }, [handleKeyDown])
 
-  const theme = themeClasses(isDark)
+  const textColor = isDark ? "text-gray-400" : "text-gray-600"
+  const textMuted = isDark ? "text-gray-500" : "text-gray-500"
+  const bgClass = isDark ? "bg-gray-800/50" : "bg-gray-100/50"
+  const buttonBg = isDark ? "bg-gray-700 hover:bg-gray-600" : ""
 
   return (
-    <div
-      className={cn(
-        "flex items-center gap-4 rounded-lg p-3 backdrop-blur-sm",
-        isDark ? "bg-gray-800/50" : "bg-gray-100/50"
-      )}
-    >
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={onTogglePlay}
-        className={isDark ? "bg-gray-700 hover:bg-gray-600" : ""}
-      >
+    <div className={cn("flex items-center gap-4 rounded-lg p-3 backdrop-blur-sm", bgClass)}>
+      <Button variant="outline" size="sm" onClick={onTogglePlay} className={buttonBg}>
         {isPlaying ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +75,7 @@ export function VisualizationControls({
       </Button>
 
       <div className="flex flex-1 items-center gap-2">
-        <span className={theme.textSecondary}>Speed: {animationSpeed.toFixed(1)}x</span>
+        <span className={textColor}>Speed: {animationSpeed.toFixed(1)}x</span>
         <Slider
           value={[animationSpeed]}
           min={0.1}
@@ -96,16 +89,11 @@ export function VisualizationControls({
       </div>
 
       {onReset && (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onReset}
-          className={isDark ? "bg-gray-700 hover:bg-gray-600" : ""}
-        >
+        <Button variant="outline" size="sm" onClick={onReset} className={buttonBg}>
           Reset
         </Button>
       )}
-      <div className={theme.textMuted}>
+      <div className={textMuted}>
         <kbd className="rounded bg-gray-700/50 px-1.5 py-0.5">Space</kbd> Play/Pause
         {onReset && (
           <>
