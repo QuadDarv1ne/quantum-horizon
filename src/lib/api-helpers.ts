@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
+import { getServerSession, type Session } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
 // ==================== ТИПЫ ====================
@@ -44,19 +44,18 @@ export interface HandlerRequest<T = unknown> {
  */
 export async function getCurrentUserId(): Promise<string | null> {
   const session = await getServerSession(authOptions)
-  if (!session?.user || !(session.user as Record<string, unknown>).id) {
-    return null
-  }
-  return (session.user as Record<string, unknown>).id as string
+  return session?.user.id ?? null
 }
 
 /**
  * Получить текущую сессию с проверкой пользователя
  */
-export async function getCurrentSession() {
+export async function getCurrentSession(): Promise<{
+  session: Session | null
+  userId: string | null
+}> {
   const session = await getServerSession(authOptions)
-  const userId = session?.user ? (session.user as Record<string, unknown>).id : null
-  return { session, userId: userId as string | null }
+  return { session, userId: session?.user.id ?? null }
 }
 
 /**

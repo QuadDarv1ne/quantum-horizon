@@ -1,8 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { db } from "@/lib/db"
+
+async function getUserId(): Promise<string | null> {
+  const session = await getServerSession(authOptions)
+  return session?.user.id ?? null
+}
 
 /**
  * GET /api/visualizations/progress
@@ -10,17 +14,12 @@ import { db } from "@/lib/db"
  */
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions)
+    const userId = await getUserId()
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (!session?.user || !(session.user as any).id) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const userId = (session.user as any).id as string
-
-    // Получить весь прогресс пользователя
     const progress = await db.userProgress.findMany({
       where: { userId },
       orderBy: { lastCompleted: "desc" },
@@ -42,15 +41,12 @@ export async function GET() {
  */
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
+    const userId = await getUserId()
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if (!session?.user || !(session.user as any).id) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const userId = (session.user as any).id as string
     const body = (await request.json()) as { topic?: string; completedCount?: number }
     const { topic, completedCount = 1 } = body
 
@@ -58,7 +54,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Topic is required" }, { status: 400 })
     }
 
-    // Обновить или создать прогресс
     const progress = await db.userProgress.upsert({
       where: {
         userId_topic: {

@@ -1,8 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import NextAuth, { type NextAuthOptions } from "next-auth"
+import NextAuth, { type NextAuthOptions, type DefaultUser } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { compare } from "bcryptjs"
 import { db } from "@/lib/db"
+
+interface ExtendedUser extends DefaultUser {
+  id: string
+  role?: string
+}
+
+declare module "next-auth" {
+  interface Session {
+    user: ExtendedUser
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id: string
+    role?: string
+  }
+}
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -110,21 +128,13 @@ export const authOptions: NextAuthOptions = {
   // Callbacks
   callbacks: {
     jwt({ token, user }) {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-      if (user) {
-        token.id = user.id
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-        token.role = (user as any).role as string
-      }
+      token.id = user.id
+      token.role = user.role
       return token
     },
     session({ session, token }) {
-      if (session.user) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-        ;(session.user as any).id = token.id as string
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-        ;(session.user as any).role = token.role as string
-      }
+      session.user.id = token.id
+      session.user.role = token.role
       return session
     },
   },

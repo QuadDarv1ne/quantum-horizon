@@ -147,13 +147,3 @@ export function useVisualizationCanvas(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies)
 }
-
-/**
- * Утилита для создания градиентов с кешированием
- */
-export function createCachedGradient<T extends CanvasGradient>(
-  _cacheRef: React.RefObject<T | null>,
-  _createFn: (ctx: CanvasRenderingContext2D) => T
-): T | null {
-  return null
-}

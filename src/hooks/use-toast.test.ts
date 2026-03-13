@@ -1,9 +1,38 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { renderHook, act } from "@testing-library/react"
 import { useToast, toast, reducer } from "./use-toast"
-import type { State, Action } from "./use-toast"
+import type { ToastProps } from "@/components/ui/toast"
+import type { ToastActionElement } from "@/components/ui/toast"
+
+type ToasterToast = ToastProps & {
+  id: string
+  title?: React.ReactNode
+  description?: React.ReactNode
+  action?: ToastActionElement
+}
+
+interface State {
+  toasts: ToasterToast[]
+}
+
+type Action =
+  | {
+      type: "ADD_TOAST"
+      toast: ToasterToast
+    }
+  | {
+      type: "UPDATE_TOAST"
+      toast: Partial<ToasterToast>
+    }
+  | {
+      type: "DISMISS_TOAST"
+      toastId?: ToasterToast["id"]
+    }
+  | {
+      type: "REMOVE_TOAST"
+      toastId?: ToasterToast["id"]
+    }
 
 describe("reducer", () => {
   const initialState: State = { toasts: [] }

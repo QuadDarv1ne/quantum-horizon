@@ -1,22 +1,6 @@
 // Lazy-loaded visualization components for code splitting
 import dynamic from "next/dynamic"
-import { Suspense } from "react"
 import { VisualizationCardSkeleton } from "@/components/ui/loading-skeleton"
-import { ErrorBoundary } from "@/components/ui/error-boundary"
-
-// Wrapper для lazy компонентов с Suspense и ErrorBoundary
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function withSuspense<P extends object>(Component: React.ComponentType<P>, name: string) {
-  return function WrappedComponent(props: P) {
-    return (
-      <ErrorBoundary name={name}>
-        <Suspense fallback={<VisualizationCardSkeleton />}>
-          <Component {...props} />
-        </Suspense>
-      </ErrorBoundary>
-    )
-  }
-}
 
 // Quantum visualizations
 export const WaveFunctionVisualization = dynamic(

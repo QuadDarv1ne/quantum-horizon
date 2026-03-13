@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { useEffect, useRef, useCallback } from "react"
 
 /**
@@ -146,81 +145,6 @@ export function useCanvasAnimation(
         observer.disconnect()
       }
       resizeObserver.disconnect()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps)
-}
-
-/**
- * Хук для анимации с фиксированным шагом времени (fixed timestep)
- */
-export function useFixedTimestepCanvasAnimation(
-  canvasRef: React.RefObject<HTMLCanvasElement>,
-  update: (ctx: CanvasRenderingContext2D, width: number, height: number, dt: number) => void,
-  timestep: number = 1 / 60,
-  deps: React.DependencyList = []
-): void {
-  const animationFrameId = useRef<number | undefined>(undefined)
-  const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
-  const lastTimeRef = useRef<number>(0)
-  const accumulatorRef = useRef<number>(0)
-
-  const setupCanvasCallback = useCallback(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
-
-    setupCanvas(canvas, ctx)
-    ctxRef.current = ctx
-  }, [canvasRef])
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
-
-    setupCanvas(canvas, ctx)
-    ctxRef.current = ctx
-
-    const handleResize = () => {
-      setupCanvasCallback()
-    }
-
-    window.addEventListener("resize", handleResize)
-
-    let running = true
-
-    const loop = (timestamp: number) => {
-      if (!running) return
-
-      if (!lastTimeRef.current) lastTimeRef.current = timestamp
-      const deltaTime = (timestamp - lastTimeRef.current) / 1000
-      lastTimeRef.current = timestamp
-
-      accumulatorRef.current += deltaTime
-
-      // Fixed timestep update
-      while (accumulatorRef.current >= timestep) {
-        const rect = canvas.getBoundingClientRect()
-        update(ctx, rect.width, rect.height, timestep)
-        accumulatorRef.current -= timestep
-      }
-
-      animationFrameId.current = requestAnimationFrame(loop)
-    }
-
-    animationFrameId.current = requestAnimationFrame(loop)
-
-    return (): void => {
-      running = false
-      window.removeEventListener("resize", handleResize)
-      if (animationFrameId.current !== undefined) {
-        cancelAnimationFrame(animationFrameId.current)
-      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps)

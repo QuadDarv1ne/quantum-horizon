@@ -5,8 +5,6 @@
 import { useRef, useState, useEffect } from "react"
 import { setupCanvas } from "@/hooks/use-canvas-animation"
 import { Button } from "@/components/ui/button"
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { Slider } from "@/components/ui/slider"
 
 interface AtomicModelVisualizationProps {
   isDark: boolean
@@ -270,12 +268,12 @@ export function AtomicModelVisualization({ isDark }: AtomicModelVisualizationPro
     <div className="space-y-4">
       <canvas
         ref={canvasRef}
-        className="w-full h-[350px] rounded-lg"
+        className="h-[350px] w-full rounded-lg"
         aria-label="Атомная модель Бора: электронные орбиты и переходы"
         role="img"
       />
 
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex flex-wrap gap-2">
         {Object.keys(elements).map((el) => (
           <Button
             key={el}
@@ -306,7 +304,7 @@ export function AtomicModelVisualization({ isDark }: AtomicModelVisualizationPro
             variant="outline"
             size="sm"
             className={`text-xs ${
-              isDark ? "text-yellow-400 border-yellow-500/50" : "text-yellow-700 border-yellow-500"
+              isDark ? "border-yellow-500/50 text-yellow-400" : "border-yellow-500 text-yellow-700"
             }`}
           >
             ↑ Возбуждение
@@ -318,7 +316,7 @@ export function AtomicModelVisualization({ isDark }: AtomicModelVisualizationPro
             variant="outline"
             size="sm"
             className={`text-xs ${
-              isDark ? "text-red-400 border-red-500/50" : "text-red-700 border-red-500"
+              isDark ? "border-red-500/50 text-red-400" : "border-red-500 text-red-700"
             }`}
           >
             ↓ Излучение
@@ -346,16 +344,16 @@ export function AtomicModelVisualization({ isDark }: AtomicModelVisualizationPro
       </div>
 
       <div
-        className={`rounded-lg p-3 border text-sm ${
+        className={`rounded-lg border p-3 text-sm ${
           isDark
-            ? "bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-blue-500/20"
-            : "bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200"
+            ? "border-blue-500/20 bg-gradient-to-r from-blue-900/30 to-purple-900/30"
+            : "border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50"
         }`}
       >
-        <div className={`font-semibold mb-1 ${isDark ? "text-cyan-300" : "text-cyan-700"}`}>
+        <div className={`mb-1 font-semibold ${isDark ? "text-cyan-300" : "text-cyan-700"}`}>
           ⚛️ Модель Бора (1913)
         </div>
-        <p className={isDark ? "text-gray-400 mt-1" : "text-gray-600 mt-1"}>
+        <p className={isDark ? "mt-1 text-gray-400" : "mt-1 text-gray-600"}>
           Электроны движутся по дискретным орбитам. Переход между уровнями сопровождается
           испусканием/поглощением фотона: ΔE = hν
         </p>
