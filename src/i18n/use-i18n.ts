@@ -15,7 +15,7 @@ import type { TranslationKeys } from "./types"
  * return <h1>{t('title')}</h1>
  */
 export function useI18n() {
-  return useNextIntlTranslations<TranslationKeys>()
+  return useNextIntlTranslations()
 }
 
 /**
