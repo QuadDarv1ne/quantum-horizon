@@ -1,14 +1,25 @@
+import createMiddleware from "next-intl/middleware"
 import { withAuth } from "next-auth/middleware"
 import { NextResponse } from "next/server"
+import { locales, defaultLocale } from "@/i18n/config"
 
-export default withAuth(
+// next-intl middleware для обработки локали
+const intlMiddleware = createMiddleware({
+  locales,
+  defaultLocale,
+  localePrefix: "never", // Не добавлять префикс локали к URL (используем localStorage)
+})
+
+// Auth middleware
+const authMiddleware = withAuth(
   function middleware(req) {
     // Получаем токен сессии
     const token = req.nextauth.token
 
     // Проверяем путь для защиты
     const isAuthPath = req.nextUrl.pathname.startsWith("/auth")
-    const isProtectedPath = req.nextUrl.pathname.startsWith("/dashboard") ||
+    const isProtectedPath =
+      req.nextUrl.pathname.startsWith("/dashboard") ||
       req.nextUrl.pathname.startsWith("/profile") ||
       req.nextUrl.pathname.startsWith("/settings")
 
@@ -36,6 +47,23 @@ export default withAuth(
     },
   }
 )
+
+// Комбинированный middleware
+export default function middleware(req: Parameters<typeof authMiddleware>[0]) {
+  // Сначала обрабатываем i18n
+  const intlResponse = intlMiddleware(req)
+
+  // Затем обрабатываем auth
+  const authResponse = authMiddleware(req)
+
+  // Если auth требует редиректа, используем его
+  if (authResponse && (authResponse as NextResponse).redirect) {
+    return authResponse
+  }
+
+  // Иначе используем intl response
+  return intlResponse
+}
 
 // Защищаем только определённые пути
 export const config = {

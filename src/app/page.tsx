@@ -6,7 +6,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ErrorBoundary } from "@/components/ui/error-boundary"
-import { translations, type Language } from "@/lib/translations"
+import { useTranslations, useLocale } from "next-intl"
 import { FullscreenWrapper } from "@/components/visualizations/base/fullscreen-wrapper"
 import {
   WaveFunctionVisualization,
@@ -38,32 +38,12 @@ import {
 
 type Theme = "dark" | "light"
 
-// ==================== QUANTUM MECHANICS ====================
-
-// ==================== SPECIAL RELATIVITY ====================
-
-// ==================== STELLAR EVOLUTION ====================
-
-// ==================== DOUBLE-SLIT EXPERIMENT ====================
-
-// ==================== DARK MATTER VISUALIZATION ====================
-
-// ==================== WHITE HOLE ====================
-
-// ==================== PHYSICS TIMELINE ====================
-// Component moved to: src/components/visualizations/education/physics-timeline.tsx
-
-// ==================== SCIENTISTS BIOGRAPHIES ====================
 // ==================== MAIN PAGE ====================
 export default function Home() {
+  const t = useTranslations()
+  const locale = useLocale()
+
   const [activeSection, setActiveSection] = useState("quantum")
-  const [language, setLanguage] = useState<Language>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("physics-lang") as Language
-      return saved && translations[saved] ? saved : "ru"
-    }
-    return "ru"
-  })
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("physics-theme") as Theme
@@ -72,15 +52,21 @@ export default function Home() {
     return "dark"
   })
   const [menuOpen, setMenuOpen] = useState(false)
+  const [_mounted, setMounted] = useState(false)
 
-  // Save preferences to localStorage
-  useEffect(() => {
-    localStorage.setItem("physics-lang", language)
-  }, [language])
-
+  // Save theme preference to localStorage
   useEffect(() => {
     localStorage.setItem("physics-theme", theme)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true)
   }, [theme])
+
+  // Save language preference to localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined" && locale) {
+      localStorage.setItem("NEXT_LOCALE", locale)
+    }
+  }, [locale])
 
   // Keyboard shortcuts for navigation
   useEffect(() => {
@@ -108,16 +94,216 @@ export default function Home() {
     }
   }, [])
 
-  const t = translations[language]
-  const isRTL = language === "he"
+  const isRTL = locale === "he"
   const isDark = theme === "dark"
 
   const navItems = [
-    { id: "quantum", label: t.quantum, color: "from-purple-600 to-blue-600" },
-    { id: "relativity", label: t.relativity, color: "from-yellow-600 to-orange-600" },
-    { id: "cosmos", label: t.cosmos, color: "from-red-600 to-purple-600" },
-    { id: "advanced", label: t.advanced, color: "from-pink-600 to-purple-600" },
+    { id: "quantum", label: t("quantum"), color: "from-purple-600 to-blue-600" },
+    { id: "relativity", label: t("relativity"), color: "from-yellow-600 to-orange-600" },
+    { id: "cosmos", label: t("cosmos"), color: "from-red-600 to-purple-600" },
+    { id: "advanced", label: t("advanced"), color: "from-pink-600 to-purple-600" },
   ]
+
+  // Helper для получения текста описания проекта
+  const getAboutText = () => {
+    const texts: Record<string, string> = {
+      ru: "Интерактивные визуализации физических явлений: от квантовой механики до космологии.",
+      en: "Interactive visualizations of physical phenomena: from quantum mechanics to cosmology.",
+      zh: "物理现象的交互式可视化：从量子力学到宇宙学。",
+      he: "ויזואליזציות אינטראקטיביות של תופעות פיזיקליות",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getSectionsTitle = () => {
+    const texts: Record<string, string> = {
+      ru: "📖 Разделы",
+      en: "📖 Sections",
+      zh: "📖 章节",
+      he: "📖 סעיפים",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getVisualizationsTitle = () => {
+    const texts: Record<string, string> = {
+      ru: "🔬 Визуализации",
+      en: "🔬 Visualizations",
+      zh: "🔬 可视化",
+      he: "🔬 ויזואליזציות",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getFormulasTitle = () => {
+    const texts: Record<string, string> = {
+      ru: "📐 Формулы",
+      en: "📐 Formulas",
+      zh: "📐 公式",
+      he: "📐 נוסחאות",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getSettingsTitle = () => {
+    const texts: Record<string, string> = {
+      ru: "⚙️ Настройки",
+      en: "⚙️ Settings",
+      zh: "⚙️ 设置",
+      he: "⚙️ הגדרות",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getLanguageLabel = () => {
+    const texts: Record<string, string> = {
+      ru: "Язык",
+      en: "Language",
+      zh: "语言",
+      he: "שפה",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getThemeLabel = () => {
+    const texts: Record<string, string> = {
+      ru: "Тема",
+      en: "Theme",
+      zh: "主题",
+      he: "ערכת נושא",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getFooterText = () => {
+    const texts: Record<string, string> = {
+      ru: "Создано с ❤️ для любителей физики",
+      en: "Made with ❤️ for physics enthusiasts",
+      zh: "为物理爱好者用❤️制作",
+      he: "נבנה ב❤️ לחובבי פיזיקה",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getMenuLabel = () => {
+    const texts: Record<string, string> = {
+      ru: "Меню",
+      en: "Menu",
+      zh: "菜单",
+      he: "תפריט",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getKeyboardHint = () => {
+    const texts: Record<string, string> = {
+      ru: "Клавиши: 1-4 разделы, M меню, Esc закрыть",
+      en: "Keys: 1-4 sections, M menu, Esc close",
+      zh: "快捷键：1-4章节，M菜单，Esc关闭",
+      he: "מקשים: 1-4 סעיפים, M תפריט, Esc סגור",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getWaveFunctionLabel = () => {
+    const texts: Record<string, string> = {
+      ru: "Волновая функция",
+      en: "Wave Function",
+      zh: "波函数",
+      he: "פונקציית גל",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getUncertaintyLabel = () => {
+    const texts: Record<string, string> = {
+      ru: "Принцип неопределённости",
+      en: "Uncertainty Principle",
+      zh: "不确定性原理",
+      he: "עיקרון אי-הוודאות",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getTunnelingLabel = () => {
+    const texts: Record<string, string> = {
+      ru: "Квантовое туннелирование",
+      en: "Quantum Tunneling",
+      zh: "量子隧穿",
+      he: "מינהור קוונטי",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getTimeDilationLabel = () => {
+    const texts: Record<string, string> = {
+      ru: "Замедление времени",
+      en: "Time Dilation",
+      zh: "时间膨胀",
+      he: "התארכות זמן",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getHRDiagramLabel = () => {
+    const texts: Record<string, string> = {
+      ru: "Диаграмма Г-Р",
+      en: "H-R Diagram",
+      zh: "赫罗图",
+      he: "דיאגרמת H-R",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getNeutronStarLabel = () => {
+    const texts: Record<string, string> = {
+      ru: "Нейтронная звезда",
+      en: "Neutron Star",
+      zh: "中子星",
+      he: "כוכב נייטרון",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getBlackHoleLabel = () => {
+    const texts: Record<string, string> = {
+      ru: "Чёрная дыра",
+      en: "Black Hole",
+      zh: "黑洞",
+      he: "חור שחור",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getWhiteHoleLabel = () => {
+    const texts: Record<string, string> = {
+      ru: "Белая дыра",
+      en: "White Hole",
+      zh: "白洞",
+      he: "חור לבן",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getDoubleSlitLabel = () => {
+    const texts: Record<string, string> = {
+      ru: "Двойная щель",
+      en: "Double Slit",
+      zh: "双缝实验",
+      he: "סדק כפול",
+    }
+    return texts[locale] || texts.en
+  }
+
+  const getDarkMatterLabel = () => {
+    const texts: Record<string, string> = {
+      ru: "Тёмная материя",
+      en: "Dark Matter",
+      zh: "暗物质",
+      he: "חומר אפל",
+    }
+    return texts[locale] || texts.en
+  }
 
   return (
     <div
@@ -138,36 +324,26 @@ export default function Home() {
             }}
             className={`absolute top-4 right-4 rounded-lg p-2 ${isDark ? "text-gray-400 hover:bg-gray-800" : "text-gray-600 hover:bg-gray-100"}`}
           >
-            вњ•
+            ✕
           </button>
 
           {/* Menu content */}
           <div className="mt-8 space-y-6">
             <div>
               <h2 className={`mb-2 text-xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
-                {language === "ru" && "рџ“љ Рћ РїСЂРѕРµРєС‚Рµ"}
-                {language === "en" && "рџ“љ About"}
-                {language === "zh" && "рџ“љ е…ідєЋйЎ№з›®"}
-                {language === "he" && "рџ“љ ЧђЧ•Ч“Ч•ЧЄ"}
+                {locale === "ru" && "📚 О проекте"}
+                {locale === "en" && "📚 About"}
+                {locale === "zh" && "📚 关于项目"}
+                {locale === "he" && "📚 אודות"}
               </h2>
               <p className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                {language === "ru" &&
-                  "РРЅС‚РµСЂР°РєС‚РёРІРЅС‹Рµ РІРёР·СѓР°Р»РёР·Р°С†РёРё С„РёР·РёС‡РµСЃРєРёС… СЏРІР»РµРЅРёР№: РѕС‚ РєРІР°РЅС‚РѕРІРѕР№ РјРµС…Р°РЅРёРєРё РґРѕ РєРѕСЃРјРѕР»РѕРіРёРё."}
-                {language === "en" &&
-                  "Interactive visualizations of physical phenomena: from quantum mechanics to cosmology."}
-                {language === "zh" &&
-                  "з‰©зђ†зЋ°и±Ўзљ„дє¤дє’ејЏеЏЇи§†еЊ–пјљд»Ћй‡Џе­ђеЉ›е­¦е€°е®‡е®™е­¦гЂ‚"}
-                {language === "he" &&
-                  "Ч•Ч™Ч–Ч•ЧђЧњЧ™Ч–Ч¦Ч™Ч•ЧЄ ЧђЧ™Ч ЧЧЁЧђЧ§ЧЧ™Ч‘Ч™Ч•ЧЄ Ч©Чњ ЧЄЧ•Ч¤ЧўЧ•ЧЄ Ч¤Ч™Ч–Ч™Ч§ЧњЧ™Ч•ЧЄ"}
+                {getAboutText()}
               </p>
             </div>
 
             <div className={`border-t pt-4 ${isDark ? "border-gray-800" : "border-gray-200"}`}>
               <h3 className={`mb-3 font-semibold ${isDark ? "text-gray-200" : "text-gray-800"}`}>
-                {language === "ru" && "рџ“– Р Р°Р·РґРµР»С‹"}
-                {language === "en" && "рџ“– Sections"}
-                {language === "zh" && "рџ“– з« иЉ‚"}
-                {language === "he" && "рџ“– ЧЎЧўЧ™Ч¤Ч™Чќ"}
+                {getSectionsTitle()}
               </h3>
               <div className="space-y-2">
                 {navItems.map((item) => (
@@ -193,163 +369,61 @@ export default function Home() {
 
             <div className={`border-t pt-4 ${isDark ? "border-gray-800" : "border-gray-200"}`}>
               <h3 className={`mb-3 font-semibold ${isDark ? "text-gray-200" : "text-gray-800"}`}>
-                {language === "ru" && "рџ”¬ Р’РёР·СѓР°Р»РёР·Р°С†РёРё"}
-                {language === "en" && "рџ”¬ Visualizations"}
-                {language === "zh" && "рџ”¬ еЏЇи§†еЊ–"}
-                {language === "he" && "рџ”¬ Ч•Ч™Ч–Ч•ЧђЧњЧ™Ч–Ч¦Ч™Ч•ЧЄ"}
+                {getVisualizationsTitle()}
               </h3>
               <div className={`space-y-1 text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                <div>
-                  рџЊЉ{" "}
-                  {language === "ru"
-                    ? "Р’РѕР»РЅРѕРІР°СЏ С„СѓРЅРєС†РёСЏ"
-                    : language === "en"
-                      ? "Wave Function"
-                      : language === "zh"
-                        ? "жіўе‡Ѕж•°"
-                        : "Ч¤Ч•Ч Ч§Ч¦Ч™Ч™ЧЄ Ч’Чњ"}
-                </div>
-                <div>
-                  рџ“ђ{" "}
-                  {language === "ru"
-                    ? "РџСЂРёРЅС†РёРї РЅРµРѕРїСЂРµРґРµР»С‘РЅРЅРѕСЃС‚Рё"
-                    : language === "en"
-                      ? "Uncertainty Principle"
-                      : language === "zh"
-                        ? "дёЌзЎ®е®љжЂ§еЋџзђ†"
-                        : "ЧўЧ™Ч§ЧЁЧ•Чџ ЧђЧ™-Ч”Ч•Ч•Ч“ЧђЧ•ЧЄ"}
-                </div>
-                <div>
-                  рџљ§{" "}
-                  {language === "ru"
-                    ? "РљРІР°РЅС‚РѕРІРѕРµ С‚СѓРЅРЅРµР»РёСЂРѕРІР°РЅРёРµ"
-                    : language === "en"
-                      ? "Quantum Tunneling"
-                      : language === "zh"
-                        ? "й‡Џе­ђйљ§з©ї"
-                        : "ЧћЧ™Ч Ч”Ч•ЧЁ Ч§Ч•Ч•Ч ЧЧ™"}
-                </div>
-                <div>
-                  вЏ±пёЏ{" "}
-                  {language === "ru"
-                    ? "Р—Р°РјРµРґР»РµРЅРёРµ РІСЂРµРјРµРЅРё"
-                    : language === "en"
-                      ? "Time Dilation"
-                      : language === "zh"
-                        ? "ж—¶й—ґи†ЁиѓЂ"
-                        : "Ч”ЧЄЧђЧЁЧ›Ч•ЧЄ Ч–ЧћЧџ"}
-                </div>
-                <div>рџ’Ґ E = mcВІ</div>
-                <div>
-                  рџ“Љ{" "}
-                  {language === "ru"
-                    ? "Р”РёР°РіСЂР°РјРјР° Р“-Р "
-                    : language === "en"
-                      ? "H-R Diagram"
-                      : language === "zh"
-                        ? "иµ«зЅ—е›ѕ"
-                        : "Ч“Ч™ЧђЧ’ЧЁЧћЧЄ H-R"}
-                </div>
-                <div>
-                  рџ’«{" "}
-                  {language === "ru"
-                    ? "РќРµР№С‚СЂРѕРЅРЅР°СЏ Р·РІРµР·РґР°"
-                    : language === "en"
-                      ? "Neutron Star"
-                      : language === "zh"
-                        ? "дё­е­ђжџ"
-                        : "Ч›Ч•Ч›Ч‘ Ч Ч™Ч™ЧЧЁЧ•Чџ"}
-                </div>
-                <div>
-                  рџ•іпёЏ{" "}
-                  {language === "ru"
-                    ? "Р§С‘СЂРЅР°СЏ РґС‹СЂР°"
-                    : language === "en"
-                      ? "Black Hole"
-                      : language === "zh"
-                        ? "й»‘жґћ"
-                        : "Ч—Ч•ЧЁ Ч©Ч—Ч•ЧЁ"}
-                </div>
-                <div>
-                  вљЄ{" "}
-                  {language === "ru"
-                    ? "Р‘РµР»Р°СЏ РґС‹СЂР°"
-                    : language === "en"
-                      ? "White Hole"
-                      : language === "zh"
-                        ? "з™Ѕжґћ"
-                        : "Ч—Ч•ЧЁ ЧњЧ‘Чџ"}
-                </div>
-                <div>
-                  рџ”¬{" "}
-                  {language === "ru"
-                    ? "Р”РІРѕР№РЅР°СЏ С‰РµР»СЊ"
-                    : language === "en"
-                      ? "Double Slit"
-                      : language === "zh"
-                        ? "еЏЊзјќе®ћйЄЊ"
-                        : "ЧЎЧ“Ч§ Ч›Ч¤Ч•Чњ"}
-                </div>
-                <div>
-                  рџЊЂ{" "}
-                  {language === "ru"
-                    ? "РўС‘РјРЅР°СЏ РјР°С‚РµСЂРёСЏ"
-                    : language === "en"
-                      ? "Dark Matter"
-                      : language === "zh"
-                        ? "жљ—з‰©иґЁ"
-                        : "Ч—Ч•ЧћЧЁ ЧђЧ¤Чњ"}
-                </div>
+                <div>🌊 {getWaveFunctionLabel()}</div>
+                <div>📐 {getUncertaintyLabel()}</div>
+                <div>🚧 {getTunnelingLabel()}</div>
+                <div>⏱️ {getTimeDilationLabel()}</div>
+                <div>💥 E = mc²</div>
+                <div>📊 {getHRDiagramLabel()}</div>
+                <div>💫 {getNeutronStarLabel()}</div>
+                <div>🕳️ {getBlackHoleLabel()}</div>
+                <div>⚪ {getWhiteHoleLabel()}</div>
+                <div>🔬 {getDoubleSlitLabel()}</div>
+                <div>🌀 {getDarkMatterLabel()}</div>
               </div>
             </div>
 
             <div className={`border-t pt-4 ${isDark ? "border-gray-800" : "border-gray-200"}`}>
               <h3 className={`mb-3 font-semibold ${isDark ? "text-gray-200" : "text-gray-800"}`}>
-                {language === "ru" && "рџ“ђ Р¤РѕСЂРјСѓР»С‹"}
-                {language === "en" && "рџ“ђ Formulas"}
-                {language === "zh" && "рџ“ђ е…¬ејЏ"}
-                {language === "he" && "рџ“ђ Ч Ч•ЧЎЧ—ЧђЧ•ЧЄ"}
+                {getFormulasTitle()}
               </h3>
               <div
                 className={`space-y-2 font-mono text-xs ${isDark ? "text-cyan-400" : "text-cyan-600"}`}
               >
-                <div>E = mcВІ</div>
-                <div>О”xВ·О”p в‰Ґ в„Џ/2</div>
-                <div>П€(x,t) = Ae^(i(kx-П‰t))</div>
-                <div>R_s = 2GM/cВІ</div>
-                <div>T_H = в„ЏcВі/8ПЂGMk_B</div>
-                <div>Оі = 1/в€љ(1-vВІ/cВІ)</div>
+                <div>E = mc²</div>
+                <div>Δx·Δp ≥ ℏ/2</div>
+                <div>ψ(x,t) = Ae^(i(kx-ωt))</div>
+                <div>R_s = 2GM/c²</div>
+                <div>T_H = ℏc³/8πGMk_B</div>
+                <div>γ = 1/√(1-v²/c²)</div>
               </div>
             </div>
 
             <div className={`border-t pt-4 ${isDark ? "border-gray-800" : "border-gray-200"}`}>
               <h3 className={`mb-3 font-semibold ${isDark ? "text-gray-200" : "text-gray-800"}`}>
-                {language === "ru" && "вљ™пёЏ РќР°СЃС‚СЂРѕР№РєРё"}
-                {language === "en" && "вљ™пёЏ Settings"}
-                {language === "zh" && "вљ™пёЏ и®ѕзЅ®"}
-                {language === "he" && "вљ™пёЏ Ч”Ч’Ч“ЧЁЧ•ЧЄ"}
+                {getSettingsTitle()}
               </h3>
               <div className="space-y-3">
                 <div>
                   <label className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                    {language === "ru"
-                      ? "РЇР·С‹Рє"
-                      : language === "en"
-                        ? "Language"
-                        : language === "zh"
-                          ? "иЇ­иЁЂ"
-                          : "Ч©Ч¤Ч”"}
+                    {getLanguageLabel()}
                   </label>
                   <div className="mt-1 flex gap-1">
-                    {(["ru", "en", "zh", "he"] as Language[]).map((lang) => (
+                    {(["ru", "en", "zh", "he"] as const).map((lang) => (
                       <Button
                         key={lang}
                         onClick={() => {
-                          setLanguage(lang)
+                          if (typeof window !== "undefined") {
+                            localStorage.setItem("NEXT_LOCALE", lang)
+                            window.location.reload()
+                          }
                         }}
-                        variant={language === lang ? "default" : "ghost"}
+                        variant={locale === lang ? "default" : "ghost"}
                         size="sm"
-                        className={`px-2 text-xs ${language === lang ? "bg-purple-600" : isDark ? "text-gray-400" : "text-gray-600"}`}
+                        className={`px-2 text-xs ${locale === lang ? "bg-purple-600" : isDark ? "text-gray-400" : "text-gray-600"}`}
                       >
                         {lang.toUpperCase()}
                       </Button>
@@ -358,13 +432,7 @@ export default function Home() {
                 </div>
                 <div>
                   <label className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                    {language === "ru"
-                      ? "РўРµРјР°"
-                      : language === "en"
-                        ? "Theme"
-                        : language === "zh"
-                          ? "дё»йў"
-                          : "ЧўЧЁЧ›ЧЄ Ч Ч•Ч©Чђ"}
+                    {getThemeLabel()}
                   </label>
                   <div className="mt-1 flex gap-2">
                     <Button
@@ -375,7 +443,7 @@ export default function Home() {
                       size="sm"
                       className={`text-xs ${theme === "dark" ? "bg-gray-700" : ""}`}
                     >
-                      рџЊ™ Dark
+                      🌙 Dark
                     </Button>
                     <Button
                       onClick={() => {
@@ -385,7 +453,7 @@ export default function Home() {
                       size="sm"
                       className={`text-xs ${theme === "light" ? "bg-gray-200 text-gray-900" : ""}`}
                     >
-                      вЂпёЏ Light
+                      ☀️ Light
                     </Button>
                   </div>
                 </div>
@@ -394,11 +462,7 @@ export default function Home() {
 
             <div className={`border-t pt-4 ${isDark ? "border-gray-800" : "border-gray-200"}`}>
               <p className={`text-xs ${isDark ? "text-gray-500" : "text-gray-500"}`}>
-                {language === "ru" &&
-                  "РЎРѕР·РґР°РЅРѕ СЃ вќ¤пёЏ РґР»СЏ Р»СЋР±РёС‚РµР»РµР№ С„РёР·РёРєРё"}
-                {language === "en" && "Made with вќ¤пёЏ for physics enthusiasts"}
-                {language === "zh" && "дёєз‰©зђ†з€±еҐЅиЂ…з”Ёвќ¤пёЏе€¶дЅњ"}
-                {language === "he" && "Ч Ч‘Ч Ч” Ч‘вќ¤пёЏ ЧњЧ—Ч•Ч‘Ч‘Ч™ Ч¤Ч™Ч–Ч™Ч§Ч”"}
+                {getFooterText()}
               </p>
             </div>
           </div>
@@ -429,15 +493,18 @@ export default function Home() {
             <div className="flex gap-2">
               {/* Language buttons */}
               <div className="flex gap-1">
-                {(["ru", "en", "zh", "he"] as Language[]).map((lang) => (
+                {(["ru", "en", "zh", "he"] as const).map((lang) => (
                   <Button
                     key={lang}
                     onClick={() => {
-                      setLanguage(lang)
+                      if (typeof window !== "undefined") {
+                        localStorage.setItem("NEXT_LOCALE", lang)
+                        window.location.reload()
+                      }
                     }}
-                    variant={language === lang ? "default" : "ghost"}
+                    variant={locale === lang ? "default" : "ghost"}
                     size="sm"
-                    className={`px-2 text-xs ${language === lang ? "bg-purple-600" : isDark ? "text-gray-400" : "text-gray-600"}`}
+                    className={`px-2 text-xs ${locale === lang ? "bg-purple-600" : isDark ? "text-gray-400" : "text-gray-600"}`}
                   >
                     {lang.toUpperCase()}
                   </Button>
@@ -452,7 +519,7 @@ export default function Home() {
                 size="sm"
                 className={`text-xs ${isDark ? "border-gray-700 text-gray-300" : "border-gray-300 text-gray-700"}`}
               >
-                {isDark ? "вЂпёЏ" : "рџЊ™"}
+                {isDark ? "☀️" : "🌙"}
               </Button>
               {/* Menu toggle */}
               <Button
@@ -463,14 +530,7 @@ export default function Home() {
                 size="sm"
                 className={`text-xs ${isDark ? "border-gray-700 text-gray-300" : "border-gray-300 text-gray-700"}`}
               >
-                в°{" "}
-                {language === "ru"
-                  ? "РњРµРЅСЋ"
-                  : language === "en"
-                    ? "Menu"
-                    : language === "zh"
-                      ? "иЏњеЌ•"
-                      : "ЧЄЧ¤ЧЁЧ™Ч"}
+                ☰ {getMenuLabel()}
               </Button>
             </div>
           </div>
@@ -478,10 +538,10 @@ export default function Home() {
           {/* Title */}
           <div className="text-center">
             <h1 className="mb-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-2xl font-bold text-transparent md:text-4xl">
-              {t.title}
+              {t("title")}
             </h1>
             <p className={`text-sm md:text-base ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-              {t.subtitle}
+              {t("subtitle")}
             </p>
           </div>
         </div>
@@ -500,7 +560,7 @@ export default function Home() {
                   setActiveSection(tab.id)
                 }}
                 variant={activeSection === tab.id ? "default" : "ghost"}
-                title={`еї«жЌ·й”®: ${String(index + 1)} | Shortcut: ${String(index + 1)}`}
+                title={`快捷键：${String(index + 1)} | Shortcut: ${String(index + 1)}`}
                 className={`text-xs md:text-sm ${activeSection === tab.id ? `bg-gradient-to-r ${tab.color}` : isDark ? "text-gray-400" : "text-gray-600"}`}
               >
                 {tab.label}
@@ -523,14 +583,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-purple-400" : "text-purple-600"}`}>
-                  {t.waveFunction}
+                  {t("waveFunction")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.waveFunctionDesc}
+                  {t("waveFunctionDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.waveFunction} isDark={isDark}>
+                <FullscreenWrapper title={t("waveFunction")} isDark={isDark}>
                   <ErrorBoundary name="WaveFunctionVisualization">
                     <WaveFunctionVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -547,14 +607,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-blue-400" : "text-blue-600"}`}>
-                  {t.uncertainty}
+                  {t("uncertainty")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.uncertaintyDesc}
+                  {t("uncertaintyDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.uncertainty} isDark={isDark}>
+                <FullscreenWrapper title={t("uncertainty")} isDark={isDark}>
                   <ErrorBoundary name="UncertaintyVisualization">
                     <UncertaintyVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -571,14 +631,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-green-400" : "text-green-600"}`}>
-                  {t.tunneling}
+                  {t("tunneling")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.tunnelingDesc}
+                  {t("tunnelingDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.tunneling} isDark={isDark}>
+                <FullscreenWrapper title={t("tunneling")} isDark={isDark}>
                   <ErrorBoundary name="TunnelingVisualization">
                     <TunnelingVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -599,14 +659,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-orange-400" : "text-orange-600"}`}>
-                  {t.timeDilation}
+                  {t("timeDilation")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.timeDilationDesc}
+                  {t("timeDilationDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.timeDilation} isDark={isDark}>
+                <FullscreenWrapper title={t("timeDilation")} isDark={isDark}>
                   <ErrorBoundary name="TimeDilationVisualization">
                     <TimeDilationVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -623,14 +683,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-purple-400" : "text-purple-600"}`}>
-                  {t.lengthContraction}
+                  {t("lengthContraction")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.lengthContractionDesc}
+                  {t("lengthContractionDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.lengthContraction} isDark={isDark}>
+                <FullscreenWrapper title={t("lengthContraction")} isDark={isDark}>
                   <ErrorBoundary name="LengthContractionVisualization">
                     <LengthContractionVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -647,14 +707,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-yellow-400" : "text-yellow-600"}`}>
-                  {t.massEnergy}
+                  {t("massEnergy")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.massEnergyDesc}
+                  {t("massEnergyDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.massEnergy} isDark={isDark}>
+                <FullscreenWrapper title={t("massEnergy")} isDark={isDark}>
                   <ErrorBoundary name="MassEnergyVisualization">
                     <MassEnergyVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -675,14 +735,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-blue-400" : "text-blue-600"}`}>
-                  {t.hrDiagram}
+                  {t("hrDiagram")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.hrDiagramDesc}
+                  {t("hrDiagramDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.hrDiagram} isDark={isDark}>
+                <FullscreenWrapper title={t("hrDiagram")} isDark={isDark}>
                   <ErrorBoundary name="HRDiagramVisualization">
                     <HRDiagramVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -699,14 +759,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-cyan-400" : "text-cyan-600"}`}>
-                  {t.neutronStar}
+                  {t("neutronStar")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.neutronStarDesc}
+                  {t("neutronStarDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.neutronStar} isDark={isDark}>
+                <FullscreenWrapper title={t("neutronStar")} isDark={isDark}>
                   <ErrorBoundary name="NeutronStarVisualization">
                     <NeutronStarVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -723,14 +783,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-red-400" : "text-red-600"}`}>
-                  {t.blackHole}
+                  {t("blackHole")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.blackHoleDesc}
+                  {t("blackHoleDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.blackHole} isDark={isDark}>
+                <FullscreenWrapper title={t("blackHole")} isDark={isDark}>
                   <ErrorBoundary name="BlackHoleVisualization">
                     <BlackHoleVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -747,14 +807,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-cyan-400" : "text-cyan-600"}`}>
-                  {t.whiteHole}
+                  {t("whiteHole")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.whiteHoleDesc}
+                  {t("whiteHoleDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.whiteHole} isDark={isDark}>
+                <FullscreenWrapper title={t("whiteHole")} isDark={isDark}>
                   <ErrorBoundary name="WhiteHoleVisualization">
                     <WhiteHoleVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -771,14 +831,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-yellow-400" : "text-yellow-600"}`}>
-                  {t.solarSystem}
+                  {t("solarSystem")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.solarSystemDesc}
+                  {t("solarSystemDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.solarSystem} isDark={isDark}>
+                <FullscreenWrapper title={t("solarSystem")} isDark={isDark}>
                   <ErrorBoundary name="SolarSystemVisualization">
                     <SolarSystemVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -795,14 +855,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-blue-400" : "text-blue-600"}`}>
-                  {t.cmb}
+                  {t("cmb")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.cmbDesc}
+                  {t("cmbDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.cmb} isDark={isDark}>
+                <FullscreenWrapper title={t("cmb")} isDark={isDark}>
                   <ErrorBoundary name="CMBVisualization">
                     <CMBVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -819,14 +879,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-purple-400" : "text-purple-600"}`}>
-                  {t.darkEnergy}
+                  {t("darkEnergy")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.darkEnergyDesc}
+                  {t("darkEnergyDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.darkEnergy} isDark={isDark}>
+                <FullscreenWrapper title={t("darkEnergy")} isDark={isDark}>
                   <ErrorBoundary name="DarkEnergyVisualization">
                     <DarkEnergyVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -847,14 +907,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-pink-400" : "text-pink-600"}`}>
-                  {t.doubleSlit}
+                  {t("doubleSlit")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.doubleSlitDesc}
+                  {t("doubleSlitDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.doubleSlit} isDark={isDark}>
+                <FullscreenWrapper title={t("doubleSlit")} isDark={isDark}>
                   <ErrorBoundary name="DoubleSlitVisualization">
                     <DoubleSlitVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -871,14 +931,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-purple-400" : "text-purple-600"}`}>
-                  {t.darkMatter}
+                  {t("darkMatter")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.darkMatterDesc}
+                  {t("darkMatterDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.darkMatter} isDark={isDark}>
+                <FullscreenWrapper title={t("darkMatter")} isDark={isDark}>
                   <ErrorBoundary name="DarkMatterVisualization">
                     <DarkMatterVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -895,14 +955,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-purple-400" : "text-purple-600"}`}>
-                  {t.gravitationalWaves}
+                  {t("gravitationalWaves")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.gravitationalWavesDesc}
+                  {t("gravitationalWavesDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.gravitationalWaves} isDark={isDark}>
+                <FullscreenWrapper title={t("gravitationalWaves")} isDark={isDark}>
                   <ErrorBoundary name="GravitationalWavesVisualization">
                     <GravitationalWavesVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -919,14 +979,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-pink-400" : "text-pink-600"}`}>
-                  {t.quantumEntanglement}
+                  {t("quantumEntanglement")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.quantumEntanglementDesc}
+                  {t("quantumEntanglementDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.quantumEntanglement} isDark={isDark}>
+                <FullscreenWrapper title={t("quantumEntanglement")} isDark={isDark}>
                   <ErrorBoundary name="QuantumEntanglementVisualization">
                     <QuantumEntanglementVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -943,14 +1003,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-cyan-400" : "text-cyan-600"}`}>
-                  {t.atomicModel}
+                  {t("atomicModel")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.atomicModelDesc}
+                  {t("atomicModelDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.atomicModel} isDark={isDark}>
+                <FullscreenWrapper title={t("atomicModel")} isDark={isDark}>
                   <ErrorBoundary name="AtomicModelVisualization">
                     <AtomicModelVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -967,14 +1027,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-green-400" : "text-green-600"}`}>
-                  {t.radioactiveDecay}
+                  {t("radioactiveDecay")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.radioactiveDecayDesc}
+                  {t("radioactiveDecayDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.radioactiveDecay} isDark={isDark}>
+                <FullscreenWrapper title={t("radioactiveDecay")} isDark={isDark}>
                   <ErrorBoundary name="RadioactiveDecayVisualization">
                     <RadioactiveDecayVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -991,14 +1051,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-cyan-400" : "text-cyan-600"}`}>
-                  {t.superconductivity}
+                  {t("superconductivity")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.superconductivityDesc}
+                  {t("superconductivityDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.superconductivity} isDark={isDark}>
+                <FullscreenWrapper title={t("superconductivity")} isDark={isDark}>
                   <ErrorBoundary name="SuperconductivityVisualization">
                     <SuperconductivityVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -1015,14 +1075,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-yellow-400" : "text-yellow-600"}`}>
-                  {t.standardModel}
+                  {t("standardModel")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.standardModelDesc}
+                  {t("standardModelDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.standardModel} isDark={isDark}>
+                <FullscreenWrapper title={t("standardModel")} isDark={isDark}>
                   <ErrorBoundary name="StandardModelVisualization">
                     <StandardModelVisualization isDark={isDark} />
                   </ErrorBoundary>
@@ -1039,14 +1099,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-purple-400" : "text-purple-600"}`}>
-                  {t.calculator}
+                  {t("calculator")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.calculatorDesc}
+                  {t("calculatorDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.calculator} isDark={isDark}>
+                <FullscreenWrapper title={t("calculator")} isDark={isDark}>
                   <FormulaCalculator />
                 </FullscreenWrapper>
               </CardContent>
@@ -1061,14 +1121,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-purple-400" : "text-purple-600"}`}>
-                  {t.timeline}
+                  {t("timeline")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.timelineDesc}
+                  {t("timelineDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.timeline} isDark={isDark}>
+                <FullscreenWrapper title={t("timeline")} isDark={isDark}>
                   <PhysicsTimeline />
                 </FullscreenWrapper>
               </CardContent>
@@ -1083,14 +1143,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-cyan-400" : "text-cyan-600"}`}>
-                  {t.physicsQuiz}
+                  {t("physicsQuiz")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.physicsQuizDesc}
+                  {t("physicsQuizDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.physicsQuiz} isDark={isDark}>
+                <FullscreenWrapper title={t("physicsQuiz")} isDark={isDark}>
                   <PhysicsQuiz />
                 </FullscreenWrapper>
               </CardContent>
@@ -1105,14 +1165,14 @@ export default function Home() {
             >
               <CardHeader className="pb-2">
                 <CardTitle className={`text-lg ${isDark ? "text-yellow-400" : "text-yellow-600"}`}>
-                  {t.scientists}
+                  {t("scientists")}
                 </CardTitle>
                 <CardDescription className={`text-xs ${isDark ? "" : "text-gray-600"}`}>
-                  {t.scientistsDesc}
+                  {t("scientistsDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
-                <FullscreenWrapper title={t.scientists} isDark={isDark}>
+                <FullscreenWrapper title={t("scientists")} isDark={isDark}>
                   <ScientistsBiographies />
                 </FullscreenWrapper>
               </CardContent>
@@ -1125,16 +1185,9 @@ export default function Home() {
         <div
           className={`mx-auto max-w-6xl px-4 text-center text-xs ${isDark ? "text-gray-500" : "text-gray-600"}`}
         >
-          <p>{t.footer}</p>
+          <p>{t("footer")}</p>
           <p className={`mt-1 ${isDark ? "text-gray-600" : "text-gray-500"}`}>
-            вЊЁпёЏ{" "}
-            {language === "ru"
-              ? "РљР»Р°РІРёС€Рё: 1-4 СЂР°Р·РґРµР»С‹, M РјРµРЅСЋ, Esc Р·Р°РєСЂС‹С‚СЊ"
-              : language === "en"
-                ? "Keys: 1-4 sections, M menu, Esc close"
-                : language === "zh"
-                  ? "еї«жЌ·й”®: 1-4з« иЉ‚, MиЏњеЌ•, Escе…ій—­"
-                  : "ЧћЧ§Ч©Ч™Чќ: 1-4 ЧЎЧўЧ™Ч¤Ч™Чќ, M ЧЄЧ¤ЧЁЧ™Ч, Esc ЧЎЧ’Ч•ЧЁ"}
+            ⌨️ {getKeyboardHint()}
           </p>
         </div>
       </footer>

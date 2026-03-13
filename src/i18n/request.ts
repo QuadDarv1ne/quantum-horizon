@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { getRequestConfig } from "next-intl/server"
-import { locales, type Locale } from "./config"
+import { locales, defaultLocale, type Locale } from "./config"
 
 function isValidLocale(locale: string): locale is Locale {
   return locales.includes(locale as Locale)
@@ -12,7 +12,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
 
   // Validate locale
   if (!locale || !isValidLocale(locale)) {
-    locale = "ru"
+    locale = defaultLocale
   }
 
   return {

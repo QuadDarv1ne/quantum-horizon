@@ -25,6 +25,11 @@ function isValidLocale(locale: string): locale is Locale {
   return locales.includes(locale as Locale)
 }
 
+// Определение направления текста для RTL языков
+function getTextDirection(locale: Locale): "ltr" | "rtl" {
+  return locale === "he" ? "rtl" : "ltr"
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -38,9 +43,10 @@ export default async function RootLayout({
   }
 
   const messages = await getMessages()
+  const dir = getTextDirection(locale)
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} dir={dir} suppressHydrationWarning>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
