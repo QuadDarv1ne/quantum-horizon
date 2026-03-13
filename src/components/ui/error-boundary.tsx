@@ -3,14 +3,12 @@
 import { Component, type ReactNode, type ErrorInfo } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { useToast } from "@/hooks/use-toast"
 
 interface Props {
   children: ReactNode
   fallback?: ReactNode
   name?: string
   onError?: (error: Error, errorInfo: ErrorInfo) => void
-  autoDismiss?: number
 }
 
 interface State {
@@ -37,48 +35,11 @@ export class ErrorBoundary extends Component<Props, State> {
       errorInfo
     )
 
-    // Логирование в аналитику
-    this.logErrorToAnalytics(error, errorInfo)
-
-    // Callback
     this.props.onError?.(error, errorInfo)
-
     this.setState({ errorInfo })
   }
 
-  private logErrorToAnalytics(error: Error, errorInfo: ErrorInfo) {
-    if (typeof window !== "undefined") {
-      // Отправка ошибки в аналитику
-      const errorData = {
-        message: error.message,
-        stack: error.stack,
-        componentStack: errorInfo.componentStack,
-        timestamp: new Date().toISOString(),
-        url: window.location.href,
-      }
-
-      // Логирование в консоль
-      console.error("[Error Analytics]", errorData)
-
-      // Отправка на сервер (если есть endpoint)
-      if (navigator.sendBeacon) {
-        const blob = new Blob([JSON.stringify(errorData)], { type: "application/json" })
-        navigator.sendBeacon("/api/errors", blob)
-      }
-    }
-  }
-
-  private showToast() {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const toast = useToast // This won't work in class, need different approach
-    console.warn("Toast notification for error:", this.state.error?.message)
-  }
-
   public handleRetry = () => {
-    this.setState({ hasError: false, error: null, errorInfo: null })
-  }
-
-  public reset = () => {
     this.setState({ hasError: false, error: null, errorInfo: null })
   }
 
@@ -94,12 +55,12 @@ export class ErrorBoundary extends Component<Props, State> {
             <CardTitle className="text-red-400">
               ⚠️ Ошибка{this.props.name ? `: ${this.props.name}` : ""}
             </CardTitle>
-            <CardDescription className="text-red-300/70 space-y-2">
+            <CardDescription className="space-y-2 text-red-300/70">
               <p>{this.state.error?.message || "Произошла неизвестная ошибка"}</p>
               {process.env.NODE_ENV === "development" && this.state.errorInfo && (
-                <details className="text-xs text-red-300/50 mt-2">
+                <details className="mt-2 text-xs text-red-300/50">
                   <summary className="cursor-pointer">Детали ошибки (Dev)</summary>
-                  <pre className="mt-2 p-2 bg-red-950/50 rounded overflow-auto max-h-40">
+                  <pre className="mt-2 max-h-40 overflow-auto rounded bg-red-950/50 p-2">
                     <code>{this.state.errorInfo.componentStack}</code>
                   </pre>
                 </details>
@@ -130,9 +91,6 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 }
 
-/**
- * Функциональный Error Boundary с использованием React 18 use() хука
- */
 export function ErrorBoundaryFallback({
   error,
   reset,
@@ -148,7 +106,7 @@ export function ErrorBoundaryFallback({
         <CardTitle className="text-red-400">⚠️ Ошибка{title ? `: ${title}` : ""}</CardTitle>
         <CardDescription className="text-red-300/70">
           <p>{error.message}</p>
-          {error.digest && <p className="text-xs mt-2 text-red-300/50">Error ID: {error.digest}</p>}
+          {error.digest && <p className="mt-2 text-xs text-red-300/50">Error ID: {error.digest}</p>}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex gap-2">
@@ -160,9 +118,6 @@ export function ErrorBoundaryFallback({
   )
 }
 
-/**
- * Hook-based error boundary wrapper для функциональных компонентов
- */
 export function withErrorBoundary<P extends object>(
   WrappedComponent: React.ComponentType<P>,
   options: { name?: string; fallback?: ReactNode } = {}
