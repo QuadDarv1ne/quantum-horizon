@@ -6,8 +6,8 @@ describe("Web Vitals", () => {
     expect(true).toBe(true)
   })
 
-  it("should have useReportWebVitals import", () => {
+  it("should have useReportWebVitals import", async () => {
     // Test that the module can be imported
-    expect(() => import("../web-vitals")).not.toThrow()
+    await expect(import("./web-vitals")).resolves.toBeDefined()
   })
 })

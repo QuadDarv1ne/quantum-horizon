@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
-import { ServiceWorkerRegistration } from "../service-worker-registration"
+import { ServiceWorkerRegistration } from "./service-worker-registration"
 
 describe("ServiceWorkerRegistration", () => {
   beforeEach(() => {

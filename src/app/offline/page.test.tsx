@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
-import OfflinePage from "@/app/offline/page"
+import OfflinePage from "./page"
 
 describe("OfflinePage", () => {
   beforeEach(() => {
