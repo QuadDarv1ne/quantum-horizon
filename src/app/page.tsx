@@ -55,345 +55,325 @@ function PhysicsTimeline() {
     {
       year: -300,
       era: "ancient",
-      title: "РђСЂРёСЃС‚РѕС‚РµР»СЊ",
-      desc: "Р¤РёР·РёРєР° Р°РЅС‚РёС‡РЅРѕСЃС‚Рё",
-      detail: "РћСЃРЅРѕРІС‹ РјРµС…Р°РЅРёРєРё Рё РєРѕСЃРјРѕР»РѕРіРёРё",
+      title: "Аристотель",
+      desc: "Физика античности",
+      detail: "Основы механики и космологии",
       color: "#8B5CF6",
     },
     {
       year: -250,
       era: "ancient",
-      title: "РђСЂС…РёРјРµРґ",
-      desc: "Р—Р°РєРѕРЅ СЂС‹С‡Р°РіР°",
-      detail: "Eureka! Р—Р°РєРѕРЅ РіРёРґСЂРѕСЃС‚Р°С‚РёРєРё",
+      title: "Архимед",
+      desc: "Закон рычага",
+      detail: "Eureka! Закон гидростатики",
       color: "#8B5CF6",
     },
     {
       year: 1543,
       era: "renaissance",
-      title: "РљРѕРїРµСЂРЅРёРє",
-      desc: "Р“РµР»РёРѕС†РµРЅС‚СЂРёР·Рј",
-      detail: "Р РµРІРѕР»СЋС†РёСЏ РІ Р°СЃС‚СЂРѕРЅРѕРјРёРё",
+      title: "Коперник",
+      desc: "Гелиоцентризм",
+      detail: "Революция в астрономии",
       color: "#F59E0B",
     },
     {
       year: 1609,
       era: "renaissance",
-      title: "РљРµРїР»РµСЂ",
-      desc: "Р—Р°РєРѕРЅС‹ РїР»Р°РЅРµС‚",
-      detail: "Р­Р»Р»РёРїС‚РёС‡РµСЃРєРёРµ РѕСЂР±РёС‚С‹ РїР»Р°РЅРµС‚",
+      title: "Кеплер",
+      desc: "Законы планет",
+      detail: "Эллиптические орбиты планет",
       color: "#F59E0B",
     },
     {
       year: 1666,
       era: "classical",
-      title: "РќСЊСЋС‚РѕРЅ",
-      desc: "РљР»Р°СЃСЃРёС‡РµСЃРєР°СЏ РјРµС…Р°РЅРёРєР°",
-      detail: "Р—Р°РєРѕРЅС‹ РґРІРёР¶РµРЅРёСЏ, РіСЂР°РІРёС‚Р°С†РёСЏ",
+      title: "Ньютон",
+      desc: "Классическая механика",
+      detail: "Законы движения, гравитация",
       color: "#EF4444",
     },
     {
       year: 1687,
       era: "classical",
       title: "Principia",
-      desc: "РњР°С‚РµРјР°С‚РёС‡РµСЃРєРёРµ РЅР°С‡Р°Р»Р°",
-      detail: "Р’РµР»РёС‡Р°Р№С€РёР№ С‚СЂСѓРґ РќСЊСЋС‚РѕРЅР°",
+      desc: "Математические начала",
+      detail: "Величайший труд Ньютона",
       color: "#EF4444",
     },
     {
       year: 1800,
       era: "classical",
-      title: "Р’РѕР»СЊС‚Р°",
-      desc: "Р­Р»РµРєС‚СЂРёС‡РµСЃРєР°СЏ Р±Р°С‚Р°СЂРµСЏ",
-      detail: "РџРµСЂРІС‹Р№ РёСЃС‚РѕС‡РЅРёРє С‚РѕРєР°",
+      title: "Вольта",
+      desc: "Электрическая батарея",
+      detail: "Первый источник тока",
       color: "#3B82F6",
     },
     {
       year: 1820,
       era: "classical",
-      title: "Р­СЂСЃС‚РµРґ",
-      desc: "Р­Р»РµРєС‚СЂРѕРјР°РіРЅРµС‚РёР·Рј",
-      detail: "РЎРІСЏР·СЊ СЌР»РµРєС‚СЂРёС‡РµСЃС‚РІР° Рё РјР°РіРЅРµС‚РёР·РјР°",
+      title: "Эрстед",
+      desc: "Электромагнетизм",
+      detail: "Связь электричества и магнетизма",
       color: "#3B82F6",
     },
     {
       year: 1831,
       era: "classical",
-      title: "Р¤Р°СЂР°РґРµР№",
-      desc: "Р­Р»РµРєС‚СЂРѕРјР°РіРЅРёС‚РЅР°СЏ РёРЅРґСѓРєС†РёСЏ",
-      detail: "РћСЃРЅРѕРІС‹ СЌР»РµРєС‚СЂРѕС‚РµС…РЅРёРєРё",
+      title: "Фарадей",
+      desc: "Электромагнитная индукция",
+      detail: "Основы электротехники",
       color: "#3B82F6",
     },
     {
       year: 1865,
       era: "classical",
-      title: "РњР°РєСЃРІРµР»Р»",
-      desc: "РЈСЂР°РІРЅРµРЅРёСЏ РњР°РєСЃРІРµР»Р»Р°",
-      detail: "РўРµРѕСЂРёСЏ СЌР»РµРєС‚СЂРѕРјР°РіРЅРµС‚РёР·РјР°",
+      title: "Максвелл",
+      desc: "Уравнения Максвелла",
+      detail: "Теория электромагнетизма",
       color: "#3B82F6",
     },
     {
       year: 1887,
       era: "modern",
-      title: "РњРёС…РµР»СЊСЃРѕРЅ",
-      desc: "РћРїС‹С‚ РњРёС…РµР»СЊСЃРѕРЅР°",
-      detail: "РџРѕСЃС‚РѕСЏРЅСЃС‚РІРѕ СЃРєРѕСЂРѕСЃС‚Рё СЃРІРµС‚Р°",
+      title: "Микельсон",
+      desc: "Опыт Микельсона",
+      detail: "Постоянство скорости света",
       color: "#10B981",
     },
     {
       year: 1895,
       era: "modern",
-      title: "Р РµРЅС‚РіРµРЅ",
-      desc: "Р РµРЅС‚РіРµРЅРѕРІСЃРєРёРµ Р»СѓС‡Рё",
-      detail: "РћС‚РєСЂС‹С‚РёРµ РёРѕРЅРёР·РёСЂСѓСЋС‰РµРіРѕ РёР·Р»СѓС‡РµРЅРёСЏ",
+      title: "Рентген",
+      desc: "Рентгеновские лучи",
+      detail: "Открытие ионизирующего излучения",
       color: "#10B981",
     },
     {
       year: 1896,
       era: "modern",
-      title: "Р‘РµРєРєРµСЂРµР»СЊ",
-      desc: "Р Р°РґРёРѕР°РєС‚РёРІРЅРѕСЃС‚СЊ",
-      detail: "РЇРІР»РµРЅРёРµ СЃР°РјРѕРїСЂРѕРёР·РІРѕР»СЊРЅРѕРіРѕ СЂР°СЃРїР°РґР°",
+      title: "Беккерель",
+      desc: "Радиоактивность",
+      detail: "Явление самопроизвольного распада",
       color: "#10B981",
     },
     {
       year: 1897,
       era: "modern",
-      title: "РўРѕРјСЃРѕРЅ",
-      desc: "РћС‚РєСЂС‹С‚РёРµ СЌР»РµРєС‚СЂРѕРЅР°",
-      detail: "РџРµСЂРІР°СЏ СЌР»РµРјРµРЅС‚Р°СЂРЅР°СЏ С‡Р°СЃС‚РёС†Р°",
+      title: "Томсон",
+      desc: "Открытие электрона",
+      detail: "Первая элементарная частица",
       color: "#10B981",
     },
     {
       year: 1900,
       era: "quantum",
-      title: "РџР»Р°РЅРє",
-      desc: "РљРІР°РЅС‚РѕРІР°СЏ РіРёРїРѕС‚РµР·Р°",
-      detail: "Р РѕР¶РґРµРЅРёРµ РєРІР°РЅС‚РѕРІРѕР№ С„РёР·РёРєРё",
+      title: "Планк",
+      desc: "Квантовая гипотеза",
+      detail: "Рождение квантовой физики",
       color: "#EC4899",
     },
     {
       year: 1905,
       era: "relativity",
-      title: "Р­Р№РЅС€С‚РµР№РЅ",
-      desc: "РЎРїРµС†РёР°Р»СЊРЅР°СЏ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕСЃС‚СЊ",
-      detail: "E = mcВІ, 4 СЃС‚Р°С‚СЊРё Р·Р° РіРѕРґ С‡СѓРґРµСЃ",
+      title: "Эйнштейн",
+      desc: "Специальная относительность",
+      detail: "E = mc², 4 статьи за год чудес",
       color: "#F97316",
     },
     {
       year: 1911,
       era: "quantum",
-      title: "РћРЅРЅРµСЃ",
-      desc: "РЎРІРµСЂС…РїСЂРѕРІРѕРґРёРјРѕСЃС‚СЊ",
-      detail: "РќСѓР»РµРІРѕРµ СЃРѕРїСЂРѕС‚РёРІР»РµРЅРёРµ РїСЂРё РЅРёР·РєРёС… T",
+      title: "Оннес",
+      desc: "Сверхпроводимость",
+      detail: "Нулевое сопротивление при низких T",
       color: "#EC4899",
     },
     {
       year: 1911,
       era: "quantum",
-      title: "Р РµР·РµСЂС„РѕСЂРґ",
-      desc: "РЇРґРµСЂРЅР°СЏ РјРѕРґРµР»СЊ Р°С‚РѕРјР°",
-      detail: "РџР»Р°РЅРµС‚Р°СЂРЅР°СЏ РјРѕРґРµР»СЊ",
+      title: "Резерфорд",
+      desc: "Ядерная модель атома",
+      detail: "Планетарная модель",
       color: "#EC4899",
     },
     {
       year: 1913,
       era: "quantum",
-      title: "Р‘РѕСЂ",
-      desc: "РњРѕРґРµР»СЊ Р°С‚РѕРјР° Р‘РѕСЂР°",
-      detail: "РљРІР°РЅС‚РѕРІС‹Рµ РѕСЂР±РёС‚С‹ СЌР»РµРєС‚СЂРѕРЅРѕРІ",
+      title: "Бор",
+      desc: "Модель атома Бора",
+      detail: "Квантовые орбиты электронов",
       color: "#EC4899",
     },
     {
       year: 1915,
       era: "relativity",
-      title: "Р­Р№РЅС€С‚РµР№РЅ",
-      desc: "РћР±С‰Р°СЏ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕСЃС‚СЊ",
-      detail: "РСЃРєСЂРёРІР»РµРЅРёРµ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІР°-РІСЂРµРјРµРЅРё",
+      title: "Эйнштейн",
+      desc: "Общая относительность",
+      detail: "Искривление пространства-времени",
       color: "#F97316",
     },
     {
       year: 1924,
       era: "quantum",
-      title: "РґРµ Р‘СЂРѕР№Р»СЊ",
-      desc: "Р’РѕР»РЅРѕРІРѕР№ РґСѓР°Р»РёР·Рј",
-      detail: "Р’РѕР»РЅС‹ РјР°С‚РµСЂРёРё О» = h/p",
+      title: "де Бройль",
+      desc: "Волновой дуализм",
+      detail: "Волны материи λ = h/p",
       color: "#EC4899",
     },
     {
       year: 1925,
       era: "quantum",
-      title: "Р“РµР№Р·РµРЅР±РµСЂРі",
-      desc: "РњР°С‚СЂРёС‡РЅР°СЏ РјРµС…Р°РЅРёРєР°",
-      detail: "РџСЂРёРЅС†РёРї РЅРµРѕРїСЂРµРґРµР»С‘РЅРЅРѕСЃС‚Рё",
+      title: "Гейзенберг",
+      desc: "Матричная механика",
+      detail: "Принцип неопределённости",
       color: "#EC4899",
     },
     {
       year: 1926,
       era: "quantum",
-      title: "РЁСЂС‘РґРёРЅРіРµСЂ",
-      desc: "Р’РѕР»РЅРѕРІРѕРµ СѓСЂР°РІРЅРµРЅРёРµ",
-      detail: "РЈСЂР°РІРЅРµРЅРёРµ РЁСЂС‘РґРёРЅРіРµСЂР°",
+      title: "Шрёдингер",
+      desc: "Волновое уравнение",
+      detail: "Уравнение Шрёдингера",
       color: "#EC4899",
     },
     {
       year: 1927,
       era: "quantum",
-      title: "Р›РµРјРµС‚СЂ",
-      desc: "Р‘РѕР»СЊС€РѕР№ РІР·СЂС‹РІ",
-      detail: "РўРµРѕСЂРёСЏ СЂР°СЃС€РёСЂСЏСЋС‰РµР№СЃСЏ Р’СЃРµР»РµРЅРЅРѕР№",
+      title: "Леметр",
+      desc: "Большой взрыв",
+      detail: "Теория расширяющейся Вселенной",
       color: "#EC4899",
     },
     {
       year: 1928,
       era: "quantum",
-      title: "Р”РёСЂР°Рє",
-      desc: "Р РµР»СЏС‚РёРІРёСЃС‚СЃРєРѕРµ СѓСЂР°РІРЅРµРЅРёРµ",
-      detail: "РџСЂРµРґСЃРєР°Р·Р°РЅРёРµ Р°РЅС‚РёС‡Р°СЃС‚РёС†",
+      title: "Дирак",
+      desc: "Релятивистское уравнение",
+      detail: "Предсказание античастиц",
       color: "#EC4899",
     },
     {
       year: 1929,
       era: "cosmology",
-      title: "РҐР°Р±Р±Р»",
-      desc: "Р Р°СЃС€РёСЂРµРЅРёРµ Р’СЃРµР»РµРЅРЅРѕР№",
-      detail: "Р—Р°РєРѕРЅ РҐР°Р±Р±Р»Р°: РіР°Р»Р°РєС‚РёРєРё СЂР°Р·Р»РµС‚Р°СЋС‚СЃСЏ",
+      title: "Хаббл",
+      desc: "Расширение Вселенной",
+      detail: "Закон Хаббла: галактики разлетаются",
       color: "#A855F7",
     },
     {
       year: 1932,
       era: "quantum",
-      title: "Р§РµРґРІРёРє",
-      desc: "РћС‚РєСЂС‹С‚РёРµ РЅРµР№С‚СЂРѕРЅР°",
-      detail: "РЎС‚СЂСѓРєС‚СѓСЂР° СЏРґСЂР° Р°С‚РѕРјР°",
+      title: "Чедвик",
+      desc: "Открытие нейтрона",
+      detail: "Структура ядра атома",
       color: "#EC4899",
     },
     {
       year: 1938,
       era: "nuclear",
-      title: "Р“Р°РЅ Рё РЁС‚СЂР°СЃСЃРјР°РЅ",
-      desc: "Р”РµР»РµРЅРёРµ СЏРґСЂР°",
-      detail: "РћСЃРЅРѕРІР° СЏРґРµСЂРЅРѕР№ СЌРЅРµСЂРіРµС‚РёРєРё",
+      title: "Ган и Штрассман",
+      desc: "Деление ядра",
+      detail: "Основа ядерной энергетики",
       color: "#FBBF24",
     },
     {
       year: 1947,
       era: "quantum",
-      title: "Р›СЌРјР±",
-      desc: "РЎРґРІРёРі Р›СЌРјР±Р°",
-      detail: "РљРІР°РЅС‚РѕРІР°СЏ СЌР»РµРєС‚СЂРѕРґРёРЅР°РјРёРєР°",
+      title: "Лэмб",
+      desc: "Сдвиг Лэмба",
+      detail: "Квантовая электродинамика",
       color: "#EC4899",
     },
     {
       year: 1964,
       era: "quantum",
-      title: "Р“РµР»Р»-РњР°РЅРЅ",
-      desc: "РљРІР°СЂРєРё",
-      detail: "РЎС‚Р°РЅРґР°СЂС‚РЅР°СЏ РјРѕРґРµР»СЊ Р·Р°СЂРѕР¶РґР°РµС‚СЃСЏ",
+      title: "Гелл-Манн",
+      desc: "Кварки",
+      detail: "Стандартная модель зарождается",
       color: "#EC4899",
     },
     {
       year: 1965,
       era: "cosmology",
-      title: "РџРµРЅР·РёР°СЃ Рё Р’РёР»СЊСЃРѕРЅ",
-      desc: "Р РµР»РёРєС‚РѕРІРѕРµ РёР·Р»СѓС‡РµРЅРёРµ",
-      detail: "Р”РѕРєР°Р·Р°С‚РµР»СЊСЃС‚РІРѕ Р‘РѕР»СЊС€РѕРіРѕ РІР·СЂС‹РІР°",
+      title: "Пензиас и Вилсон",
+      desc: "Реликтовое излучение",
+      detail: "Доказательство Большого взрыва",
       color: "#A855F7",
     },
     {
       year: 1967,
       era: "unified",
-      title: "Р’Р°Р№РЅР±РµСЂРі",
-      desc: "Р­Р»РµРєС‚СЂРѕСЃР»Р°Р±Р°СЏ С‚РµРѕСЂРёСЏ",
-      detail: "РћР±СЉРµРґРёРЅРµРЅРёРµ СЃРёР» РїСЂРёСЂРѕРґС‹",
+      title: "Вайнберг",
+      desc: "Электрослабая теория",
+      detail: "Объединение сил природы",
       color: "#14B8A6",
     },
     {
       year: 1970,
       era: "quantum",
-      title: "РЎС‚Р°РЅРґР°СЂС‚РЅР°СЏ РјРѕРґРµР»СЊ",
-      desc: "РљРІР°СЂРєРё Рё Р»РµРїС‚РѕРЅС‹",
-      detail: "РЎРѕРІСЂРµРјРµРЅРЅР°СЏ С‚РµРѕСЂРёСЏ С‡Р°СЃС‚РёС†",
+      title: "Стандартная модель",
+      desc: "Кварки и лептоны",
+      detail: "Современная теория частиц",
       color: "#EC4899",
     },
     {
       year: 1980,
       era: "cosmology",
-      title: "Р“СѓС‚",
-      desc: "РРЅС„Р»СЏС†РёСЏ",
-      detail: "РўРµРѕСЂРёСЏ СЌРєСЃРїРѕРЅРµРЅС†РёР°Р»СЊРЅРѕРіРѕ СЂР°СЃС€РёСЂРµРЅРёСЏ",
+      title: "Гут",
+      desc: "Инфляция",
+      detail: "Теория экспоненциального расширения",
       color: "#A855F7",
     },
     {
       year: 1998,
       era: "cosmology",
-      title: "РўС‘РјРЅР°СЏ СЌРЅРµСЂРіРёСЏ",
-      desc: "РЈСЃРєРѕСЂРµРЅРёРµ СЂР°СЃС€РёСЂРµРЅРёСЏ",
-      detail: "70% Р’СЃРµР»РµРЅРЅРѕР№ вЂ” С‚С‘РјРЅР°СЏ СЌРЅРµСЂРіРёСЏ",
+      title: "Тёмная энергия",
+      desc: "Ускорение расширения",
+      detail: "70% Вселенной — тёмная энергия",
       color: "#A855F7",
     },
     {
       year: 2012,
       era: "quantum",
       title: "CERN",
-      desc: "Р‘РѕР·РѕРЅ РҐРёРіРіСЃР°",
-      detail: "РџРѕСЃР»РµРґРЅРёР№ СЌР»РµРјРµРЅС‚ РЎС‚Р°РЅРґР°СЂС‚РЅРѕР№ РјРѕРґРµР»Рё",
+      desc: "Бозон Хиггса",
+      detail: "Последний элемент Стандартной модели",
       color: "#EC4899",
     },
     {
       year: 2015,
       era: "relativity",
       title: "LIGO",
-      desc: "Р“СЂР°РІРёС‚Р°С†РёРѕРЅРЅС‹Рµ РІРѕР»РЅС‹",
-      detail: "РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ РѕР±С‰РµР№ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕСЃС‚Рё",
+      desc: "Гравитационные волны",
+      detail: "Подтверждение общей относительности",
       color: "#F97316",
     },
     {
       year: 2019,
       era: "cosmology",
       title: "EHT",
-      desc: "Р¤РѕС‚Рѕ С‡С‘СЂРЅРѕР№ РґС‹СЂС‹",
-      detail: "M87* вЂ” РїРµСЂРІРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ",
+      desc: "Фото чёрной дыры",
+      detail: "M87* — первое изображение",
       color: "#A855F7",
     },
   ]
 
   const eras = [
-    { id: "ancient", name: "РђРЅС‚РёС‡РЅРѕСЃС‚СЊ", range: "-300 вЂ” 0", color: "#8B5CF6" },
-    { id: "renaissance", name: "Р РµРЅРµСЃСЃР°РЅСЃ", range: "1500 вЂ” 1600", color: "#F59E0B" },
-    { id: "classical", name: "РљР»Р°СЃСЃРёРєР°", range: "1600 вЂ” 1900", color: "#3B82F6" },
-    { id: "modern", name: "РЎРѕРІСЂРµРјРµРЅРЅРѕСЃС‚СЊ", range: "1900 вЂ” 1930", color: "#10B981" },
-    { id: "quantum", name: "РљРІР°РЅС‚С‹", range: "1900 вЂ” 2020", color: "#EC4899" },
-    {
-      id: "relativity",
-      name: "РћС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕСЃС‚СЊ",
-      range: "1905 вЂ” 2020",
-      color: "#F97316",
-    },
-    { id: "cosmology", name: "РљРѕСЃРјРѕР»РѕРіРёСЏ", range: "1920 вЂ” 2020", color: "#A855F7" },
-    {
-      id: "nuclear",
-      name: "РЇРґРµСЂРЅР°СЏ С„РёР·РёРєР°",
-      range: "1930 вЂ” 1950",
-      color: "#FBBF24",
-    },
-    {
-      id: "unified",
-      name: "Р’РµР»РёРєРёРµ С‚РµРѕСЂРёРё",
-      range: "1960 вЂ” 2020",
-      color: "#14B8A6",
-    },
+    { id: "ancient", name: "Античность", range: "-300 — 0", color: "#8B5CF6" },
+    { id: "renaissance", name: "Ренессанс", range: "1500 — 1600", color: "#F59E0B" },
+    { id: "classical", name: "Классика", range: "1600 — 1900", color: "#3B82F6" },
+    { id: "modern", name: "Современность", range: "1900 — 1930", color: "#10B981" },
+    { id: "quantum", name: "Кванты", range: "1900 — 2020", color: "#EC4899" },
+    { id: "relativity", name: "Относительность", range: "1905 — 2020", color: "#F97316" },
+    { id: "cosmology", name: "Космология", range: "1920 — 2020", color: "#A855F7" },
+    { id: "nuclear", name: "Ядерная физика", range: "1930 — 1950", color: "#FBBF24" },
+    { id: "unified", name: "Великие теории", range: "1960 — 2020", color: "#14B8A6" },
   ]
 
   const filteredEvents = selectedEra ? events.filter((e) => e.era === selectedEra) : events
-
-  const yearToX = (year: number, width: number) => {
-    const minYear = -300
-    const maxYear = 2025
-    return ((year - minYear) / (maxYear - minYear)) * width
-  }
-
   const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  const yearToX = (year: number, width: number): number => ((year - -300) / (2025 - -300)) * width
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -417,15 +397,9 @@ function PhysicsTimeline() {
     const height = canvas.offsetHeight
     const centerY = height / 2
 
-    let _time = 0
-    const _scrollOffset = 0
-    const hoveredEvent = -1
-
     const animate = () => {
-      _time += 0.02
       ctx.clearRect(0, 0, width, height)
 
-      // Background - cached gradient
       if (!bgGradient) {
         bgGradient = ctx.createLinearGradient(0, 0, width, height)
         bgGradient.addColorStop(0, "#0a0a18")
@@ -434,7 +408,6 @@ function PhysicsTimeline() {
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
 
-      // Timeline gradient - cached
       if (!timelineGradient) {
         timelineGradient = ctx.createLinearGradient(0, 0, width, 0)
         timelineGradient.addColorStop(0, "#8B5CF6")
@@ -446,14 +419,12 @@ function PhysicsTimeline() {
       ctx.strokeStyle = timelineGradient
       ctx.lineWidth = 3
 
-      // Draw timeline line
       const lineY = centerY
       ctx.beginPath()
       ctx.moveTo(0, lineY)
       ctx.lineTo(width, lineY)
       ctx.stroke()
 
-      // Draw era markers
       eras.forEach((era, i) => {
         ctx.fillStyle = era.color + "40"
         ctx.font = "9px sans-serif"
@@ -461,14 +432,10 @@ function PhysicsTimeline() {
         ctx.fillText(era.name, 10, 15 + i * 12)
       })
 
-      // Draw events
       filteredEvents.forEach((event, i) => {
         const x = yearToX(event.year, width)
         const y = lineY + (i % 2 === 0 ? -30 : 30)
-        const isHovered = hoveredEvent === i
-
-        // Event marker
-        const radius = isHovered ? 8 : 5
+        const radius = 5
         const glow = ctx.createRadialGradient(x, lineY, 0, x, lineY, radius * 3)
         glow.addColorStop(0, event.color)
         glow.addColorStop(1, "rgba(0, 0, 0, 0)")
@@ -482,7 +449,6 @@ function PhysicsTimeline() {
         ctx.arc(x, lineY, radius, 0, Math.PI * 2)
         ctx.fill()
 
-        // Connection line
         ctx.strokeStyle = event.color + "80"
         ctx.lineWidth = 1
         ctx.beginPath()
@@ -490,31 +456,13 @@ function PhysicsTimeline() {
         ctx.lineTo(x, y)
         ctx.stroke()
 
-        // Label
-        ctx.fillStyle = isHovered ? "#FFFFFF" : "#AAAAAA"
-        ctx.font = `${isHovered ? "bold " : ""}9px sans-serif`
+        ctx.fillStyle = "#AAAAAA"
+        ctx.font = "9px sans-serif"
         ctx.textAlign = "center"
         ctx.fillText(event.year.toString(), x, y + (i % 2 === 0 ? -8 : 15))
         ctx.fillText(event.title, x, y + (i % 2 === 0 ? -18 : 25))
-
-        // Detail on hover
-        if (isHovered) {
-          ctx.fillStyle = "rgba(0, 0, 0, 0.9)"
-          ctx.fillRect(x - 60, lineY + 50, 120, 35)
-          ctx.strokeStyle = event.color
-          ctx.lineWidth = 1
-          ctx.strokeRect(x - 60, lineY + 50, 120, 35)
-
-          ctx.fillStyle = event.color
-          ctx.font = "bold 10px sans-serif"
-          ctx.fillText(event.desc, x, lineY + 65)
-          ctx.fillStyle = "#AAAAAA"
-          ctx.font = "8px sans-serif"
-          ctx.fillText(event.detail, x, lineY + 78)
-        }
       })
 
-      // Year labels
       ctx.fillStyle = "rgba(255, 255, 255, 0.3)"
       ctx.font = "8px sans-serif"
       ctx.textAlign = "center"
@@ -538,11 +486,9 @@ function PhysicsTimeline() {
     <div className="space-y-3">
       <canvas
         ref={canvasRef}
-        className="w-full h-56 rounded-lg cursor-pointer"
-        aria-label="Реликтовое излучение: карта ранней Вселенной"
+        className="w-full h-56 rounded-lg"
+        aria-label="История физики: временная шкала открытий"
         role="img"
-        aria-live="polite"
-        aria-atomic="true"
       />
 
       <div className="flex gap-2 flex-wrap">
@@ -554,7 +500,7 @@ function PhysicsTimeline() {
           size="sm"
           className={`text-xs ${selectedEra === null ? "bg-purple-600" : ""}`}
         >
-          Р’СЃРµ СЌРїРѕС…Рё
+          Все эпохи
         </Button>
         {eras.slice(2, 7).map((era) => (
           <Button
@@ -564,7 +510,7 @@ function PhysicsTimeline() {
             }}
             variant={selectedEra === era.id ? "default" : "outline"}
             size="sm"
-            className={`text-xs ${selectedEra === era.id ? "" : ""}`}
+            className="text-xs"
             style={{
               borderColor: era.color + "80",
               color: selectedEra === era.id ? "white" : era.color,
@@ -576,11 +522,10 @@ function PhysicsTimeline() {
       </div>
 
       <div className="bg-purple-900/20 rounded-lg p-2 border border-purple-500/20 text-xs">
-        <div className="text-purple-300 font-semibold">рџ“… РСЃС‚РѕСЂРёСЏ С„РёР·РёРєРё</div>
+        <div className="text-purple-300 font-semibold">📅 История физики</div>
         <p className="text-gray-400 mt-1">
-          РћС‚ РђСЂС…РёРјРµРґР° РґРѕ РҐРѕРєРёРЅРіР° вЂ” Р±РѕР»РµРµ 2300 Р»РµС‚ РѕС‚РєСЂС‹С‚РёР№.
-          РљР°Р¶РґР°СЏ СЌРїРѕС…Р° РїСЂРёРЅРѕСЃРёР»Р° СЂРµРІРѕР»СЋС†РёРѕРЅРЅС‹Рµ РёРґРµРё,
-          РјРµРЅСЏРІС€РёРµ РЅР°С€Рµ РїРѕРЅРёРјР°РЅРёРµ Р’СЃРµР»РµРЅРЅРѕР№.
+          От Архимеда до Хокинга — более 2300 лет открытий. Каждая эпоха приносила революционные
+          идеи, менявшие наше понимание Вселенной.
         </p>
       </div>
     </div>
