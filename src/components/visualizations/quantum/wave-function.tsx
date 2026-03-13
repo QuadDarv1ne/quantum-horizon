@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef, useState, useCallback, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Button } from "@/components/ui/button"
@@ -13,6 +14,7 @@ interface WaveFunctionVisualizationProps {
 }
 
 export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationProps) {
+  const t = useTranslations()
   const { quantumNumber, showProbability } = useVisualizationStore(selectWaveFunctionSettings)
   const { isPlaying, animationSpeed, setQuantumNumber, togglePlaying, setAnimationSpeed } =
     useVisualizationStore()
@@ -329,7 +331,9 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
                 : "bg-gradient-to-r from-yellow-600 to-orange-600"
             }`}
           >
-            {measurementMode ? "✋ Click to Measure" : "🎲 Measure Mode"}
+            {measurementMode
+              ? t("canvas.waveFunction.measureModeActive")
+              : t("canvas.waveFunction.measureModeInactive")}
           </Button>
         </div>
       </div>
@@ -341,19 +345,17 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
         }`}
       >
         <div className={`mb-1 font-semibold ${isDark ? "text-cyan-300" : "text-cyan-700"}`}>
-          📐 Schrödinger equation solution:
+          📐 {t("canvas.waveFunction.schrodinger")}
         </div>
         <div className={`text-center font-mono ${isDark ? "text-white" : "text-gray-900"}`}>
-          E_n = n²π²ℏ² / 2mL²
+          {t("canvas.waveFunction.energyFormula")}
         </div>
         <p className={`mt-2 text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-          Energy is quantized! The particle cannot have zero energy (n≥1) — this is a fundamental
-          difference from classical physics.
+          {t("canvas.waveFunction.energyQuantized")}
         </p>
         {measurementMode && (
           <p className="mt-2 text-xs text-yellow-600 dark:text-yellow-400">
-            💡 Click on the canvas to measure the particle position. The probability of detection
-            follows |ψ|² distribution.
+            {t("canvas.waveFunction.probabilityDetection")}
           </p>
         )}
         <Button
@@ -365,7 +367,7 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
           size="sm"
           className="mt-2 w-full"
         >
-          🔗 Copy URL
+          {t("canvas.waveFunction.copyUrl")}
         </Button>
       </div>
     </div>

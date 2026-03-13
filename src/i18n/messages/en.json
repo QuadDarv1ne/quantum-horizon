@@ -82,7 +82,14 @@
       "measure": "Measure",
       "schrodinger": "Schrödinger equation solution:",
       "energyFormula": "E_n = n²π²ℏ² / 2mL²",
-      "energyQuantized": "Energy is quantized! The particle cannot have zero energy (n≥1) — this is a fundamental difference from classical physics."
+      "energyQuantized": "Energy is quantized! The particle cannot have zero energy (n≥1) — this is a fundamental difference from classical physics.",
+      "measureMode": "Click to Measure",
+      "measureModeActive": "✋ Click to Measure",
+      "measureModeInactive": "🎲 Measure Mode",
+      "copyUrl": "🔗 Copy URL",
+      "clickToMeasure": "Click anywhere to measure position",
+      "waveFunctionCollapsed": "Wave function collapsed!",
+      "probabilityDetection": "💡 Click on the canvas to measure the particle position. The probability of detection follows |ψ|² distribution."
     },
     "uncertainty": {
       "title": "Uncertainty Principle",
