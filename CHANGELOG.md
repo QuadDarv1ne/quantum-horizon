@@ -9,6 +9,18 @@
 
 ## [0.3.0] - 2026-03-13
 
+### Добавлено
+
+- Storybook stories для base компонентов (visualization-controls, visualization-selector, visualization-card, fullscreen-wrapper)
+- Storybook stories для brownian-motion visualization
+- Расширенные E2E тесты Playwright (13 тестов для визуализаций, настроек, keyboard shortcuts)
+- 182 unit/component теста (visualization-canvas, visualization-controls, visualization-selector, wave-function, schrodingers-cat, black-hole, button)
+
+### Изменено
+
+- Обновлён порт dev сервера на auto-select (0)
+- Улучшена структура E2E тестов (app.spec.ts)
+
 ### Удалено
 
 - Удалены неиспользуемые eslint-disable комментарии
@@ -16,15 +28,6 @@
 - Удалён неиспользуемый код из use-canvas-animation.ts (useFixedTimestepCanvasAnimation)
 - Удалён неиспользуемый код из use-visualization-canvas.ts (createCachedGradient)
 - Удалён неиспользуемый wrapper withSuspense из lazy.tsx
-
-### Изменено
-
-- Улучшена типизация в auth route (добавлены Session и JWT декларации)
-- Упрощена логика callbacks в auth (убраны eslint-disable и any casts)
-- Рефакторинг API routes (bookmarks, progress) — выделена getUserId() функция
-- Улучшена типизация в use-auth.ts (useHasRole hook)
-- Упрощён use-toast.ts (удалены неиспользуемые actionTypes)
-- Упрощён api-helpers.ts (getCurrentSession возвращает { session, userId })
 
 ---
 
