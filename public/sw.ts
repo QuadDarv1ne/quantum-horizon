@@ -1,8 +1,10 @@
+/// <reference path="./sw.d.ts" />
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable no-restricted-globals */
 // Service Worker for Quantum Horizon PWA
 // Provides offline caching and network-first strategies
 
@@ -10,8 +12,8 @@ const CACHE_NAME = "quantum-horizon-v1"
 const STATIC_ASSETS = ["/", "/offline", "/favicon.svg"]
 
 // Install event - cache static assets
-self.addEventListener("install", (event: ExtendableEvent) => {
-  event.waitUntil(
+self.addEventListener("install", (event) => {
+  ;(event as ServiceWorkerInstallEvent).waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(STATIC_ASSETS)
     })
@@ -20,8 +22,8 @@ self.addEventListener("install", (event: ExtendableEvent) => {
 })
 
 // Activate event - clean up old caches
-self.addEventListener("activate", (event: ExtendableEvent) => {
-  event.waitUntil(
+self.addEventListener("activate", (event) => {
+  ;(event as ServiceWorkerActivateEvent).waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.filter((name) => name !== CACHE_NAME).map((name) => caches.delete(name))
@@ -32,8 +34,8 @@ self.addEventListener("activate", (event: ExtendableEvent) => {
 })
 
 // Fetch event - network first, fallback to cache
-self.addEventListener("fetch", (event: FetchEvent) => {
-  const { request } = event
+self.addEventListener("fetch", (event) => {
+  const { request } = event as ServiceWorkerFetchEvent
 
   // Skip non-GET requests
   if (request.method !== "GET") {

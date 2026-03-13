@@ -1,13 +1,13 @@
 "use strict"
 ;(() => {
-  var a = "quantum-horizon-v1",
-    r = ["/", "/offline", "/favicon.svg"]
+  var s = "quantum-horizon-v1",
+    i = ["/", "/offline", "/favicon.svg"]
   self.addEventListener("install", (n) => {
-    ;(n.waitUntil(caches.open(a).then((e) => e.addAll(r))), self.skipWaiting())
+    ;(n.waitUntil(caches.open(s).then((e) => e.addAll(i))), self.skipWaiting())
   })
   self.addEventListener("activate", (n) => {
     ;(n.waitUntil(
-      caches.keys().then((e) => Promise.all(e.filter((t) => t !== a).map((t) => caches.delete(t))))
+      caches.keys().then((e) => Promise.all(e.filter((t) => t !== s).map((t) => caches.delete(t))))
     ),
       self.clients.claim())
   })
@@ -18,11 +18,11 @@
       n.respondWith(
         fetch(e)
           .then((t) => {
-            let s = t.clone()
+            let a = t.clone()
             return (
               t.status === 200 &&
-                caches.open(a).then((i) => {
-                  i.put(e, s)
+                caches.open(s).then((r) => {
+                  r.put(e, a)
                 }),
               t
             )
@@ -41,6 +41,6 @@
       )
   })
   self.addEventListener("message", (n) => {
-    n.data && n.data.type === "SKIP_WAITING" && self.skipWaiting()
+    n.data?.type === "SKIP_WAITING" && self.skipWaiting()
   })
 })()
