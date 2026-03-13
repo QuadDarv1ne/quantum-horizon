@@ -1,10 +1,8 @@
-﻿/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+﻿/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import { setupCanvas } from "@/hooks/use-canvas-animation"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ErrorBoundary } from "@/components/ui/error-boundary"
@@ -35,6 +33,7 @@ import {
   PhysicsQuiz,
   ScientistsBiographies,
   FormulaCalculator,
+  PhysicsTimeline,
 } from "@/components/visualizations"
 
 type Theme = "dark" | "light"
@@ -52,489 +51,7 @@ type Theme = "dark" | "light"
 // ==================== WHITE HOLE ====================
 
 // ==================== PHYSICS TIMELINE ====================
-function PhysicsTimeline() {
-  const [selectedEra, setSelectedEra] = useState<string | null>(null)
-
-  const events = [
-    {
-      year: -300,
-      era: "ancient",
-      title: "Аристотель",
-      desc: "Физика античности",
-      detail: "Основы механики и космологии",
-      color: "#8B5CF6",
-    },
-    {
-      year: -250,
-      era: "ancient",
-      title: "Архимед",
-      desc: "Закон рычага",
-      detail: "Eureka! Закон гидростатики",
-      color: "#8B5CF6",
-    },
-    {
-      year: 1543,
-      era: "renaissance",
-      title: "Коперник",
-      desc: "Гелиоцентризм",
-      detail: "Революция в астрономии",
-      color: "#F59E0B",
-    },
-    {
-      year: 1609,
-      era: "renaissance",
-      title: "Кеплер",
-      desc: "Законы планет",
-      detail: "Эллиптические орбиты планет",
-      color: "#F59E0B",
-    },
-    {
-      year: 1666,
-      era: "classical",
-      title: "Ньютон",
-      desc: "Классическая механика",
-      detail: "Законы движения, гравитация",
-      color: "#EF4444",
-    },
-    {
-      year: 1687,
-      era: "classical",
-      title: "Principia",
-      desc: "Математические начала",
-      detail: "Величайший труд Ньютона",
-      color: "#EF4444",
-    },
-    {
-      year: 1800,
-      era: "classical",
-      title: "Вольта",
-      desc: "Электрическая батарея",
-      detail: "Первый источник тока",
-      color: "#3B82F6",
-    },
-    {
-      year: 1820,
-      era: "classical",
-      title: "Эрстед",
-      desc: "Электромагнетизм",
-      detail: "Связь электричества и магнетизма",
-      color: "#3B82F6",
-    },
-    {
-      year: 1831,
-      era: "classical",
-      title: "Фарадей",
-      desc: "Электромагнитная индукция",
-      detail: "Основы электротехники",
-      color: "#3B82F6",
-    },
-    {
-      year: 1865,
-      era: "classical",
-      title: "Максвелл",
-      desc: "Уравнения Максвелла",
-      detail: "Теория электромагнетизма",
-      color: "#3B82F6",
-    },
-    {
-      year: 1887,
-      era: "modern",
-      title: "Микельсон",
-      desc: "Опыт Микельсона",
-      detail: "Постоянство скорости света",
-      color: "#10B981",
-    },
-    {
-      year: 1895,
-      era: "modern",
-      title: "Рентген",
-      desc: "Рентгеновские лучи",
-      detail: "Открытие ионизирующего излучения",
-      color: "#10B981",
-    },
-    {
-      year: 1896,
-      era: "modern",
-      title: "Беккерель",
-      desc: "Радиоактивность",
-      detail: "Явление самопроизвольного распада",
-      color: "#10B981",
-    },
-    {
-      year: 1897,
-      era: "modern",
-      title: "Томсон",
-      desc: "Открытие электрона",
-      detail: "Первая элементарная частица",
-      color: "#10B981",
-    },
-    {
-      year: 1900,
-      era: "quantum",
-      title: "Планк",
-      desc: "Квантовая гипотеза",
-      detail: "Рождение квантовой физики",
-      color: "#EC4899",
-    },
-    {
-      year: 1905,
-      era: "relativity",
-      title: "Эйнштейн",
-      desc: "Специальная относительность",
-      detail: "E = mc², 4 статьи за год чудес",
-      color: "#F97316",
-    },
-    {
-      year: 1911,
-      era: "quantum",
-      title: "Оннес",
-      desc: "Сверхпроводимость",
-      detail: "Нулевое сопротивление при низких T",
-      color: "#EC4899",
-    },
-    {
-      year: 1911,
-      era: "quantum",
-      title: "Резерфорд",
-      desc: "Ядерная модель атома",
-      detail: "Планетарная модель",
-      color: "#EC4899",
-    },
-    {
-      year: 1913,
-      era: "quantum",
-      title: "Бор",
-      desc: "Модель атома Бора",
-      detail: "Квантовые орбиты электронов",
-      color: "#EC4899",
-    },
-    {
-      year: 1915,
-      era: "relativity",
-      title: "Эйнштейн",
-      desc: "Общая относительность",
-      detail: "Искривление пространства-времени",
-      color: "#F97316",
-    },
-    {
-      year: 1924,
-      era: "quantum",
-      title: "де Бройль",
-      desc: "Волновой дуализм",
-      detail: "Волны материи λ = h/p",
-      color: "#EC4899",
-    },
-    {
-      year: 1925,
-      era: "quantum",
-      title: "Гейзенберг",
-      desc: "Матричная механика",
-      detail: "Принцип неопределённости",
-      color: "#EC4899",
-    },
-    {
-      year: 1926,
-      era: "quantum",
-      title: "Шрёдингер",
-      desc: "Волновое уравнение",
-      detail: "Уравнение Шрёдингера",
-      color: "#EC4899",
-    },
-    {
-      year: 1927,
-      era: "quantum",
-      title: "Леметр",
-      desc: "Большой взрыв",
-      detail: "Теория расширяющейся Вселенной",
-      color: "#EC4899",
-    },
-    {
-      year: 1928,
-      era: "quantum",
-      title: "Дирак",
-      desc: "Релятивистское уравнение",
-      detail: "Предсказание античастиц",
-      color: "#EC4899",
-    },
-    {
-      year: 1929,
-      era: "cosmology",
-      title: "Хаббл",
-      desc: "Расширение Вселенной",
-      detail: "Закон Хаббла: галактики разлетаются",
-      color: "#A855F7",
-    },
-    {
-      year: 1932,
-      era: "quantum",
-      title: "Чедвик",
-      desc: "Открытие нейтрона",
-      detail: "Структура ядра атома",
-      color: "#EC4899",
-    },
-    {
-      year: 1938,
-      era: "nuclear",
-      title: "Ган и Штрассман",
-      desc: "Деление ядра",
-      detail: "Основа ядерной энергетики",
-      color: "#FBBF24",
-    },
-    {
-      year: 1947,
-      era: "quantum",
-      title: "Лэмб",
-      desc: "Сдвиг Лэмба",
-      detail: "Квантовая электродинамика",
-      color: "#EC4899",
-    },
-    {
-      year: 1964,
-      era: "quantum",
-      title: "Гелл-Манн",
-      desc: "Кварки",
-      detail: "Стандартная модель зарождается",
-      color: "#EC4899",
-    },
-    {
-      year: 1965,
-      era: "cosmology",
-      title: "Пензиас и Вилсон",
-      desc: "Реликтовое излучение",
-      detail: "Доказательство Большого взрыва",
-      color: "#A855F7",
-    },
-    {
-      year: 1967,
-      era: "unified",
-      title: "Вайнберг",
-      desc: "Электрослабая теория",
-      detail: "Объединение сил природы",
-      color: "#14B8A6",
-    },
-    {
-      year: 1970,
-      era: "quantum",
-      title: "Стандартная модель",
-      desc: "Кварки и лептоны",
-      detail: "Современная теория частиц",
-      color: "#EC4899",
-    },
-    {
-      year: 1980,
-      era: "cosmology",
-      title: "Гут",
-      desc: "Инфляция",
-      detail: "Теория экспоненциального расширения",
-      color: "#A855F7",
-    },
-    {
-      year: 1998,
-      era: "cosmology",
-      title: "Тёмная энергия",
-      desc: "Ускорение расширения",
-      detail: "70% Вселенной — тёмная энергия",
-      color: "#A855F7",
-    },
-    {
-      year: 2012,
-      era: "quantum",
-      title: "CERN",
-      desc: "Бозон Хиггса",
-      detail: "Последний элемент Стандартной модели",
-      color: "#EC4899",
-    },
-    {
-      year: 2015,
-      era: "relativity",
-      title: "LIGO",
-      desc: "Гравитационные волны",
-      detail: "Подтверждение общей относительности",
-      color: "#F97316",
-    },
-    {
-      year: 2019,
-      era: "cosmology",
-      title: "EHT",
-      desc: "Фото чёрной дыры",
-      detail: "M87* — первое изображение",
-      color: "#A855F7",
-    },
-  ]
-
-  const eras = [
-    { id: "ancient", name: "Античность", range: "-300 — 0", color: "#8B5CF6" },
-    { id: "renaissance", name: "Ренессанс", range: "1500 — 1600", color: "#F59E0B" },
-    { id: "classical", name: "Классика", range: "1600 — 1900", color: "#3B82F6" },
-    { id: "modern", name: "Современность", range: "1900 — 1930", color: "#10B981" },
-    { id: "quantum", name: "Кванты", range: "1900 — 2020", color: "#EC4899" },
-    { id: "relativity", name: "Относительность", range: "1905 — 2020", color: "#F97316" },
-    { id: "cosmology", name: "Космология", range: "1920 — 2020", color: "#A855F7" },
-    { id: "nuclear", name: "Ядерная физика", range: "1930 — 1950", color: "#FBBF24" },
-    { id: "unified", name: "Великие теории", range: "1960 — 2020", color: "#14B8A6" },
-  ]
-
-  const filteredEvents = selectedEra ? events.filter((e) => e.era === selectedEra) : events
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  const yearToX = (year: number, width: number): number => ((year - -300) / (2025 - -300)) * width
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
-
-    let animationFrameId: number
-    let bgGradient: CanvasGradient | null = null
-    let timelineGradient: CanvasGradient | null = null
-
-    const resize = () => {
-      setupCanvas(canvas, ctx)
-      bgGradient = null
-      timelineGradient = null
-    }
-    resize()
-    window.addEventListener("resize", resize)
-
-    const width = canvas.offsetWidth
-    const height = canvas.offsetHeight
-    const centerY = height / 2
-
-    const animate = () => {
-      ctx.clearRect(0, 0, width, height)
-
-      if (!bgGradient) {
-        bgGradient = ctx.createLinearGradient(0, 0, width, height)
-        bgGradient.addColorStop(0, "#0a0a18")
-        bgGradient.addColorStop(1, "#151530")
-      }
-      ctx.fillStyle = bgGradient
-      ctx.fillRect(0, 0, width, height)
-
-      if (!timelineGradient) {
-        timelineGradient = ctx.createLinearGradient(0, 0, width, 0)
-        timelineGradient.addColorStop(0, "#8B5CF6")
-        timelineGradient.addColorStop(0.25, "#3B82F6")
-        timelineGradient.addColorStop(0.5, "#10B981")
-        timelineGradient.addColorStop(0.75, "#EC4899")
-        timelineGradient.addColorStop(1, "#F97316")
-      }
-      ctx.strokeStyle = timelineGradient
-      ctx.lineWidth = 3
-
-      const lineY = centerY
-      ctx.beginPath()
-      ctx.moveTo(0, lineY)
-      ctx.lineTo(width, lineY)
-      ctx.stroke()
-
-      eras.forEach((era, i) => {
-        ctx.fillStyle = era.color + "40"
-        ctx.font = "9px sans-serif"
-        ctx.textAlign = "left"
-        ctx.fillText(era.name, 10, 15 + i * 12)
-      })
-
-      filteredEvents.forEach((event, i) => {
-        const x = yearToX(event.year, width)
-        const y = lineY + (i % 2 === 0 ? -30 : 30)
-        const radius = 5
-        const glow = ctx.createRadialGradient(x, lineY, 0, x, lineY, radius * 3)
-        glow.addColorStop(0, event.color)
-        glow.addColorStop(1, "rgba(0, 0, 0, 0)")
-        ctx.fillStyle = glow
-        ctx.beginPath()
-        ctx.arc(x, lineY, radius * 3, 0, Math.PI * 2)
-        ctx.fill()
-
-        ctx.fillStyle = event.color
-        ctx.beginPath()
-        ctx.arc(x, lineY, radius, 0, Math.PI * 2)
-        ctx.fill()
-
-        ctx.strokeStyle = event.color + "80"
-        ctx.lineWidth = 1
-        ctx.beginPath()
-        ctx.moveTo(x, lineY)
-        ctx.lineTo(x, y)
-        ctx.stroke()
-
-        ctx.fillStyle = "#AAAAAA"
-        ctx.font = "9px sans-serif"
-        ctx.textAlign = "center"
-        ctx.fillText(event.year.toString(), x, y + (i % 2 === 0 ? -8 : 15))
-        ctx.fillText(event.title, x, y + (i % 2 === 0 ? -18 : 25))
-      })
-
-      ctx.fillStyle = "rgba(255, 255, 255, 0.3)"
-      ctx.font = "8px sans-serif"
-      ctx.textAlign = "center"
-      for (let year = -300; year <= 2025; year += 200) {
-        const x = yearToX(year, width)
-        ctx.fillText(year.toString(), x, height - 5)
-      }
-
-      animationFrameId = requestAnimationFrame(animate)
-    }
-
-    animate()
-
-    return () => {
-      window.removeEventListener("resize", resize)
-      cancelAnimationFrame(animationFrameId)
-    }
-  }, [filteredEvents])
-
-  return (
-    <div className="space-y-3">
-      <canvas
-        ref={canvasRef}
-        className="w-full h-56 rounded-lg"
-        aria-label="История физики: временная шкала открытий"
-        role="img"
-      />
-
-      <div className="flex gap-2 flex-wrap">
-        <Button
-          onClick={() => {
-            setSelectedEra(null)
-          }}
-          variant={selectedEra === null ? "default" : "outline"}
-          size="sm"
-          className={`text-xs ${selectedEra === null ? "bg-purple-600" : ""}`}
-        >
-          Все эпохи
-        </Button>
-        {eras.slice(2, 7).map((era) => (
-          <Button
-            key={era.id}
-            onClick={() => {
-              setSelectedEra(selectedEra === era.id ? null : era.id)
-            }}
-            variant={selectedEra === era.id ? "default" : "outline"}
-            size="sm"
-            className="text-xs"
-            style={{
-              borderColor: era.color + "80",
-              color: selectedEra === era.id ? "white" : era.color,
-            }}
-          >
-            {era.name}
-          </Button>
-        ))}
-      </div>
-
-      <div className="bg-purple-900/20 rounded-lg p-2 border border-purple-500/20 text-xs">
-        <div className="text-purple-300 font-semibold">📅 История физики</div>
-        <p className="text-gray-400 mt-1">
-          От Архимеда до Хокинга — более 2300 лет открытий. Каждая эпоха приносила революционные
-          идеи, менявшие наше понимание Вселенной.
-        </p>
-      </div>
-    </div>
-  )
-}
+// Component moved to: src/components/visualizations/education/physics-timeline.tsx
 
 // ==================== SCIENTISTS BIOGRAPHIES ====================
 // ==================== MAIN PAGE ====================
@@ -609,17 +126,17 @@ export default function Home() {
     >
       {/* Side Menu */}
       <div
-        className={`fixed top-0 right-0 h-full w-80 z-[60] transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 z-[60] h-full w-80 transform transition-transform duration-300 ease-in-out ${
           menuOpen ? "translate-x-0" : "translate-x-full"
-        } ${isDark ? "bg-gray-900/98" : "bg-white/98"} backdrop-blur-lg shadow-2xl border-l ${isDark ? "border-gray-800" : "border-gray-200"}`}
+        } ${isDark ? "bg-gray-900/98" : "bg-white/98"} border-l shadow-2xl backdrop-blur-lg ${isDark ? "border-gray-800" : "border-gray-200"}`}
       >
-        <div className="p-6 h-full overflow-y-auto">
+        <div className="h-full overflow-y-auto p-6">
           {/* Close button */}
           <button
             onClick={() => {
               setMenuOpen(false)
             }}
-            className={`absolute top-4 right-4 p-2 rounded-lg ${isDark ? "hover:bg-gray-800 text-gray-400" : "hover:bg-gray-100 text-gray-600"}`}
+            className={`absolute top-4 right-4 rounded-lg p-2 ${isDark ? "text-gray-400 hover:bg-gray-800" : "text-gray-600 hover:bg-gray-100"}`}
           >
             вњ•
           </button>
@@ -627,7 +144,7 @@ export default function Home() {
           {/* Menu content */}
           <div className="mt-8 space-y-6">
             <div>
-              <h2 className={`text-xl font-bold mb-2 ${isDark ? "text-white" : "text-gray-900"}`}>
+              <h2 className={`mb-2 text-xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>
                 {language === "ru" && "рџ“љ Рћ РїСЂРѕРµРєС‚Рµ"}
                 {language === "en" && "рџ“љ About"}
                 {language === "zh" && "рџ“љ е…ідєЋйЎ№з›®"}
@@ -646,7 +163,7 @@ export default function Home() {
             </div>
 
             <div className={`border-t pt-4 ${isDark ? "border-gray-800" : "border-gray-200"}`}>
-              <h3 className={`font-semibold mb-3 ${isDark ? "text-gray-200" : "text-gray-800"}`}>
+              <h3 className={`mb-3 font-semibold ${isDark ? "text-gray-200" : "text-gray-800"}`}>
                 {language === "ru" && "рџ“– Р Р°Р·РґРµР»С‹"}
                 {language === "en" && "рџ“– Sections"}
                 {language === "zh" && "рџ“– з« иЉ‚"}
@@ -660,12 +177,12 @@ export default function Home() {
                       setActiveSection(item.id)
                       setMenuOpen(false)
                     }}
-                    className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
+                    className={`w-full rounded-lg px-3 py-2 text-left transition-colors ${
                       activeSection === item.id
                         ? "bg-purple-600/20 text-purple-400"
                         : isDark
-                          ? "hover:bg-gray-800 text-gray-300"
-                          : "hover:bg-gray-100 text-gray-700"
+                          ? "text-gray-300 hover:bg-gray-800"
+                          : "text-gray-700 hover:bg-gray-100"
                     }`}
                   >
                     {item.label}
@@ -675,13 +192,13 @@ export default function Home() {
             </div>
 
             <div className={`border-t pt-4 ${isDark ? "border-gray-800" : "border-gray-200"}`}>
-              <h3 className={`font-semibold mb-3 ${isDark ? "text-gray-200" : "text-gray-800"}`}>
+              <h3 className={`mb-3 font-semibold ${isDark ? "text-gray-200" : "text-gray-800"}`}>
                 {language === "ru" && "рџ”¬ Р’РёР·СѓР°Р»РёР·Р°С†РёРё"}
                 {language === "en" && "рџ”¬ Visualizations"}
                 {language === "zh" && "рџ”¬ еЏЇи§†еЊ–"}
                 {language === "he" && "рџ”¬ Ч•Ч™Ч–Ч•ЧђЧњЧ™Ч–Ч¦Ч™Ч•ЧЄ"}
               </h3>
-              <div className={`text-xs space-y-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+              <div className={`space-y-1 text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
                 <div>
                   рџЊЉ{" "}
                   {language === "ru"
@@ -787,14 +304,14 @@ export default function Home() {
             </div>
 
             <div className={`border-t pt-4 ${isDark ? "border-gray-800" : "border-gray-200"}`}>
-              <h3 className={`font-semibold mb-3 ${isDark ? "text-gray-200" : "text-gray-800"}`}>
+              <h3 className={`mb-3 font-semibold ${isDark ? "text-gray-200" : "text-gray-800"}`}>
                 {language === "ru" && "рџ“ђ Р¤РѕСЂРјСѓР»С‹"}
                 {language === "en" && "рџ“ђ Formulas"}
                 {language === "zh" && "рџ“ђ е…¬ејЏ"}
                 {language === "he" && "рџ“ђ Ч Ч•ЧЎЧ—ЧђЧ•ЧЄ"}
               </h3>
               <div
-                className={`text-xs space-y-2 font-mono ${isDark ? "text-cyan-400" : "text-cyan-600"}`}
+                className={`space-y-2 font-mono text-xs ${isDark ? "text-cyan-400" : "text-cyan-600"}`}
               >
                 <div>E = mcВІ</div>
                 <div>О”xВ·О”p в‰Ґ в„Џ/2</div>
@@ -806,7 +323,7 @@ export default function Home() {
             </div>
 
             <div className={`border-t pt-4 ${isDark ? "border-gray-800" : "border-gray-200"}`}>
-              <h3 className={`font-semibold mb-3 ${isDark ? "text-gray-200" : "text-gray-800"}`}>
+              <h3 className={`mb-3 font-semibold ${isDark ? "text-gray-200" : "text-gray-800"}`}>
                 {language === "ru" && "вљ™пёЏ РќР°СЃС‚СЂРѕР№РєРё"}
                 {language === "en" && "вљ™пёЏ Settings"}
                 {language === "zh" && "вљ™пёЏ и®ѕзЅ®"}
@@ -823,7 +340,7 @@ export default function Home() {
                           ? "иЇ­иЁЂ"
                           : "Ч©Ч¤Ч”"}
                   </label>
-                  <div className="flex gap-1 mt-1">
+                  <div className="mt-1 flex gap-1">
                     {(["ru", "en", "zh", "he"] as Language[]).map((lang) => (
                       <Button
                         key={lang}
@@ -832,7 +349,7 @@ export default function Home() {
                         }}
                         variant={language === lang ? "default" : "ghost"}
                         size="sm"
-                        className={`text-xs px-2 ${language === lang ? "bg-purple-600" : isDark ? "text-gray-400" : "text-gray-600"}`}
+                        className={`px-2 text-xs ${language === lang ? "bg-purple-600" : isDark ? "text-gray-400" : "text-gray-600"}`}
                       >
                         {lang.toUpperCase()}
                       </Button>
@@ -849,7 +366,7 @@ export default function Home() {
                           ? "дё»йў"
                           : "ЧўЧЁЧ›ЧЄ Ч Ч•Ч©Чђ"}
                   </label>
-                  <div className="flex gap-2 mt-1">
+                  <div className="mt-1 flex gap-2">
                     <Button
                       onClick={() => {
                         setTheme("dark")
@@ -891,7 +408,7 @@ export default function Home() {
       {/* Overlay */}
       {menuOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-50 backdrop-blur-sm"
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
           onClick={() => {
             setMenuOpen(false)
           }}
@@ -905,9 +422,9 @@ export default function Home() {
         <div
           className={`absolute inset-0 ${isDark ? "bg-[radial-gradient(ellipse_at_center,rgba(60,30,120,0.15),transparent_70%)]" : "bg-[radial-gradient(ellipse_at_center,rgba(100,80,180,0.08),transparent_70%)]"}`}
         />
-        <div className="relative z-10 max-w-6xl mx-auto px-4">
+        <div className="relative z-10 mx-auto max-w-6xl px-4">
           {/* Language, Theme and Menu controls */}
-          <div className="flex justify-between items-center mb-4">
+          <div className="mb-4 flex items-center justify-between">
             <div></div>
             <div className="flex gap-2">
               {/* Language buttons */}
@@ -920,7 +437,7 @@ export default function Home() {
                     }}
                     variant={language === lang ? "default" : "ghost"}
                     size="sm"
-                    className={`text-xs px-2 ${language === lang ? "bg-purple-600" : isDark ? "text-gray-400" : "text-gray-600"}`}
+                    className={`px-2 text-xs ${language === lang ? "bg-purple-600" : isDark ? "text-gray-400" : "text-gray-600"}`}
                   >
                     {lang.toUpperCase()}
                   </Button>
@@ -960,7 +477,7 @@ export default function Home() {
 
           {/* Title */}
           <div className="text-center">
-            <h1 className="text-2xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 mb-2">
+            <h1 className="mb-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-2xl font-bold text-transparent md:text-4xl">
               {t.title}
             </h1>
             <p className={`text-sm md:text-base ${isDark ? "text-gray-400" : "text-gray-600"}`}>
@@ -972,10 +489,10 @@ export default function Home() {
 
       {/* Navigation */}
       <nav
-        className={`sticky top-0 z-50 backdrop-blur-md border-b ${isDark ? "bg-gray-950/90 border-gray-800" : "bg-white/90 border-gray-200"}`}
+        className={`sticky top-0 z-50 border-b backdrop-blur-md ${isDark ? "border-gray-800 bg-gray-950/90" : "border-gray-200 bg-white/90"}`}
       >
-        <div className="max-w-6xl mx-auto px-4 py-2">
-          <div className="flex justify-center gap-2 flex-wrap">
+        <div className="mx-auto max-w-6xl px-4 py-2">
+          <div className="flex flex-wrap justify-center gap-2">
             {navItems.map((tab, index) => (
               <Button
                 key={tab.id}
@@ -994,14 +511,14 @@ export default function Home() {
       </nav>
 
       {/* Main content */}
-      <main className="max-w-6xl mx-auto px-4 py-6 space-y-6">
+      <main className="mx-auto max-w-6xl space-y-6 px-4 py-6">
         {activeSection === "quantum" && (
           <>
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30"
-                  : "bg-white border-purple-300"
+                  ? "border-purple-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-purple-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1024,8 +541,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-blue-500/30"
-                  : "bg-white border-blue-300"
+                  ? "border-blue-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-blue-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1048,8 +565,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-green-500/30"
-                  : "bg-white border-green-300"
+                  ? "border-green-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-green-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1076,8 +593,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-orange-500/30"
-                  : "bg-white border-orange-300"
+                  ? "border-orange-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-orange-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1100,8 +617,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30"
-                  : "bg-white border-purple-300"
+                  ? "border-purple-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-purple-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1124,8 +641,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-yellow-500/30"
-                  : "bg-white border-yellow-300"
+                  ? "border-yellow-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-yellow-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1152,8 +669,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-blue-500/30"
-                  : "bg-white border-blue-300"
+                  ? "border-blue-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-blue-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1176,8 +693,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-cyan-500/30"
-                  : "bg-white border-cyan-300"
+                  ? "border-cyan-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-cyan-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1200,8 +717,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-red-500/30"
-                  : "bg-white border-red-300"
+                  ? "border-red-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-red-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1224,8 +741,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-cyan-500/30"
-                  : "bg-white border-cyan-300"
+                  ? "border-cyan-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-cyan-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1248,8 +765,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-yellow-500/30"
-                  : "bg-white border-yellow-300"
+                  ? "border-yellow-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-yellow-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1272,8 +789,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-blue-500/30"
-                  : "bg-white border-blue-300"
+                  ? "border-blue-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-blue-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1296,8 +813,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30"
-                  : "bg-white border-purple-300"
+                  ? "border-purple-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-purple-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1324,8 +841,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-pink-500/30"
-                  : "bg-white border-pink-300"
+                  ? "border-pink-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-pink-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1348,8 +865,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30"
-                  : "bg-white border-purple-300"
+                  ? "border-purple-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-purple-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1372,8 +889,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30"
-                  : "bg-white border-purple-300"
+                  ? "border-purple-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-purple-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1396,8 +913,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-pink-500/30"
-                  : "bg-white border-pink-300"
+                  ? "border-pink-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-pink-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1420,8 +937,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-cyan-500/30"
-                  : "bg-white border-cyan-300"
+                  ? "border-cyan-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-cyan-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1444,8 +961,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-green-500/30"
-                  : "bg-white border-green-300"
+                  ? "border-green-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-green-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1468,8 +985,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-cyan-500/30"
-                  : "bg-white border-cyan-300"
+                  ? "border-cyan-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-cyan-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1492,8 +1009,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-yellow-500/30"
-                  : "bg-white border-yellow-300"
+                  ? "border-yellow-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-yellow-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1516,8 +1033,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30"
-                  : "bg-white border-purple-300"
+                  ? "border-purple-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-purple-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1538,8 +1055,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-purple-500/30"
-                  : "bg-white border-purple-300"
+                  ? "border-purple-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-purple-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1560,8 +1077,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-cyan-500/30"
-                  : "bg-white border-cyan-300"
+                  ? "border-cyan-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-cyan-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1582,8 +1099,8 @@ export default function Home() {
             <Card
               className={
                 isDark
-                  ? "bg-gradient-to-br from-gray-900 to-gray-950 border-yellow-500/30"
-                  : "bg-white border-yellow-300"
+                  ? "border-yellow-500/30 bg-gradient-to-br from-gray-900 to-gray-950"
+                  : "border-yellow-300 bg-white"
               }
             >
               <CardHeader className="pb-2">
@@ -1604,9 +1121,9 @@ export default function Home() {
         )}
       </main>
 
-      <footer className={`border-t py-4 mt-6 ${isDark ? "border-gray-800" : "border-gray-200"}`}>
+      <footer className={`mt-6 border-t py-4 ${isDark ? "border-gray-800" : "border-gray-200"}`}>
         <div
-          className={`max-w-6xl mx-auto px-4 text-center text-xs ${isDark ? "text-gray-500" : "text-gray-600"}`}
+          className={`mx-auto max-w-6xl px-4 text-center text-xs ${isDark ? "text-gray-500" : "text-gray-600"}`}
         >
           <p>{t.footer}</p>
           <p className={`mt-1 ${isDark ? "text-gray-600" : "text-gray-500"}`}>

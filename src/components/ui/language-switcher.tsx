@@ -14,6 +14,8 @@ import { locales, type Locale } from "@/i18n/config"
 const languageNames: Record<Locale, string> = {
   ru: "Русский",
   en: "English",
+  zh: "中文",
+  he: "עברית",
 }
 
 export function LanguageSwitcher() {
@@ -23,10 +25,7 @@ export function LanguageSwitcher() {
 
   function handleLocaleChange(newLocale: string) {
     // Replace locale in pathname
-    const newPathname = pathname.replace(
-      new RegExp(`^/${locale}`),
-      `/${newLocale}`,
-    )
+    const newPathname = pathname.replace(new RegExp(`^/${locale}`), `/${newLocale}`)
     router.push(newPathname)
   }
 

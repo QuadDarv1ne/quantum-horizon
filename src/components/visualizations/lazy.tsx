@@ -263,3 +263,82 @@ export const GravitationalWavesVisualization = dynamic(
     ssr: false,
   }
 )
+
+// Education components
+export const PhysicsQuiz = dynamic(
+  () =>
+    import("@/components/visualizations/education/physics-quiz").then((mod) => ({
+      default: mod.PhysicsQuiz,
+    })),
+  {
+    loading: () => <VisualizationCardSkeleton />,
+    ssr: false,
+  }
+)
+
+export const PhysicsTimeline = dynamic(
+  () =>
+    import("@/components/visualizations/education/physics-timeline").then((mod) => ({
+      default: mod.PhysicsTimeline,
+    })),
+  {
+    loading: () => <VisualizationCardSkeleton />,
+    ssr: false,
+  }
+)
+
+export const ScientistsBiographies = dynamic(
+  () =>
+    import("@/components/visualizations/education/scientists-biographies").then((mod) => ({
+      default: mod.ScientistsBiographies,
+    })),
+  {
+    loading: () => <VisualizationCardSkeleton />,
+    ssr: false,
+  }
+)
+
+export const FormulaCalculator = dynamic(
+  () =>
+    import("@/components/visualizations/education/formula-calculator").then((mod) => ({
+      default: mod.FormulaCalculator,
+    })),
+  {
+    loading: () => <VisualizationCardSkeleton />,
+    ssr: false,
+  }
+)
+
+// Additional cosmos visualizations
+export const SolarSystemVisualization = dynamic(
+  () =>
+    import("@/components/visualizations/cosmos/solar-system").then((mod) => ({
+      default: mod.SolarSystemVisualization,
+    })),
+  {
+    loading: () => <VisualizationCardSkeleton />,
+    ssr: false,
+  }
+)
+
+export const CMBVisualization = dynamic(
+  () =>
+    import("@/components/visualizations/cosmos/cmb").then((mod) => ({
+      default: mod.CMBVisualization,
+    })),
+  {
+    loading: () => <VisualizationCardSkeleton />,
+    ssr: false,
+  }
+)
+
+export const DarkEnergyVisualization = dynamic(
+  () =>
+    import("@/components/visualizations/cosmos/dark-energy").then((mod) => ({
+      default: mod.DarkEnergyVisualization,
+    })),
+  {
+    loading: () => <VisualizationCardSkeleton />,
+    ssr: false,
+  }
+)
