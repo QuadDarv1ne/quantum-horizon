@@ -114,31 +114,55 @@
 
 ### Требования
 
-| Компонент | Версия             | Ссылка                              |
-| --------- | ------------------ | ----------------------------------- |
-| Node.js   | 18+                | [nodejs.org](https://nodejs.org/)   |
-| Bun       | 1.0+ (опционально) | [bun.sh](https://bun.sh/)           |
-| Git       | Любая              | [git-scm.com](https://git-scm.com/) |
+| Компонент | Версия | Ссылка                              |
+| --------- | ------ | ----------------------------------- |
+| Node.js   | 18+    | [nodejs.org](https://nodejs.org/)   |
+| Git       | Любая  | [git-scm.com](https://git-scm.com/) |
 
 ### Установка
 
 ```bash
-# Клонирование репозитория
+# 1. Клонирование репозитория
 git clone https://github.com/QuadDarv1ne/quantum-horizon.git
 cd quantum-horizon
 
-# Установка зависимостей
+# 2. Установка зависимостей
 npm install
-# или с bun
-bun install
 
-# Копирование переменных окружения
+# 3. Настройка переменных окружения
 cp .env.example .env.local
+```
 
-# Запуск разработки
+### Настройка .env.local
+
+Минимальные требования для запуска:
+
+```bash
+# База данных (SQLite для разработки)
+DATABASE_URL="file:./prisma/dev.db"
+
+# Аутентификация (сгенерируйте случайную строку)
+NEXTAUTH_SECRET="your-secret-key-here"
+NEXTAUTH_URL="http://localhost:3000"
+```
+
+> **Примечание:** Для SQLite измените `DATABASE_URL` на файловый путь. Для PostgreSQL используйте формат: `postgresql://user:password@localhost:5432/quantum_horizon`
+
+### Инициализация базы данных
+
+```bash
+# Генерация Prisma клиента
+npm run db:generate
+
+# Применение миграций
+npm run db:migrate
+```
+
+### Запуск
+
+```bash
+# Сервер разработки
 npm run dev
-# или
-bun run dev
 ```
 
 Откройте [http://localhost:3000](http://localhost:3000) в браузере.
@@ -147,19 +171,17 @@ bun run dev
 
 ## 📦 Сборка и запуск
 
+### Production сборка
+
 ```bash
-# Production сборка
+# Сборка проекта
 npm run build
-# или
-bun run build
 
 # Запуск production сервера
 npm run start
-# или
-bun run start
 ```
 
-### Docker (опционально)
+### Docker
 
 ```bash
 # Сборка образа
@@ -169,43 +191,71 @@ docker build -t quantum-horizon .
 docker run -p 3000:3000 quantum-horizon
 ```
 
+Или с Docker Compose:
+
+```bash
+docker-compose up --build
+```
+
+---
+
+## 📋 Доступные скрипты
+
+| Команда                | Описание                              |
+| ---------------------- | ------------------------------------- |
+| `npm run dev`          | Запуск сервера разработки (порт 3000) |
+| `npm run build`        | Production сборка проекта             |
+| `npm run start`        | Запуск production сервера             |
+| `npm run lint`         | Проверка кода через ESLint            |
+| `npm run lint:fix`     | Исправление ошибок ESLint             |
+| `npm run format`       | Форматирование кода через Prettier    |
+| `npm run format:check` | Проверка форматирования               |
+| `npm run db:generate`  | Генерация Prisma клиента              |
+| `npm run db:migrate`   | Создание и применение миграций        |
+| `npm run db:push`      | Синхронизация БД без миграций         |
+| `npm run db:reset`     | Сброс базы данных                     |
+| `npm run test`         | Запуск тестов (Vitest)                |
+| `npm run test:e2e`     | E2E тесты (Playwright)                |
+
 ---
 
 ## 🗄️ База данных (Prisma)
 
 ```bash
-# Генерация клиента Prisma
+# Генерация Prisma клиента (после установки зависимостей)
 npm run db:generate
 
-# Применение миграций
+# Применение миграций (создаёт и применяет)
 npm run db:migrate
 
-# Сброс базы данных
+# Сброс базы данных (удаление всех данных)
 npm run db:reset
+
+# Push схемы без миграций (для разработки)
+npm run db:push
 ```
 
 ### Поддерживаемые БД
 
-| БД         | Статус              | Использование     |
-| ---------- | ------------------- | ----------------- |
-| PostgreSQL | ✅ Рекомендуется    | Production        |
-| SQLite     | ✅ Для разработки   | Local development |
-| MySQL      | ⚠️ Экспериментально | Не рекомендуется  |
+| БД         | Статус            | Использование     |
+| ---------- | ----------------- | ----------------- |
+| PostgreSQL | ✅ Рекомендуется  | Production        |
+| SQLite     | ✅ Для разработки | Local development |
 
 ---
 
 ## 🛠️ Технологии
 
-| Категория          | Технологии                |
-| ------------------ | ------------------------- |
-| **Framework**      | Next.js 16, React 19      |
-| **Язык**           | TypeScript 5              |
-| **Стили**          | Tailwind CSS 4, shadcn/ui |
-| **Анимации**       | Framer Motion             |
-| **Графика**        | Canvas API, Recharts      |
-| **База данных**    | Prisma ORM                |
-| **Аутентификация** | NextAuth.js               |
-| **Раннер**         | Bun, npm                  |
+| Категория             | Технологии                |
+| --------------------- | ------------------------- |
+| **Framework**         | Next.js 16, React 19      |
+| **Язык**              | TypeScript 5              |
+| **Стили**             | Tailwind CSS 4, shadcn/ui |
+| **Анимации**          | Framer Motion             |
+| **Графика**           | Canvas API, Recharts      |
+| **База данных**       | Prisma ORM                |
+| **Аутентификация**    | NextAuth.js               |
+| **Пакетный менеджер** | npm                       |
 
 ### Полный стек
 
@@ -219,7 +269,7 @@ npm run db:reset
 │  Next.js API Routes → Prisma ORM → PostgreSQL   │
 ├─────────────────────────────────────────────────┤
 │              DevOps & Tools                      │
-│  Bun → ESLint → Prettier → GitHub Actions       │
+│  npm → ESLint → Prettier → GitHub Actions       │
 └─────────────────────────────────────────────────┘
 ```
 
