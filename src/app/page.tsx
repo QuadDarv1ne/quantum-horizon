@@ -1,6 +1,4 @@
-﻿/* eslint-disable @typescript-eslint/no-unnecessary-condition */
-
-"use client"
+﻿"use client"
 
 import { useState, useEffect } from "react"
 import { useTranslations, useLocale } from "next-intl"
@@ -45,10 +43,9 @@ export default function Home() {
 
   const [activeSection, setActiveSection] = useState("quantum")
   const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("physics-theme") as Theme
-      return saved || "dark"
-    }
+    if (typeof window === "undefined") return "dark"
+    const saved = localStorage.getItem("physics-theme")
+    if (saved === "dark" || saved === "light") return saved
     return "dark"
   })
   const [menuOpen, setMenuOpen] = useState(false)
