@@ -37,6 +37,11 @@ import { SECTIONS, type Section, type Language } from "@/lib/constants-ui"
 
 type Theme = "dark" | "light"
 
+const STORAGE_KEYS = {
+  THEME: "physics-theme",
+  LOCALE: "NEXT_LOCALE",
+} as const
+
 export default function Home() {
   const t = useTranslations()
   const locale = useLocale()
@@ -44,19 +49,19 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState<Section>("quantum")
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === "undefined") return "dark"
-    const saved = localStorage.getItem("physics-theme")
+    const saved = localStorage.getItem(STORAGE_KEYS.THEME)
     if (saved === "dark" || saved === "light") return saved
     return "dark"
   })
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    localStorage.setItem("physics-theme", theme)
+    localStorage.setItem(STORAGE_KEYS.THEME, theme)
   }, [theme])
 
   useEffect(() => {
     if (typeof window !== "undefined" && locale) {
-      localStorage.setItem("NEXT_LOCALE", locale)
+      localStorage.setItem(STORAGE_KEYS.LOCALE, locale)
     }
   }, [locale])
 
@@ -85,7 +90,7 @@ export default function Home() {
 
   const handleLanguageChange = (lang: Language) => {
     if (typeof window !== "undefined") {
-      localStorage.setItem("NEXT_LOCALE", lang)
+      localStorage.setItem(STORAGE_KEYS.LOCALE, lang)
       window.location.reload()
     }
   }
