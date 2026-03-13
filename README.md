@@ -4,7 +4,7 @@
 
 Интерактивная платформа для визуализации и изучения современной физики — от квантовой механики до космологии.
 
-![Version](https://img.shields.io/badge/version-0.2.0-blue)
+![Version](https://img.shields.io/badge/version-0.3.0-blue)
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)
@@ -95,16 +95,16 @@
 
 <div align="center">
 
-| Квантовая механика | Теория относительности | Космология |
-|-------------------|----------------------|-----------|
-| *Волновая функция* | *Замедление времени* | *Диаграмма HR* |
+| Квантовая механика                                                                     | Теория относительности                                                                 | Космология                                                                       |
+| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| _Волновая функция_                                                                     | _Замедление времени_                                                                   | _Диаграмма HR_                                                                   |
 | ![Wave Function](https://via.placeholder.com/400x225/1a1a2e/ffffff?text=Wave+Function) | ![Time Dilation](https://via.placeholder.com/400x225/1a1a2e/ffffff?text=Time+Dilation) | ![HR Diagram](https://via.placeholder.com/400x225/1a1a2e/ffffff?text=HR+Diagram) |
 
-| Чёрная дыра | Стандартная модель | Солнечная система |
-|------------|-------------------|------------------|
+| Чёрная дыра                                                                      | Стандартная модель                                                                       | Солнечная система                                                                    |
+| -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
 | ![Black Hole](https://via.placeholder.com/400x225/1a1a2e/ffffff?text=Black+Hole) | ![Standard Model](https://via.placeholder.com/400x225/1a1a2e/ffffff?text=Standard+Model) | ![Solar System](https://via.placeholder.com/400x225/1a1a2e/ffffff?text=Solar+System) |
 
-> 📌 *Плейсхолдеры будут заменены на реальные скриншоты*
+> 📌 _Плейсхолдеры будут заменены на реальные скриншоты_
 
 </div>
 
@@ -114,11 +114,11 @@
 
 ### Требования
 
-| Компонент | Версия | Ссылка |
-|-----------|--------|--------|
-| Node.js | 18+ | [nodejs.org](https://nodejs.org/) |
-| Bun | 1.0+ (опционально) | [bun.sh](https://bun.sh/) |
-| Git | Любая | [git-scm.com](https://git-scm.com/) |
+| Компонент | Версия             | Ссылка                              |
+| --------- | ------------------ | ----------------------------------- |
+| Node.js   | 18+                | [nodejs.org](https://nodejs.org/)   |
+| Bun       | 1.0+ (опционально) | [bun.sh](https://bun.sh/)           |
+| Git       | Любая              | [git-scm.com](https://git-scm.com/) |
 
 ### Установка
 
@@ -186,26 +186,26 @@ npm run db:reset
 
 ### Поддерживаемые БД
 
-| БД | Статус | Использование |
-|----|--------|---------------|
-| PostgreSQL | ✅ Рекомендуется | Production |
-| SQLite | ✅ Для разработки | Local development |
-| MySQL | ⚠️ Экспериментально | Не рекомендуется |
+| БД         | Статус              | Использование     |
+| ---------- | ------------------- | ----------------- |
+| PostgreSQL | ✅ Рекомендуется    | Production        |
+| SQLite     | ✅ Для разработки   | Local development |
+| MySQL      | ⚠️ Экспериментально | Не рекомендуется  |
 
 ---
 
 ## 🛠️ Технологии
 
-| Категория | Технологии |
-|-----------|------------|
-| **Framework** | Next.js 16, React 19 |
-| **Язык** | TypeScript 5 |
-| **Стили** | Tailwind CSS 4, shadcn/ui |
-| **Анимации** | Framer Motion |
-| **Графика** | Canvas API, Recharts |
-| **База данных** | Prisma ORM |
-| **Аутентификация** | NextAuth.js |
-| **Раннер** | Bun, npm |
+| Категория          | Технологии                |
+| ------------------ | ------------------------- |
+| **Framework**      | Next.js 16, React 19      |
+| **Язык**           | TypeScript 5              |
+| **Стили**          | Tailwind CSS 4, shadcn/ui |
+| **Анимации**       | Framer Motion             |
+| **Графика**        | Canvas API, Recharts      |
+| **База данных**    | Prisma ORM                |
+| **Аутентификация** | NextAuth.js               |
+| **Раннер**         | Bun, npm                  |
 
 ### Полный стек
 
@@ -283,15 +283,15 @@ quantum-horizon/
 
 ## 📚 Документация
 
-| Файл | Описание |
-|------|----------|
-| [README.md](./README.md) | Основная документация |
-| [CONTRIBUTING.md](./CONTRIBUTING.md) | Руководство для контрибьюторов |
-| [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) | Кодекс поведения |
-| [SECURITY.md](./SECURITY.md) | Политика безопасности |
-| [CHANGELOG.md](./CHANGELOG.md) | История изменений |
-| [GIT-GUIDE.md](./GIT-GUIDE.md) | Руководство по Git |
-| [LICENSE](./LICENSE) | MIT лицензия |
+| Файл                                       | Описание                       |
+| ------------------------------------------ | ------------------------------ |
+| [README.md](./README.md)                   | Основная документация          |
+| [CONTRIBUTING.md](./CONTRIBUTING.md)       | Руководство для контрибьюторов |
+| [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) | Кодекс поведения               |
+| [SECURITY.md](./SECURITY.md)               | Политика безопасности          |
+| [CHANGELOG.md](./CHANGELOG.md)             | История изменений              |
+| [GIT-GUIDE.md](./GIT-GUIDE.md)             | Руководство по Git             |
+| [LICENSE](./LICENSE)                       | MIT лицензия                   |
 
 ---
 

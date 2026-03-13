@@ -7,9 +7,31 @@
 
 ---
 
+## [0.3.0] - 2026-03-13
+
+### Удалено
+
+- Удалены неиспользуемые eslint-disable комментарии
+- Удалены unused импорты и функции
+- Удалён неиспользуемый код из use-canvas-animation.ts (useFixedTimestepCanvasAnimation)
+- Удалён неиспользуемый код из use-visualization-canvas.ts (createCachedGradient)
+- Удалён неиспользуемый wrapper withSuspense из lazy.tsx
+
+### Изменено
+
+- Улучшена типизация в auth route (добавлены Session и JWT декларации)
+- Упрощена логика callbacks в auth (убраны eslint-disable и any casts)
+- Рефакторинг API routes (bookmarks, progress) — выделена getUserId() функция
+- Улучшена типизация в use-auth.ts (useHasRole hook)
+- Упрощён use-toast.ts (удалены неиспользуемые actionTypes)
+- Упрощён api-helpers.ts (getCurrentSession возвращает { session, userId })
+
+---
+
 ## [Unreleased]
 
 ### Добавлено
+
 - Docker поддержка (Dockerfile, .dockerignore)
 - Prettier для форматирования кода
 - SECURITY.md — политика безопасности
@@ -18,6 +40,7 @@
 - Скрипты: `lint:fix`, `format`, `format:check`
 
 ### Изменено
+
 - Обновлён README.md с улучшенной структурой
 - Обновлён .env.example до современного формата
 - Обновлён .gitignore (prisma/migrations/ теперь коммитятся)
@@ -25,6 +48,7 @@
 - Оптимизированы хуки (use-canvas-animation, use-toast, use-mobile)
 
 ### Исправлено
+
 - Merge конфликты в src/app/page.tsx
 - Типы в src/hooks/use-mobile.ts
 - Типы в src/lib/db.ts
@@ -35,6 +59,7 @@
 ## [0.2.0] - 2026-03-11
 
 ### Добавлено
+
 - Мультиязычность (RU, EN, ZH, HE)
 - Визуализация волновой функции (уравнение Шрёдингера)
 - Принцип неопределённости Гейзенберга
@@ -63,6 +88,7 @@
 - Биографии учёных
 
 ### Изменено
+
 - Обновлён до Next.js 16
 - React 19
 - Tailwind CSS 4
@@ -73,6 +99,7 @@
 ## [0.1.0] - 2025-XX-XX
 
 ### Добавлено
+
 - Initial commit
 - Базовая структура Next.js проекта
 - Настройка shadcn/ui компонентов
@@ -90,6 +117,7 @@
 
 ---
 
-[Unreleased]: https://github.com/QuadDarv1ne/quantum-horizon/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/QuadDarv1ne/quantum-horizon/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/QuadDarv1ne/quantum-horizon/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/QuadDarv1ne/quantum-horizon/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/QuadDarv1ne/quantum-horizon/releases/tag/v0.1.0
