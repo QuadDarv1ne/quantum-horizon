@@ -43,11 +43,23 @@ export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationPro
 
   useEffect(() => {
     QueryParam.setNumber("ss.speed", speed)
+  }, [speed])
+
+  useEffect(() => {
     QueryParam.setNumber("ss.zoom", zoom)
+  }, [zoom])
+
+  useEffect(() => {
     QueryParam.setBoolean("ss.orbits", showOrbits)
+  }, [showOrbits])
+
+  useEffect(() => {
     QueryParam.setBoolean("ss.labels", showLabels)
+  }, [showLabels])
+
+  useEffect(() => {
     if (selectedPlanet) QueryParam.setString("ss.planet", selectedPlanet)
-  }, [speed, zoom, showOrbits, showLabels, selectedPlanet])
+  }, [selectedPlanet])
 
   // Planet data (relative to Earth)
   const planets = useMemo<Planet[]>(

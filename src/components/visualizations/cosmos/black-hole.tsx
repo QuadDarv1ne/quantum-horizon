@@ -35,11 +35,23 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
   // Update URL when state changes
   useEffect(() => {
     QueryParam.setNumber("bh.mass", mass)
+  }, [mass])
+
+  useEffect(() => {
     QueryParam.setBoolean("bh.accretion", showAccretion)
+  }, [showAccretion])
+
+  useEffect(() => {
     QueryParam.setBoolean("bh.hawking", showHawking)
+  }, [showHawking])
+
+  useEffect(() => {
     QueryParam.setBoolean("bh.doppler", showDoppler)
+  }, [showDoppler])
+
+  useEffect(() => {
     QueryParam.setBoolean("bh.lensing", showLensing)
-  }, [mass, showAccretion, showHawking, showDoppler, showLensing])
+  }, [showLensing])
 
   // Generate background stars once
   useEffect(() => {

@@ -26,8 +26,11 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
     const n = QueryParam.getNumber("wf.n", quantumNumber)
     if (n !== quantumNumber) setQuantumNumber(n as 1 | 2 | 3 | 4 | 5)
     QueryParam.setNumber("wf.n", quantumNumber)
+  }, [quantumNumber, setQuantumNumber])
+
+  useEffect(() => {
     QueryParam.setBoolean("wf.prob", showProbability)
-  }, [quantumNumber, showProbability, setQuantumNumber])
+  }, [showProbability])
 
   const draw = useCallback(
     (
@@ -296,7 +299,7 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
         <div className="space-y-1">
           <div className="flex justify-between text-xs">
             <span className={isDark ? "text-cyan-400" : "text-cyan-700"}>Quantum number n</span>
-            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+            <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
               {quantumNumber}
             </span>
           </div>
@@ -337,16 +340,16 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
         </div>
       </div>
       <div
-        className={`rounded-lg p-3 border ${
+        className={`rounded-lg border p-3 ${
           isDark
-            ? "bg-gradient-to-r from-blue-900/30 to-purple-900/30 border-blue-500/20"
-            : "bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200"
+            ? "border-blue-500/20 bg-gradient-to-r from-blue-900/30 to-purple-900/30"
+            : "border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50"
         }`}
       >
-        <div className={`font-semibold mb-1 ${isDark ? "text-cyan-300" : "text-cyan-700"}`}>
+        <div className={`mb-1 font-semibold ${isDark ? "text-cyan-300" : "text-cyan-700"}`}>
           📐 Schrödinger equation solution:
         </div>
-        <div className={`font-mono text-center ${isDark ? "text-white" : "text-gray-900"}`}>
+        <div className={`text-center font-mono ${isDark ? "text-white" : "text-gray-900"}`}>
           E_n = n²π²ℏ² / 2mL²
         </div>
         <p className={`mt-2 text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
@@ -366,7 +369,7 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
           }}
           variant="outline"
           size="sm"
-          className="w-full mt-2"
+          className="mt-2 w-full"
         >
           🔗 Copy URL
         </Button>
