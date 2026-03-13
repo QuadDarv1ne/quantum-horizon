@@ -148,14 +148,14 @@ const FORMULAS: FormulaExamples = {
 
 export function usePageTranslations() {
   const t = useTranslations()
-  const locale = useLocale() as Locale
+  const locale = useLocale()
 
   return useMemo(
     () => ({
       t,
       locale,
-      getTexts: () => TEXTS[locale],
-      getVisualizationLabels: () => VISUALIZATION_LABELS[locale],
+      getTexts: () => TEXTS[locale as Locale],
+      getVisualizationLabels: () => VISUALIZATION_LABELS[locale as Locale],
       getFormulas: () => FORMULAS,
     }),
     [t, locale]
