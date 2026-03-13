@@ -2,25 +2,19 @@
 
 import { Button } from "@/components/ui/button"
 import { usePageTranslations } from "@/hooks/use-page-translations"
+import { NAV_ITEMS, LANGUAGES, type Section, type Language } from "@/lib/constants-ui"
 
 interface SideMenuProps {
   isOpen: boolean
   onClose: () => void
-  activeSection: string
-  onSectionSelect: (section: string) => void
+  activeSection: Section
+  onSectionSelect: (section: Section) => void
   locale: string
   theme: "dark" | "light"
   onThemeChange: (theme: "dark" | "light") => void
-  onLanguageChange: (lang: "ru" | "en" | "zh" | "he") => void
+  onLanguageChange: (lang: Language) => void
   isDark: boolean
 }
-
-const navItems = [
-  { id: "quantum", label: "quantum", color: "from-purple-600 to-blue-600" },
-  { id: "relativity", label: "relativity", color: "from-yellow-600 to-orange-600" },
-  { id: "cosmos", label: "cosmos", color: "from-red-600 to-purple-600" },
-  { id: "advanced", label: "advanced", color: "from-pink-600 to-purple-600" },
-]
 
 export function SideMenu({
   isOpen,
@@ -72,7 +66,7 @@ export function SideMenu({
                 {texts.sections}
               </h3>
               <div className="space-y-2">
-                {navItems.map((item) => (
+                {NAV_ITEMS.map((item) => (
                   <button
                     key={item.id}
                     onClick={() => {
@@ -137,7 +131,7 @@ export function SideMenu({
                     {texts.language}
                   </label>
                   <div className="mt-1 flex gap-1">
-                    {(["ru", "en", "zh", "he"] as const).map((lang) => (
+                    {LANGUAGES.map((lang) => (
                       <Button
                         key={lang}
                         onClick={() => {

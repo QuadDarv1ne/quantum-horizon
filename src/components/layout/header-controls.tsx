@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { usePageTranslations } from "@/hooks/use-page-translations"
+import { LANGUAGES } from "@/lib/constants-ui"
 
 interface HeaderControlsProps {
   locale: string
@@ -21,7 +22,7 @@ export function HeaderControls({
   const { getTexts } = usePageTranslations()
   const texts = getTexts()
 
-  const handleLanguageChange = (lang: "ru" | "en" | "zh" | "he") => {
+  const handleLanguageChange = (lang: (typeof LANGUAGES)[number]) => {
     if (typeof window !== "undefined") {
       localStorage.setItem("NEXT_LOCALE", lang)
       window.location.reload()
@@ -33,7 +34,7 @@ export function HeaderControls({
       <div></div>
       <div className="flex gap-2">
         <div className="flex gap-1">
-          {(["ru", "en", "zh", "he"] as const).map((lang) => (
+          {LANGUAGES.map((lang) => (
             <Button
               key={lang}
               onClick={() => {

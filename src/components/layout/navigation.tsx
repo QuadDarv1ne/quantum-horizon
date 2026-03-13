@@ -1,19 +1,13 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { NAV_ITEMS, type Section } from "@/lib/constants-ui"
 
 interface NavigationProps {
-  activeSection: string
-  onSectionChange: (section: string) => void
+  activeSection: Section
+  onSectionChange: (section: Section) => void
   isDark: boolean
 }
-
-const navItems = [
-  { id: "quantum", label: "quantum", color: "from-purple-600 to-blue-600" },
-  { id: "relativity", label: "relativity", color: "from-yellow-600 to-orange-600" },
-  { id: "cosmos", label: "cosmos", color: "from-red-600 to-purple-600" },
-  { id: "advanced", label: "advanced", color: "from-pink-600 to-purple-600" },
-]
 
 export function Navigation({ activeSection, onSectionChange, isDark }: NavigationProps) {
   return (
@@ -24,7 +18,7 @@ export function Navigation({ activeSection, onSectionChange, isDark }: Navigatio
     >
       <div className="mx-auto max-w-6xl px-4 py-2">
         <div className="flex flex-wrap justify-center gap-2">
-          {navItems.map((tab, index) => (
+          {NAV_ITEMS.map((tab, index) => (
             <Button
               key={tab.id}
               onClick={() => {

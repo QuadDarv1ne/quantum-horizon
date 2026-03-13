@@ -33,15 +33,15 @@ import {
   FormulaCalculator,
   PhysicsTimeline,
 } from "@/components/visualizations"
+import { SECTIONS, type Section, type Language } from "@/lib/constants-ui"
 
 type Theme = "dark" | "light"
-type Language = "ru" | "en" | "zh" | "he"
 
 export default function Home() {
   const t = useTranslations()
   const locale = useLocale()
 
-  const [activeSection, setActiveSection] = useState("quantum")
+  const [activeSection, setActiveSection] = useState<Section>("quantum")
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === "undefined") return "dark"
     const saved = localStorage.getItem("physics-theme")
@@ -64,11 +64,9 @@ export default function Home() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
 
-      const sections = ["quantum", "relativity", "cosmos", "advanced"]
-
       if (e.key >= "1" && e.key <= "4") {
         const index = parseInt(e.key) - 1
-        if (sections[index]) setActiveSection(sections[index])
+        if (SECTIONS[index]) setActiveSection(SECTIONS[index])
       } else if (e.key === "m" || e.key === "M") {
         setMenuOpen((prev) => !prev)
       } else if (e.key === "Escape") {
