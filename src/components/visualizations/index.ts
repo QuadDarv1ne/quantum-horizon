@@ -43,3 +43,5 @@ export { SuperconductivityVisualization } from "./quantum/superconductivity"
 
 // Education components
 export { PhysicsQuiz } from "./education/physics-quiz"
+export { ScientistsBiographies } from "./education/scientists-biographies"
+export { FormulaCalculator } from "./education/formula-calculator"
