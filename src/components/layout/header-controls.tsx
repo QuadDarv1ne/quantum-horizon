@@ -29,6 +29,20 @@ export function HeaderControls({
     }
   }
 
+  const handleThemeToggle = () => {
+    onThemeChange(theme === "dark" ? "light" : "dark")
+  }
+
+  const getLangButtonClass = (lang: (typeof LANGUAGES)[number]) => {
+    const base = "px-2 text-xs"
+    if (locale === lang) {
+      return `${base} bg-purple-600`
+    }
+    return `${base} ${isDark ? "text-gray-400" : "text-gray-600"}`
+  }
+
+  const themeButtonClass = `text-xs ${isDark ? "border-gray-700 text-gray-300" : "border-gray-300 text-gray-700"}`
+
   return (
     <div className="mb-4 flex items-center justify-between">
       <div></div>
@@ -42,34 +56,21 @@ export function HeaderControls({
               }}
               variant={locale === lang ? "default" : "ghost"}
               size="sm"
-              className={`px-2 text-xs ${
-                locale === lang ? "bg-purple-600" : isDark ? "text-gray-400" : "text-gray-600"
-              }`}
+              className={getLangButtonClass(lang)}
             >
               {lang.toUpperCase()}
             </Button>
           ))}
         </div>
         <Button
-          onClick={() => {
-            onThemeChange(theme === "dark" ? "light" : "dark")
-          }}
+          onClick={handleThemeToggle}
           variant="outline"
           size="sm"
-          className={`text-xs ${
-            isDark ? "border-gray-700 text-gray-300" : "border-gray-300 text-gray-700"
-          }`}
+          className={themeButtonClass}
         >
           {isDark ? "☀️" : "🌙"}
         </Button>
-        <Button
-          onClick={onMenuOpen}
-          variant="outline"
-          size="sm"
-          className={`text-xs ${
-            isDark ? "border-gray-700 text-gray-300" : "border-gray-300 text-gray-700"
-          }`}
-        >
+        <Button onClick={onMenuOpen} variant="outline" size="sm" className={themeButtonClass}>
           ☰ {texts.menu}
         </Button>
       </div>
