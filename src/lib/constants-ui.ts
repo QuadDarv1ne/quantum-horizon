@@ -7,5 +7,14 @@ export const NAV_ITEMS = [
 
 export const SECTIONS = ["quantum", "relativity", "cosmos", "advanced"] as const
 export const LANGUAGES = ["ru", "en", "zh", "he"] as const
+
 export type Section = (typeof SECTIONS)[number]
 export type Language = (typeof LANGUAGES)[number]
+
+export function getSectionById(id: string): Section | undefined {
+  return SECTIONS.find((s) => s === id)
+}
+
+export function getLanguageByCode(code: string): Language | undefined {
+  return LANGUAGES.find((l) => l === code)
+}
