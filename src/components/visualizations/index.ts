@@ -40,3 +40,6 @@ export { QuantumEntanglementVisualization } from "./quantum/quantum-entanglement
 export { AtomicModelVisualization } from "./quantum/atomic-model"
 export { RadioactiveDecayVisualization } from "./quantum/radioactive-decay"
 export { SuperconductivityVisualization } from "./quantum/superconductivity"
+
+// Education components
+export { PhysicsQuiz } from "./education/physics-quiz"
