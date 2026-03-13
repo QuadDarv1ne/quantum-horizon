@@ -19,8 +19,7 @@ interface GradientCache {
 }
 
 export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore()
-  const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
+  const { isPlaying, animationSpeed, setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
   const [mass, setMass] = useState(() => QueryParam.getNumber("bh.mass", 10))
   const [showAccretion, setShowAccretion] = useState(() =>
@@ -156,8 +155,8 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
         }}
         isDark={isDark}
       />
-      <div className={`p-4 rounded-lg ${isDark ? "bg-gray-800/50" : "bg-gray-100/50"}`}>
-        <label className="block text-sm font-medium mb-2">
+      <div className={`rounded-lg p-4 ${isDark ? "bg-gray-800/50" : "bg-gray-100/50"}`}>
+        <label className="mb-2 block text-sm font-medium">
           Mass: {mass.toFixed(1)} Solar Masses
         </label>
         <input
@@ -171,7 +170,7 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
           }}
           className="w-full"
         />
-        <div className="flex gap-4 mt-3 flex-wrap">
+        <div className="mt-3 flex flex-wrap gap-4">
           <label className="flex items-center gap-2 text-sm">
             <input
               type="checkbox"
@@ -220,7 +219,7 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
           }}
           variant="outline"
           size="sm"
-          className="w-full mt-2"
+          className="mt-2 w-full"
         >
           🔗 Copy URL
         </Button>

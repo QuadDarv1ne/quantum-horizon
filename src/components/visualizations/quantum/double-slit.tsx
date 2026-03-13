@@ -22,8 +22,7 @@ interface Particle {
 }
 
 export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore()
-  const { togglePlaying, setAnimationSpeed } = useVisualizationStore()
+  const { isPlaying, animationSpeed, togglePlaying, setAnimationSpeed } = useVisualizationStore()
 
   const [slitSeparation, setSlitSeparation] = useState(40)
   const [slitWidth, setSlitWidth] = useState(8)
@@ -251,7 +250,7 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className={isDark ? "text-blue-400" : "text-blue-700"}>d (slits)</span>
-            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+            <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
               {slitSeparation}
             </span>
           </div>
@@ -268,7 +267,7 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className={isDark ? "text-green-400" : "text-green-700"}>λ (wave)</span>
-            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+            <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
               {wavelength}
             </span>
           </div>
@@ -285,7 +284,7 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className={isDark ? "text-yellow-400" : "text-yellow-700"}>a (width)</span>
-            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+            <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
               {slitWidth}
             </span>
           </div>
@@ -329,8 +328,8 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
       </div>
 
       <div
-        className={`rounded-lg p-3 border text-sm ${
-          isDark ? "bg-blue-900/20 border-blue-500/20" : "bg-blue-50 border-blue-200"
+        className={`rounded-lg border p-3 text-sm ${
+          isDark ? "border-blue-500/20 bg-blue-900/20" : "border-blue-200 bg-blue-50"
         }`}
       >
         <p className={isDark ? "text-gray-300" : "text-gray-700"}>

@@ -11,8 +11,7 @@ interface UncertaintyVisualizationProps {
 }
 
 export function UncertaintyVisualization({ isDark }: UncertaintyVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore()
-  const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
+  const { isPlaying, animationSpeed, setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
   const [deltaX, setDeltaX] = useState(50)
 
@@ -125,8 +124,8 @@ export function UncertaintyVisualization({ isDark }: UncertaintyVisualizationPro
         }}
         isDark={isDark}
       />
-      <div className={`p-4 rounded-lg ${isDark ? "bg-gray-800/50" : "bg-gray-100/50"}`}>
-        <label className="block text-sm font-medium mb-2">
+      <div className={`rounded-lg p-4 ${isDark ? "bg-gray-800/50" : "bg-gray-100/50"}`}>
+        <label className="mb-2 block text-sm font-medium">
           Position Uncertainty (Δx): {(deltaX * 1e-10).toExponential(2)} m
         </label>
         <input
@@ -140,11 +139,11 @@ export function UncertaintyVisualization({ isDark }: UncertaintyVisualizationPro
           }}
           className="w-full"
         />
-        <div className="flex justify-between text-xs mt-1 text-gray-500">
+        <div className="mt-1 flex justify-between text-xs text-gray-500">
           <span>Small Δx</span>
           <span>Large Δx</span>
         </div>
-        <p className={`text-xs mt-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+        <p className={`mt-2 text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
           As Δx increases, Δp decreases (and vice versa)
         </p>
       </div>

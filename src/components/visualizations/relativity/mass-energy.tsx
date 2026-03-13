@@ -14,8 +14,7 @@ interface MassEnergyVisualizationProps {
 }
 
 export function MassEnergyVisualization({ isDark }: MassEnergyVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore()
-  const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
+  const { isPlaying, animationSpeed, setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
   useEffect(() => {
     QueryParam.setBoolean("me.playing", isPlaying)
@@ -138,7 +137,7 @@ export function MassEnergyVisualization({ isDark }: MassEnergyVisualizationProps
         onSpeedChange={setAnimationSpeed}
         isDark={isDark}
       />
-      <div className={`p-4 rounded-lg ${isDark ? "bg-gray-800/50" : "bg-gray-100/50"}`}>
+      <div className={`rounded-lg p-4 ${isDark ? "bg-gray-800/50" : "bg-gray-100/50"}`}>
         <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>
           <strong>E = mc²</strong> — Energy and mass are interchangeable. The speed of light squared
           (c²) is the conversion factor.
@@ -164,7 +163,7 @@ export function MassEnergyVisualization({ isDark }: MassEnergyVisualizationProps
           }}
           variant="outline"
           size="sm"
-          className="w-full mt-2"
+          className="mt-2 w-full"
         >
           🔗 Copy URL
         </Button>

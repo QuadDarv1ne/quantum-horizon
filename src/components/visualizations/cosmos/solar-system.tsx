@@ -29,8 +29,7 @@ interface StarPosition {
 }
 
 export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore()
-  const { togglePlaying, setAnimationSpeed } = useVisualizationStore()
+  const { isPlaying, animationSpeed, togglePlaying, setAnimationSpeed } = useVisualizationStore()
 
   const [speed, setSpeed] = useState(1)
   const [showOrbits, setShowOrbits] = useState(true)
@@ -355,7 +354,7 @@ export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationPro
         <div className="space-y-1">
           <div className="flex justify-between text-xs">
             <span className="text-yellow-400">Скорость</span>
-            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+            <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
               {speed.toFixed(1)}x
             </span>
           </div>
@@ -372,7 +371,7 @@ export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationPro
         <div className="space-y-1">
           <div className="flex justify-between text-xs">
             <span className="text-blue-400">Масштаб</span>
-            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+            <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
               {zoom.toFixed(1)}x
             </span>
           </div>
@@ -388,7 +387,7 @@ export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationPro
         </div>
       </div>
 
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex flex-wrap gap-2">
         <Button
           onClick={() => {
             setShowOrbits(!showOrbits)
@@ -428,13 +427,13 @@ export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationPro
         ))}
       </div>
 
-      <div className="bg-yellow-900/20 rounded-lg p-2 border border-yellow-500/20 text-xs">
-        <div className="text-yellow-300 font-semibold">🌍 Солнечная система</div>
-        <p className={isDark ? "text-gray-400 mt-1" : "text-gray-600 mt-1"}>
+      <div className="rounded-lg border border-yellow-500/20 bg-yellow-900/20 p-2 text-xs">
+        <div className="font-semibold text-yellow-300">🌍 Солнечная система</div>
+        <p className={isDark ? "mt-1 text-gray-400" : "mt-1 text-gray-600"}>
           8 планет обращаются вокруг Солнца. Внутренние — каменистые (Меркурий, Венера, Земля,
           Марс), внешние — газовые гиганты (Юпитер, Сатурн, Уран, Нептун).
         </p>
-        <p className="text-cyan-400 mt-1">
+        <p className="mt-1 text-cyan-400">
           Период обращения Земли = 1 год. Нептун делает оборот за ~165 лет!
         </p>
         <Button
@@ -444,7 +443,7 @@ export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationPro
           }}
           variant="outline"
           size="sm"
-          className="w-full mt-2"
+          className="mt-2 w-full"
         >
           🔗 Copy URL
         </Button>
