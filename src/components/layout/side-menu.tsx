@@ -32,6 +32,15 @@ export function SideMenu({
   const vizLabels = getVisualizationLabels()
   const formulas = getFormulas()
 
+  const handleSectionClick = (section: Section) => {
+    onSectionSelect(section)
+    onClose()
+  }
+
+  const handleLanguageClick = (lang: Language) => {
+    onLanguageChange(lang)
+  }
+
   return (
     <>
       <div
@@ -70,8 +79,7 @@ export function SideMenu({
                   <button
                     key={item.id}
                     onClick={() => {
-                      onSectionSelect(item.id)
-                      onClose()
+                      handleSectionClick(item.id)
                     }}
                     className={`w-full rounded-lg px-3 py-2 text-left transition-colors ${
                       activeSection === item.id
@@ -135,7 +143,7 @@ export function SideMenu({
                       <Button
                         key={lang}
                         onClick={() => {
-                          onLanguageChange(lang)
+                          handleLanguageClick(lang)
                         }}
                         variant={locale === lang ? "default" : "ghost"}
                         size="sm"
