@@ -1,37 +1,59 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useCallback } from "react"
 
-/**
- * Хук для trap focus внутри элемента (для модальных окон, диалогов)
- */
-export function useFocusTrap(isActive = true) {
+export interface UseFocusTrapOptions {
+  isActive?: boolean
+  initialFocus?: HTMLElement
+  onEscape?: () => void
+}
+
+export function useFocusTrap(options: UseFocusTrapOptions = {}) {
+  const { isActive = true, initialFocus, onEscape } = options
   const containerRef = useRef<HTMLElement>(null)
+  const previouslyFocusedRef = useRef<HTMLElement | null>(null)
+
+  const getFocusableElements = useCallback((container: HTMLElement): HTMLElement[] => {
+    const focusableSelectors = [
+      "button:not([disabled])",
+      "input:not([disabled])",
+      "select:not([disabled])",
+      "textarea:not([disabled])",
+      "a[href]",
+      "[tabindex]:not([tabindex='-1'])",
+    ].join(", ")
+
+    return Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors)).filter((el) => {
+      const style = window.getComputedStyle(el)
+      return style.display !== "none" && style.visibility !== "hidden"
+    })
+  }, [])
 
   useEffect(() => {
     if (!isActive || !containerRef.current) return
 
     const container = containerRef.current
-    const focusableElements = container.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    )
+    previouslyFocusedRef.current = document.activeElement as HTMLElement
 
+    const focusableElements = getFocusableElements(container)
     const firstElement = focusableElements[0]
     const lastElement = focusableElements[focusableElements.length - 1]
 
-    // Фокус на первом элементе при активации
-    firstElement?.focus()
+    const elementToFocus = initialFocus ?? firstElement
+    elementToFocus.focus()
 
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onEscape?.()
+        return
+      }
+
       if (event.key !== "Tab") return
 
       if (event.shiftKey && document.activeElement === firstElement) {
-        // Shift + Tab
         event.preventDefault()
         lastElement.focus()
       } else if (document.activeElement === lastElement) {
-        // Tab
         event.preventDefault()
         firstElement.focus()
       }
@@ -39,28 +61,28 @@ export function useFocusTrap(isActive = true) {
 
     container.addEventListener("keydown", handleKeyDown)
 
-    return (): void => {
+    return () => {
       container.removeEventListener("keydown", handleKeyDown)
+      if (previouslyFocusedRef.current && previouslyFocusedRef.current !== document.body) {
+        previouslyFocusedRef.current.focus()
+      }
     }
-  }, [isActive])
+  }, [isActive, initialFocus, onEscape, getFocusableElements])
 
   return containerRef
 }
 
-/**
- * Хук для управления фокусом (возврат фокуса после закрытия)
- */
 export function useFocusRestore() {
   const previousFocusRef = useRef<HTMLElement | null>(null)
 
-  const saveFocus = () => {
+  const saveFocus = useCallback(() => {
     previousFocusRef.current = document.activeElement as HTMLElement
-  }
+  }, [])
 
-  const restoreFocus = () => {
+  const restoreFocus = useCallback(() => {
     previousFocusRef.current?.focus()
     previousFocusRef.current = null
-  }
+  }, [])
 
   return { saveFocus, restoreFocus, previousFocusRef }
 }
