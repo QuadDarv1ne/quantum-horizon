@@ -19,6 +19,7 @@ export const R_E = 6.371e6 // Радиус Земли, м
 export const M_E = 5.972e24 // Масса Земли, кг
 export const AU = 1.496e11 // Астрономическая единица, м
 export const sigma_SB = 5.67e-8 // Постоянная Стефана-Больцмана, Вт·м⁻²·К⁻⁴
+export const sigma = sigma_SB // Алиас для sigma_SB
 export const R_H = 1.097e7 // Постоянная Ридберга, м⁻¹
 export const a_0 = 5.292e-11 // Боровский радиус, м
 export const μ_B = 9.274e-24 // Боровский магнетон, Дж/Тл
