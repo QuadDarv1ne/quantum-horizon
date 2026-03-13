@@ -5,6 +5,7 @@ import { getLocale, getMessages } from "next-intl/server"
 import { notFound } from "next/navigation"
 import { ReactQueryProvider } from "@/components/providers/react-query-provider"
 import { ServiceWorkerRegistration } from "@/components/pwa/service-worker-registration"
+import { WebVitals } from "@/components/pwa/web-vitals"
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
 import { metadata } from "./metadata"
@@ -63,6 +64,7 @@ export default async function RootLayout({
             {children}
             <Toaster />
             <ServiceWorkerRegistration />
+            <WebVitals />
           </ReactQueryProvider>
         </NextIntlClientProvider>
       </body>

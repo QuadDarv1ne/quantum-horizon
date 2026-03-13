@@ -9,6 +9,7 @@
 ![React](https://img.shields.io/badge/React-19-61dafb?logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss&logoColor=white)
+![PWA](https://img.shields.io/badge/PWA-supported-green?logo=progressive-web-apps&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 [![Demo](https://img.shields.io/badge/Demo-live-brightgreen)](https://quantum-horizon.vercel.app)
@@ -216,6 +217,41 @@ docker-compose up --build
 | `npm run db:reset`     | Сброс базы данных                     |
 | `npm run test`         | Запуск тестов (Vitest)                |
 | `npm run test:e2e`     | E2E тесты (Playwright)                |
+
+---
+
+## 📱 PWA (Progressive Web App)
+
+Quantum Horizon поддерживает установку как PWA и работу в офлайн режиме.
+
+### Установка PWA
+
+**Desktop (Chrome/Edge):**
+
+1. Откройте сайт в браузере
+2. Нажмите на иконку установки в адресной строке
+3. Подтвердите установку
+
+**Mobile (Android):**
+
+1. Откройте сайт в Chrome
+2. Нажмите меню (⋮) → "Установить приложение"
+3. Подтвердите установку
+
+**iOS (Safari):**
+
+1. Откройте сайт в Safari
+2. Нажмите "Поделиться" → "На экран «Домой»"
+3. Подтвердите добавление
+
+### Офлайн режим
+
+Приложение кэширует ресурсы и работает без интернета:
+
+- ✅ Статические ресурсы кэшируются
+- ✅ Визуализации работают офлайн
+- ✅ Индикатор соединения показывает статус
+- ✅ Автоматическое обновление при появлении сети
 
 ---
 
