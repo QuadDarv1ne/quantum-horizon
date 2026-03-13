@@ -298,6 +298,53 @@ npm run db:push
 ```
 ┌─────────────────────────────────────────────────┐
 │                 Frontend                         │
+
+
+---
+
+## 📊 Метрики проекта
+
+### Производительность
+
+| Метрика | Значение | Цель | Статус |
+|---------|----------|------|--------|
+| Bundle size (main) | ~225 KB | < 500 KB | ✅ |
+| Bundle size (total) | ~1.1 MB | < 2 MB | ✅ |
+| Lighthouse Performance | TBD | > 90 | 🔄 |
+| Lighthouse Accessibility | TBD | > 90 | 🔄 |
+| Lighthouse Best Practices | TBD | > 90 | 🔄 |
+| Lighthouse SEO | TBD | > 90 | 🔄 |
+
+### Разработка
+
+| Метрика | Значение |
+|---------|----------|
+| Компонентов визуализаций | 27 |
+| Unit тестов | 182 |
+| E2E тестов | 13 |
+| Storybook stories | 34 |
+| Физических формул | 13 |
+| Языков | 4 (ru/en/zh/he) |
+| PWA | ✅ Полная поддержка |
+
+### Версии
+
+| Компонент | Версия |
+|-----------|--------|
+| Project | 0.4.0 |
+| Next.js | 16.x |
+| React | 19.x |
+| TypeScript | 5.x |
+| Tailwind CSS | 4.x |
+
+---
+
+## 🔗 Ссылки
+
+- **GitHub**: https://github.com/QuadDarv1ne/quantum-horizon
+- **Demo**: https://quantum-horizon.vercel.app
+- **Issues**: https://github.com/QuadDarv1ne/quantum-horizon/issues
+- **Releases**: https://github.com/QuadDarv1ne/quantum-horizon/releases
 │  Next.js 16 → React 19 → TypeScript 5           │
 │  Tailwind CSS 4 → shadcn/ui → Framer Motion     │
 ├─────────────────────────────────────────────────┤
