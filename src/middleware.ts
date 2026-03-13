@@ -54,7 +54,7 @@ export default function middleware(req: Parameters<typeof authMiddleware>[0]) {
   const intlResponse = intlMiddleware(req)
 
   // Затем обрабатываем auth
-  const authResponse = authMiddleware(req)
+  const authResponse = authMiddleware(req, { nextauth: {} })
 
   // Если auth требует редиректа, используем его
   if (authResponse && (authResponse as NextResponse).redirect) {
