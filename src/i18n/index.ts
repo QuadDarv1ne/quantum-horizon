@@ -3,7 +3,6 @@ export { useI18n, useLocale, useLanguage, useI18nNamespace } from "./use-i18n"
 
 // Re-export from next-intl for direct usage
 export { useTranslations } from "next-intl"
-export { useLocale } from "next-intl"
 
 // Server-side utilities
 export { getTranslations, getLocale, getMessages } from "next-intl/server"
