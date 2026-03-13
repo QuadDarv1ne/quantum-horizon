@@ -35,11 +35,7 @@ const cosmosVisualizations: VisualizationOption[] = [
   { id: "darkMatter", label: "Dark Matter", icon: "🌀" },
 ]
 
-export function VisualizationSelector({
-  selected,
-  onSelect,
-  isDark,
-}: VisualizationSelectorProps) {
+export function VisualizationSelector({ selected, onSelect, isDark }: VisualizationSelectorProps) {
   const buttonClass = (isActive: boolean) =>
     `flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
       isActive
@@ -51,79 +47,39 @@ export function VisualizationSelector({
           : "bg-gray-200 hover:bg-gray-300 text-gray-700"
     }`
 
+  const handleSelect = (id: VisualizationType) => {
+    onSelect(id)
+  }
+
+  const renderSection = (title: string, items: VisualizationOption[]) => (
+    <div>
+      <h3 className={`mb-2 text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+        {title}
+      </h3>
+      <div className="flex flex-wrap gap-2">
+        {items.map((viz) => (
+          <Button
+            key={viz.id}
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              handleSelect(viz.id)
+            }}
+            className={buttonClass(selected === viz.id)}
+          >
+            <span>{viz.icon}</span>
+            <span className="text-xs">{viz.label}</span>
+          </Button>
+        ))}
+      </div>
+    </div>
+  )
+
   return (
     <div className="space-y-4">
-      <div>
-        <h3
-          className={`text-sm font-medium mb-2 ${
-            isDark ? "text-gray-400" : "text-gray-600"
-          }`}
-        >
-          ⚛️ Quantum
-        </h3>
-        <div className="flex flex-wrap gap-2">
-          {quantumVisualizations.map((viz) => (
-            <Button
-              key={viz.id}
-              variant="ghost"
-              size="sm"
-              onClick={() => { onSelect(viz.id) }}
-              className={buttonClass(selected === viz.id)}
-            >
-              <span>{viz.icon}</span>
-              <span className="text-xs">{viz.label}</span>
-            </Button>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <h3
-          className={`text-sm font-medium mb-2 ${
-            isDark ? "text-gray-400" : "text-gray-600"
-          }`}
-        >
-          🚀 Relativity
-        </h3>
-        <div className="flex flex-wrap gap-2">
-          {relativityVisualizations.map((viz) => (
-            <Button
-              key={viz.id}
-              variant="ghost"
-              size="sm"
-              onClick={() => { onSelect(viz.id) }}
-              className={buttonClass(selected === viz.id)}
-            >
-              <span>{viz.icon}</span>
-              <span className="text-xs">{viz.label}</span>
-            </Button>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <h3
-          className={`text-sm font-medium mb-2 ${
-            isDark ? "text-gray-400" : "text-gray-600"
-          }`}
-        >
-          🌌 Cosmos
-        </h3>
-        <div className="flex flex-wrap gap-2">
-          {cosmosVisualizations.map((viz) => (
-            <Button
-              key={viz.id}
-              variant="ghost"
-              size="sm"
-              onClick={() => { onSelect(viz.id) }}
-              className={buttonClass(selected === viz.id)}
-            >
-              <span>{viz.icon}</span>
-              <span className="text-xs">{viz.label}</span>
-            </Button>
-          ))}
-        </div>
-      </div>
+      {renderSection("⚛️ Quantum", quantumVisualizations)}
+      {renderSection("🚀 Relativity", relativityVisualizations)}
+      {renderSection("🌌 Cosmos", cosmosVisualizations)}
     </div>
   )
 }
