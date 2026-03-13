@@ -245,26 +245,20 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
       const clickX = e.clientX - rect.left
       const width = canvas.offsetWidth
 
-      // Convert click to position in the well
       const L = width * 0.8
       const offsetX = (width - L) / 2
       const relativeX = clickX - offsetX
 
-      // Check if click is within the well
       if (relativeX >= 0 && relativeX <= L) {
-        // Quantum measurement: collapse to position eigenstate
-        // Probability of finding particle at position x is |ψ(x)|²
         const x = relativeX / L
         const probDensity = Math.pow(Math.sin(quantumNumber * Math.PI * x), 2)
 
-        // Monte Carlo acceptance
         if (Math.random() < probDensity) {
           setParticlePosition(relativeX)
           setTimeout(() => {
             setParticlePosition(null)
           }, 2000)
         } else {
-          // Particle not found at this position
           setParticlePosition(null)
         }
       }
@@ -273,7 +267,7 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
   )
 
   const measureParticle = () => {
-    setMeasurementMode(!measurementMode)
+    setMeasurementMode((prev) => !prev)
     if (measurementMode) {
       setParticlePosition(null)
     }
