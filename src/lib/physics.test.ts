@@ -20,6 +20,24 @@ import {
   comptonWavelength,
   classicalElectronRadius,
   fineStructureConstant,
+  bindingEnergy,
+  radioactiveDecay,
+  radioactivity,
+  criticalDensity,
+  redshift,
+  hubbleLaw,
+  stellarLuminosity,
+  absoluteMagnitude,
+  parallaxDistance,
+  electronBindingEnergy,
+  gravitationalWaveFrequency,
+  gravitationalWavePower,
+  cmbTemperatureAtRedshift,
+  comptonScattering,
+  tunnelingProbability,
+  gyromagneticRatio,
+  bohrMagneton,
+  wiensDisplacementLaw,
 } from "./physics"
 import { c, G, h_bar, M_SUN, m_e, a_0 } from "./constants"
 
@@ -289,6 +307,254 @@ describe("Physics formulas", () => {
       const alpha1 = fineStructureConstant()
       const alpha2 = fineStructureConstant()
       expect(alpha1).toBe(alpha2)
+    })
+  })
+
+  describe("bindingEnergy", () => {
+    it("calculates E = Δm·c² correctly", () => {
+      const massDefect = 1
+      const energy = bindingEnergy(massDefect)
+      expect(energy).toBeCloseTo(c * c, 5)
+    })
+
+    it("returns positive energy for positive mass defect", () => {
+      expect(bindingEnergy(1)).toBeGreaterThan(0)
+    })
+  })
+
+  describe("radioactiveDecay", () => {
+    it("decreases with time", () => {
+      const N0 = 1000
+      const lambda = 0.1
+      const N1 = radioactiveDecay(N0, lambda, 0)
+      const N2 = radioactiveDecay(N0, lambda, 10)
+      expect(N2).toBeLessThan(N1)
+    })
+
+    it("returns initial amount at t=0", () => {
+      expect(radioactiveDecay(1000, 0.1, 0)).toBe(1000)
+    })
+  })
+
+  describe("radioactivity", () => {
+    it("increases with decay constant", () => {
+      const A1 = radioactivity(0.1, 1000)
+      const A2 = radioactivity(0.2, 1000)
+      expect(A2).toBeCloseTo(2 * A1, 5)
+    })
+
+    it("increases with number of nuclei", () => {
+      const A1 = radioactivity(0.1, 1000)
+      const A2 = radioactivity(0.1, 2000)
+      expect(A2).toBeCloseTo(2 * A1, 5)
+    })
+  })
+
+  describe("criticalDensity", () => {
+    it("increases with Hubble constant squared", () => {
+      const H1 = 70
+      const H2 = 140
+      const rho1 = criticalDensity(H1)
+      const rho2 = criticalDensity(H2)
+      expect(rho2).toBeCloseTo(4 * rho1, 5)
+    })
+
+    it("returns positive value", () => {
+      expect(criticalDensity(70)).toBeGreaterThan(0)
+    })
+  })
+
+  describe("redshift", () => {
+    it("returns 0 for no shift", () => {
+      expect(redshift(500, 500)).toBe(0)
+    })
+
+    it("returns positive z for redshift", () => {
+      expect(redshift(600, 500)).toBe(0.2)
+    })
+
+    it("returns negative z for blueshift", () => {
+      expect(redshift(450, 500)).toBe(-0.1)
+    })
+  })
+
+  describe("hubbleLaw", () => {
+    it("increases with distance", () => {
+      const v1 = hubbleLaw(70, 100)
+      const v2 = hubbleLaw(70, 200)
+      expect(v2).toBeCloseTo(2 * v1, 5)
+    })
+
+    it("increases with Hubble constant", () => {
+      const v1 = hubbleLaw(70, 100)
+      const v2 = hubbleLaw(140, 100)
+      expect(v2).toBeCloseTo(2 * v1, 5)
+    })
+  })
+
+  describe("stellarLuminosity", () => {
+    it("increases with radius squared", () => {
+      const T = 5800
+      const L1 = stellarLuminosity(1, T)
+      const L2 = stellarLuminosity(2, T)
+      expect(L2).toBeCloseTo(4 * L1, 5)
+    })
+
+    it("increases with temperature to the fourth power", () => {
+      const R = 1
+      const T1 = 3000
+      const T2 = 6000
+      const L1 = stellarLuminosity(R, T1)
+      const L2 = stellarLuminosity(R, T2)
+      expect(L2).toBeCloseTo(16 * L1, 5)
+    })
+  })
+
+  describe("absoluteMagnitude", () => {
+    it("equals apparent magnitude at 10 parsecs", () => {
+      expect(absoluteMagnitude(5, 10)).toBe(5)
+    })
+
+    it("decreases for closer distances", () => {
+      // M = m - 5·log₁₀(d/10)
+      // При d=100: M = m - 5·log₁₀(10) = m - 5
+      // При d=10: M = m - 5·log₁₀(1) = m
+      const M1 = absoluteMagnitude(0, 100) // M = -5
+      const M2 = absoluteMagnitude(0, 10) // M = 0
+      expect(M2).toBeGreaterThan(M1) // 0 > -5
+    })
+  })
+
+  describe("parallaxDistance", () => {
+    it("returns distance in parsecs", () => {
+      expect(parallaxDistance(1)).toBe(1)
+    })
+
+    it("increases as parallax decreases", () => {
+      const d1 = parallaxDistance(0.1)
+      const d2 = parallaxDistance(0.01)
+      expect(d2).toBeCloseTo(10 * d1, 5)
+    })
+  })
+
+  describe("electronBindingEnergy", () => {
+    it("returns -13.6 eV for n=1", () => {
+      expect(electronBindingEnergy(1)).toBeCloseTo(-13.6, 5)
+    })
+
+    it("approaches 0 as n increases", () => {
+      expect(electronBindingEnergy(10)).toBeCloseTo(-0.136, 5)
+    })
+  })
+
+  describe("gravitationalWaveFrequency", () => {
+    it("increases with total mass", () => {
+      const f1 = gravitationalWaveFrequency(M_SUN, 1e9)
+      const f2 = gravitationalWaveFrequency(2 * M_SUN, 1e9)
+      expect(f2).toBeGreaterThan(f1)
+    })
+
+    it("increases as separation decreases", () => {
+      const f1 = gravitationalWaveFrequency(M_SUN, 1e9)
+      const f2 = gravitationalWaveFrequency(M_SUN, 5e8)
+      expect(f2).toBeGreaterThan(f1)
+    })
+  })
+
+  describe("gravitationalWavePower", () => {
+    it("increases with masses", () => {
+      const P1 = gravitationalWavePower(M_SUN, M_SUN, 1e9)
+      const P2 = gravitationalWavePower(2 * M_SUN, 2 * M_SUN, 1e9)
+      expect(P2).toBeGreaterThan(P1)
+    })
+
+    it("increases rapidly as separation decreases", () => {
+      const P1 = gravitationalWavePower(M_SUN, M_SUN, 1e9)
+      const P2 = gravitationalWavePower(M_SUN, M_SUN, 5e8)
+      expect(P2).toBeGreaterThan(P1)
+    })
+  })
+
+  describe("cmbTemperatureAtRedshift", () => {
+    it("returns T0 at z=0", () => {
+      expect(cmbTemperatureAtRedshift(0)).toBeCloseTo(2.725, 5)
+    })
+
+    it("increases with redshift", () => {
+      expect(cmbTemperatureAtRedshift(1)).toBeCloseTo(5.45, 5)
+    })
+  })
+
+  describe("comptonScattering", () => {
+    it("returns 0 for forward scattering", () => {
+      expect(comptonScattering(0)).toBeCloseTo(0, 15)
+    })
+
+    it("is maximum for backscattering", () => {
+      const deltaLambda180 = comptonScattering(Math.PI)
+      const deltaLambda90 = comptonScattering(Math.PI / 2)
+      expect(deltaLambda180).toBeGreaterThan(deltaLambda90)
+    })
+  })
+
+  describe("tunnelingProbability", () => {
+    it("returns 1 when particle energy exceeds barrier", () => {
+      expect(tunnelingProbability(1, 5, 10, 1)).toBe(1)
+    })
+
+    it("decreases with barrier width", () => {
+      // Используем реалистичные значения для электрона
+      const mass = 9.109e-31 // масса электрона
+      const V = 1e-18 // высота барьера (~6 eV)
+      const E = 0.5e-18 // энергия частицы (~3 eV)
+      const T1 = tunnelingProbability(mass, V, E, 1e-10) // 0.1 нм
+      const T2 = tunnelingProbability(mass, V, E, 2e-10) // 0.2 нм
+      expect(T2).toBeLessThan(T1)
+    })
+
+    it("decreases with barrier height", () => {
+      const mass = 9.109e-31
+      const E = 0.5e-18 // энергия частицы
+      const T1 = tunnelingProbability(mass, 1e-18, E, 1e-10) // V = 6 eV
+      const T2 = tunnelingProbability(mass, 2e-18, E, 1e-10) // V = 12 eV
+      expect(T2).toBeLessThan(T1)
+    })
+  })
+
+  describe("gyromagneticRatio", () => {
+    it("returns negative value for electron", () => {
+      expect(gyromagneticRatio()).toBeLessThan(0)
+    })
+
+    it("is constant", () => {
+      const gamma1 = gyromagneticRatio()
+      const gamma2 = gyromagneticRatio()
+      expect(gamma1).toBe(gamma2)
+    })
+  })
+
+  describe("bohrMagneton", () => {
+    it("returns positive value", () => {
+      expect(bohrMagneton()).toBeGreaterThan(0)
+    })
+
+    it("is constant", () => {
+      const mu1 = bohrMagneton()
+      const mu2 = bohrMagneton()
+      expect(mu1).toBe(mu2)
+    })
+  })
+
+  describe("wiensDisplacementLaw", () => {
+    it("decreases with temperature", () => {
+      const lambda1 = wiensDisplacementLaw(3000)
+      const lambda2 = wiensDisplacementLaw(6000)
+      expect(lambda2).toBeCloseTo(lambda1 / 2, 5)
+    })
+
+    it("returns wavelength in meters", () => {
+      const lambda = wiensDisplacementLaw(5800)
+      expect(lambda).toBeLessThan(1e-6)
     })
   })
 })

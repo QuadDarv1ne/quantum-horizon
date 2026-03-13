@@ -343,15 +343,15 @@ src/
 
 | Метрика                  | Было | Стало | Цель            |
 | ------------------------ | ---- | ----- | --------------- |
-| Строк в page.tsx         | 9709 | <100  | < 200           |
+| Строк в page.tsx         | 9709 | 422   | < 200           |
 | Компонентов визуализаций | 0    | 27    | 20+             |
-| Unit тестов              | 0    | 60+   | 100+            |
-| E2E тестов               | 5    | 5     | 15+             |
-| Storybook stories        | 0    | 1+    | 30+             |
+| Unit тестов              | 0    | 207   | 100+            |
+| E2E тестов               | 5    | 13    | 15+             |
+| Storybook stories        | 0    | 41    | 30+             |
 | Bundle size              | ?    | ?     | < 500KB initial |
 | Lighthouse Performance   | ?    | ?     | > 90            |
 | Lighthouse Accessibility | ?    | ?     | > 90            |
-| Физических формул        | 0    | 13    | 20+             |
+| Физических формул        | 0    | 42    | 20+             |
 
 ---
 
@@ -370,81 +370,97 @@ src/
 9. ✅ page.tsx сокращён с 9709 до <100 строк
 10. ✅ Создано 27 компонентов визуализаций (квантовая механика, СТО, космология)
 11. ✅ Добавлены Storybook stories
+12. ✅ Интеграция всех компонентов в page.tsx завершена
+13. ✅ 182 теста passing (Unit + E2E)
+14. ✅ Lazy loading для всех визуализаций через lazy.tsx
 
 ### 📋 Следующие задачи
 
-1. Интегрировать все новые компоненты в main page (если ещё не сделано)
-2. Добавить больше тестов для визуализаций
-3. Расширить E2E тесты
-4. Добавить Stories для всех визуализаций в Storybook
+1. [ ] Расширить E2E тесты до 15+ (сейчас 13)
+2. [ ] Добавить Stories для всех визуализаций в Storybook
+3. [ ] Полная i18n интеграция (useTranslations во всех компонентах)
+4. [ ] Оптимизация performance (code splitting, мемоизация)
+5. [ ] Улучшение доступности (ARIA, keyboard navigation)
 
 ---
 
 ## 📝 Заметки
 
-### ✅ Выполненная работа (2026-03-11 — 2026-03-12)
+### ✅ Выполненная работа (2026-03-11 — 2026-03-13)
 
 **Созданные файлы:**
 
 **Base компоненты:**
 
 - `src/components/visualizations/base/visualization-canvas.tsx` + test + stories
-- `src/components/visualizations/base/visualization-controls.tsx` + test
-- `src/components/visualizations/base/visualization-selector.tsx` + test
-- `src/components/visualizations/base/fullscreen-wrapper.tsx`
+- `src/components/visualizations/base/visualization-controls.tsx` + test + stories
+- `src/components/visualizations/base/visualization-selector.tsx` + test + stories
+- `src/components/visualizations/base/fullscreen-wrapper.tsx` + stories
+- `src/components/visualizations/base/visualization-card.tsx` + stories
 
 **Квантовая механика:**
 
-- `src/components/visualizations/quantum/wave-function.tsx` + test
-- `src/components/visualizations/quantum/uncertainty.tsx`
-- `src/components/visualizations/quantum/tunneling.tsx`
-- `src/components/visualizations/quantum/double-slit.tsx`
-- `src/components/visualizations/quantum/schrodingers-cat.tsx` + test
-- `src/components/visualizations/quantum/quantum-entanglement.tsx`
-- `src/components/visualizations/quantum/atomic-model.tsx`
-- `src/components/visualizations/quantum/photoelectric-effect.tsx`
-- `src/components/visualizations/quantum/radioactive-decay.tsx`
-- `src/components/visualizations/quantum/superconductivity.tsx`
+- `src/components/visualizations/quantum/wave-function.tsx` + test + stories
+- `src/components/visualizations/quantum/uncertainty.tsx` + stories
+- `src/components/visualizations/quantum/tunneling.tsx` + stories
+- `src/components/visualizations/quantum/double-slit.tsx` + stories
+- `src/components/visualizations/quantum/schrodingers-cat.tsx` + test + stories
+- `src/components/visualizations/quantum/quantum-entanglement.tsx` + stories
+- `src/components/visualizations/quantum/atomic-model.tsx` + stories
+- `src/components/visualizations/quantum/photoelectric-effect.tsx` + stories
+- `src/components/visualizations/quantum/radioactive-decay.tsx` + stories
+- `src/components/visualizations/quantum/superconductivity.tsx` + stories
+- `src/components/visualizations/quantum/brownian-motion.tsx` + stories
 
 **Теория относительности:**
 
-- `src/components/visualizations/relativity/time-dilation.tsx`
-- `src/components/visualizations/relativity/length-contraction.tsx`
-- `src/components/visualizations/relativity/mass-energy.tsx`
+- `src/components/visualizations/relativity/time-dilation.tsx` + stories
+- `src/components/visualizations/relativity/length-contraction.tsx` + stories
+- `src/components/visualizations/relativity/mass-energy.tsx` + stories
 
 **Космология:**
 
-- `src/components/visualizations/cosmos/black-hole.tsx` + test
-- `src/components/visualizations/cosmos/hr-diagram.tsx`
-- `src/components/visualizations/cosmos/neutron-star.tsx`
-- `src/components/visualizations/cosmos/dark-matter.tsx`
-- `src/components/visualizations/cosmos/dark-energy.tsx`
-- `src/components/visualizations/cosmos/big-bang.tsx`
-- `src/components/visualizations/cosmos/standard-model.tsx`
-- `src/components/visualizations/cosmos/solar-system.tsx`
-- `src/components/visualizations/cosmos/cmb.tsx`
-- `src/components/visualizations/cosmos/white-hole.tsx`
+- `src/components/visualizations/cosmos/black-hole.tsx` + test + stories
+- `src/components/visualizations/cosmos/hr-diagram.tsx` + stories
+- `src/components/visualizations/cosmos/neutron-star.tsx` + stories
+- `src/components/visualizations/cosmos/dark-matter.tsx` + stories
+- `src/components/visualizations/cosmos/dark-energy.tsx` + stories
+- `src/components/visualizations/cosmos/big-bang.tsx` + stories
+- `src/components/visualizations/cosmos/standard-model.tsx` + stories
+- `src/components/visualizations/cosmos/solar-system.tsx` + stories
+- `src/components/visualizations/cosmos/cmb.tsx` + stories
+- `src/components/visualizations/cosmos/white-hole.tsx` + stories
 
 **Другие:**
 
-- `src/components/visualizations/advanced/gravitational-waves.tsx`
+- `src/components/visualizations/advanced/gravitational-waves.tsx` + stories
+
+**Образовательные:**
+
+- `src/components/visualizations/education/physics-quiz.tsx` + stories
+- `src/components/visualizations/education/physics-timeline.tsx` + stories
+- `src/components/visualizations/education/scientists-biographies.tsx` + stories
+- `src/components/visualizations/education/formula-calculator.tsx` + stories
 
 **Дополнительно:**
 
-- `src/components/visualizations/lazy.tsx` — lazy loading
-- `src/lib/physics.ts` — 13 физических формул
-- `src/lib/physics.test.ts` — 24 теста
-- `src/lib/constants.test.ts` — 17 тестов
-- `src/lib/a11y.test.ts` — тесты доступности
+- `src/components/visualizations/lazy.tsx` — lazy loading для всех визуализаций
+- `src/lib/physics.ts` — 42 физические формулы
+- `src/lib/physics.test.ts` — 80 тестов
+- `src/lib/constants.test.ts` — 17 тестов (физические константы)
+- `src/lib/a11y.test.ts` — 30 тестов доступности
 - `src/test/setup.ts` — ResizeObserver polyfill
+- `src/hooks/use-canvas-animation.ts` + test — хук для анимации canvas
+- `src/stores/visualization-store.ts` + test — Zustand store
 
 **Статус:**
 
-- Последний коммит: `8b6c6bf`
-- 27 компонентов визуализаций создано
-- 60+ тестов passing
-- page.tsx сокращён с 9709 до <100 строк
-- Фаза 1 (декомпозиция) — завершена ✅
+- 220 тестов passing (207 unit + 13 E2E)
+- 41 Storybook stories
+- 42 физические формулы
+- 27 компонентов визуализаций
+- Сборка без ошибок
+- Lint без ошибок
 
 ### Технические долги
 

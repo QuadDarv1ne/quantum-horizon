@@ -175,4 +175,34 @@ test.describe("Quantum Horizon", () => {
       await searchInput.clear()
     }
   })
+
+  test("speed control slider changes animation speed", async ({ page }) => {
+    await page.goto("/")
+
+    // Find speed slider
+    const speedSlider = page.getByRole("slider", { name: /speed/i })
+    if (await speedSlider.isVisible()) {
+      const initialValue = await speedSlider.inputValue()
+
+      // Change speed value
+      await speedSlider.fill(String(Number(initialValue) + 1))
+      await page.waitForTimeout(200)
+
+      // Verify value changed
+      const newValue = await speedSlider.inputValue()
+      expect(Number(newValue)).toBeGreaterThan(Number(initialValue))
+    }
+  })
+
+  test("canvas elements are present in visualizations", async ({ page }) => {
+    await page.goto("/")
+
+    // Check that canvas elements render
+    const canvasElements = page.locator("canvas")
+    await expect(canvasElements.first()).toBeVisible()
+
+    // Verify canvas has proper attributes for accessibility
+    const firstCanvas = canvasElements.first()
+    await expect(firstCanvas).toHaveAttribute("role", "img")
+  })
 })

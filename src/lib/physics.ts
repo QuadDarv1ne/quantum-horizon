@@ -1,6 +1,6 @@
 // Физические формулы и расчёты
 
-import { G, c, h_bar, k_B, m_e, e, epsilon_0, R_H, a_0 } from "./constants"
+import { G, c, h_bar, k_B, m_e, e, epsilon_0, R_H, a_0, sigma, h } from "./constants"
 
 /**
  * Расчёт фактора Лоренца
@@ -165,4 +165,164 @@ export function classicalElectronRadius(): number {
  */
 export function fineStructureConstant(): number {
   return (e * e) / (4 * Math.PI * epsilon_0 * h_bar * c)
+}
+
+/**
+ * Расчёт энергии связи ядра
+ * E_b = Δm·c² (дефект массы)
+ */
+export function bindingEnergy(massDefect: number): number {
+  return massDefect * c * c
+}
+
+/**
+ * Расчёт периода полураспада
+ * N(t) = N₀ · e^(-λt)
+ */
+export function radioactiveDecay(
+  initialAmount: number,
+  decayConstant: number,
+  time: number
+): number {
+  return initialAmount * Math.exp(-decayConstant * time)
+}
+
+/**
+ * Расчёт активности радиоактивного источника
+ * A = λN
+ */
+export function radioactivity(decayConstant: number, numberOfNuclei: number): number {
+  return decayConstant * numberOfNuclei
+}
+
+/**
+ * Расчёт критической плотности Вселенной
+ * ρ_c = 3H₀² / (8πG)
+ */
+export function criticalDensity(hubbleConstant: number): number {
+  return (3 * hubbleConstant * hubbleConstant) / (8 * Math.PI * G)
+}
+
+/**
+ * Расчёт красного смещения
+ * z = (λ_obs - λ_emit) / λ_emit
+ */
+export function redshift(observedWavelength: number, emittedWavelength: number): number {
+  return (observedWavelength - emittedWavelength) / emittedWavelength
+}
+
+/**
+ * Расчёт скорости удаления галактики (закон Хаббла)
+ * v = H₀ · d
+ */
+export function hubbleLaw(hubbleConstant: number, distance: number): number {
+  return hubbleConstant * distance
+}
+
+/**
+ * Расчёт светимости звезды
+ * L = 4πR²σT⁴
+ */
+export function stellarLuminosity(radius: number, temperature: number): number {
+  return 4 * Math.PI * radius * radius * sigma * Math.pow(temperature, 4)
+}
+
+/**
+ * Расчёт абсолютной звёздной величины
+ * M = m - 5·log₁₀(d/10)
+ */
+export function absoluteMagnitude(apparentMagnitude: number, distanceParsecs: number): number {
+  return apparentMagnitude - 5 * Math.log10(distanceParsecs / 10)
+}
+
+/**
+ * Расчёт расстояния по параллаксу
+ * d = 1/p (в парсеках)
+ */
+export function parallaxDistance(parallaxAngle: number): number {
+  return 1 / parallaxAngle
+}
+
+/**
+ * Расчёт энергии связи электрона в атоме водорода
+ * E = -13.6 eV / n²
+ */
+export function electronBindingEnergy(n: number): number {
+  return -13.6 / (n * n)
+}
+
+/**
+ * Расчёт частоты гравитационных волн от двойной системы
+ * f = (1/π) · √(GM/a³)
+ */
+export function gravitationalWaveFrequency(totalMass: number, separation: number): number {
+  return (1 / Math.PI) * Math.sqrt((G * totalMass) / Math.pow(separation, 3))
+}
+
+/**
+ * Расчёт мощности гравитационного излучения
+ * P = (32/5) · (G⁴/c⁵) · (m₁²m₂²(m₁+m₂))/a⁵
+ */
+export function gravitationalWavePower(mass1: number, mass2: number, separation: number): number {
+  const numerator = 32 * Math.pow(G, 4) * Math.pow(mass1, 2) * Math.pow(mass2, 2) * (mass1 + mass2)
+  const denominator = 5 * Math.pow(c, 5) * Math.pow(separation, 5)
+  return numerator / denominator
+}
+
+/**
+ * Расчёт температуры реликтового излучения на красном смещении z
+ * T(z) = T₀ · (1 + z)
+ */
+export function cmbTemperatureAtRedshift(z: number, T0 = 2.725): number {
+  return T0 * (1 + z)
+}
+
+/**
+ * Расчёт комптоновского рассеяния (изменение длины волны)
+ * Δλ = (h/mₑc) · (1 - cos θ)
+ */
+export function comptonScattering(scatteringAngle: number): number {
+  const lambdaC = h / (m_e * c)
+  return lambdaC * (1 - Math.cos(scatteringAngle))
+}
+
+/**
+ * Расчёт вероятности туннелирования (приближённо)
+ * T ≈ e^(-2κL), где κ = √(2m(V-E))/ℏ
+ */
+export function tunnelingProbability(
+  particleMass: number,
+  barrierHeight: number,
+  particleEnergy: number,
+  barrierWidth: number
+): number {
+  if (particleEnergy >= barrierHeight) return 1
+
+  const kappa = Math.sqrt(2 * particleMass * (barrierHeight - particleEnergy)) / h_bar
+  return Math.exp(-2 * kappa * barrierWidth)
+}
+
+/**
+ * Расчёт гиромагнитного отношения для электрона
+ * γ = -e/(2mₑ)
+ */
+export function gyromagneticRatio(): number {
+  return -e / (2 * m_e)
+}
+
+/**
+ * Расчёт магнитного момента Бора
+ * μ_B = eℏ/(2mₑ)
+ */
+export function bohrMagneton(): number {
+  return (e * h_bar) / (2 * m_e)
+}
+
+/**
+ * Расчёт длины волны теплового излучения (закон смещения Вина)
+ * λ_max = b/T, где b = 2.898×10⁻³ м·К
+ */
+export function wiensDisplacementLaw(temperature: number): number {
+  const wiensConstant = 2.898e-3
+  return wiensConstant / temperature
 }
