@@ -78,8 +78,9 @@ export const QueryParam = {
     if (typeof window === "undefined") return
     const params = new URLSearchParams(window.location.search)
     params.set(key, value)
-    const newUrl = `${window.location.pathname}?${params.toString()}${window.location.hash}`
-    window.history.replaceState({}, "", newUrl)
+    const url = new URL(window.location.href)
+    url.search = params.toString()
+    window.history.replaceState({}, "", url.toString())
   },
 
   setNumber: (key: string, value: number): void => {
@@ -94,7 +95,8 @@ export const QueryParam = {
     if (typeof window === "undefined") return
     const params = new URLSearchParams(window.location.search)
     params.delete(key)
-    const newUrl = `${window.location.pathname}?${params.toString()}${window.location.hash}`
-    window.history.replaceState({}, "", newUrl)
+    const url = new URL(window.location.href)
+    url.search = params.toString()
+    window.history.replaceState({}, "", url.toString())
   },
 }
