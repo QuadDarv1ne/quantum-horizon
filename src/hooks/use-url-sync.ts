@@ -58,7 +58,8 @@ export function useUrlSync<T extends Record<string, unknown>>(
 export const QueryParam = {
   getString: (key: string, fallback = ""): string => {
     if (typeof window === "undefined") return fallback
-    return new URLSearchParams(window.location.search).get(key) ?? fallback
+    const params = new URLSearchParams(window.location.search)
+    return params.get(key) ?? fallback
   },
 
   getNumber: (key: string, fallback = 0): number => {
