@@ -227,15 +227,6 @@ export const useVisualizationStore = create<VisualizationState>()(
     {
       name: "visualization-settings",
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({
-        // Сохраняем только настройки, не selectedVisualization
-        isFullscreen: state.isFullscreen,
-        isPlaying: state.isPlaying,
-        animationSpeed: state.animationSpeed,
-        waveFunction: state.waveFunction,
-        timeDilation: state.timeDilation,
-        blackHole: state.blackHole,
-      }),
     }
   )
 )
