@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useCallback } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Button } from "@/components/ui/button"
@@ -30,82 +30,85 @@ export function TimeDilationVisualization({ isDark }: TimeDilationVisualizationP
     QueryParam.setBoolean("td.clock", showClock)
   }, [velocity, showClock, setVelocity])
 
-  const draw = (
-    ctx: CanvasRenderingContext2D,
-    width: number,
-    height: number,
-    _isDark: boolean,
-    delta: number
-  ) => {
-    const centerX = width / 2
-    const centerY = height / 2
-    const isDark = _isDark
+  const draw = useCallback(
+    (
+      ctx: CanvasRenderingContext2D,
+      width: number,
+      height: number,
+      _isDark: boolean,
+      delta: number
+    ) => {
+      const centerX = width / 2
+      const centerY = height / 2
+      const isDark = _isDark
 
-    // Clear canvas
-    ctx.fillStyle = isDark ? "#0f172a" : "#f8fafc"
-    ctx.fillRect(0, 0, width, height)
+      // Clear canvas
+      ctx.fillStyle = isDark ? "#0f172a" : "#f8fafc"
+      ctx.fillRect(0, 0, width, height)
 
-    // Calculate time dilation factor (Lorentz factor)
-    const _v = velocity * c
-    const gamma = 1 / Math.sqrt(1 - velocity * velocity)
+      // Calculate time dilation factor (Lorentz factor)
+      const _v = velocity * c
+      const gamma = 1 / Math.sqrt(1 - velocity * velocity)
 
-    // Update animation
-    if (isPlaying) {
-      timeOffset.current += (delta / 1000) * animationSpeed
-    }
+      // Update animation
+      if (isPlaying) {
+        timeOffset.current += (delta / 1000) * animationSpeed
+      }
 
-    // Draw stationary frame (observer)
-    ctx.save()
-    ctx.translate(centerX - 150, centerY)
+      // Draw stationary frame (observer)
+      ctx.save()
+      ctx.translate(centerX - 150, centerY)
 
-    // Stationary clock
-    if (showClock) {
-      drawClock(ctx, 0, 0, 80, timeOffset.current, isDark)
+      // Stationary clock
+      if (showClock) {
+        drawClock(ctx, 0, 0, 80, timeOffset.current, isDark)
+        ctx.fillStyle = isDark ? "#e2e8f0" : "#1e293b"
+        ctx.font = "14px sans-serif"
+        ctx.textAlign = "center"
+        ctx.fillText("Observer", 0, 110)
+        ctx.fillText("t", 0, -110)
+      }
+
+      ctx.restore()
+
+      // Draw moving frame (spaceship)
+      ctx.save()
+      ctx.translate(centerX + 150, centerY)
+
+      // Length contraction visualization
+      const contractedLength = 100 / gamma
+      const xPos = Math.sin(timeOffset.current * 0.5) * 50
+
+      // Spaceship body
+      ctx.fillStyle = isDark ? "#3b82f6" : "#2563eb"
+      ctx.beginPath()
+      ctx.ellipse(xPos, 0, contractedLength, 30, 0, 0, Math.PI * 2)
+      ctx.fill()
+
+      // Moving clock
+      if (showClock) {
+        const dilatedTime = timeOffset.current / gamma
+        drawClock(ctx, xPos, -60, 50, dilatedTime, isDark)
+      }
+
+      // Velocity indicator
       ctx.fillStyle = isDark ? "#e2e8f0" : "#1e293b"
       ctx.font = "14px sans-serif"
       ctx.textAlign = "center"
-      ctx.fillText("Observer", 0, 110)
-      ctx.fillText("t", 0, -110)
-    }
+      ctx.fillText(`v = ${(velocity * 100).toFixed(0)}% c`, xPos, 110)
+      ctx.fillText(`gamma = ${gamma.toFixed(2)}`, xPos, -110)
 
-    ctx.restore()
+      ctx.restore()
 
-    // Draw moving frame (spaceship)
-    ctx.save()
-    ctx.translate(centerX + 150, centerY)
-
-    // Length contraction visualization
-    const contractedLength = 100 / gamma
-    const xPos = Math.sin(timeOffset.current * 0.5) * 50
-
-    // Spaceship body
-    ctx.fillStyle = isDark ? "#3b82f6" : "#2563eb"
-    ctx.beginPath()
-    ctx.ellipse(xPos, 0, contractedLength, 30, 0, 0, Math.PI * 2)
-    ctx.fill()
-
-    // Moving clock
-    if (showClock) {
-      const dilatedTime = timeOffset.current / gamma
-      drawClock(ctx, xPos, -60, 50, dilatedTime, isDark)
-    }
-
-    // Velocity indicator
-    ctx.fillStyle = isDark ? "#e2e8f0" : "#1e293b"
-    ctx.font = "14px sans-serif"
-    ctx.textAlign = "center"
-    ctx.fillText(`v = ${(velocity * 100).toFixed(0)}% c`, xPos, 110)
-    ctx.fillText(`gamma = ${gamma.toFixed(2)}`, xPos, -110)
-
-    ctx.restore()
-
-    // Draw formula
-    ctx.fillStyle = isDark ? "#94a3b8" : "#64748b"
-    ctx.font = "16px monospace"
-    ctx.textAlign = "center"
-    ctx.fillText("Delta t' = Delta t / gamma", centerX, 30)
-    ctx.fillText(`gamma = 1/sqrt(1 - v²/c²) = ${gamma.toFixed(4)}`, centerX, 55)
-  }
+      // Draw formula
+      ctx.fillStyle = isDark ? "#94a3b8" : "#64748b"
+      ctx.font = "16px monospace"
+      ctx.textAlign = "center"
+      ctx.fillText("Delta t' = Delta t / gamma", centerX, 30)
+      ctx.fillText(`gamma = 1/sqrt(1 - v²/c²) = ${gamma.toFixed(4)}`, centerX, 55)
+    },
+    [isPlaying, animationSpeed, velocity, showClock]
+  )
 
   return (
     <div className="space-y-4">
