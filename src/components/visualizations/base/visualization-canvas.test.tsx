@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
-import { render } from "@testing-library/react"
+import { render, screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import { VisualizationCanvas } from "./visualization-canvas"
 
 describe("VisualizationCanvas", () => {
@@ -16,7 +17,6 @@ describe("VisualizationCanvas", () => {
 
     const canvas = getByTestId("visualization-canvas")
     expect(canvas).toBeInTheDocument()
-    // Canvas mock returns CANVAS-MOCK element
     expect(canvas.tagName).toMatch(/CANVAS/)
   })
 
@@ -33,12 +33,59 @@ describe("VisualizationCanvas", () => {
 
     render(<VisualizationCanvas draw={mockDraw} isDark={true} />)
 
-    // Advance timers to allow animation frame to execute
     vi.advanceTimersByTime(100)
 
-    // draw will be called in animation frame
     expect(mockDraw).toHaveBeenCalled()
 
     vi.useRealTimers()
+  })
+
+  it("has proper ARIA attributes", () => {
+    render(
+      <VisualizationCanvas
+        draw={mockDraw}
+        isDark={true}
+        ariaLabel="Test visualization"
+        ariaDescription="Interactive physics demo"
+      />
+    )
+
+    const canvas = screen.getByRole("img")
+    expect(canvas).toHaveAttribute("aria-label", "Test visualization")
+    expect(canvas).toHaveAttribute("aria-description", "Interactive physics demo")
+  })
+
+  it("is keyboard accessible", () => {
+    render(
+      <VisualizationCanvas
+        draw={mockDraw}
+        isDark={true}
+        tabIndex={0}
+        ariaLabel="Keyboard accessible visualization"
+      />
+    )
+
+    const canvas = screen.getByRole("img")
+    expect(canvas).toHaveAttribute("tabindex", "0")
+  })
+
+  it("calls onKeyDown when key is pressed", async () => {
+    const user = userEvent.setup()
+    const handleKeyDown = vi.fn()
+
+    render(
+      <VisualizationCanvas
+        draw={mockDraw}
+        isDark={true}
+        onKeyDown={handleKeyDown}
+        ariaLabel="Test visualization"
+      />
+    )
+
+    const canvas = screen.getByRole("img")
+    canvas.focus()
+    await user.keyboard("{Enter}")
+
+    expect(handleKeyDown).toHaveBeenCalled()
   })
 })

@@ -17,7 +17,11 @@ interface VisualizationCanvasProps {
   pauseWhenHidden?: boolean
   respectReducedMotion?: boolean
   onClick?: (e: React.MouseEvent<HTMLCanvasElement>) => void
+  onKeyDown?: (e: React.KeyboardEvent<HTMLCanvasElement>) => void
   style?: React.CSSProperties
+  ariaLabel?: string
+  ariaDescription?: string
+  tabIndex?: number
 }
 
 export function VisualizationCanvas({
@@ -28,7 +32,11 @@ export function VisualizationCanvas({
   pauseWhenHidden = true,
   respectReducedMotion = true,
   onClick,
+  onKeyDown,
   style,
+  ariaLabel = "Interactive physics visualization",
+  ariaDescription,
+  tabIndex = 0,
 }: VisualizationCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -54,18 +62,21 @@ export function VisualizationCanvas({
     <div
       ref={containerRef}
       className={`relative ${className ?? ""}`}
-      role="img"
+      role="application"
       aria-live="polite"
       aria-atomic="true"
     >
       <canvas
         ref={canvasRef}
         className="h-full w-full"
-        style={{ display: "block", ...style }}
+        style={{ display: "block", outline: "none", ...style }}
         data-testid="visualization-canvas"
-        aria-label="Interactive physics visualization"
+        aria-label={ariaLabel}
+        aria-description={ariaDescription}
         role="img"
+        tabIndex={tabIndex}
         onClick={onClick}
+        onKeyDown={onKeyDown}
       />
     </div>
   )

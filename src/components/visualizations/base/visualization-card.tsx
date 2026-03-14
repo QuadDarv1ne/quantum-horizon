@@ -48,10 +48,25 @@ export function VisualizationCard({
   const descColor = isDark ? "" : "text-gray-600"
 
   return (
-    <Card className={`${borderColors[color]} ${bgColor}`}>
+    <Card
+      className={`${borderColors[color]} ${bgColor}`}
+      role="region"
+      aria-labelledby={`card-title-${title.replace(/\s+/g, "-").toLowerCase()}`}
+      aria-describedby={`card-desc-${title.replace(/\s+/g, "-").toLowerCase()}`}
+    >
       <CardHeader className="pb-2">
-        <CardTitle className={`text-lg ${textColors[color]}`}>{title}</CardTitle>
-        <CardDescription className={`text-xs ${descColor}`}>{description}</CardDescription>
+        <CardTitle
+          id={`card-title-${title.replace(/\s+/g, "-").toLowerCase()}`}
+          className={`text-lg ${textColors[color]}`}
+        >
+          {title}
+        </CardTitle>
+        <CardDescription
+          id={`card-desc-${title.replace(/\s+/g, "-").toLowerCase()}`}
+          className={`text-xs ${descColor}`}
+        >
+          {description}
+        </CardDescription>
       </CardHeader>
       <CardContent className="relative">
         <FullscreenWrapper title={title} isDark={isDark}>
