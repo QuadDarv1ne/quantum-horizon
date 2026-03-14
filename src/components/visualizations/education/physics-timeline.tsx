@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
-import { useVisualizationCanvas } from "@/hooks/use-visualization-canvas"
+import { useCanvasAnimation } from "@/hooks/use-canvas-animation"
 
 interface TimelineEvent {
   year: number
@@ -349,8 +349,8 @@ export function PhysicsTimeline() {
 
   const yearToX = (year: number, width: number): number => ((year - -300) / (2025 - -300)) * width
 
-  // Используем новый хук для анимации canvas
-  useVisualizationCanvas(
+  // Используем хук для анимации canvas
+  useCanvasAnimation(
     canvasRef,
     (ctx, width, height) => {
       const centerY = height / 2
@@ -435,7 +435,7 @@ export function PhysicsTimeline() {
       }
     },
     {
-      dependencies: [filteredEvents],
+      deps: [filteredEvents],
       pauseWhenHidden: true,
       respectReducedMotion: true,
     }
