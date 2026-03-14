@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
 interface FullscreenWrapperProps {
   children: React.ReactNode
@@ -10,8 +10,9 @@ interface FullscreenWrapperProps {
 
 export function FullscreenWrapper({ children, title, isDark }: FullscreenWrapperProps) {
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
 
-  // Handle F key for fullscreen toggle
+  // Handle F key for fullscreen toggle and Escape to close
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isFullscreen) {
@@ -24,6 +25,13 @@ export function FullscreenWrapper({ children, title, isDark }: FullscreenWrapper
     }
   }, [isFullscreen])
 
+  // Focus close button when fullscreen opens
+  useEffect(() => {
+    if (isFullscreen && closeButtonRef.current) {
+      closeButtonRef.current.focus()
+    }
+  }, [isFullscreen])
+
   return (
     <>
       {/* Fullscreen button */}
@@ -31,12 +39,14 @@ export function FullscreenWrapper({ children, title, isDark }: FullscreenWrapper
         onClick={() => {
           setIsFullscreen(true)
         }}
-        className={`absolute top-2 right-2 z-10 p-1.5 rounded-lg transition-all ${
+        className={`absolute top-2 right-2 z-10 rounded-lg p-1.5 transition-all ${
           isDark
-            ? "bg-gray-800/80 hover:bg-gray-700 text-gray-400 hover:text-white"
-            : "bg-white/80 hover:bg-gray-100 text-gray-600 hover:text-gray-900"
+            ? "bg-gray-800/80 text-gray-400 hover:bg-gray-700 hover:text-white"
+            : "bg-white/80 text-gray-600 hover:bg-gray-100 hover:text-gray-900"
         } backdrop-blur-sm`}
         title="Fullscreen (F)"
+        aria-label={`Open ${title} in fullscreen mode`}
+        aria-expanded={isFullscreen}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -60,16 +70,20 @@ export function FullscreenWrapper({ children, title, isDark }: FullscreenWrapper
           onClick={() => {
             setIsFullscreen(false)
           }}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="fullscreen-title"
         >
           {/* Backdrop */}
           <div
             className={`absolute inset-0 ${isDark ? "bg-black/95" : "bg-white/95"} backdrop-blur-sm`}
+            aria-hidden="true"
           />
 
           {/* Content container */}
           <div
-            className={`relative w-full max-w-6xl max-h-[90vh] overflow-auto rounded-xl shadow-2xl ${
-              isDark ? "bg-gray-900 border border-gray-700" : "bg-white border border-gray-200"
+            className={`relative max-h-[90vh] w-full max-w-6xl overflow-auto rounded-xl shadow-2xl ${
+              isDark ? "border border-gray-700 bg-gray-900" : "border border-gray-200 bg-white"
             }`}
             onClick={(e) => {
               e.stopPropagation()
@@ -77,22 +91,27 @@ export function FullscreenWrapper({ children, title, isDark }: FullscreenWrapper
           >
             {/* Header */}
             <div
-              className={`sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b ${
-                isDark ? "bg-gray-900 border-gray-700" : "bg-white border-gray-200"
+              className={`sticky top-0 z-10 flex items-center justify-between border-b px-4 py-3 ${
+                isDark ? "border-gray-700 bg-gray-900" : "border-gray-200 bg-white"
               }`}
             >
-              <h3 className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-900"}`}>
+              <h3
+                id="fullscreen-title"
+                className={`text-lg font-semibold ${isDark ? "text-white" : "text-gray-900"}`}
+              >
                 {title}
               </h3>
               <button
+                ref={closeButtonRef}
                 onClick={() => {
                   setIsFullscreen(false)
                 }}
-                className={`p-2 rounded-lg transition-colors ${
+                className={`rounded-lg p-2 transition-colors ${
                   isDark
-                    ? "hover:bg-gray-800 text-gray-400 hover:text-white"
-                    : "hover:bg-gray-100 text-gray-600 hover:text-gray-900"
+                    ? "text-gray-400 hover:bg-gray-800 hover:text-white"
+                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                 }`}
+                aria-label="Close fullscreen view"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -113,7 +132,7 @@ export function FullscreenWrapper({ children, title, isDark }: FullscreenWrapper
 
             {/* Visualization content - enlarged */}
             <div className="p-4">
-              <div className="transform scale-100">{children}</div>
+              <div className="scale-100 transform">{children}</div>
             </div>
           </div>
         </div>
