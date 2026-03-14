@@ -1,111 +1,111 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 "use client"
 
-import { useRef, useState, useEffect } from "react"
-import { setupCanvas } from "@/hooks/use-canvas-animation"
+import { useRef, useState, useCallback, useEffect } from "react"
+import { VisualizationCanvas } from "../base/visualization-canvas"
+import { VisualizationControls } from "../base/visualization-controls"
 import { Slider } from "@/components/ui/slider"
 import { Button } from "@/components/ui/button"
+import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
 
 interface BigBangVisualizationProps {
   isDark: boolean
 }
 
+interface Particle {
+  angle: number
+  baseDistance: number
+  size: number
+  color: string
+  type: "galaxy" | "particle" | "photon"
+}
+
 export function BigBangVisualization({ isDark }: BigBangVisualizationProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const { togglePlaying, setAnimationSpeed } = useVisualizationStore()
+
   const [expansionSpeed, setExpansionSpeed] = useState(50)
   const [timeScale, setTimeScale] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(true)
 
+  const timeRef = useRef(0)
+  const particlesRef = useRef<Particle[]>([])
+  const bgGradientRef = useRef<CanvasGradient | null>(null)
+  const lastTimeRef = useRef(0)
+
+  // Initialize particles once
   useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
-
-    let animationFrameId: number
-
-    const resize = () => {
-      setupCanvas(canvas, ctx)
-    }
-    resize()
-    window.addEventListener("resize", resize)
-
-    const width = canvas.offsetWidth
-    const height = canvas.offsetHeight
-    const centerX = width / 2
-    const centerY = height / 2
-
-    // Particles representing matter/galaxies
-    const particles: Array<{
-      angle: number
-      distance: number
-      baseDistance: number
-      size: number
-      color: string
-      type: "galaxy" | "particle" | "photon"
-    }> = []
-
-    // Initialize particles
-    for (let i = 0; i < 150; i++) {
-      const angle = Math.random() * Math.PI * 2
-      const baseDist = 5 + Math.random() * 100
-      particles.push({
-        angle,
-        distance: baseDist,
-        baseDistance: baseDist,
-        size: 1 + Math.random() * 2,
-        color: `hsl(${200 + Math.random() * 60}, 70%, ${60 + Math.random() * 30}%)`,
-        type: Math.random() < 0.3 ? "galaxy" : Math.random() < 0.5 ? "photon" : "particle",
-      })
-    }
-
-    let time = 0
-    let lastTime = 0
-
-    const animate = (timestamp: number) => {
-      if (!lastTime) lastTime = timestamp
-      const deltaTime = timestamp - lastTime
-      lastTime = timestamp
-
-      if (isPlaying) {
-        time += deltaTime / 1000
+    if (particlesRef.current.length === 0) {
+      for (let i = 0; i < 150; i++) {
+        const angle = Math.random() * Math.PI * 2
+        const baseDist = 5 + Math.random() * 100
+        particlesRef.current.push({
+          angle,
+          baseDistance: baseDist,
+          size: 1 + Math.random() * 2,
+          color: `hsl(${200 + Math.random() * 60}, 70%, ${60 + Math.random() * 30}%)`,
+          type: Math.random() < 0.3 ? "galaxy" : Math.random() < 0.5 ? "photon" : "particle",
+        })
       }
-      ctx.clearRect(0, 0, width, height)
+    }
+  }, [])
 
-      // Background - cosmic microwave radiation
-      const bgGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 200)
-      const temp = Math.max(0, 3000 - timeScale * 30)
-      const bgAlpha = Math.min(0.3, timeScale * 0.01)
-      bgGradient.addColorStop(
-        0,
-        `rgba(255, ${String(100 + temp / 20)}, ${String(50 + temp / 30)}, ${String(bgAlpha)})`
-      )
-      bgGradient.addColorStop(0.5, `rgba(100, 50, 150, ${String(bgAlpha * 0.5)})`)
-      bgGradient.addColorStop(1, isDark ? "rgba(5, 5, 20, 1)" : "rgba(10, 10, 30, 1)")
-      ctx.fillStyle = bgGradient
+  const draw = useCallback(
+    (
+      ctx: CanvasRenderingContext2D,
+      width: number,
+      height: number,
+      _isDark: boolean,
+      delta: number
+    ) => {
+      const centerX = width / 2
+      const centerY = height / 2
+      const isDarkMode = _isDark
+
+      // Update time
+      if (isPlaying) {
+        const deltaTime = delta || 16
+        timeRef.current += (deltaTime / 1000) * animationSpeed
+        lastTimeRef.current = timeRef.current
+      }
+      const time = timeRef.current
+
+      // Clear
+      ctx.fillStyle = isDarkMode ? "#050520" : "#0a0a30"
       ctx.fillRect(0, 0, width, height)
 
-      // Expansion factor based on time and speed
+      // Background - cosmic microwave radiation (cached)
+      if (!bgGradientRef.current) {
+        const bgGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 200)
+        bgGradient.addColorStop(0, "rgba(255, 150, 100, 0.3)")
+        bgGradient.addColorStop(0.5, "rgba(100, 50, 150, 0.15)")
+        bgGradient.addColorStop(1, isDarkMode ? "rgba(5, 5, 20, 1)" : "rgba(10, 10, 30, 1)")
+        bgGradientRef.current = bgGradient
+      }
+      ctx.fillStyle = bgGradientRef.current
+      ctx.fillRect(0, 0, width, height)
+
+      // Auto-increment timeScale when playing
+      if (isPlaying && timeScale < 100) {
+        setTimeScale((t) => Math.min(100, t + 0.5 * animationSpeed))
+      }
+
+      // Expansion factor
       const expansionFactor = 1 + (timeScale / 100) * (expansionSpeed / 50) * 3
 
       // Draw particles
-      particles.forEach((p) => {
+      particlesRef.current.forEach((p) => {
         const expandedDist = p.baseDistance * expansionFactor
-
-        // Add some wobble
         const wobble = Math.sin(time * 2 + p.angle) * 2
         const x = centerX + Math.cos(p.angle) * (expandedDist + wobble)
         const y = centerY + Math.sin(p.angle) * (expandedDist + wobble)
 
         if (expandedDist < Math.max(width, height)) {
           if (p.type === "galaxy") {
-            // Galaxy spiral
             ctx.fillStyle = p.color
             ctx.beginPath()
             ctx.arc(x, y, p.size * 2, 0, Math.PI * 2)
             ctx.fill()
 
-            // Spiral arms
             ctx.strokeStyle = p.color.replace("70%", "50%")
             ctx.lineWidth = 0.5
             for (let arm = 0; arm < 2; arm++) {
@@ -121,13 +121,11 @@ export function BigBangVisualization({ isDark }: BigBangVisualizationProps) {
               ctx.stroke()
             }
           } else if (p.type === "photon") {
-            // Photon - faster, smaller
             ctx.fillStyle = `rgba(255, 255, 200, ${String(0.5 + Math.sin(time * 5 + p.angle) * 0.3)})`
             ctx.beginPath()
             ctx.arc(x, y, p.size * 0.5, 0, Math.PI * 2)
             ctx.fill()
           } else {
-            // Regular particle
             ctx.fillStyle = p.color
             ctx.beginPath()
             ctx.arc(x, y, p.size, 0, Math.PI * 2)
@@ -136,7 +134,7 @@ export function BigBangVisualization({ isDark }: BigBangVisualizationProps) {
         }
       })
 
-      // Central singularity / early universe glow
+      // Central singularity glow
       if (timeScale < 30) {
         const singularityGlow = ctx.createRadialGradient(
           centerX,
@@ -155,8 +153,8 @@ export function BigBangVisualization({ isDark }: BigBangVisualizationProps) {
         ctx.fill()
       }
 
-      // Time scale indicator
-      ctx.fillStyle = isDark ? "rgba(255, 255, 255, 0.8)" : "rgba(255, 255, 255, 0.9)"
+      // Era text
+      ctx.fillStyle = isDarkMode ? "rgba(255, 255, 255, 0.8)" : "rgba(255, 255, 255, 0.9)"
       ctx.font = "10px sans-serif"
       ctx.textAlign = "left"
 
@@ -171,45 +169,28 @@ export function BigBangVisualization({ isDark }: BigBangVisualizationProps) {
       ctx.fillText(eraText, 10, 20)
       ctx.fillText(`Radius: ${(expansionFactor * 100).toFixed(0)} billion light years`, 10, 35)
 
-      // Scale factor
-      ctx.fillStyle = isDark ? "rgba(100, 200, 255, 0.8)" : "rgba(50, 150, 235, 0.9)"
+      ctx.fillStyle = isDarkMode ? "rgba(100, 200, 255, 0.8)" : "rgba(50, 150, 235, 0.9)"
       ctx.fillText(`a(t) = ${expansionFactor.toFixed(2)}`, 10, height - 10)
-
-      animationFrameId = requestAnimationFrame(animate)
-    }
-
-    animate(0)
-
-    return () => {
-      window.removeEventListener("resize", resize)
-      cancelAnimationFrame(animationFrameId)
-    }
-  }, [expansionSpeed, timeScale, isPlaying, isDark])
-
-  useEffect(() => {
-    if (!isPlaying) return
-    const interval = setInterval(() => {
-      setTimeScale((t) => Math.min(100, t + 0.5))
-    }, 50)
-    return () => {
-      clearInterval(interval)
-    }
-  }, [isPlaying])
+    },
+    [isPlaying, animationSpeed, expansionSpeed, timeScale]
+  )
 
   return (
     <div className="space-y-4">
-      <canvas
-        ref={canvasRef}
-        className="w-full h-[350px] rounded-lg"
-        aria-label="Big Bang: expansion of the Universe"
-        role="img"
+      <VisualizationCanvas draw={draw} isDark={isDark} className="h-[350px]" />
+      <VisualizationControls
+        isPlaying={isPlaying}
+        animationSpeed={animationSpeed}
+        onTogglePlay={togglePlaying}
+        onSpeedChange={setAnimationSpeed}
+        isDark={isDark}
       />
 
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className={isDark ? "text-cyan-400" : "text-cyan-700"}>Expansion speed</span>
-            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+            <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
               {expansionSpeed}%
             </span>
           </div>
@@ -226,7 +207,7 @@ export function BigBangVisualization({ isDark }: BigBangVisualizationProps) {
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className={isDark ? "text-yellow-400" : "text-yellow-700"}>Time</span>
-            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+            <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
               {timeScale.toFixed(0)}%
             </span>
           </div>
@@ -243,19 +224,13 @@ export function BigBangVisualization({ isDark }: BigBangVisualizationProps) {
       </div>
 
       <div className="flex gap-2">
-        <Button
-          onClick={() => {
-            setIsPlaying(!isPlaying)
-          }}
-          variant="outline"
-          size="sm"
-          className="flex-1 text-xs"
-        >
+        <Button onClick={togglePlaying} variant="outline" size="sm" className="flex-1 text-xs">
           {isPlaying ? "⏸️ Pause" : "▶️ Play"}
         </Button>
         <Button
           onClick={() => {
             setTimeScale(0)
+            timeRef.current = 0
           }}
           variant="outline"
           size="sm"
@@ -266,14 +241,14 @@ export function BigBangVisualization({ isDark }: BigBangVisualizationProps) {
       </div>
 
       <div
-        className={`rounded-lg p-3 border text-sm ${
-          isDark ? "bg-orange-900/20 border-orange-500/20" : "bg-orange-50 border-orange-200"
+        className={`rounded-lg border p-3 text-sm ${
+          isDark ? "border-orange-500/20 bg-orange-900/20" : "border-orange-200 bg-orange-50"
         }`}
       >
-        <div className={isDark ? "text-orange-300 font-semibold" : "text-orange-700 font-semibold"}>
+        <div className={isDark ? "font-semibold text-orange-300" : "font-semibold text-orange-700"}>
           💥 Big Bang (13.8 billion years ago)
         </div>
-        <p className={isDark ? "text-gray-400 mt-1" : "text-gray-600 mt-1"}>
+        <p className={isDark ? "mt-1 text-gray-400" : "mt-1 text-gray-600"}>
           The Universe was born from a singularity. Hubble's Law: v = H₀·d — galaxies recede at a
           speed proportional to their distance.
         </p>
