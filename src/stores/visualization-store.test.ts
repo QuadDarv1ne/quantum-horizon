@@ -324,7 +324,7 @@ describe("Persistence", () => {
     const persisted = localStorage.getItem("visualization-settings")
     const parsed = JSON.parse(persisted!)
 
-    // selectedVisualization should not be in persisted state
-    expect(parsed.state.selectedVisualization).toBeUndefined()
+    // selectedVisualization is now persisted (removed partialize)
+    expect(parsed.state.selectedVisualization).toBe("blackHole")
   })
 })
