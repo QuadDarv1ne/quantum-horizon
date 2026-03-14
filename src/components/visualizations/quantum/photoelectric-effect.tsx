@@ -2,87 +2,94 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 "use client"
 
-import { useRef, useState, useEffect } from "react"
-import { setupCanvas } from "@/hooks/use-canvas-animation"
+import { useRef, useState, useCallback } from "react"
+import { VisualizationCanvas } from "../base/visualization-canvas"
+import { VisualizationControls } from "../base/visualization-controls"
 import { Slider } from "@/components/ui/slider"
+import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
 
 interface PhotoelectricEffectVisualizationProps {
   isDark: boolean
 }
 
+interface Photon {
+  x: number
+  y: number
+  vx: number
+  vy: number
+  energy: number
+}
+
+interface Electron {
+  x: number
+  y: number
+  vx: number
+  vy: number
+  life: number
+}
+
 export function PhotoelectricEffectVisualization({
   isDark,
 }: PhotoelectricEffectVisualizationProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [frequency, setFrequency] = useState(50) // as % of threshold
+  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const { togglePlaying, setAnimationSpeed } = useVisualizationStore()
+
+  const [frequency, setFrequency] = useState(50)
   const [intensity, setIntensity] = useState(50)
-  const [workFunction, setWorkFunction] = useState(2.5) // eV
+  const [workFunction, setWorkFunction] = useState(2.5)
 
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
+  const timeRef = useRef(0)
+  const photonsRef = useRef<Photon[]>([])
+  const electronsRef = useRef<Electron[]>([])
+  const metalGradientRef = useRef<CanvasGradient | null>(null)
 
-    let animationFrameId: number
+  const draw = useCallback(
+    (
+      ctx: CanvasRenderingContext2D,
+      width: number,
+      height: number,
+      _isDark: boolean,
+      delta: number
+    ) => {
+      const isDarkMode = _isDark
+      const metalY = height * 0.6
+      const metalHeight = height * 0.3
 
-    const resize = () => {
-      setupCanvas(canvas, ctx)
-    }
-    resize()
-    window.addEventListener("resize", resize)
+      // Update time
+      if (isPlaying) {
+        timeRef.current += (delta / 1000) * animationSpeed
+      }
+      const time = timeRef.current
 
-    const width = canvas.offsetWidth
-    const height = canvas.offsetHeight
-
-    // Metal surface
-    const metalY = height * 0.6
-    const metalHeight = height * 0.3
-
-    // Photons
-    const photons: Array<{ x: number; y: number; vx: number; vy: number; energy: number }> = []
-    // Electrons
-    const electrons: Array<{ x: number; y: number; vx: number; vy: number; life: number }> = []
-
-    // Calculate photon energy based on frequency
-    const photonEnergy = (frequency / 100) * 6 // eV (simplified)
-    const canEmit = photonEnergy >= workFunction
-    const kineticEnergy = Math.max(0, photonEnergy - workFunction)
-
-    let time = 0
-
-    const animate = () => {
-      time += 0.016
-      ctx.clearRect(0, 0, width, height)
-
-      // Background
-      ctx.fillStyle = isDark ? "#0a0a15" : "#f8fafc"
+      // Clear
+      ctx.fillStyle = isDarkMode ? "#0a0a15" : "#f8fafc"
       ctx.fillRect(0, 0, width, height)
 
-      // Metal plate
-      const metalGradient = ctx.createLinearGradient(0, metalY, 0, height)
-      metalGradient.addColorStop(0, isDark ? "#4a4a6a" : "#9a9aba")
-      metalGradient.addColorStop(0.5, isDark ? "#3a3a5a" : "#8a8aaa")
-      metalGradient.addColorStop(1, isDark ? "#2a2a4a" : "#7a7a9a")
-      ctx.fillStyle = metalGradient
+      // Metal plate (cached gradient)
+      if (!metalGradientRef.current) {
+        const metalGradient = ctx.createLinearGradient(0, metalY, 0, height)
+        metalGradient.addColorStop(0, isDarkMode ? "#4a4a6a" : "#9a9aba")
+        metalGradient.addColorStop(0.5, isDarkMode ? "#3a3a5a" : "#8a8aaa")
+        metalGradient.addColorStop(1, isDarkMode ? "#2a2a4a" : "#7a7a9a")
+        metalGradientRef.current = metalGradient
+      }
+      ctx.fillStyle = metalGradientRef.current
       ctx.fillRect(50, metalY, width - 100, metalHeight)
 
-      // Metal surface highlight
-      ctx.strokeStyle = isDark ? "#6a6a8a" : "#aaaacc"
+      ctx.strokeStyle = isDarkMode ? "#6a6a8a" : "#aaaacc"
       ctx.lineWidth = 2
       ctx.beginPath()
       ctx.moveTo(50, metalY)
       ctx.lineTo(width - 50, metalY)
       ctx.stroke()
 
-      // Metal label
-      ctx.fillStyle = isDark ? "#888" : "#666"
+      ctx.fillStyle = isDarkMode ? "#888" : "#666"
       ctx.font = "10px sans-serif"
       ctx.textAlign = "center"
       ctx.fillText("Metal plate", width / 2, metalY + metalHeight / 2)
 
       // Light source
-      ctx.fillStyle = isDark ? "#FFD700" : "#FFA500"
+      ctx.fillStyle = isDarkMode ? "#FFD700" : "#FFA500"
       ctx.beginPath()
       ctx.arc(30, height * 0.3, 15, 0, Math.PI * 2)
       ctx.fill()
@@ -97,9 +104,14 @@ export function PhotoelectricEffectVisualization({
         ctx.stroke()
       }
 
-      // Spawn photons based on intensity
+      // Calculate photon energy
+      const photonEnergy = (frequency / 100) * 6
+      const canEmit = photonEnergy >= workFunction
+      const kineticEnergy = Math.max(0, photonEnergy - workFunction)
+
+      // Spawn photons
       if (Math.random() < intensity / 100) {
-        photons.push({
+        photonsRef.current.push({
           x: 50,
           y: height * 0.3 + (Math.random() - 0.5) * 20,
           vx: 3 + Math.random(),
@@ -109,17 +121,13 @@ export function PhotoelectricEffectVisualization({
       }
 
       // Update and draw photons
-      for (let i = photons.length - 1; i >= 0; i--) {
-        const p = photons[i]
+      for (let i = photonsRef.current.length - 1; i >= 0; i--) {
+        const p = photonsRef.current[i]
         p.x += p.vx
         p.y += p.vy
 
-        // Draw photon as wave packet
         const wavelength = 30 - (frequency / 100) * 20
-        ctx.strokeStyle =
-          frequency > 50
-            ? `rgba(150, 50, 255, 0.8)` // UV
-            : `rgba(255, 200, 50, 0.8)` // Visible
+        ctx.strokeStyle = frequency > 50 ? `rgba(150, 50, 255, 0.8)` : `rgba(255, 200, 50, 0.8)`
         ctx.lineWidth = 2
         ctx.beginPath()
         for (let dx = -15; dx <= 15; dx++) {
@@ -129,44 +137,38 @@ export function PhotoelectricEffectVisualization({
         }
         ctx.stroke()
 
-        // Check collision with metal
         if (p.y >= metalY - 5) {
-          // Emit electron if energy > work function
           if (canEmit && Math.random() < 0.7) {
-            const eVx = (Math.random() - 0.3) * 2
-            const eVy = -2 - kineticEnergy * 1.5 - Math.random() * 2
-            electrons.push({
+            electronsRef.current.push({
               x: p.x,
               y: metalY - 5,
-              vx: eVx,
-              vy: eVy,
+              vx: (Math.random() - 0.3) * 2,
+              vy: -2 - kineticEnergy * 1.5 - Math.random() * 2,
               life: 1,
             })
           }
-          photons.splice(i, 1)
+          photonsRef.current.splice(i, 1)
         }
       }
 
       // Update and draw electrons
-      for (let i = electrons.length - 1; i >= 0; i--) {
-        const e = electrons[i]
+      for (let i = electronsRef.current.length - 1; i >= 0; i--) {
+        const e = electronsRef.current[i]
         e.x += e.vx
         e.y += e.vy
-        e.vy += 0.02 // gravity
+        e.vy += 0.02
         e.life -= 0.005
 
         if (e.life <= 0 || e.y > height) {
-          electrons.splice(i, 1)
+          electronsRef.current.splice(i, 1)
           continue
         }
 
-        // Draw electron
         ctx.fillStyle = `rgba(100, 200, 255, ${String(e.life)})`
         ctx.beginPath()
         ctx.arc(e.x, e.y, 4, 0, Math.PI * 2)
         ctx.fill()
 
-        // Electron trail
         ctx.strokeStyle = `rgba(100, 200, 255, ${String(e.life * 0.3)})`
         ctx.lineWidth = 1
         ctx.beginPath()
@@ -180,7 +182,6 @@ export function PhotoelectricEffectVisualization({
       const diagramY = 30
       const diagramH = 80
 
-      // Work function level
       ctx.strokeStyle = "rgba(255, 150, 100, 0.8)"
       ctx.setLineDash([3, 3])
       ctx.beginPath()
@@ -198,7 +199,6 @@ export function PhotoelectricEffectVisualization({
         diagramY + diagramH * (1 - workFunction / 6) - 3
       )
 
-      // Photon energy level
       ctx.strokeStyle = frequency > 50 ? "rgba(150, 50, 255, 0.8)" : "rgba(255, 200, 50, 0.8)"
       ctx.beginPath()
       ctx.moveTo(diagramX - 30, diagramY + diagramH * (1 - photonEnergy / 6))
@@ -212,49 +212,41 @@ export function PhotoelectricEffectVisualization({
         diagramY + diagramH * (1 - photonEnergy / 6) - 3
       )
 
-      // Labels
-      ctx.fillStyle = isDark ? "#888" : "#666"
+      ctx.fillStyle = isDarkMode ? "#888" : "#666"
       ctx.font = "9px sans-serif"
       ctx.textAlign = "center"
       ctx.fillText("Energy", diagramX, diagramY - 5)
 
-      // Status
       ctx.fillStyle = canEmit ? "#90EE90" : "#FF6B6B"
       ctx.font = "bold 11px sans-serif"
       ctx.textAlign = "left"
       ctx.fillText(canEmit ? "✓ Photoelectric effect!" : "✗ hν < W", 10, 20)
 
       if (canEmit) {
-        ctx.fillStyle = canEmit ? (isDark ? "#90EE90" : "#006400") : "#FF6B6B"
+        ctx.fillStyle = canEmit ? (isDarkMode ? "#90EE90" : "#006400") : "#FF6B6B"
         ctx.font = "10px sans-serif"
         ctx.fillText(`E_kin = ${(kineticEnergy * 1.6e-19).toExponential(1)} J`, 10, 35)
       }
-
-      animationFrameId = requestAnimationFrame(animate)
-    }
-
-    animate()
-
-    return () => {
-      window.removeEventListener("resize", resize)
-      cancelAnimationFrame(animationFrameId)
-    }
-  }, [frequency, intensity, workFunction, isDark])
+    },
+    [isPlaying, animationSpeed, frequency, intensity, workFunction]
+  )
 
   return (
     <div className="space-y-4">
-      <canvas
-        ref={canvasRef}
-        className="w-full h-[350px] rounded-lg"
-        aria-label="Photoelectric effect: electron emission by light"
-        role="img"
+      <VisualizationCanvas draw={draw} isDark={isDark} className="h-[350px]" />
+      <VisualizationControls
+        isPlaying={isPlaying}
+        animationSpeed={animationSpeed}
+        onTogglePlay={togglePlaying}
+        onSpeedChange={setAnimationSpeed}
+        isDark={isDark}
       />
 
       <div className="grid grid-cols-3 gap-2 text-xs">
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className={isDark ? "text-purple-400" : "text-purple-700"}>Frequency ν</span>
-            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+            <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
               {(frequency * 0.8 + 400).toFixed(0)} THz
             </span>
           </div>
@@ -271,7 +263,7 @@ export function PhotoelectricEffectVisualization({
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className={isDark ? "text-yellow-400" : "text-yellow-700"}>Intensity</span>
-            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+            <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
               {intensity}%
             </span>
           </div>
@@ -288,7 +280,7 @@ export function PhotoelectricEffectVisualization({
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className={isDark ? "text-orange-400" : "text-orange-700"}>Work function</span>
-            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+            <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
               {workFunction} eV
             </span>
           </div>
@@ -306,42 +298,42 @@ export function PhotoelectricEffectVisualization({
 
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div
-          className={`rounded p-2 border ${
-            isDark ? "bg-purple-950/30 border-purple-500/20" : "bg-purple-50 border-purple-200"
+          className={`rounded border p-2 ${
+            isDark ? "border-purple-500/20 bg-purple-950/30" : "border-purple-200 bg-purple-50"
           }`}
         >
           <div
-            className={isDark ? "text-purple-400 font-semibold" : "text-purple-700 font-semibold"}
+            className={isDark ? "font-semibold text-purple-400" : "font-semibold text-purple-700"}
           >
             Einstein equation
           </div>
-          <div className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+          <div className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
             hν = W + E_kin
           </div>
         </div>
         <div
-          className={`rounded p-2 border ${
-            isDark ? "bg-green-950/30 border-green-500/20" : "bg-green-50 border-green-200"
+          className={`rounded border p-2 ${
+            isDark ? "border-green-500/20 bg-green-950/30" : "border-green-200 bg-green-50"
           }`}
         >
-          <div className={isDark ? "text-green-400 font-semibold" : "text-green-700 font-semibold"}>
+          <div className={isDark ? "font-semibold text-green-400" : "font-semibold text-green-700"}>
             Kinetic energy
           </div>
-          <div className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+          <div className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
             E = hν - W
           </div>
         </div>
       </div>
 
       <div
-        className={`rounded-lg p-3 border text-sm ${
-          isDark ? "bg-yellow-900/20 border-yellow-500/20" : "bg-yellow-50 border-yellow-200"
+        className={`rounded-lg border p-3 text-sm ${
+          isDark ? "border-yellow-500/20 bg-yellow-900/20" : "border-yellow-200 bg-yellow-50"
         }`}
       >
-        <div className={isDark ? "text-yellow-300 font-semibold" : "text-yellow-700 font-semibold"}>
+        <div className={isDark ? "font-semibold text-yellow-300" : "font-semibold text-yellow-700"}>
           ⚡ Photoelectric Effect (Einstein, 1905)
         </div>
-        <p className={isDark ? "text-gray-400 mt-1" : "text-gray-600 mt-1"}>
+        <p className={isDark ? "mt-1 text-gray-400" : "mt-1 text-gray-600"}>
           Light consists of quanta (photons). Electrons are emitted only if hν ≥ W. Intensity
           affects the number of electrons, not their energy!
         </p>
