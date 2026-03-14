@@ -98,6 +98,13 @@ export const selectVisualizationSettings = (state: VisualizationState) => ({
   selectedVisualization: state.selectedVisualization,
 })
 
+export const selectPlaybackSettings = (state: VisualizationState) => ({
+  isPlaying: state.isPlaying,
+  animationSpeed: state.animationSpeed,
+  togglePlaying: state.togglePlaying,
+  setAnimationSpeed: state.setAnimationSpeed,
+})
+
 export const selectWaveFunctionSettings = (state: VisualizationState) => state.waveFunction
 
 export const selectTimeDilationSettings = (state: VisualizationState) => state.timeDilation

@@ -6,7 +6,11 @@ import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
-import { useVisualizationStore, selectWaveFunctionSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectWaveFunctionSettings,
+  selectPlaybackSettings,
+} from "@/stores/visualization-store"
 import { QueryParam } from "@/hooks/use-url-sync"
 
 interface WaveFunctionVisualizationProps {
@@ -16,8 +20,8 @@ interface WaveFunctionVisualizationProps {
 export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationProps) {
   const t = useTranslations()
   const { quantumNumber, showProbability } = useVisualizationStore(selectWaveFunctionSettings)
-  const { isPlaying, animationSpeed, setQuantumNumber, togglePlaying, setAnimationSpeed } =
-    useVisualizationStore()
+  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const { setQuantumNumber, togglePlaying, setAnimationSpeed } = useVisualizationStore()
   const [particlePosition, setParticlePosition] = useState<number | null>(null)
   const [measurementMode, setMeasurementMode] = useState(false)
 
