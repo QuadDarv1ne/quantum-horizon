@@ -33,6 +33,7 @@ out/
 # Next.js specific
 *.tsbuildinfo
 next-env.d.ts
+**/*.tsbuildinfo
 
 # Next.js cache directory
 .next/cache/
