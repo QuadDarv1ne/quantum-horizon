@@ -52,11 +52,11 @@ export function VisualizationSelector({ selected, onSelect, isDark }: Visualizat
   }
 
   const renderSection = (title: string, items: VisualizationOption[]) => (
-    <div>
-      <h3 className={`mb-2 text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+    <div role="group" aria-label={title}>
+      <h3 className={`mb-2 text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-600"}`} id={`${title}-label`}>
         {title}
       </h3>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2" role="radiogroup" aria-labelledby={`${title}-label`}>
         {items.map((viz) => (
           <Button
             key={viz.id}
@@ -66,8 +66,12 @@ export function VisualizationSelector({ selected, onSelect, isDark }: Visualizat
               handleSelect(viz.id)
             }}
             className={buttonClass(selected === viz.id)}
+            role="radio"
+            aria-checked={selected === viz.id}
+            aria-label={`${viz.icon} ${viz.label} visualization`}
+            tabIndex={selected === viz.id ? 0 : -1}
           >
-            <span>{viz.icon}</span>
+            <span aria-hidden="true">{viz.icon}</span>
             <span className="text-xs">{viz.label}</span>
           </Button>
         ))}
