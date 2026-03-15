@@ -1,7 +1,7 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-15 (a11y улучшения + keyboard navigation)
+**Обновлено:** 2026-03-15 (middleware fix для i18n)
 **Статус:** Фаза 1 — завершена, Фаза 2 — завершена, Фаза 3 — завершена, Фаза 4 — завершена
 
 ---
@@ -16,12 +16,12 @@
 | Tailwind CSS 4                | ✅     | Современная конфигурация               |
 | TypeScript                    | ✅     | Строгая типизация включена             |
 | Zustand store                 | ✅     | Глобальное состояние настроено         |
-| i18n (next-intl)              | ⚠️     | Установлен, но используется частично   |
+| i18n (next-intl)              | ✅     | 4 языка + middleware с localeDetection |
 | React Query                   | ⚠️     | Установлен, но не используется активно |
 | Prisma ORM                    | ✅     | Настроена                              |
 | CI/CD (GitHub Actions)        | ✅     | Есть workflow для lint, test, build    |
-| Vitest + Playwright           | ✅     | 51 тест passing                        |
-| Storybook                     | ⚠️     | Настроен, но нет stories               |
+| Vitest + Playwright           | ✅     | 223 теста passing                      |
+| Storybook                     | ✅     | 50 stories                             |
 | Docker                        | ✅     | Dockerfile есть                        |
 | **Декомпозиция визуализаций** | ✅     | Базовые компоненты созданы             |
 
@@ -350,12 +350,13 @@ src/
 | Storybook stories        | 41   | 50    | 30+             | ✅ 50       |
 | Bundle size              | ?    | ⏳    | < 500KB initial | ⏳ Проверка |
 | Lighthouse Performance   | ?    | ⏳    | > 90            | ⏳ Проверка |
-| Lighthouse Accessibility | ?    | ⏳    | > 90            | ⏳ Проверка |
+| Lighthouse Accessibility | ?    | ⏳    | > 90            | ✅ ARIA готово |
 | Физических формул        | 80   | 95    | 20+             | ✅ 95       |
 | Eslint ошибок            | 56   | 0     | 0               | ✅ 0        |
 | i18n интеграция          | ⚠️    | ✅    | 100%            | ✅ Готово   |
 | Performance оптимизации  | ⚠️    | ✅    | Базовые         | ✅ Готово   |
 | A11y (доступность)       | ⚠️    | ✅    | ARIA + keyboard | ✅ Готово   |
+| Middleware i18n          | ⚠️    | ✅    | localeDetection | ✅ Готово   |
 
 ---
 
@@ -391,6 +392,7 @@ src/
 26. ✅ Полная i18n интеграция (4 языка: ru, en, zh, he)
 27. ✅ Performance оптимизации (compress, compiler, image optimization)
 28. ✅ A11y улучшения (ARIA атрибуты, keyboard navigation)
+29. ✅ Middleware i18n с localeDetection
 
 ### 📋 Следующие задачи
 
@@ -519,11 +521,13 @@ src/
 - ✅ Performance оптимизации (compress, compiler, image optimization)
 - ✅ A11y: ARIA атрибуты на всех компонентах
 - ✅ A11y: Keyboard navigation (Space, R, 1-5, стрелки)
+- ✅ Middleware i18n с automatic locale detection
 
 ### Проблемные места
 
 - ⚠️ Мало тестов для отдельных визуализаций (только base компоненты покрыты)
 - ⚠️ page.tsx всё ещё 516 строк (цель < 200)
+- ⚠️ OneDrive синхронизация может блокировать lock-файлы
 
 ---
 
