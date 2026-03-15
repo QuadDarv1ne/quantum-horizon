@@ -173,8 +173,8 @@ export function ProtoplanetaryDiskVisualization({
         starRadius * 2.5
       )
       starGradient.addColorStop(0, "#fff")
-      starGradient.addColorStop(0.2, `hsl(${starHue}, 90%, 70%)`)
-      starGradient.addColorStop(0.5, `hsla(${starHue}, 90%, 50%, 0.5)`)
+      starGradient.addColorStop(0.2, `hsl(${String(starHue)}, 90%, 70%)`)
+      starGradient.addColorStop(0.5, `hsla(${String(starHue)}, 90%, 50%, 0.5)`)
       starGradient.addColorStop(1, "rgba(255, 200, 100, 0)")
       ctx.fillStyle = starGradient
       ctx.beginPath()
@@ -182,7 +182,7 @@ export function ProtoplanetaryDiskVisualization({
       ctx.fill()
 
       // Star core
-      ctx.fillStyle = `hsl(${starHue}, 90%, 80%)`
+      ctx.fillStyle = `hsl(${String(starHue)}, 90%, 80%)`
       ctx.beginPath()
       ctx.arc(centerX, centerY, starRadius, 0, Math.PI * 2)
       ctx.fill()
@@ -277,7 +277,7 @@ export function ProtoplanetaryDiskVisualization({
           const saturation = p.radius > 100 ? 60 : 50
           const lightness = p.radius > 100 ? 70 : 50
 
-          ctx.fillStyle = `hsl(${hue}, ${saturation}%, ${lightness}%)`
+          ctx.fillStyle = `hsl(${String(hue)}, ${String(saturation)}%, ${String(lightness)}%)`
           ctx.beginPath()
           ctx.arc(x, y, planetSize, 0, Math.PI * 2)
           ctx.fill()
@@ -354,8 +354,8 @@ export function ProtoplanetaryDiskVisualization({
       const innerTemp = 1500 - starAge * 100
       const outerTemp = 50 - starAge * 5
       ctx.font = "10px monospace"
-      ctx.fillText(`T(внутр): ~${Math.max(500, innerTemp)}K`, width - 250, 155)
-      ctx.fillText(`T(внеш): ~${Math.max(10, outerTemp)}K`, width - 250, 168)
+      ctx.fillText(`T(внутр): ~${String(Math.max(500, innerTemp))}K`, width - 250, 155)
+      ctx.fillText(`T(внеш): ~${String(Math.max(10, outerTemp))}K`, width - 250, 168)
 
       // Evolution progress bar
       const barWidth = 200

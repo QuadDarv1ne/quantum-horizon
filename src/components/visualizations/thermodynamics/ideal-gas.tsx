@@ -6,7 +6,7 @@ import { VisualizationControls } from "../base/visualization-controls"
 import { Slider } from "@/components/ui/slider"
 import { Card, CardContent } from "@/components/ui/card"
 import { idealGasLaw, rmsVelocity, averageKineticEnergy } from "@/lib/physics"
-import { k_B, R, N_A } from "@/lib/constants"
+import { k_B, N_A } from "@/lib/constants"
 import { QueryParam } from "@/hooks/use-url-sync"
 import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
 
@@ -134,7 +134,7 @@ export function IdealGasVisualization({ isDark }: IdealGasVisualizationProps) {
       const molecules = moleculesRef.current
       const speedMultiplier = Math.sqrt(temperature / 300)
 
-      molecules.forEach((mol, i) => {
+      molecules.forEach((mol, _i) => {
         // Update position
         mol.x += mol.vx * speedMultiplier * delta * 0.00006
         mol.y += mol.vy * speedMultiplier * delta * 0.00006
@@ -169,7 +169,7 @@ export function IdealGasVisualization({ isDark }: IdealGasVisualizationProps) {
         const avgSpeed = Math.sqrt(3 * k_B * temperature / (28e-3 / N_A)) * 0.001
         const speedRatio = speed / avgSpeed
         const hue = 200 - Math.min(speedRatio, 1.5) * 120
-        ctx.fillStyle = `hsl(${hue}, 70%, 55%)`
+        ctx.fillStyle = `hsl(${String(hue)}, 70%, 55%)`
 
         ctx.beginPath()
         ctx.arc(molX, molY, 4, 0, Math.PI * 2)
@@ -177,7 +177,7 @@ export function IdealGasVisualization({ isDark }: IdealGasVisualizationProps) {
 
         // Velocity vector
         if (showVelocities) {
-          ctx.strokeStyle = `hsla(${hue}, 70%, 55%, 0.5)`
+          ctx.strokeStyle = `hsla(${String(hue)}, 70%, 55%, 0.5)`
           ctx.lineWidth = 1
           ctx.beginPath()
           ctx.moveTo(molX, molY)
@@ -214,10 +214,10 @@ export function IdealGasVisualization({ isDark }: IdealGasVisualizationProps) {
 
       ctx.font = "11px monospace"
       ctx.fillText(`PV = nRT`, width - 250, margin + 42)
-      ctx.fillText(`n = ${moles.toFixed(2)} моль`, width - 250, margin + 60)
-      ctx.fillText(`T = ${temperature} K`, width - 250, margin + 78)
-      ctx.fillText(`P = ${pressure.toFixed(2)} атм`, width - 250, margin + 96)
-      ctx.fillText(`V = ${volume.toFixed(2)} × 22.4 л`, width - 250, margin + 114)
+      ctx.fillText(`n = ${String(moles.toFixed(2))} моль`, width - 250, margin + 60)
+      ctx.fillText(`T = ${String(temperature)} K`, width - 250, margin + 78)
+      ctx.fillText(`P = ${String(pressure.toFixed(2))} атм`, width - 250, margin + 96)
+      ctx.fillText(`V = ${String(volume.toFixed(2))} × 22.4 л`, width - 250, margin + 114)
 
       // Equation check
       ctx.fillStyle = result.matches ? "#22c55e" : "#ef4444"
@@ -233,7 +233,7 @@ export function IdealGasVisualization({ isDark }: IdealGasVisualizationProps) {
       ctx.fillStyle = isDarkMode ? "#94a3b8" : "#64748b"
       ctx.font = "10px monospace"
       ctx.fillText(
-        `v_rms = ${(vRms / 100).toFixed(0)} м/с`,
+        `v_rms = ${String((vRms / 100).toFixed(0))} м/с`,
         width - 250,
         margin + 158
       )
@@ -241,7 +241,7 @@ export function IdealGasVisualization({ isDark }: IdealGasVisualizationProps) {
       // Average kinetic energy
       const avgKE = averageKineticEnergy(temperature)
       ctx.fillText(
-        `⟨E⟩ = ${(avgKE * 1e21).toFixed(2)} × 10⁻²¹ Дж`,
+        `⟨E⟩ = ${String((avgKE * 1e21).toFixed(2))} × 10⁻²¹ Дж`,
         width - 250,
         margin + 172
       )

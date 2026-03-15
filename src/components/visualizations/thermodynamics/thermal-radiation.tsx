@@ -171,13 +171,13 @@ export function ThermalRadiationVisualization({
 
           // Color based on wavelength
           const hue = ((photon.wavelength - 380e-9) / (750e-9 - 380e-9)) * 270
-          ctx.fillStyle = `hsla(${hue}, 80%, 60%, 0.8)`
+          ctx.fillStyle = `hsla(${String(hue)}, 80%, 60%, 0.8)`
           ctx.beginPath()
           ctx.arc(px, py, 3, 0, Math.PI * 2)
           ctx.fill()
 
           // Glow effect
-          ctx.shadowColor = `hsla(${hue}, 80%, 60%, 0.6)`
+          ctx.shadowColor = `hsla(${String(hue)}, 80%, 60%, 0.6)`
           ctx.shadowBlur = 10
           ctx.fill()
           ctx.shadowBlur = 0
@@ -196,14 +196,14 @@ export function ThermalRadiationVisualization({
       ctx.fillText("Тепловое излучение", width - 210, 40)
 
       ctx.font = "11px monospace"
-      ctx.fillText(`T = ${temperature} K`, width - 210, 60)
+      ctx.fillText(`T = ${String(temperature)} K`, width - 210, 60)
 
       const lambdaMax = wiensDisplacementLaw(temperature)
-      ctx.fillText(`λ_max = ${(lambdaMax * 1e9).toFixed(0)} нм`, width - 210, 78)
+      ctx.fillText(`λ_max = ${String((lambdaMax * 1e9).toFixed(0))} нм`, width - 210, 78)
 
       const totalPower = stefanBoltzmannLaw(1, temperature)
       ctx.fillText(
-        `P = ${totalPower.toExponential(2)} Вт/м²`,
+        `P = ${String(totalPower.toExponential(2))} Вт/м²`,
         width - 210,
         96
       )

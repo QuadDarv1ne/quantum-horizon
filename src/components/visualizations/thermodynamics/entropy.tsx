@@ -5,8 +5,7 @@ import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Slider } from "@/components/ui/slider"
 import { Card, CardContent } from "@/components/ui/card"
-import { entropyChange, idealGasEntropy, averageKineticEnergy } from "@/lib/physics"
-import { k_B } from "@/lib/constants"
+import { averageKineticEnergy } from "@/lib/physics"
 import { QueryParam } from "@/hooks/use-url-sync"
 import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
 
@@ -61,10 +60,13 @@ export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
         y: Math.random(),
         vx: (Math.random() - 0.5) * 0.02,
         vy: (Math.random() - 0.5) * 0.02,
-        side: "left",
+        side: "left" as const,
       })
     }
     particlesRef.current = particles
+  }, [particleCount])
+
+  useEffect(() => {
     setIsMixed(false)
   }, [particleCount])
 
@@ -136,14 +138,14 @@ export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
         const speed = Math.sqrt(particle.vx * particle.vx + particle.vy * particle.vy)
         const normalizedSpeed = Math.min(speed / 0.03, 1)
         const hue = 200 - normalizedSpeed * 150 // Blue (cold) to Red (hot)
-        ctx.fillStyle = `hsl(${hue}, 70%, 55%)`
+        ctx.fillStyle = `hsl(${String(hue)}, 70%, 55%)`
 
         ctx.beginPath()
         ctx.arc(px, py, 4, 0, Math.PI * 2)
         ctx.fill()
 
         // Velocity vector
-        ctx.strokeStyle = `hsla(${hue}, 70%, 55%, 0.4)`
+        ctx.strokeStyle = `hsla(${String(hue)}, 70%, 55%, 0.4)`
         ctx.lineWidth = 1
         ctx.beginPath()
         ctx.moveTo(px, py)
@@ -153,7 +155,7 @@ export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
 
       // Calculate entropy
       const leftParticles = particlesRef.current.filter((p) => p.x < 0.5).length
-      const rightParticles = particlesRef.current.length - leftParticles
+      const _rightParticles = particlesRef.current.length - leftParticles
       const fraction = leftParticles / particlesRef.current.length
       const mixing = -fraction * Math.log2(fraction + 1e-10) - (1 - fraction) * Math.log2(1 - fraction + 1e-10)
       const maxMixing = 1 // Maximum when equally mixed
@@ -170,12 +172,12 @@ export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
       ctx.fillText("Энтропия", width - 230, margin + 22)
 
       ctx.font = "11px monospace"
-      ctx.fillText(`N = ${particleCount} частиц`, width - 230, margin + 42)
-      ctx.fillText(`T = ${temperature} K`, width - 230, margin + 60)
+      ctx.fillText(`N = ${String(particleCount)} частиц`, width - 230, margin + 42)
+      ctx.fillText(`T = ${String(temperature)} K`, width - 230, margin + 60)
 
       // Entropy value
       const entropy = mixing / maxMixing
-      ctx.fillText(`S/S_max = ${entropy.toFixed(3)}`, width - 230, margin + 82)
+      ctx.fillText(`S/S_max = ${String(entropy.toFixed(3))}`, width - 230, margin + 82)
 
       // State indicator
       const state = entropy > 0.9 ? "Максимальная" : entropy > 0.5 ? "Смешивание" : "Упорядочено"
@@ -186,7 +188,7 @@ export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
       const avgKE = averageKineticEnergy(temperature)
       ctx.fillStyle = isDarkMode ? "#94a3b8" : "#64748b"
       ctx.fillText(
-        `⟨E⟩ = ${(avgKE * 1e21).toFixed(2)} × 10⁻²¹ Дж`,
+        `⟨E⟩ = ${String((avgKE * 1e21).toFixed(2))} × 10⁻²¹ Дж`,
         width - 230,
         margin + 122
       )
