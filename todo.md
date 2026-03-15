@@ -1,8 +1,8 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-15 (eslint fixes + 9 Stories + 24 E2E теста)
-**Статус:** Фаза 1 — завершена, Фаза 2 — завершена, Фаза 3 — завершена
+**Обновлено:** 2026-03-15 (i18n + performance оптимизации)
+**Статус:** Фаза 1 — завершена, Фаза 2 — завершена, Фаза 3 — завершена, Фаза 4 — в процессе
 
 ---
 
@@ -348,11 +348,13 @@ src/
 | Unit тестов              | 223  | 223   | 100+            | ✅ 223      |
 | E2E тестов               | 14   | 24    | 15+             | ✅ 24       |
 | Storybook stories        | 41   | 50    | 30+             | ✅ 50       |
-| Bundle size              | ?    | ?     | < 500KB initial | ⏳ Проверка |
-| Lighthouse Performance   | ?    | ?     | > 90            | ⏳ Проверка |
-| Lighthouse Accessibility | ?    | ?     | > 90            | ⏳ Проверка |
+| Bundle size              | ?    | ⏳    | < 500KB initial | ⏳ Проверка |
+| Lighthouse Performance   | ?    | ⏳    | > 90            | ⏳ Проверка |
+| Lighthouse Accessibility | ?    | ⏳    | > 90            | ⏳ Проверка |
 | Физических формул        | 80   | 95    | 20+             | ✅ 95       |
 | Eslint ошибок            | 56   | 0     | 0               | ✅ 0        |
+| i18n интеграция          | ⚠️    | ✅    | 100%            | ✅ Готово   |
+| Performance оптимизации  | ⚠️    | ✅    | Базовые         | ✅ Готово   |
 
 ---
 
@@ -385,15 +387,15 @@ src/
 23. ✅ Исправлены eslint ошибки (restrict-template-expressions)
 24. ✅ Добавлены Stories для 9 новых визуализаций
 25. ✅ Расширены E2E тесты до 24
+26. ✅ Полная i18n интеграция (4 языка: ru, en, zh, he)
+27. ✅ Performance оптимизации (compress, compiler, image optimization)
 
 ### 📋 Следующие задачи
 
-1. [ ] Полная i18n интеграция (useTranslations во всех компонентах)
-2. [ ] Оптимизация performance (code splitting, мемоизация)
-3. [ ] Улучшение доступности (ARIA, keyboard navigation)
-4. [ ] Замерить Lighthouse Performance и Accessibility
-5. [ ] Замерить Bundle size
-6. [ ] Сократить page.tsx до < 200 строк
+1. [ ] Улучшение доступности (ARIA, keyboard navigation)
+2. [ ] Замерить Lighthouse Performance и Accessibility
+3. [ ] Замерить Bundle size
+4. [ ] Сократить page.tsx до < 200 строк
 
 ---
 
@@ -512,13 +514,14 @@ src/
 - ✅ Security headers настроены
 - ✅ TypeScript strict mode
 - ✅ Eslint без ошибок
+- ✅ i18n на 4 языках (ru, en, zh, he)
+- ✅ Performance оптимизации (compress, compiler, image optimization)
 
 ### Проблемные места
 
-- ⚠️ Глобальный контекст вместо next-intl (требуется полная i18n интеграция)
 - ⚠️ Мало тестов для отдельных визуализаций (только base компоненты покрыты)
 - ⚠️ page.tsx всё ещё 516 строк (цель < 200)
 
 ---
 
-**Следующее обновление:** После полной i18n интеграции и оптимизации performance
+**Следующее обновление:** После улучшения доступности (a11y) и замеров Lighthouse
