@@ -23,6 +23,9 @@ export const sigma = sigma_SB // Алиас для sigma_SB
 export const R_H = 1.097e7 // Постоянная Ридберга, м⁻¹
 export const a_0 = 5.292e-11 // Боровский радиус, м
 export const μ_B = 9.274e-24 // Боровский магнетон, Дж/Тл
+export const R = 8.314 // Универсальная газовая постоянная, Дж/(моль·К)
+export const N_A = 6.022e23 // Число Авогадро, моль⁻¹
+export const wiensConstant = 2.898e-3 // Постоянная Вина, м·К
 
 // Производные константы
 export const Z_0 = Math.sqrt(mu_0 / epsilon_0) // Волновое сопротивление вакуума, Ом

@@ -326,3 +326,104 @@ export const DarkEnergyVisualization = dynamic(
     ssr: false,
   }
 )
+
+// New cosmos visualizations
+export const WormholeVisualization = dynamic(
+  () =>
+    import("@/components/visualizations/cosmos/wormhole").then((mod) => ({
+      default: mod.WormholeVisualization,
+    })),
+  {
+    loading: () => <VisualizationCardSkeleton />,
+    ssr: false,
+  }
+)
+
+export const PulsarVisualization = dynamic(
+  () =>
+    import("@/components/visualizations/cosmos/pulsar").then((mod) => ({
+      default: mod.PulsarVisualization,
+    })),
+  {
+    loading: () => <VisualizationCardSkeleton />,
+    ssr: false,
+  }
+)
+
+export const QuasarVisualization = dynamic(
+  () =>
+    import("@/components/visualizations/cosmos/quasar").then((mod) => ({
+      default: mod.QuasarVisualization,
+    })),
+  {
+    loading: () => <VisualizationCardSkeleton />,
+    ssr: false,
+  }
+)
+
+export const ProtoplanetaryDiskVisualization = dynamic(
+  () =>
+    import("@/components/visualizations/cosmos/protoplanetary-disk").then((mod) => ({
+      default: mod.ProtoplanetaryDiskVisualization,
+    })),
+  {
+    loading: () => <VisualizationCardSkeleton />,
+    ssr: false,
+  }
+)
+
+// Thermodynamics visualizations
+export const ThermalRadiationVisualization = dynamic(
+  () =>
+    import("@/components/visualizations/thermodynamics/thermal-radiation").then((mod) => ({
+      default: mod.ThermalRadiationVisualization,
+    })),
+  {
+    loading: () => <VisualizationCardSkeleton />,
+    ssr: false,
+  }
+)
+
+export const EntropyVisualization = dynamic(
+  () =>
+    import("@/components/visualizations/thermodynamics/entropy").then((mod) => ({
+      default: mod.EntropyVisualization,
+    })),
+  {
+    loading: () => <VisualizationCardSkeleton />,
+    ssr: false,
+  }
+)
+
+export const PhaseTransitionVisualization = dynamic(
+  () =>
+    import("@/components/visualizations/thermodynamics/phase-transition").then((mod) => ({
+      default: mod.PhaseTransitionVisualization,
+    })),
+  {
+    loading: () => <VisualizationCardSkeleton />,
+    ssr: false,
+  }
+)
+
+export const IdealGasVisualization = dynamic(
+  () =>
+    import("@/components/visualizations/thermodynamics/ideal-gas").then((mod) => ({
+      default: mod.IdealGasVisualization,
+    })),
+  {
+    loading: () => <VisualizationCardSkeleton />,
+    ssr: false,
+  }
+)
+
+export const CarnotEngineVisualization = dynamic(
+  () =>
+    import("@/components/visualizations/thermodynamics/carnot-engine").then((mod) => ({
+      default: mod.CarnotEngineVisualization,
+    })),
+  {
+    loading: () => <VisualizationCardSkeleton />,
+    ssr: false,
+  }
+)

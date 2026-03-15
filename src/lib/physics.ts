@@ -1,6 +1,6 @@
 // Физические формулы и расчёты
 
-import { G, c, h_bar, k_B, m_e, e, epsilon_0, R_H, a_0, sigma, h } from "./constants"
+import { G, c, h_bar, k_B, M_SUN, m_e, e, epsilon_0, R_H, a_0, sigma, h, R, N_A, wiensConstant } from "./constants"
 
 /**
  * Расчёт фактора Лоренца
@@ -323,6 +323,121 @@ export function bohrMagneton(): number {
  * λ_max = b/T, где b = 2.898×10⁻³ м·К
  */
 export function wiensDisplacementLaw(temperature: number): number {
-  const wiensConstant = 2.898e-3
   return wiensConstant / temperature
+}
+
+/**
+ * Расчёт спектральной плотности энергии чёрного тела (закон Планка)
+ * B(λ,T) = (2hc²/λ⁵) · 1/(e^(hc/λkT) - 1)
+ */
+export function plancksLaw(wavelength: number, temperature: number): number {
+  const numerator = 2 * h * Math.pow(c, 2) / Math.pow(wavelength, 5)
+  const exponent = (h * c) / (wavelength * k_B * temperature)
+  const denominator = Math.exp(exponent) - 1
+  return numerator / denominator
+}
+
+/**
+ * Расчёт полной мощности излучения чёрного тела (закон Стефана-Больцмана)
+ * P = σAT⁴
+ */
+export function stefanBoltzmannLaw(area: number, temperature: number): number {
+  return sigma * area * Math.pow(temperature, 4)
+}
+
+/**
+ * Расчёт энтропии идеального газа
+ * S = Nk[ln(V/Nλ³) + 5/2], где λ - тепловая длина волны де Бройля
+ */
+export function idealGasEntropy(N: number, V: number, temperature: number): number {
+  const lambdaThermal = h / Math.sqrt(2 * Math.PI * m_e * k_B * temperature)
+  return N * k_B * (Math.log(V / (N * Math.pow(lambdaThermal, 3))) + 2.5)
+}
+
+/**
+ * Расчёт изменения энтропии при теплопередаче
+ * ΔS = Q/T
+ */
+export function entropyChange(heat: number, temperature: number): number {
+  return heat / temperature
+}
+
+/**
+ * Расчёт эффективности цикла Карно
+ * η = 1 - T_c/T_h
+ */
+export function carnotEfficiency(temperatureCold: number, temperatureHot: number): number {
+  return 1 - temperatureCold / temperatureHot
+}
+
+/**
+ * Уравнение состояния идеального газа
+ * PV = nRT
+ */
+export function idealGasLaw(pressure: number, volume: number, moles: number, temperature: number): {
+  calculated: number
+  expected: number
+  matches: boolean
+} {
+  const calculated = pressure * volume
+  const expected = moles * R * temperature
+  return {
+    calculated,
+    expected,
+    matches: Math.abs(calculated - expected) < 1e-6,
+  }
+}
+
+/**
+ * Расчёт средней кинетической энергии молекулы
+ * ⟨E⟩ = (3/2)kT
+ */
+export function averageKineticEnergy(temperature: number): number {
+  return (3 / 2) * k_B * temperature
+}
+
+/**
+ * Расчёт средней квадратичной скорости молекул
+ * v_rms = √(3kT/m)
+ */
+export function rmsVelocity(temperature: number, mass: number): number {
+  return Math.sqrt((3 * k_B * temperature) / mass)
+}
+
+/**
+ * Расчёт работы изотермического расширения
+ * W = nRT·ln(V₂/V₁)
+ */
+export function isothermalWork(moles: number, temperature: number, V1: number, V2: number): number {
+  return moles * R * temperature * Math.log(V2 / V1)
+}
+
+/**
+ * Расчёт работы адиабатического процесса
+ * W = (P₁V₁ - P₂V₂)/(γ-1)
+ */
+export function adiabaticWork(P1: number, V1: number, P2: number, V2: number, gamma: number): number {
+  return (P1 * V1 - P2 * V2) / (gamma - 1)
+}
+
+/**
+ * Расчёт фазового перехода (скрытая теплота)
+ * Q = mL
+ */
+export function latentHeat(mass: number, specificLatentHeat: number): number {
+  return mass * specificLatentHeat
+}
+
+/**
+ * Расчёт давления насыщенного пара (уравнение Клапейрона-Клаузиуса, приближённо)
+ * ln(P₂/P₁) = (L/R)·(1/T₁ - 1/T₂)
+ */
+export function clapeyronClausius(
+  P1: number,
+  T1: number,
+  T2: number,
+  latentHeatOfVaporization: number
+): number {
+  const lnRatio = (latentHeatOfVaporization / R) * (1 / T1 - 1 / T2)
+  return P1 * Math.exp(lnRatio)
 }
