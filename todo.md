@@ -1,7 +1,7 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-15 (middleware fix для i18n)
+**Обновлено:** 2026-03-15 (фикс package.json + sw.js)
 **Статус:** Фаза 1 — завершена, Фаза 2 — завершена, Фаза 3 — завершена, Фаза 4 — завершена
 
 ---
@@ -522,6 +522,8 @@ src/
 - ✅ A11y: ARIA атрибуты на всех компонентах
 - ✅ A11y: Keyboard navigation (Space, R, 1-5, стрелки)
 - ✅ Middleware i18n с automatic locale detection
+- ✅ Service Worker собран (sw.js)
+- ✅ package.json фикс (node вместо bun)
 
 ### Проблемные места
 
