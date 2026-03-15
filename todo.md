@@ -1,8 +1,8 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-15 (i18n + performance оптимизации)
-**Статус:** Фаза 1 — завершена, Фаза 2 — завершена, Фаза 3 — завершена, Фаза 4 — в процессе
+**Обновлено:** 2026-03-15 (a11y улучшения + keyboard navigation)
+**Статус:** Фаза 1 — завершена, Фаза 2 — завершена, Фаза 3 — завершена, Фаза 4 — завершена
 
 ---
 
@@ -355,6 +355,7 @@ src/
 | Eslint ошибок            | 56   | 0     | 0               | ✅ 0        |
 | i18n интеграция          | ⚠️    | ✅    | 100%            | ✅ Готово   |
 | Performance оптимизации  | ⚠️    | ✅    | Базовые         | ✅ Готово   |
+| A11y (доступность)       | ⚠️    | ✅    | ARIA + keyboard | ✅ Готово   |
 
 ---
 
@@ -389,13 +390,13 @@ src/
 25. ✅ Расширены E2E тесты до 24
 26. ✅ Полная i18n интеграция (4 языка: ru, en, zh, he)
 27. ✅ Performance оптимизации (compress, compiler, image optimization)
+28. ✅ A11y улучшения (ARIA атрибуты, keyboard navigation)
 
 ### 📋 Следующие задачи
 
-1. [ ] Улучшение доступности (ARIA, keyboard navigation)
-2. [ ] Замерить Lighthouse Performance и Accessibility
-3. [ ] Замерить Bundle size
-4. [ ] Сократить page.tsx до < 200 строк
+1. [ ] Замерить Lighthouse Performance и Accessibility
+2. [ ] Замерить Bundle size
+3. [ ] Сократить page.tsx до < 200 строк
 
 ---
 
@@ -516,6 +517,8 @@ src/
 - ✅ Eslint без ошибок
 - ✅ i18n на 4 языках (ru, en, zh, he)
 - ✅ Performance оптимизации (compress, compiler, image optimization)
+- ✅ A11y: ARIA атрибуты на всех компонентах
+- ✅ A11y: Keyboard navigation (Space, R, 1-5, стрелки)
 
 ### Проблемные места
 
@@ -524,4 +527,4 @@ src/
 
 ---
 
-**Следующее обновление:** После улучшения доступности (a11y) и замеров Lighthouse
+**Следующее обновление:** После замеров Lighthouse и Bundle size
