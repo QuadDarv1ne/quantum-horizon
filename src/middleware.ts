@@ -8,6 +8,7 @@ const intlMiddleware = createMiddleware({
   locales,
   defaultLocale,
   localePrefix: "never", // Не добавлять префикс локали к URL (используем localStorage)
+  localeDetection: true, // Автоматическое определение локали
 })
 
 // Комбинированный middleware
