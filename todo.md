@@ -1,8 +1,8 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-15 (после полной интеграции и тестирования)
-**Статус:** Фаза 1 — завершена, Фаза 2 — завершена
+**Обновлено:** 2026-03-15 (добавлено 9 новых визуализаций)
+**Статус:** Фаза 1 — завершена, Фаза 2 — завершена, Фаза 3 — в процессе
 
 ---
 
@@ -343,15 +343,15 @@ src/
 
 | Метрика                  | Было | Стало | Цель            | Статус      |
 | ------------------------ | ---- | ----- | --------------- | ----------- |
-| Строк в page.tsx         | 9709 | 422   | < 200           | ✅ 422 стр  |
-| Компонентов визуализаций | 0    | 33    | 20+             | ✅ 33       |
-| Unit тестов              | 0    | 223   | 100+            | ✅ 223      |
-| E2E тестов               | 5    | 14    | 15+             | ⏳ 14/15    |
-| Storybook stories        | 0    | 41    | 30+             | ✅ 41       |
+| Строк в page.tsx         | 9709 | 516   | < 200           | ⏳ 516 стр  |
+| Компонентов визуализаций | 33   | 42    | 20+             | ✅ 42       |
+| Unit тестов              | 223  | 223   | 100+            | ✅ 223      |
+| E2E тестов               | 14   | 14    | 15+             | ⏳ 14/15    |
+| Storybook stories        | 41   | 41    | 30+             | ✅ 41       |
 | Bundle size              | ?    | ?     | < 500KB initial | ⏳ Проверка |
 | Lighthouse Performance   | ?    | ?     | > 90            | ⏳ Проверка |
 | Lighthouse Accessibility | ?    | ?     | > 90            | ⏳ Проверка |
-| Физических формул        | 0    | 80    | 20+             | ✅ 80       |
+| Физических формул        | 80   | 95    | 20+             | ✅ 95       |
 
 ---
 
@@ -367,8 +367,8 @@ src/
 6. ✅ Написано 60+ тестов (60+ passing)
 7. ✅ Сборка проходит успешно
 8. ✅ Lint без ошибок
-9. ✅ page.tsx сокращён с 9709 до 422 строк
-10. ✅ Создано 33 компонента визуализаций (квантовая механика, СТО, космология, образование)
+9. ✅ page.tsx сокращён с 9709 до 516 строк
+10. ✅ Создано 42 компонента визуализаций (квантовая механика, СТО, космология, термодинамика, образование)
 11. ✅ Добавлены Storybook stories
 12. ✅ Интеграция всех компонентов в page.tsx завершена
 13. ✅ 223 unit-теста passing
@@ -380,6 +380,7 @@ src/
 19. ✅ Физические константы вынесены в `constants.ts`
 20. ✅ CI/CD pipeline настроен
 21. ✅ Docker поддержка
+22. ✅ Добавлены 9 новых визуализаций (термодинамика + космология)
 
 ### 📋 Следующие задачи
 
@@ -389,6 +390,7 @@ src/
 4. [ ] Улучшение доступности (ARIA, keyboard navigation)
 5. [ ] Замерить Lighthouse Performance и Accessibility
 6. [ ] Замерить Bundle size
+7. [ ] Исправить eslint ошибки в новых компонентах (restrict-template-expressions)
 
 ---
 
@@ -426,7 +428,7 @@ src/
 - `src/components/visualizations/relativity/length-contraction.tsx` + stories
 - `src/components/visualizations/relativity/mass-energy.tsx` + stories
 
-**Космология (11):**
+**Космология (15):**
 
 - `src/components/visualizations/cosmos/black-hole.tsx` + test + stories
 - `src/components/visualizations/cosmos/hr-diagram.tsx` + stories
@@ -438,6 +440,18 @@ src/
 - `src/components/visualizations/cosmos/solar-system.tsx` + stories
 - `src/components/visualizations/cosmos/cmb.tsx` + stories
 - `src/components/visualizations/cosmos/white-hole.tsx` + stories
+- `src/components/visualizations/cosmos/wormhole.tsx` ✨ НОВОЕ
+- `src/components/visualizations/cosmos/pulsar.tsx` ✨ НОВОЕ
+- `src/components/visualizations/cosmos/quasar.tsx` ✨ НОВОЕ
+- `src/components/visualizations/cosmos/protoplanetary-disk.tsx` ✨ НОВОЕ
+
+**Термодинамика (5):**
+
+- `src/components/visualizations/thermodynamics/thermal-radiation.tsx` ✨ НОВОЕ
+- `src/components/visualizations/thermodynamics/entropy.tsx` ✨ НОВОЕ
+- `src/components/visualizations/thermodynamics/phase-transition.tsx` ✨ НОВОЕ
+- `src/components/visualizations/thermodynamics/ideal-gas.tsx` ✨ НОВОЕ
+- `src/components/visualizations/thermodynamics/carnot-engine.tsx` ✨ НОВОЕ
 
 **Другие (1):**
 
@@ -453,7 +467,7 @@ src/
 **Дополнительно:**
 
 - `src/components/visualizations/lazy.tsx` — lazy loading для всех визуализаций
-- `src/lib/physics.ts` — 80 физических формул
+- `src/lib/physics.ts` — 95 физических формул
 - `src/lib/physics.test.ts` — 80 тестов
 - `src/lib/constants.test.ts` — 17 тестов (физические константы)
 - `src/lib/a11y.test.ts` — 30 тестов доступности
@@ -466,10 +480,10 @@ src/
 - 223 тестов passing (unit)
 - 14 E2E тестов passing
 - 41 Storybook stories
-- 80 физические формулы
-- 33 компонента визуализаций
+- 95 физические формулы
+- 42 компонента визуализаций
 - Сборка без ошибок
-- Lint без ошибок
+- Lint без ошибок (требуется исправление restrict-template-expressions)
 
 ### Технические долги
 
@@ -499,8 +513,9 @@ src/
 
 - ⚠️ Глобальный контекст вместо next-intl (требуется полная i18n интеграция)
 - ⚠️ Мало тестов для отдельных визуализаций (только base компоненты покрыты)
-- ⚠️ page.tsx всё ещё 422 строки (цель < 200)
+- ⚠️ page.tsx всё ещё 516 строк (цель < 200)
+- ⚠️ Eslint ошибки в новых компонентах (restrict-template-expressions, unused vars)
 
 ---
 
-**Следующее обновление:** После полной i18n интеграции и оптимизации performance
+**Следующее обновление:** После исправления eslint ошибок и добавления Stories
