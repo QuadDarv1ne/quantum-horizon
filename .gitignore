@@ -226,6 +226,9 @@ logs/
 log.txt
 server.log
 dev.log
+build-*.txt
+test-output.txt
+test-result.txt
 
 # ==================== CREDENTIALS & SECRETS ====================
 .aws/
