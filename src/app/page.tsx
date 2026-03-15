@@ -28,6 +28,15 @@ import {
   SolarSystemVisualization,
   CMBVisualization,
   DarkEnergyVisualization,
+  WormholeVisualization,
+  PulsarVisualization,
+  QuasarVisualization,
+  ProtoplanetaryDiskVisualization,
+  ThermalRadiationVisualization,
+  EntropyVisualization,
+  PhaseTransitionVisualization,
+  IdealGasVisualization,
+  CarnotEngineVisualization,
   PhysicsQuiz,
   ScientistsBiographies,
   FormulaCalculator,
@@ -69,7 +78,7 @@ export default function Home() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
 
-      if (e.key >= "1" && e.key <= "4") {
+      if (e.key >= "1" && e.key <= "5") {
         const index = parseInt(e.key) - 1
         if (SECTIONS[index]) setActiveSection(SECTIONS[index])
       } else if (e.key === "m" || e.key === "M") {
@@ -289,6 +298,42 @@ export default function Home() {
             >
               <DarkEnergyVisualization isDark={isDark} />
             </VisualizationCard>
+
+            <VisualizationCard
+              title="Wormhole"
+              description="Кротовая нора — мост Эйнштейна-Розена"
+              color="purple"
+              isDark={isDark}
+            >
+              <WormholeVisualization isDark={isDark} />
+            </VisualizationCard>
+
+            <VisualizationCard
+              title="Pulsar"
+              description="Пульсар — вращающаяся нейтронная звезда"
+              color="cyan"
+              isDark={isDark}
+            >
+              <PulsarVisualization isDark={isDark} />
+            </VisualizationCard>
+
+            <VisualizationCard
+              title="Quasar"
+              description="Квазар — активное галактическое ядро"
+              color="orange"
+              isDark={isDark}
+            >
+              <QuasarVisualization isDark={isDark} />
+            </VisualizationCard>
+
+            <VisualizationCard
+              title="Protoplanetary Disk"
+              description="Протопланетный диск — формирование планет"
+              color="green"
+              isDark={isDark}
+            >
+              <ProtoplanetaryDiskVisualization isDark={isDark} />
+            </VisualizationCard>
           </>
         )}
 
@@ -403,16 +448,65 @@ export default function Home() {
             </VisualizationCard>
           </>
         )}
+
+        {activeSection === "thermodynamics" && (
+          <>
+            <VisualizationCard
+              title="Thermal Radiation"
+              description="Тепловое излучение — закон Планка и Вина"
+              color="orange"
+              isDark={isDark}
+            >
+              <ThermalRadiationVisualization isDark={isDark} />
+            </VisualizationCard>
+
+            <VisualizationCard
+              title="Entropy"
+              description="Энтропия — второй закон термодинамики"
+              color="blue"
+              isDark={isDark}
+            >
+              <EntropyVisualization isDark={isDark} />
+            </VisualizationCard>
+
+            <VisualizationCard
+              title="Phase Transition"
+              description="Фазовые переходы — твёрдое, жидкое, газ"
+              color="cyan"
+              isDark={isDark}
+            >
+              <PhaseTransitionVisualization isDark={isDark} />
+            </VisualizationCard>
+
+            <VisualizationCard
+              title="Ideal Gas"
+              description="Идеальный газ — уравнение состояния PV=nRT"
+              color="green"
+              isDark={isDark}
+            >
+              <IdealGasVisualization isDark={isDark} />
+            </VisualizationCard>
+
+            <VisualizationCard
+              title="Carnot Engine"
+              description="Двигатель Карно — максимальная эффективность"
+              color="red"
+              isDark={isDark}
+            >
+              <CarnotEngineVisualization isDark={isDark} />
+            </VisualizationCard>
+          </>
+        )}
       </main>
 
       <footer className={`mt-6 border-t py-4 ${isDark ? "border-gray-800" : "border-gray-200"}`}>
         <div className="mx-auto max-w-6xl px-4 text-center text-xs">
           <p className={isDark ? "text-gray-500" : "text-gray-600"}>{t("footer")}</p>
           <p className={`mt-1 ${isDark ? "text-gray-600" : "text-gray-500"}`}>
-            ⌨️ {locale === "ru" && "Клавиши: 1-4 разделы, M меню, Esc закрыть"}
-            {locale === "en" && "Keys: 1-4 sections, M menu, Esc close"}
-            {locale === "zh" && "快捷键：1-4 章节，M 菜单，Esc 关闭"}
-            {locale === "he" && "מקשים: 1-4 סעיפים, M תפריט, Esc סגור"}
+            ⌨️ {locale === "ru" && "Клавиши: 1-5 разделы, M меню, Esc закрыть"}
+            {locale === "en" && "Keys: 1-5 sections, M menu, Esc close"}
+            {locale === "zh" && "快捷键：1-5 章节，M 菜单，Esc 关闭"}
+            {locale === "he" && "מקשים: 1-5 סעיפים, M תפריט, Esc סגור"}
           </p>
         </div>
       </footer>
