@@ -1,8 +1,8 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-12 (после создания всех визуализаций)
-**Статус:** Фаза 1 — завершена, Фаза 2 — в процессе
+**Обновлено:** 2026-03-15 (после полной интеграции и тестирования)
+**Статус:** Фаза 1 — завершена, Фаза 2 — завершена
 
 ---
 
@@ -341,17 +341,17 @@ src/
 
 ## 📈 Метрики для отслеживания
 
-| Метрика                  | Было | Стало | Цель            |
-| ------------------------ | ---- | ----- | --------------- |
-| Строк в page.tsx         | 9709 | 422   | < 200           |
-| Компонентов визуализаций | 0    | 27    | 20+             |
-| Unit тестов              | 0    | 207   | 100+            |
-| E2E тестов               | 5    | 13    | 15+             |
-| Storybook stories        | 0    | 41    | 30+             |
-| Bundle size              | ?    | ?     | < 500KB initial |
-| Lighthouse Performance   | ?    | ?     | > 90            |
-| Lighthouse Accessibility | ?    | ?     | > 90            |
-| Физических формул        | 0    | 42    | 20+             |
+| Метрика                  | Было | Стало | Цель            | Статус      |
+| ------------------------ | ---- | ----- | --------------- | ----------- |
+| Строк в page.tsx         | 9709 | 422   | < 200           | ✅ 422 стр  |
+| Компонентов визуализаций | 0    | 33    | 20+             | ✅ 33       |
+| Unit тестов              | 0    | 223   | 100+            | ✅ 223      |
+| E2E тестов               | 5    | 14    | 15+             | ⏳ 14/15    |
+| Storybook stories        | 0    | 41    | 30+             | ✅ 41       |
+| Bundle size              | ?    | ?     | < 500KB initial | ⏳ Проверка |
+| Lighthouse Performance   | ?    | ?     | > 90            | ⏳ Проверка |
+| Lighthouse Accessibility | ?    | ?     | > 90            | ⏳ Проверка |
+| Физических формул        | 0    | 80    | 20+             | ✅ 80       |
 
 ---
 
@@ -367,26 +367,34 @@ src/
 6. ✅ Написано 60+ тестов (60+ passing)
 7. ✅ Сборка проходит успешно
 8. ✅ Lint без ошибок
-9. ✅ page.tsx сокращён с 9709 до <100 строк
-10. ✅ Создано 27 компонентов визуализаций (квантовая механика, СТО, космология)
+9. ✅ page.tsx сокращён с 9709 до 422 строк
+10. ✅ Создано 33 компонента визуализаций (квантовая механика, СТО, космология, образование)
 11. ✅ Добавлены Storybook stories
 12. ✅ Интеграция всех компонентов в page.tsx завершена
-13. ✅ 182 теста passing (Unit + E2E)
-14. ✅ Lazy loading для всех визуализаций через lazy.tsx
+13. ✅ 223 unit-теста passing
+14. ✅ 14 E2E тестов passing
+15. ✅ Lazy loading для всех визуализаций через lazy.tsx
+16. ✅ 41 Storybook stories
+17. ✅ Zustand store с persist middleware
+18. ✅ Хук `useCanvasAnimation` для общей логики
+19. ✅ Физические константы вынесены в `constants.ts`
+20. ✅ CI/CD pipeline настроен
+21. ✅ Docker поддержка
 
 ### 📋 Следующие задачи
 
-1. [ ] Расширить E2E тесты до 15+ (сейчас 13)
-2. [ ] Добавить Stories для всех визуализаций в Storybook
-3. [ ] Полная i18n интеграция (useTranslations во всех компонентах)
-4. [ ] Оптимизация performance (code splitting, мемоизация)
-5. [ ] Улучшение доступности (ARIA, keyboard navigation)
+1. [ ] Расширить E2E тесты до 15+ (сейчас 14) — добавить тест для speed control
+2. [ ] Полная i18n интеграция (useTranslations во всех компонентах)
+3. [ ] Оптимизация performance (code splitting, мемоизация)
+4. [ ] Улучшение доступности (ARIA, keyboard navigation)
+5. [ ] Замерить Lighthouse Performance и Accessibility
+6. [ ] Замерить Bundle size
 
 ---
 
 ## 📝 Заметки
 
-### ✅ Выполненная работа (2026-03-11 — 2026-03-13)
+### ✅ Выполненная работа (2026-03-11 — 2026-03-15)
 
 **Созданные файлы:**
 
@@ -398,7 +406,7 @@ src/
 - `src/components/visualizations/base/fullscreen-wrapper.tsx` + stories
 - `src/components/visualizations/base/visualization-card.tsx` + stories
 
-**Квантовая механика:**
+**Квантовая механика (11):**
 
 - `src/components/visualizations/quantum/wave-function.tsx` + test + stories
 - `src/components/visualizations/quantum/uncertainty.tsx` + stories
@@ -412,13 +420,13 @@ src/
 - `src/components/visualizations/quantum/superconductivity.tsx` + stories
 - `src/components/visualizations/quantum/brownian-motion.tsx` + stories
 
-**Теория относительности:**
+**Теория относительности (3):**
 
 - `src/components/visualizations/relativity/time-dilation.tsx` + stories
 - `src/components/visualizations/relativity/length-contraction.tsx` + stories
 - `src/components/visualizations/relativity/mass-energy.tsx` + stories
 
-**Космология:**
+**Космология (11):**
 
 - `src/components/visualizations/cosmos/black-hole.tsx` + test + stories
 - `src/components/visualizations/cosmos/hr-diagram.tsx` + stories
@@ -431,11 +439,11 @@ src/
 - `src/components/visualizations/cosmos/cmb.tsx` + stories
 - `src/components/visualizations/cosmos/white-hole.tsx` + stories
 
-**Другие:**
+**Другие (1):**
 
 - `src/components/visualizations/advanced/gravitational-waves.tsx` + stories
 
-**Образовательные:**
+**Образовательные (4):**
 
 - `src/components/visualizations/education/physics-quiz.tsx` + stories
 - `src/components/visualizations/education/physics-timeline.tsx` + stories
@@ -445,7 +453,7 @@ src/
 **Дополнительно:**
 
 - `src/components/visualizations/lazy.tsx` — lazy loading для всех визуализаций
-- `src/lib/physics.ts` — 42 физические формулы
+- `src/lib/physics.ts` — 80 физических формул
 - `src/lib/physics.test.ts` — 80 тестов
 - `src/lib/constants.test.ts` — 17 тестов (физические константы)
 - `src/lib/a11y.test.ts` — 30 тестов доступности
@@ -455,18 +463,21 @@ src/
 
 **Статус:**
 
-- 220 тестов passing (207 unit + 13 E2E)
+- 223 тестов passing (unit)
+- 14 E2E тестов passing
 - 41 Storybook stories
-- 42 физические формулы
-- 27 компонентов визуализаций
+- 80 физические формулы
+- 33 компонента визуализаций
 - Сборка без ошибок
 - Lint без ошибок
 
 ### Технические долги
 
-- `eslint` игнорирует `src/app/page.tsx` — нужно исправить после рефакторинга
-- `ignoreBuildErrors: true` в next.config.ts — убрать после исправления типов
-- `reactStrictMode: false` — включить после рефакторинга
+- ✅ `reactStrictMode: true` — включён
+- ⚠️ `eslint` игнорирует `src/components/ui/**` — необходимо для shadcn компонентов
+- ⚠️ `eslint` игнорирует `.storybook/**` — допустимо для stories
+- ⚠️ `eslint` игнорирует `src/lib/a11y.tsx` — требует проверки
+- ⚠️ `eslint` игнорирует `public/sw.ts` — service worker
 
 ### Хорошие практики (уже есть)
 
@@ -475,16 +486,21 @@ src/
 - ✅ Физические константы вынесены в `constants.ts`
 - ✅ CI/CD pipeline настроен
 - ✅ Docker поддержка
-- ✅ 60+ тестов passing
+- ✅ 223 unit-теста passing
+- ✅ 14 E2E тестов passing
 - ✅ Lazy loading для визуализаций
-- ✅ Storybook stories
+- ✅ 41 Storybook stories
+- ✅ 80 физических формул
+- ✅ 33 компонента визуализаций
+- ✅ Security headers настроены
+- ✅ TypeScript strict mode
 
 ### Проблемные места
 
-- Требуется интеграция всех компонентов в page.tsx
-- Глобальный контекст вместо next-intl
-- Нужно больше тестов для визуализаций
+- ⚠️ Глобальный контекст вместо next-intl (требуется полная i18n интеграция)
+- ⚠️ Мало тестов для отдельных визуализаций (только base компоненты покрыты)
+- ⚠️ page.tsx всё ещё 422 строки (цель < 200)
 
 ---
 
-**Следующее обновление:** После завершения интеграции и добавления тестов
+**Следующее обновление:** После полной i18n интеграции и оптимизации performance

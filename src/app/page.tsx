@@ -32,7 +32,7 @@ import {
   ScientistsBiographies,
   FormulaCalculator,
   PhysicsTimeline,
-} from "@/components/visualizations"
+} from "@/components/visualizations/lazy"
 import { SECTIONS, type Section, type Language } from "@/lib/constants-ui"
 
 type Theme = "dark" | "light"

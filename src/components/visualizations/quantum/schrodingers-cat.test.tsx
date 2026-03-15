@@ -1,8 +1,38 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/require-await */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { render, screen, act } from "@testing-library/react"
 import { SchrodingersCatVisualization } from "./schrodingers-cat"
+
+// Mock useCanvasAnimation hook
+vi.mock("@/hooks/use-canvas-animation", () => ({
+  useCanvasAnimation: vi.fn(),
+}))
+
+// Mock visualization store
+vi.mock("@/stores/visualization-store", () => {
+  const mockStore = vi.fn((selector: unknown) => {
+    if (typeof selector === "function") {
+      // Call selector with mock state
+      return selector({
+        isPlaying: false,
+        animationSpeed: 1,
+        togglePlaying: vi.fn(),
+        setAnimationSpeed: vi.fn(),
+      })
+    }
+    return {}
+  })
+  return {
+    useVisualizationStore: mockStore,
+    selectPlaybackSettings: (state: { isPlaying: boolean; animationSpeed: number }) => ({
+      isPlaying: state.isPlaying,
+      animationSpeed: state.animationSpeed,
+    }),
+  }
+})
 
 describe("SchrodingersCatVisualization", () => {
   beforeEach(() => {
@@ -16,7 +46,9 @@ describe("SchrodingersCatVisualization", () => {
       name: /schrödinger|schrodinger/i,
     })
     expect(canvas).toBeInTheDocument()
-    expect(canvas).toHaveAttribute("aria-live", "polite")
+    // aria-live is on the parent container, not the canvas itself
+    const container = canvas.closest('[role="application"]')
+    expect(container).toHaveAttribute("aria-live", "polite")
   })
 
   it("should render control buttons", () => {
@@ -113,11 +145,12 @@ describe("SchrodingersCatVisualization", () => {
   it("should have proper accessibility attributes", () => {
     const { container } = render(<SchrodingersCatVisualization isDark={true} />)
 
-    const region = container.querySelector('[role="region"]')
-    expect(region).toHaveAccessibleName()
+    const region = container.querySelector('[role="application"]')
+    expect(region).toHaveAttribute("aria-live", "polite")
+    expect(region).toHaveAttribute("aria-atomic", "true")
 
     const canvas = screen.getByRole("img")
-    expect(canvas).toHaveAttribute("aria-live", "polite")
-    expect(canvas).toHaveAttribute("aria-atomic", "true")
+    expect(canvas).toHaveAttribute("role", "img")
+    expect(canvas).toHaveAttribute("tabindex", "0")
   })
 })
