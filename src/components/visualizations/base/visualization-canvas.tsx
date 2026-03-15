@@ -65,6 +65,7 @@ export function VisualizationCanvas({
       role="application"
       aria-live="polite"
       aria-atomic="true"
+      aria-label={ariaLabel}
     >
       <canvas
         ref={canvasRef}
@@ -77,6 +78,8 @@ export function VisualizationCanvas({
         tabIndex={tabIndex}
         onClick={onClick}
         onKeyDown={onKeyDown}
+        aria-roledescription="interactive visualization canvas"
+        aria-keyshortcuts="Space Enter ArrowUp ArrowDown ArrowLeft ArrowRight"
       />
     </div>
   )
