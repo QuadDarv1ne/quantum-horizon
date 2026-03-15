@@ -1,6 +1,6 @@
 // Физические формулы и расчёты
 
-import { G, c, h_bar, k_B, M_SUN, m_e, e, epsilon_0, R_H, a_0, sigma, h, R, N_A, wiensConstant } from "./constants"
+import { G, c, h_bar, k_B, m_e, e, epsilon_0, R_H, a_0, sigma, h, R, N_A, wiensConstant } from "./constants"
 
 /**
  * Расчёт фактора Лоренца

@@ -191,7 +191,7 @@ export function QuasarVisualization({ isDark }: QuasarVisualizationProps) {
           const saturation = 80
           const lightness = 40 + (layer / diskLayers) * 30
 
-          ctx.strokeStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, ${0.3 + layer / diskLayers * 0.5})`
+          ctx.strokeStyle = `hsla(${String(hue)}, ${String(saturation)}%, ${String(lightness)}%, ${String(0.3 + layer / diskLayers * 0.5)})`
           ctx.lineWidth = 2
           ctx.beginPath()
 
@@ -224,7 +224,7 @@ export function QuasarVisualization({ isDark }: QuasarVisualizationProps) {
           // Temperature-based color
           const temperature = 5000 + (1 - (p.radius - diskInnerRadius) / (diskOuterRadius - diskInnerRadius)) * 25000
           const hue = Math.max(0, 60 - (temperature - 5000) / 500)
-          ctx.fillStyle = `hsla(${hue}, 90%, ${50 + p.brightness * 20}%, ${p.brightness})`
+          ctx.fillStyle = `hsla(${String(hue)}, 90%, ${String(50 + p.brightness * 20)}%, ${String(p.brightness)})`
           ctx.beginPath()
           ctx.arc(x, y, p.size, 0, Math.PI * 2)
           ctx.fill()

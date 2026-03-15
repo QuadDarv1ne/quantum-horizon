@@ -5,7 +5,7 @@ import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Slider } from "@/components/ui/slider"
 import { Card, CardContent } from "@/components/ui/card"
-import { carnotEfficiency, isothermalWork, adiabaticWork } from "@/lib/physics"
+import { carnotEfficiency } from "@/lib/physics"
 import { QueryParam } from "@/hooks/use-url-sync"
 import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
 
@@ -293,7 +293,7 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
       ctx.textAlign = "center"
       ctx.fillText(`T_h`, engineX + engineSize / 2, engineY - 5)
       ctx.font = "10px monospace"
-      ctx.fillText(`${tempHot}K`, engineX + engineSize / 2, engineY + 12)
+      ctx.fillText(`${String(tempHot)}K`, engineX + engineSize / 2, engineY + 12)
 
       // Cold reservoir
       ctx.fillStyle = "#3b82f6"
@@ -302,7 +302,7 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
       ctx.fill()
       ctx.fillStyle = isDarkMode ? "#fff" : "#000"
       ctx.fillText(`T_c`, engineX + engineSize / 2, engineY + engineSize - 5)
-      ctx.fillText(`${tempCold}K`, engineX + engineSize / 2, engineY + engineSize + 12)
+      ctx.fillText(`${String(tempCold)}K`, engineX + engineSize / 2, engineY + engineSize + 12)
 
       // Engine (circle in middle)
       ctx.fillStyle = "#f59e0b"
@@ -363,7 +363,7 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
 
       ctx.font = "11px monospace"
       ctx.fillText(`η = 1 - T_c/T_h`, engineX - 10, engineY + engineSize + 70)
-      ctx.fillText(`η = ${efficiency.toFixed(3)} (${(efficiency * 100).toFixed(1)}%)`, engineX - 10, engineY + engineSize + 90)
+      ctx.fillText(`η = ${String(efficiency.toFixed(3))} (${String((efficiency * 100).toFixed(1))}%)`, engineX - 10, engineY + engineSize + 90)
 
       // Efficiency bar
       const barWidth = 160

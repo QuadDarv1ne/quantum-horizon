@@ -5,7 +5,7 @@ import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Slider } from "@/components/ui/slider"
 import { Card, CardContent } from "@/components/ui/card"
-import { latentHeat, clapeyronClausius } from "@/lib/physics"
+import { latentHeat as _latentHeat, clapeyronClausius as _clapeyronClausius } from "@/lib/physics"
 import { QueryParam } from "@/hooks/use-url-sync"
 import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
 
@@ -60,9 +60,9 @@ export function PhaseTransitionVisualization({
   
   const getPhase = useCallback((temp: number, press: number): Phase => {
     // Simplified phase diagram for water
-    const triplePointTemp = 273.16
-    const triplePointPress = 0.006
-    const criticalTemp = 647
+    const _triplePointTemp = 273.16
+    const _triplePointPress = 0.006
+    const _criticalTemp = 647
 
     // Adjust melting/boiling points based on pressure (Clapeyron-Clausius approximation)
     const meltingPoint = meltingPointAt1Atm + (press - 1) * 0.01
@@ -157,7 +157,7 @@ export function PhaseTransitionVisualization({
           // Draw lattice connections
           ctx.strokeStyle = isDarkMode ? "#4a5568" : "#cbd5e1"
           ctx.lineWidth = 0.5
-          molecules.forEach((other, i) => {
+          molecules.forEach((other, _i) => {
             const dx = mol.x - (margin + other.x * containerWidth)
             const dy = mol.y - (margin + other.y * containerHeight)
             const dist = Math.sqrt(dx * dx + dy * dy)
@@ -203,14 +203,14 @@ export function PhaseTransitionVisualization({
         // Draw molecule
         const molTemp = currentPhase === "solid" ? 200 : currentPhase === "liquid" ? 300 : 500
         const hue = 200 - ((molTemp - 200) / 300) * 150
-        ctx.fillStyle = `hsl(${hue}, 70%, 55%)`
+        ctx.fillStyle = `hsl(${String(hue)}, 70%, 55%)`
         ctx.beginPath()
         ctx.arc(mol.x, mol.y, currentPhase === "gas" ? 3 : 5, 0, Math.PI * 2)
         ctx.fill()
 
         // Velocity vectors for gas
         if (currentPhase === "gas") {
-          ctx.strokeStyle = `hsla(${hue}, 70%, 55%, 0.4)`
+          ctx.strokeStyle = `hsla(${String(hue)}, 70%, 55%, 0.4)`
           ctx.lineWidth = 1
           ctx.beginPath()
           ctx.moveTo(mol.x, mol.y)
@@ -304,12 +304,12 @@ export function PhaseTransitionVisualization({
       ctx.font = "11px monospace"
       ctx.fillStyle = isDarkMode ? "#94a3b8" : "#64748b"
       ctx.fillText(
-        `След. переход: ${transitionTemp} K (${currentPhase === "solid" ? "плавление" : "испарение"})`,
+        `След. переход: ${String(transitionTemp)} K (${currentPhase === "solid" ? "плавление" : "испарение"})`,
         margin + 150,
         height - 28
       )
     },
-    [temperature, pressure, moleculeCount, currentPhase]
+    [temperature, pressure, currentPhase]
   )
 
   return (

@@ -232,8 +232,8 @@ export function PulsarVisualization({ isDark }: PulsarVisualizationProps) {
 
       if (pulseIntensity > 0.1) {
         const pulseGradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, 150)
-        pulseGradient.addColorStop(0, `rgba(255, 255, 255, ${pulseIntensity * 0.8})`)
-        pulseGradient.addColorStop(0.5, `rgba(200, 200, 255, ${pulseIntensity * 0.3})`)
+        pulseGradient.addColorStop(0, `rgba(255, 255, 255, ${String(pulseIntensity * 0.8)})`)
+        pulseGradient.addColorStop(0.5, `rgba(200, 200, 255, ${String(pulseIntensity * 0.3)})`)
         pulseGradient.addColorStop(1, "rgba(100, 100, 255, 0)")
         ctx.fillStyle = pulseGradient
         ctx.fillRect(0, 0, width, height)
@@ -273,7 +273,7 @@ export function PulsarVisualization({ isDark }: PulsarVisualizationProps) {
 
           const alpha = p.life
           const hue = 180 + p.life * 60
-          ctx.fillStyle = `hsla(${hue}, 80%, 60%, ${alpha})`
+          ctx.fillStyle = `hsla(${String(hue)}, 80%, 60%, ${String(alpha)})`
           ctx.beginPath()
           ctx.arc(p.x, p.y, 2 * p.life, 0, Math.PI * 2)
           ctx.fill()
@@ -319,7 +319,7 @@ export function PulsarVisualization({ isDark }: PulsarVisualizationProps) {
       ctx.fillStyle = isDarkMode ? "#1e293b" : "#e2e8f0"
       ctx.fillRect(width - 230, beamY, 200, 15)
       const beamWidth = pulseIntensity * 200
-      ctx.fillStyle = `rgba(34, 197, 94, ${0.5 + pulseIntensity * 0.5})`
+      ctx.fillStyle = `rgba(34, 197, 94, ${String(0.5 + pulseIntensity * 0.5)})`
       ctx.fillRect(width - 230, beamY, beamWidth, 15)
       ctx.strokeStyle = isDarkMode ? "#475569" : "#cbd5e1"
       ctx.strokeRect(width - 230, beamY, 200, 15)

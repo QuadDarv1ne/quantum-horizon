@@ -205,4 +205,131 @@ test.describe("Quantum Horizon", () => {
     const firstCanvas = canvasElements.first()
     await expect(firstCanvas).toHaveAttribute("role", "img")
   })
+
+  test("thermodynamics section is accessible", async ({ page }) => {
+    await page.goto("/")
+
+    // Click on Thermodynamics tab
+    const thermoTab = page.getByRole("button", { name: /thermodynamics/i })
+    if (await thermoTab.isVisible()) {
+      await thermoTab.click()
+      await page.waitForTimeout(300)
+
+      // Check thermodynamics visualizations appear
+      const thermalRadiation = page.getByText(/Thermal Radiation/i)
+      await expect(thermalRadiation).toBeVisible()
+    }
+  })
+
+  test("wormhole visualization is accessible", async ({ page }) => {
+    await page.goto("/")
+
+    // Click on Cosmos tab
+    const cosmosTab = page.getByRole("button", { name: /cosmos/i })
+    await cosmosTab.click()
+    await page.waitForTimeout(300)
+
+    // Check wormhole visualization appears
+    const wormhole = page.getByText(/Wormhole/i)
+    await expect(wormhole).toBeVisible()
+  })
+
+  test("pulsar visualization is accessible", async ({ page }) => {
+    await page.goto("/")
+
+    // Click on Cosmos tab
+    const cosmosTab = page.getByRole("button", { name: /cosmos/i })
+    await cosmosTab.click()
+    await page.waitForTimeout(300)
+
+    // Check pulsar visualization appears
+    const pulsar = page.getByText(/Pulsar/i)
+    await expect(pulsar).toBeVisible()
+  })
+
+  test("quasar visualization is accessible", async ({ page }) => {
+    await page.goto("/")
+
+    // Click on Cosmos tab
+    const cosmosTab = page.getByRole("button", { name: /cosmos/i })
+    await cosmosTab.click()
+    await page.waitForTimeout(300)
+
+    // Check quasar visualization appears
+    const quasar = page.getByText(/Quasar/i)
+    await expect(quasar).toBeVisible()
+  })
+
+  test("protoplanetary disk visualization is accessible", async ({ page }) => {
+    await page.goto("/")
+
+    // Click on Cosmos tab
+    const cosmosTab = page.getByRole("button", { name: /cosmos/i })
+    await cosmosTab.click()
+    await page.waitForTimeout(300)
+
+    // Check protoplanetary disk visualization appears
+    const disk = page.getByText(/Protoplanetary Disk/i)
+    await expect(disk).toBeVisible()
+  })
+
+  test("entropy visualization is accessible", async ({ page }) => {
+    await page.goto("/")
+
+    // Click on Thermodynamics tab
+    const thermoTab = page.getByRole("button", { name: /thermodynamics/i })
+    if (await thermoTab.isVisible()) {
+      await thermoTab.click()
+      await page.waitForTimeout(300)
+
+      // Check entropy visualization appears
+      const entropy = page.getByText(/Entropy/i)
+      await expect(entropy).toBeVisible()
+    }
+  })
+
+  test("phase transition visualization is accessible", async ({ page }) => {
+    await page.goto("/")
+
+    // Click on Thermodynamics tab
+    const thermoTab = page.getByRole("button", { name: /thermodynamics/i })
+    if (await thermoTab.isVisible()) {
+      await thermoTab.click()
+      await page.waitForTimeout(300)
+
+      // Check phase transition visualization appears
+      const phaseTransition = page.getByText(/Phase Transition/i)
+      await expect(phaseTransition).toBeVisible()
+    }
+  })
+
+  test("ideal gas visualization is accessible", async ({ page }) => {
+    await page.goto("/")
+
+    // Click on Thermodynamics tab
+    const thermoTab = page.getByRole("button", { name: /thermodynamics/i })
+    if (await thermoTab.isVisible()) {
+      await thermoTab.click()
+      await page.waitForTimeout(300)
+
+      // Check ideal gas visualization appears
+      const idealGas = page.getByText(/Ideal Gas/i)
+      await expect(idealGas).toBeVisible()
+    }
+  })
+
+  test("carnot engine visualization is accessible", async ({ page }) => {
+    await page.goto("/")
+
+    // Click on Thermodynamics tab
+    const thermoTab = page.getByRole("button", { name: /thermodynamics/i })
+    if (await thermoTab.isVisible()) {
+      await thermoTab.click()
+      await page.waitForTimeout(300)
+
+      // Check carnot engine visualization appears
+      const carnot = page.getByText(/Carnot Engine/i)
+      await expect(carnot).toBeVisible()
+    }
+  })
 })

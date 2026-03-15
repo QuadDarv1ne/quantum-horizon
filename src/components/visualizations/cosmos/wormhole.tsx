@@ -118,7 +118,7 @@ export function WormholeVisualization({ isDark }: WormholeVisualizationProps) {
           const twinkle = 0.5 + 0.5 * Math.sin(timeRef.current * 3 + star.brightness * 10)
           const alpha = star.brightness * twinkle
 
-          ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`
+          ctx.fillStyle = `rgba(255, 255, 255, ${String(alpha)})`
           ctx.beginPath()
           ctx.arc(sx, sy, scale * 1.5, 0, Math.PI * 2)
           ctx.fill()
@@ -155,7 +155,7 @@ export function WormholeVisualization({ isDark }: WormholeVisualizationProps) {
         const alpha = 0.3 + (1 - Math.abs(t - 0.5) * 2) * 0.5
 
         // Draw ring
-        ctx.strokeStyle = `hsla(${hue}, ${saturation}%, ${lightness}%, ${alpha})`
+        ctx.strokeStyle = `hsla(${String(hue)}, ${String(saturation)}%, ${String(lightness)}%, ${String(alpha)})`
         ctx.lineWidth = 2
         ctx.beginPath()
 
@@ -251,13 +251,13 @@ export function WormholeVisualization({ isDark }: WormholeVisualizationProps) {
         const x = centerX + Math.cos(timeRef.current * 2 + i) * throatRadius * perspective * 0.5
         const y = centerY + Math.sin(timeRef.current * 2 + i) * throatRadius * perspective * 0.3
 
-        ctx.fillStyle = `hsla(${180 + t * 60}, 80%, 60%, 0.8)`
+        ctx.fillStyle = `hsla(${String(180 + t * 60)}, 80%, 60%, 0.8)`
         ctx.beginPath()
         ctx.arc(x, y, 2 * perspective, 0, Math.PI * 2)
         ctx.fill()
 
         // Trail
-        ctx.strokeStyle = `hsla(${180 + t * 60}, 80%, 60%, 0.3)`
+        ctx.strokeStyle = `hsla(${String(180 + t * 60)}, 80%, 60%, 0.3)`
         ctx.lineWidth = 1
         ctx.beginPath()
         ctx.moveTo(x, y)
