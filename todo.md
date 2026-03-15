@@ -1,8 +1,8 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-15 (добавлено 9 новых визуализаций)
-**Статус:** Фаза 1 — завершена, Фаза 2 — завершена, Фаза 3 — в процессе
+**Обновлено:** 2026-03-15 (eslint fixes + 9 Stories + 24 E2E теста)
+**Статус:** Фаза 1 — завершена, Фаза 2 — завершена, Фаза 3 — завершена
 
 ---
 
@@ -346,12 +346,13 @@ src/
 | Строк в page.tsx         | 9709 | 516   | < 200           | ⏳ 516 стр  |
 | Компонентов визуализаций | 33   | 42    | 20+             | ✅ 42       |
 | Unit тестов              | 223  | 223   | 100+            | ✅ 223      |
-| E2E тестов               | 14   | 14    | 15+             | ⏳ 14/15    |
-| Storybook stories        | 41   | 41    | 30+             | ✅ 41       |
+| E2E тестов               | 14   | 24    | 15+             | ✅ 24       |
+| Storybook stories        | 41   | 50    | 30+             | ✅ 50       |
 | Bundle size              | ?    | ?     | < 500KB initial | ⏳ Проверка |
 | Lighthouse Performance   | ?    | ?     | > 90            | ⏳ Проверка |
 | Lighthouse Accessibility | ?    | ?     | > 90            | ⏳ Проверка |
 | Физических формул        | 80   | 95    | 20+             | ✅ 95       |
+| Eslint ошибок            | 56   | 0     | 0               | ✅ 0        |
 
 ---
 
@@ -372,25 +373,27 @@ src/
 11. ✅ Добавлены Storybook stories
 12. ✅ Интеграция всех компонентов в page.tsx завершена
 13. ✅ 223 unit-теста passing
-14. ✅ 14 E2E тестов passing
+14. ✅ 24 E2E тестов passing
 15. ✅ Lazy loading для всех визуализаций через lazy.tsx
-16. ✅ 41 Storybook stories
+16. ✅ 50 Storybook stories
 17. ✅ Zustand store с persist middleware
 18. ✅ Хук `useCanvasAnimation` для общей логики
 19. ✅ Физические константы вынесены в `constants.ts`
 20. ✅ CI/CD pipeline настроен
 21. ✅ Docker поддержка
 22. ✅ Добавлены 9 новых визуализаций (термодинамика + космология)
+23. ✅ Исправлены eslint ошибки (restrict-template-expressions)
+24. ✅ Добавлены Stories для 9 новых визуализаций
+25. ✅ Расширены E2E тесты до 24
 
 ### 📋 Следующие задачи
 
-1. [ ] Расширить E2E тесты до 15+ (сейчас 14) — добавить тест для speed control
-2. [ ] Полная i18n интеграция (useTranslations во всех компонентах)
-3. [ ] Оптимизация performance (code splitting, мемоизация)
-4. [ ] Улучшение доступности (ARIA, keyboard navigation)
-5. [ ] Замерить Lighthouse Performance и Accessibility
-6. [ ] Замерить Bundle size
-7. [ ] Исправить eslint ошибки в новых компонентах (restrict-template-expressions)
+1. [ ] Полная i18n интеграция (useTranslations во всех компонентах)
+2. [ ] Оптимизация performance (code splitting, мемоизация)
+3. [ ] Улучшение доступности (ARIA, keyboard navigation)
+4. [ ] Замерить Lighthouse Performance и Accessibility
+5. [ ] Замерить Bundle size
+6. [ ] Сократить page.tsx до < 200 строк
 
 ---
 
@@ -478,12 +481,12 @@ src/
 **Статус:**
 
 - 223 тестов passing (unit)
-- 14 E2E тестов passing
-- 41 Storybook stories
+- 24 E2E тестов passing
+- 50 Storybook stories
 - 95 физические формулы
 - 42 компонента визуализаций
 - Сборка без ошибок
-- Lint без ошибок (требуется исправление restrict-template-expressions)
+- Lint без ошибок ✅
 
 ### Технические долги
 
@@ -501,21 +504,21 @@ src/
 - ✅ CI/CD pipeline настроен
 - ✅ Docker поддержка
 - ✅ 223 unit-теста passing
-- ✅ 14 E2E тестов passing
+- ✅ 24 E2E тестов passing
 - ✅ Lazy loading для визуализаций
-- ✅ 41 Storybook stories
-- ✅ 80 физических формул
-- ✅ 33 компонента визуализаций
+- ✅ 50 Storybook stories
+- ✅ 95 физических формул
+- ✅ 42 компонента визуализаций
 - ✅ Security headers настроены
 - ✅ TypeScript strict mode
+- ✅ Eslint без ошибок
 
 ### Проблемные места
 
 - ⚠️ Глобальный контекст вместо next-intl (требуется полная i18n интеграция)
 - ⚠️ Мало тестов для отдельных визуализаций (только base компоненты покрыты)
 - ⚠️ page.tsx всё ещё 516 строк (цель < 200)
-- ⚠️ Eslint ошибки в новых компонентах (restrict-template-expressions, unused vars)
 
 ---
 
-**Следующее обновление:** После исправления eslint ошибок и добавления Stories
+**Следующее обновление:** После полной i18n интеграции и оптимизации performance
