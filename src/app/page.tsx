@@ -300,8 +300,8 @@ export default function Home() {
             </VisualizationCard>
 
             <VisualizationCard
-              title="Wormhole"
-              description="Кротовая нора — мост Эйнштейна-Розена"
+              title={t("wormhole")}
+              description={t("wormholeDesc")}
               color="purple"
               isDark={isDark}
             >
@@ -309,8 +309,8 @@ export default function Home() {
             </VisualizationCard>
 
             <VisualizationCard
-              title="Pulsar"
-              description="Пульсар — вращающаяся нейтронная звезда"
+              title={t("pulsar")}
+              description={t("pulsarDesc")}
               color="cyan"
               isDark={isDark}
             >
@@ -318,8 +318,8 @@ export default function Home() {
             </VisualizationCard>
 
             <VisualizationCard
-              title="Quasar"
-              description="Квазар — активное галактическое ядро"
+              title={t("quasar")}
+              description={t("quasarDesc")}
               color="orange"
               isDark={isDark}
             >
@@ -327,8 +327,8 @@ export default function Home() {
             </VisualizationCard>
 
             <VisualizationCard
-              title="Protoplanetary Disk"
-              description="Протопланетный диск — формирование планет"
+              title={t("protoplanetaryDisk")}
+              description={t("protoplanetaryDiskDesc")}
               color="green"
               isDark={isDark}
             >
@@ -452,8 +452,8 @@ export default function Home() {
         {activeSection === "thermodynamics" && (
           <>
             <VisualizationCard
-              title="Thermal Radiation"
-              description="Тепловое излучение — закон Планка и Вина"
+              title={t("thermalRadiation")}
+              description={t("thermalRadiationDesc")}
               color="orange"
               isDark={isDark}
             >
@@ -461,8 +461,8 @@ export default function Home() {
             </VisualizationCard>
 
             <VisualizationCard
-              title="Entropy"
-              description="Энтропия — второй закон термодинамики"
+              title={t("entropy")}
+              description={t("entropyDesc")}
               color="blue"
               isDark={isDark}
             >
@@ -470,8 +470,8 @@ export default function Home() {
             </VisualizationCard>
 
             <VisualizationCard
-              title="Phase Transition"
-              description="Фазовые переходы — твёрдое, жидкое, газ"
+              title={t("phaseTransition")}
+              description={t("phaseTransitionDesc")}
               color="cyan"
               isDark={isDark}
             >
@@ -479,8 +479,8 @@ export default function Home() {
             </VisualizationCard>
 
             <VisualizationCard
-              title="Ideal Gas"
-              description="Идеальный газ — уравнение состояния PV=nRT"
+              title={t("idealGas")}
+              description={t("idealGasDesc")}
               color="green"
               isDark={isDark}
             >
@@ -488,8 +488,8 @@ export default function Home() {
             </VisualizationCard>
 
             <VisualizationCard
-              title="Carnot Engine"
-              description="Двигатель Карно — максимальная эффективность"
+              title={t("carnotEngine")}
+              description={t("carnotEngineDesc")}
               color="red"
               isDark={isDark}
             >
