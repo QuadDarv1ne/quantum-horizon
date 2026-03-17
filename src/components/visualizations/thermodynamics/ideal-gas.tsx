@@ -185,7 +185,7 @@ export function IdealGasVisualization({ isDark }: IdealGasVisualizationProps) {
         const alpha = 1 - age / 0.5
         ctx.fillStyle = `rgba(245, 158, 11, ${alpha.toFixed(2)})`
         ctx.beginPath()
-        ctx.arc(c.x, c.y, (8 * alpha).toFixed(1), 0, Math.PI * 2)
+        ctx.arc(c.x, c.y, 8 * alpha, 0, Math.PI * 2)
         ctx.fill()
         return true
       })

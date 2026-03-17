@@ -335,7 +335,7 @@ export function QuasarVisualization({ isDark }: QuasarVisualizationProps) {
         const hue = 180 + p.life * 40
         ctx.fillStyle = `hsla(${hue.toFixed(0)}, 80%, 60%, ${alpha.toFixed(2)})`
         ctx.beginPath()
-        ctx.arc(p.x, p.y, (2 * p.life).toFixed(1), 0, Math.PI * 2)
+        ctx.arc(p.x, p.y, 2 * p.life, 0, Math.PI * 2)
         ctx.fill()
 
         return true
