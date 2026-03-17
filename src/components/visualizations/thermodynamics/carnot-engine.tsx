@@ -24,12 +24,8 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
   const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
-  const [tempHot, setTempHot] = useState(() =>
-    QueryParam.getNumber("carnot.tempHot", 500)
-  )
-  const [tempCold, setTempCold] = useState(() =>
-    QueryParam.getNumber("carnot.tempCold", 300)
-  )
+  const [tempHot, setTempHot] = useState(() => QueryParam.getNumber("carnot.tempHot", 500))
+  const [tempCold, setTempCold] = useState(() => QueryParam.getNumber("carnot.tempCold", 300))
   const [compressionRatio, setCompressionRatio] = useState(() =>
     QueryParam.getNumber("carnot.compression", 3)
   )
@@ -63,7 +59,7 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
 
     const animate = () => {
       animationRef.current += 0.02
-      const progress = (animationRef.current % 4) 
+      const progress = animationRef.current % 4
 
       const state = engineStateRef.current
       const gamma = 1.4 // For diatomic gas
@@ -77,7 +73,7 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
         const t = progress
         state.volume = V1 + t * (V2 - V1)
         state.temperature = tempHot
-        state.pressure = (state.temperature / tempHot) / state.volume
+        state.pressure = state.temperature / tempHot / state.volume
         state.phase = 0
       } else if (progress < 2) {
         // Phase 2: Adiabatic expansion
@@ -91,7 +87,7 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
         const t = progress - 2
         state.volume = V3 - t * (V3 - V4)
         state.temperature = tempCold
-        state.pressure = (state.temperature / tempCold) / state.volume
+        state.pressure = state.temperature / tempCold / state.volume
         state.phase = 2
       } else {
         // Phase 4: Adiabatic compression
@@ -107,7 +103,9 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
     }
 
     const intervalId = setInterval(animate, 50)
-    return () => clearInterval(intervalId)
+    return () => {
+      clearInterval(intervalId)
+    }
   }, [isRunning, tempHot, tempCold, compressionRatio])
 
   const draw = useCallback(
@@ -178,7 +176,7 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
       ctx.strokeStyle = isDarkMode ? "rgba(59, 130, 246, 0.3)" : "rgba(59, 130, 246, 0.2)"
       ctx.lineWidth = 1
       ctx.setLineDash([5, 5])
-      
+
       // Hot isotherm
       ctx.beginPath()
       for (let v = V1; v <= V2 * 1.5; v += 0.1) {
@@ -206,30 +204,30 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
       ctx.strokeStyle = "#ef4444"
       ctx.lineWidth = 2.5
       ctx.beginPath()
-      
+
       // 1->2: Isothermal expansion
       ctx.moveTo(toScreenX(V1), toScreenY(P1))
       for (let v = V1; v <= V2; v += 0.05) {
         ctx.lineTo(toScreenX(v), toScreenY(tempHot / v))
       }
-      
+
       // 2->3: Adiabatic expansion
       for (let v = V2; v <= V3; v += 0.05) {
-        const p = tempHot * Math.pow(V2 / v, gamma) / v
+        const p = (tempHot * Math.pow(V2 / v, gamma)) / v
         ctx.lineTo(toScreenX(v), toScreenY(p))
       }
-      
+
       // 3->4: Isothermal compression
       for (let v = V3; v >= V4; v -= 0.05) {
         ctx.lineTo(toScreenX(v), toScreenY(tempCold / v))
       }
-      
+
       // 4->1: Adiabatic compression
       for (let v = V4; v >= V1; v -= 0.05) {
-        const p = tempCold * Math.pow(V4 / v, gamma) / v
+        const p = (tempCold * Math.pow(V4 / v, gamma)) / v
         ctx.lineTo(toScreenX(v), toScreenY(p))
       }
-      
+
       ctx.closePath()
       ctx.stroke()
 
@@ -252,9 +250,11 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
         ctx.stroke()
 
         // Pulse effect
-        ctx.strokeStyle = `rgba(245, 158, 11, ${0.5 - (timeRef.current % 1) * 0.5})`
+        const pulseAlpha = (0.5 - (timeRef.current % 1) * 0.5).toFixed(2)
+        ctx.strokeStyle = `rgba(245, 158, 11, ${pulseAlpha})`
+        const pulseRadius = (8 + (timeRef.current % 1) * 8).toFixed(1)
         ctx.beginPath()
-        ctx.arc(cx, cy, 8 + (timeRef.current % 1) * 8, 0, Math.PI * 2)
+        ctx.arc(cx, cy, Number(pulseRadius), 0, Math.PI * 2)
         ctx.stroke()
       }
 
@@ -272,11 +272,19 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
       ctx.fillStyle = "#3b82f6"
       ctx.fillText("Изотерма", toScreenX((V1 + V2) / 2), toScreenY(tempHot / ((V1 + V2) / 2)) - 15)
       ctx.fillStyle = "#22c55e"
-      ctx.fillText("Адиабата", toScreenX((V2 + V3) / 2) + 30, toScreenY(tempHot * Math.pow(V2 / ((V2 + V3) / 2), gamma) / ((V2 + V3) / 2)) - 15)
+      ctx.fillText(
+        "Адиабата",
+        toScreenX((V2 + V3) / 2) + 30,
+        toScreenY((tempHot * Math.pow(V2 / ((V2 + V3) / 2), gamma)) / ((V2 + V3) / 2)) - 15
+      )
       ctx.fillStyle = "#3b82f6"
       ctx.fillText("Изотерма", toScreenX((V3 + V4) / 2), toScreenY(tempCold / ((V3 + V4) / 2)) + 20)
       ctx.fillStyle = "#22c55e"
-      ctx.fillText("Адиабата", toScreenX((V4 + V1) / 2) - 30, toScreenY(tempCold * Math.pow(V4 / ((V4 + V1) / 2), gamma) / ((V4 + V1) / 2)) + 20)
+      ctx.fillText(
+        "Адиабата",
+        toScreenX((V4 + V1) / 2) - 30,
+        toScreenY((tempCold * Math.pow(V4 / ((V4 + V1) / 2), gamma)) / ((V4 + V1) / 2)) + 20
+      )
 
       // Engine visualization (right side)
       const engineX = diagramX + diagramWidth + 40
@@ -316,7 +324,7 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
         ctx.strokeStyle = "#f59e0b"
         ctx.lineWidth = 3
         ctx.beginPath()
-        
+
         if (arrowPhase === 0) {
           // Heat from hot reservoir
           ctx.moveTo(engineX + engineSize / 2, engineY + 45)
@@ -363,7 +371,11 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
 
       ctx.font = "11px monospace"
       ctx.fillText(`η = 1 - T_c/T_h`, engineX - 10, engineY + engineSize + 70)
-      ctx.fillText(`η = ${String(efficiency.toFixed(3))} (${String((efficiency * 100).toFixed(1))}%)`, engineX - 10, engineY + engineSize + 90)
+      ctx.fillText(
+        `η = ${efficiency.toFixed(3)} (${(efficiency * 100).toFixed(1)}%)`,
+        engineX - 10,
+        engineY + engineSize + 90
+      )
 
       // Efficiency bar
       const barWidth = 160
@@ -381,19 +393,21 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
   )
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative h-full w-full">
       <VisualizationCanvas draw={draw} isDark={isDark} />
-      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-4 items-end">
-        <Card className="bg-background/90 backdrop-blur border-primary/20">
-          <CardContent className="p-4 space-y-3 min-w-[340px]">
+      <div className="absolute right-4 bottom-4 left-4 flex flex-wrap items-end gap-4">
+        <Card className="bg-background/90 border-primary/20 backdrop-blur">
+          <CardContent className="min-w-[340px] space-y-3 p-4">
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">T_гор (нагреватель)</span>
-                <span className="text-sm text-muted-foreground">{tempHot} K</span>
+                <span className="text-muted-foreground text-sm">{tempHot} K</span>
               </div>
               <Slider
                 value={[tempHot]}
-                onValueChange={([v]) => setTempHot(v)}
+                onValueChange={([v]) => {
+                  setTempHot(v)
+                }}
                 min={350}
                 max={800}
                 step={25}
@@ -403,11 +417,13 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">T_хол (охладитель)</span>
-                <span className="text-sm text-muted-foreground">{tempCold} K</span>
+                <span className="text-muted-foreground text-sm">{tempCold} K</span>
               </div>
               <Slider
                 value={[tempCold]}
-                onValueChange={([v]) => setTempCold(v)}
+                onValueChange={([v]) => {
+                  setTempCold(v)
+                }}
                 min={200}
                 max={tempHot - 50}
                 step={25}
@@ -417,11 +433,13 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Степень сжатия</span>
-                <span className="text-sm text-muted-foreground">{compressionRatio}×</span>
+                <span className="text-muted-foreground text-sm">{compressionRatio}×</span>
               </div>
               <Slider
                 value={[compressionRatio]}
-                onValueChange={([v]) => setCompressionRatio(v)}
+                onValueChange={([v]) => {
+                  setCompressionRatio(v)
+                }}
                 min={2}
                 max={5}
                 step={0.5}
@@ -430,9 +448,13 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
             </div>
             <div className="flex gap-2">
               <button
-                onClick={() => setIsRunning(!isRunning)}
-                className={`px-4 py-2 rounded text-sm font-medium transition-colors ${
-                  isRunning ? "bg-red-500 text-white hover:bg-red-600" : "bg-primary text-primary-foreground hover:bg-primary/90"
+                onClick={() => {
+                  setIsRunning(!isRunning)
+                }}
+                className={`rounded px-4 py-2 text-sm font-medium transition-colors ${
+                  isRunning
+                    ? "bg-red-500 text-white hover:bg-red-600"
+                    : "bg-primary text-primary-foreground hover:bg-primary/90"
                 }`}
               >
                 {isRunning ? "Стоп" : "Старт"}

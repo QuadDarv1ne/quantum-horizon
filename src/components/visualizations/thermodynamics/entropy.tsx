@@ -28,9 +28,7 @@ export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
   const [particleCount, setParticleCount] = useState(() =>
     QueryParam.getNumber("entropy.particles", 100)
   )
-  const [temperature, setTemperature] = useState(() =>
-    QueryParam.getNumber("entropy.temp", 300)
-  )
+  const [temperature, setTemperature] = useState(() => QueryParam.getNumber("entropy.temp", 300))
   const [showBarrier, setShowBarrier] = useState(() =>
     QueryParam.getBoolean("entropy.barrier", true)
   )
@@ -67,7 +65,12 @@ export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
   }, [particleCount])
 
   useEffect(() => {
-    setIsMixed(false)
+    const timer = setTimeout(() => {
+      setIsMixed(false)
+    }, 0)
+    return () => {
+      clearTimeout(timer)
+    }
   }, [particleCount])
 
   const draw = useCallback(
@@ -106,7 +109,7 @@ export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
 
       // Update and draw particles
       const speedMultiplier = Math.sqrt(temperature / 300)
-      particlesRef.current.forEach((particle, i) => {
+      particlesRef.current.forEach((particle, _i) => {
         if (!showBarrier || isMixed) {
           // Remove barrier - particles can move freely
           particle.x += particle.vx * speedMultiplier * delta * 0.06
@@ -157,7 +160,8 @@ export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
       const leftParticles = particlesRef.current.filter((p) => p.x < 0.5).length
       const _rightParticles = particlesRef.current.length - leftParticles
       const fraction = leftParticles / particlesRef.current.length
-      const mixing = -fraction * Math.log2(fraction + 1e-10) - (1 - fraction) * Math.log2(1 - fraction + 1e-10)
+      const mixing =
+        -fraction * Math.log2(fraction + 1e-10) - (1 - fraction) * Math.log2(1 - fraction + 1e-10)
       const maxMixing = 1 // Maximum when equally mixed
 
       // Info panel
@@ -172,12 +176,12 @@ export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
       ctx.fillText("Энтропия", width - 230, margin + 22)
 
       ctx.font = "11px monospace"
-      ctx.fillText(`N = ${String(particleCount)} частиц`, width - 230, margin + 42)
-      ctx.fillText(`T = ${String(temperature)} K`, width - 230, margin + 60)
+      ctx.fillText("N = " + String(particleCount) + " частиц", width - 230, margin + 42)
+      ctx.fillText("T = " + temperature.toFixed(0) + " K", width - 230, margin + 60)
 
       // Entropy value
       const entropy = mixing / maxMixing
-      ctx.fillText(`S/S_max = ${String(entropy.toFixed(3))}`, width - 230, margin + 82)
+      ctx.fillText("S/S_max = " + entropy.toFixed(3), width - 230, margin + 82)
 
       // State indicator
       const state = entropy > 0.9 ? "Максимальная" : entropy > 0.5 ? "Смешивание" : "Упорядочено"
@@ -187,11 +191,7 @@ export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
       // Average kinetic energy
       const avgKE = averageKineticEnergy(temperature)
       ctx.fillStyle = isDarkMode ? "#94a3b8" : "#64748b"
-      ctx.fillText(
-        `⟨E⟩ = ${String((avgKE * 1e21).toFixed(2))} × 10⁻²¹ Дж`,
-        width - 230,
-        margin + 122
-      )
+      ctx.fillText(`⟨E⟩ = ${(avgKE * 1e21).toFixed(2)} × 10⁻²¹ Дж`, width - 230, margin + 122)
 
       // Entropy bar
       const barWidth = 180
@@ -216,19 +216,21 @@ export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
   )
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative h-full w-full">
       <VisualizationCanvas draw={draw} isDark={isDark} />
-      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-4 items-end">
-        <Card className="bg-background/90 backdrop-blur border-primary/20">
-          <CardContent className="p-4 space-y-3 min-w-[320px]">
+      <div className="absolute right-4 bottom-4 left-4 flex flex-wrap items-end gap-4">
+        <Card className="bg-background/90 border-primary/20 backdrop-blur">
+          <CardContent className="min-w-[320px] space-y-3 p-4">
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Частицы</span>
-                <span className="text-sm text-muted-foreground">{particleCount}</span>
+                <span className="text-muted-foreground text-sm">{particleCount}</span>
               </div>
               <Slider
                 value={[particleCount]}
-                onValueChange={([v]) => setParticleCount(v)}
+                onValueChange={([v]) => {
+                  setParticleCount(v)
+                }}
                 min={20}
                 max={300}
                 step={10}
@@ -238,18 +240,20 @@ export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Температура</span>
-                <span className="text-sm text-muted-foreground">{temperature} K</span>
+                <span className="text-muted-foreground text-sm">{temperature} K</span>
               </div>
               <Slider
                 value={[temperature]}
-                onValueChange={([v]) => setTemperature(v)}
+                onValueChange={([v]) => {
+                  setTemperature(v)
+                }}
                 min={100}
                 max={1000}
                 step={50}
                 className="w-full"
               />
             </div>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => {
                   setShowBarrier(!showBarrier)
@@ -262,7 +266,7 @@ export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
                     setIsMixed(false)
                   }
                 }}
-                className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
                   showBarrier ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80"
                 }`}
               >
@@ -273,7 +277,7 @@ export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
                   setIsMixed(true)
                   setShowBarrier(false)
                 }}
-                className="px-3 py-1.5 rounded text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 rounded px-3 py-1.5 text-xs font-medium"
               >
                 Убрать перегородку
               </button>
@@ -286,7 +290,7 @@ export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
                     p.side = "left"
                   })
                 }}
-                className="px-3 py-1.5 rounded text-xs font-medium bg-muted hover:bg-muted/80"
+                className="bg-muted hover:bg-muted/80 rounded px-3 py-1.5 text-xs font-medium"
               >
                 Сброс
               </button>

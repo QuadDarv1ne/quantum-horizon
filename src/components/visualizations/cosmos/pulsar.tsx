@@ -29,12 +29,8 @@ export function PulsarVisualization({ isDark }: PulsarVisualizationProps) {
   const [rotationSpeed, setRotationSpeed] = useState(() =>
     QueryParam.getNumber("pulsar.rotation", 10)
   )
-  const [beamIntensity, setBeamIntensity] = useState(() =>
-    QueryParam.getNumber("pulsar.beam", 1)
-  )
-  const [tiltAngle, setTiltAngle] = useState(() =>
-    QueryParam.getNumber("pulsar.tilt", 30)
-  )
+  const [beamIntensity, setBeamIntensity] = useState(() => QueryParam.getNumber("pulsar.beam", 1))
+  const [tiltAngle, setTiltAngle] = useState(() => QueryParam.getNumber("pulsar.tilt", 30))
   const [showMagneticField, setShowMagneticField] = useState(() =>
     QueryParam.getBoolean("pulsar.field", true)
   )
@@ -155,7 +151,14 @@ export function PulsarVisualization({ isDark }: PulsarVisualizationProps) {
       ctx.fill()
 
       // Glowing corona
-      const coronaGradient = ctx.createRadialGradient(centerX, centerY, neutronStarRadius, centerX, centerY, neutronStarRadius * 2)
+      const coronaGradient = ctx.createRadialGradient(
+        centerX,
+        centerY,
+        neutronStarRadius,
+        centerX,
+        centerY,
+        neutronStarRadius * 2
+      )
       coronaGradient.addColorStop(0, "rgba(255, 200, 50, 0.5)")
       coronaGradient.addColorStop(0.5, "rgba(255, 100, 50, 0.2)")
       coronaGradient.addColorStop(1, "rgba(255, 100, 50, 0)")
@@ -178,7 +181,8 @@ export function PulsarVisualization({ isDark }: PulsarVisualizationProps) {
             const r = neutronStarRadius * (1 + t * 3)
             const fieldAngle = angle + offset * t
             const x = centerX + Math.cos(fieldAngle) * r * Math.sin(t * Math.PI)
-            const y = centerY + Math.sin(fieldAngle) * r * 0.3 + t * 50 * Math.sin(rotationRef.current)
+            const y =
+              centerY + Math.sin(fieldAngle) * r * 0.3 + t * 50 * Math.sin(rotationRef.current)
             if (t === 0) ctx.moveTo(x, y)
             else ctx.lineTo(x, y)
           }
@@ -328,19 +332,21 @@ export function PulsarVisualization({ isDark }: PulsarVisualizationProps) {
   )
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative h-full w-full">
       <VisualizationCanvas draw={draw} isDark={isDark} />
-      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-4 items-end">
-        <Card className="bg-background/90 backdrop-blur border-primary/20">
-          <CardContent className="p-4 space-y-3 min-w-[340px]">
+      <div className="absolute right-4 bottom-4 left-4 flex flex-wrap items-end gap-4">
+        <Card className="bg-background/90 border-primary/20 backdrop-blur">
+          <CardContent className="min-w-[340px] space-y-3 p-4">
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Частота вращения</span>
-                <span className="text-sm text-muted-foreground">{rotationSpeed.toFixed(1)} Гц</span>
+                <span className="text-muted-foreground text-sm">{rotationSpeed.toFixed(1)} Гц</span>
               </div>
               <Slider
                 value={[rotationSpeed]}
-                onValueChange={([v]) => setRotationSpeed(v)}
+                onValueChange={([v]) => {
+                  setRotationSpeed(v)
+                }}
                 min={1}
                 max={50}
                 step={1}
@@ -350,11 +356,13 @@ export function PulsarVisualization({ isDark }: PulsarVisualizationProps) {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Интенсивность лучей</span>
-                <span className="text-sm text-muted-foreground">{beamIntensity.toFixed(1)}×</span>
+                <span className="text-muted-foreground text-sm">{beamIntensity.toFixed(1)}×</span>
               </div>
               <Slider
                 value={[beamIntensity]}
-                onValueChange={([v]) => setBeamIntensity(v)}
+                onValueChange={([v]) => {
+                  setBeamIntensity(v)
+                }}
                 min={0.5}
                 max={2}
                 step={0.1}
@@ -364,30 +372,40 @@ export function PulsarVisualization({ isDark }: PulsarVisualizationProps) {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Наклон оси</span>
-                <span className="text-sm text-muted-foreground">{tiltAngle.toFixed(0)}°</span>
+                <span className="text-muted-foreground text-sm">{tiltAngle.toFixed(0)}°</span>
               </div>
               <Slider
                 value={[tiltAngle]}
-                onValueChange={([v]) => setTiltAngle(v)}
+                onValueChange={([v]) => {
+                  setTiltAngle(v)
+                }}
                 min={0}
                 max={90}
                 step={5}
                 className="w-full"
               />
             </div>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => setShowMagneticField(!showMagneticField)}
-                className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
-                  showMagneticField ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80"
+                onClick={() => {
+                  setShowMagneticField(!showMagneticField)
+                }}
+                className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
+                  showMagneticField
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted hover:bg-muted/80"
                 }`}
               >
                 Маг. поле
               </button>
               <button
-                onClick={() => setShowParticles(!showParticles)}
-                className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
-                  showParticles ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80"
+                onClick={() => {
+                  setShowParticles(!showParticles)
+                }}
+                className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
+                  showParticles
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted hover:bg-muted/80"
                 }`}
               >
                 Частицы

@@ -8,6 +8,17 @@ import "@testing-library/jest-dom/vitest"
 import { afterEach, vi } from "vitest"
 import { cleanup } from "@testing-library/react"
 
+// Mock next-intl
+vi.mock("next-intl", () => ({
+  useTranslations: () => {
+    // Return a function that returns the key for any translation call
+    const translate = (key: string) => key
+    return translate
+  },
+  useLocale: () => "ru",
+  IntlProvider: ({ children }: { children: React.ReactNode }) => children,
+}))
+
 // Polyfill for ResizeObserver
 class ResizeObserverPolyfill {
   observe() {

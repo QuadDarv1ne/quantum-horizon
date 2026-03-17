@@ -1,6 +1,20 @@
 // Физические формулы и расчёты
 
-import { G, c, h_bar, k_B, m_e, e, epsilon_0, R_H, a_0, sigma, h, R, N_A, wiensConstant } from "./constants"
+import {
+  G,
+  c,
+  h_bar,
+  k_B,
+  m_e,
+  e,
+  epsilon_0,
+  R_H,
+  a_0,
+  sigma,
+  h,
+  R,
+  wiensConstant,
+} from "./constants"
 
 /**
  * Расчёт фактора Лоренца
@@ -331,7 +345,7 @@ export function wiensDisplacementLaw(temperature: number): number {
  * B(λ,T) = (2hc²/λ⁵) · 1/(e^(hc/λkT) - 1)
  */
 export function plancksLaw(wavelength: number, temperature: number): number {
-  const numerator = 2 * h * Math.pow(c, 2) / Math.pow(wavelength, 5)
+  const numerator = (2 * h * Math.pow(c, 2)) / Math.pow(wavelength, 5)
   const exponent = (h * c) / (wavelength * k_B * temperature)
   const denominator = Math.exp(exponent) - 1
   return numerator / denominator
@@ -374,7 +388,12 @@ export function carnotEfficiency(temperatureCold: number, temperatureHot: number
  * Уравнение состояния идеального газа
  * PV = nRT
  */
-export function idealGasLaw(pressure: number, volume: number, moles: number, temperature: number): {
+export function idealGasLaw(
+  pressure: number,
+  volume: number,
+  moles: number,
+  temperature: number
+): {
   calculated: number
   expected: number
   matches: boolean
@@ -416,7 +435,13 @@ export function isothermalWork(moles: number, temperature: number, V1: number, V
  * Расчёт работы адиабатического процесса
  * W = (P₁V₁ - P₂V₂)/(γ-1)
  */
-export function adiabaticWork(P1: number, V1: number, P2: number, V2: number, gamma: number): number {
+export function adiabaticWork(
+  P1: number,
+  V1: number,
+  P2: number,
+  V2: number,
+  gamma: number
+): number {
   return (P1 * V1 - P2 * V2) / (gamma - 1)
 }
 

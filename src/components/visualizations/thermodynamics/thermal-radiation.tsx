@@ -13,21 +13,13 @@ interface ThermalRadiationVisualizationProps {
   isDark: boolean
 }
 
-export function ThermalRadiationVisualization({
-  isDark,
-}: ThermalRadiationVisualizationProps) {
+export function ThermalRadiationVisualization({ isDark }: ThermalRadiationVisualizationProps) {
   const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
-  const [temperature, setTemperature] = useState(() =>
-    QueryParam.getNumber("therm.temp", 5000)
-  )
-  const [showWien, setShowWien] = useState(() =>
-    QueryParam.getBoolean("therm.wien", true)
-  )
-  const [showPhotons, setShowPhotons] = useState(() =>
-    QueryParam.getBoolean("therm.photons", true)
-  )
+  const [temperature, setTemperature] = useState(() => QueryParam.getNumber("therm.temp", 5000))
+  const [showWien, setShowWien] = useState(() => QueryParam.getBoolean("therm.wien", true))
+  const [showPhotons, setShowPhotons] = useState(() => QueryParam.getBoolean("therm.photons", true))
 
   useEffect(() => {
     QueryParam.setNumber("therm.temp", temperature)
@@ -196,17 +188,13 @@ export function ThermalRadiationVisualization({
       ctx.fillText("Тепловое излучение", width - 210, 40)
 
       ctx.font = "11px monospace"
-      ctx.fillText(`T = ${String(temperature)} K`, width - 210, 60)
+      ctx.fillText(`T = ${temperature.toFixed(0)} K`, width - 210, 60)
 
       const lambdaMax = wiensDisplacementLaw(temperature)
-      ctx.fillText(`λ_max = ${String((lambdaMax * 1e9).toFixed(0))} нм`, width - 210, 78)
+      ctx.fillText(`λ_max = ${(lambdaMax * 1e9).toFixed(0)} нм`, width - 210, 78)
 
       const totalPower = stefanBoltzmannLaw(1, temperature)
-      ctx.fillText(
-        `P = ${String(totalPower.toExponential(2))} Вт/м²`,
-        width - 210,
-        96
-      )
+      ctx.fillText(`P = ${totalPower.toExponential(2)} Вт/м²`, width - 210, 96)
 
       // Color temperature indicator
       const tempColor =
@@ -229,44 +217,46 @@ export function ThermalRadiationVisualization({
   )
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative h-full w-full">
       <VisualizationCanvas draw={draw} isDark={isDark} />
-      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-4 items-end">
-        <Card className="bg-background/90 backdrop-blur border-primary/20">
-          <CardContent className="p-4 space-y-3 min-w-[280px]">
+      <div className="absolute right-4 bottom-4 left-4 flex flex-wrap items-end gap-4">
+        <Card className="bg-background/90 border-primary/20 backdrop-blur">
+          <CardContent className="min-w-[280px] space-y-3 p-4">
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Температура</span>
-                <span className="text-sm text-muted-foreground">
+                <span className="text-muted-foreground text-sm">
                   {temperature.toLocaleString()} K
                 </span>
               </div>
               <Slider
                 value={[temperature]}
-                onValueChange={([v]) => setTemperature(v)}
+                onValueChange={([v]) => {
+                  setTemperature(v)
+                }}
                 min={1000}
                 max={15000}
                 step={100}
                 className="w-full"
               />
             </div>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => setShowWien(!showWien)}
-                className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
-                  showWien
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted hover:bg-muted/80"
+                onClick={() => {
+                  setShowWien(!showWien)
+                }}
+                className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
+                  showWien ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80"
                 }`}
               >
                 λ_max (Вина)
               </button>
               <button
-                onClick={() => setShowPhotons(!showPhotons)}
-                className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
-                  showPhotons
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted hover:bg-muted/80"
+                onClick={() => {
+                  setShowPhotons(!showPhotons)
+                }}
+                className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
+                  showPhotons ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80"
                 }`}
               >
                 Фотоны

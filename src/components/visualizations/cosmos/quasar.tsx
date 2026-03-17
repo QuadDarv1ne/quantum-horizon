@@ -33,24 +33,14 @@ export function QuasarVisualization({ isDark }: QuasarVisualizationProps) {
   const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
-  const [blackHoleMass, setBlackHoleMass] = useState(() =>
-    QueryParam.getNumber("quasar.mass", 6)
-  )
+  const [blackHoleMass, setBlackHoleMass] = useState(() => QueryParam.getNumber("quasar.mass", 6))
   const [accretionRate, setAccretionRate] = useState(() =>
     QueryParam.getNumber("quasar.accretion", 1)
   )
-  const [jetPower, setJetPower] = useState(() =>
-    QueryParam.getNumber("quasar.jet", 1)
-  )
-  const [viewAngle, setViewAngle] = useState(() =>
-    QueryParam.getNumber("quasar.angle", 45)
-  )
-  const [showJets, setShowJets] = useState(() =>
-    QueryParam.getBoolean("quasar.jets", true)
-  )
-  const [showDisk, setShowDisk] = useState(() =>
-    QueryParam.getBoolean("quasar.disk", true)
-  )
+  const [jetPower, setJetPower] = useState(() => QueryParam.getNumber("quasar.jet", 1))
+  const [viewAngle, setViewAngle] = useState(() => QueryParam.getNumber("quasar.angle", 45))
+  const [showJets, setShowJets] = useState(() => QueryParam.getBoolean("quasar.jets", true))
+  const [showDisk, setShowDisk] = useState(() => QueryParam.getBoolean("quasar.disk", true))
 
   const accretionParticlesRef = useRef<AccretionParticle[]>([])
   const jetParticlesRef = useRef<JetParticle[]>([])
@@ -185,13 +175,14 @@ export function QuasarVisualization({ isDark }: QuasarVisualizationProps) {
         // Draw disk in layers for 3D effect
         const diskLayers = 20
         for (let layer = diskLayers - 1; layer >= 0; layer--) {
-          const layerRadius = diskInnerRadius + (layer / diskLayers) * (diskOuterRadius - diskInnerRadius)
+          const layerRadius =
+            diskInnerRadius + (layer / diskLayers) * (diskOuterRadius - diskInnerRadius)
           const temperature = 5000 + (1 - layer / diskLayers) * 25000
           const hue = Math.max(0, 60 - (temperature - 5000) / 500)
           const saturation = 80
           const lightness = 40 + (layer / diskLayers) * 30
 
-          ctx.strokeStyle = `hsla(${String(hue)}, ${String(saturation)}%, ${String(lightness)}%, ${String(0.3 + layer / diskLayers * 0.5)})`
+          ctx.strokeStyle = `hsla(${String(hue)}, ${String(saturation)}%, ${String(lightness)}%, ${String(0.3 + (layer / diskLayers) * 0.5)})`
           ctx.lineWidth = 2
           ctx.beginPath()
 
@@ -222,7 +213,8 @@ export function QuasarVisualization({ isDark }: QuasarVisualizationProps) {
           const y = centerY + Math.sin(p.angle) * p.radius * foreshortening
 
           // Temperature-based color
-          const temperature = 5000 + (1 - (p.radius - diskInnerRadius) / (diskOuterRadius - diskInnerRadius)) * 25000
+          const temperature =
+            5000 + (1 - (p.radius - diskInnerRadius) / (diskOuterRadius - diskInnerRadius)) * 25000
           const hue = Math.max(0, 60 - (temperature - 5000) / 500)
           ctx.fillStyle = `hsla(${String(hue)}, 90%, ${String(50 + p.brightness * 20)}%, ${String(p.brightness)})`
           ctx.beginPath()
@@ -244,7 +236,15 @@ export function QuasarVisualization({ isDark }: QuasarVisualizationProps) {
         iscoGradient.addColorStop(1, "rgba(255, 100, 50, 0)")
         ctx.fillStyle = iscoGradient
         ctx.beginPath()
-        ctx.ellipse(centerX, centerY, diskInnerRadius * 1.5, diskInnerRadius * 1.5 * foreshortening, 0, 0, Math.PI * 2)
+        ctx.ellipse(
+          centerX,
+          centerY,
+          diskInnerRadius * 1.5,
+          diskInnerRadius * 1.5 * foreshortening,
+          0,
+          0,
+          Math.PI * 2
+        )
         ctx.fill()
       }
 
@@ -333,9 +333,9 @@ export function QuasarVisualization({ isDark }: QuasarVisualizationProps) {
 
         const alpha = p.life
         const hue = 180 + p.life * 40
-        ctx.fillStyle = `hsla(${hue}, 80%, 60%, ${alpha})`
+        ctx.fillStyle = `hsla(${hue.toFixed(0)}, 80%, 60%, ${alpha.toFixed(2)})`
         ctx.beginPath()
-        ctx.arc(p.x, p.y, 2 * p.life, 0, Math.PI * 2)
+        ctx.arc(p.x, p.y, (2 * p.life).toFixed(1), 0, Math.PI * 2)
         ctx.fill()
 
         return true
@@ -393,7 +393,7 @@ export function QuasarVisualization({ isDark }: QuasarVisualizationProps) {
       ctx.fillStyle = isDarkMode ? "#1e293b" : "#e2e8f0"
       ctx.fillRect(barX, barY, barWidth, barHeight)
       ctx.fillStyle = accretionRate > 1.5 ? "#ef4444" : accretionRate > 0.8 ? "#f59e0b" : "#22c55e"
-      ctx.fillRect(barX, barY, Math.min(barWidth, barWidth * accretionRate / 2), barHeight)
+      ctx.fillRect(barX, barY, Math.min(barWidth, (barWidth * accretionRate) / 2), barHeight)
       ctx.strokeStyle = isDarkMode ? "#475569" : "#cbd5e1"
       ctx.strokeRect(barX, barY, barWidth, barHeight)
     },
@@ -401,19 +401,23 @@ export function QuasarVisualization({ isDark }: QuasarVisualizationProps) {
   )
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative h-full w-full">
       <VisualizationCanvas draw={draw} isDark={isDark} />
-      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-4 items-end">
-        <Card className="bg-background/90 backdrop-blur border-primary/20">
-          <CardContent className="p-4 space-y-3 min-w-[360px]">
+      <div className="absolute right-4 bottom-4 left-4 flex flex-wrap items-end gap-4">
+        <Card className="bg-background/90 border-primary/20 backdrop-blur">
+          <CardContent className="min-w-[360px] space-y-3 p-4">
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Масса ЧД</span>
-                <span className="text-sm text-muted-foreground">10^{blackHoleMass.toFixed(1)} M☉</span>
+                <span className="text-muted-foreground text-sm">
+                  10^{blackHoleMass.toFixed(1)} M☉
+                </span>
               </div>
               <Slider
                 value={[blackHoleMass]}
-                onValueChange={([v]) => setBlackHoleMass(v)}
+                onValueChange={([v]) => {
+                  setBlackHoleMass(v)
+                }}
                 min={4}
                 max={10}
                 step={0.5}
@@ -423,11 +427,15 @@ export function QuasarVisualization({ isDark }: QuasarVisualizationProps) {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Аккреция</span>
-                <span className="text-sm text-muted-foreground">{accretionRate.toFixed(1)} × Edd</span>
+                <span className="text-muted-foreground text-sm">
+                  {accretionRate.toFixed(1)} × Edd
+                </span>
               </div>
               <Slider
                 value={[accretionRate]}
-                onValueChange={([v]) => setAccretionRate(v)}
+                onValueChange={([v]) => {
+                  setAccretionRate(v)
+                }}
                 min={0.1}
                 max={2}
                 step={0.1}
@@ -437,11 +445,13 @@ export function QuasarVisualization({ isDark }: QuasarVisualizationProps) {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Джеты</span>
-                <span className="text-sm text-muted-foreground">{jetPower.toFixed(1)}×</span>
+                <span className="text-muted-foreground text-sm">{jetPower.toFixed(1)}×</span>
               </div>
               <Slider
                 value={[jetPower]}
-                onValueChange={([v]) => setJetPower(v)}
+                onValueChange={([v]) => {
+                  setJetPower(v)
+                }}
                 min={0.5}
                 max={2}
                 step={0.1}
@@ -451,29 +461,35 @@ export function QuasarVisualization({ isDark }: QuasarVisualizationProps) {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Угол обзора</span>
-                <span className="text-sm text-muted-foreground">{viewAngle.toFixed(0)}°</span>
+                <span className="text-muted-foreground text-sm">{viewAngle.toFixed(0)}°</span>
               </div>
               <Slider
                 value={[viewAngle]}
-                onValueChange={([v]) => setViewAngle(v)}
+                onValueChange={([v]) => {
+                  setViewAngle(v)
+                }}
                 min={0}
                 max={85}
                 step={5}
                 className="w-full"
               />
             </div>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => setShowJets(!showJets)}
-                className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                onClick={() => {
+                  setShowJets(!showJets)
+                }}
+                className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
                   showJets ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80"
                 }`}
               >
                 Джеты
               </button>
               <button
-                onClick={() => setShowDisk(!showDisk)}
-                className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                onClick={() => {
+                  setShowDisk(!showDisk)
+                }}
+                className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
                   showDisk ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80"
                 }`}
               >
