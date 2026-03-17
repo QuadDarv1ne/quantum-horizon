@@ -12,10 +12,7 @@ export function generateAriaId(prefix: string): string {
 /**
  * Хук для управления фокусом и keyboard navigation
  */
-export function useKeyboardNavigation(
-  itemCount: number,
-  onSelect?: (index: number) => void,
-) {
+export function useKeyboardNavigation(itemCount: number, onSelect?: (index: number) => void) {
   return {
     onKeyDown: (event: React.KeyboardEvent, currentIndex: number) => {
       let newIndex = currentIndex
@@ -48,7 +45,7 @@ export function useKeyboardNavigation(
 
       // Фокус на новом элементе
       const element = document.querySelector(
-        `[data-keyboard-index="${String(newIndex)}"]`,
+        `[data-keyboard-index="${String(newIndex)}"]`
       ) as HTMLElement | null
       element?.focus()
     },
@@ -104,7 +101,7 @@ export function getControlAriaProps({
 export const SkipLink = () => (
   <a
     href="#main-content"
-    className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-background focus:text-foreground focus:ring-2 focus:ring-ring focus:rounded-md"
+    className="focus:bg-background focus:text-foreground focus:ring-ring sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:px-4 focus:py-2 focus:ring-2"
   >
     Перейти к основному контенту
   </a>

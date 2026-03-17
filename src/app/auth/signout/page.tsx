@@ -14,11 +14,11 @@ export default function SignOutPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 p-4">
-      <Card className="w-full max-w-md bg-slate-900/80 border-slate-700 text-white backdrop-blur-sm">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 p-4">
+      <Card className="w-full max-w-md border-slate-700 bg-slate-900/80 text-white backdrop-blur-sm">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Выход из аккаунта</CardTitle>
-          <CardDescription className="text-slate-400 text-center">
+          <CardTitle className="text-center text-2xl font-bold">Выход из аккаунта</CardTitle>
+          <CardDescription className="text-center text-slate-400">
             Вы уверены, что хотите выйти?
           </CardDescription>
         </CardHeader>
@@ -26,7 +26,7 @@ export default function SignOutPage() {
           <div className="flex gap-3">
             <Button
               variant="outline"
-              className="flex-1 bg-slate-800 border-slate-600 hover:bg-slate-700"
+              className="flex-1 border-slate-600 bg-slate-800 hover:bg-slate-700"
               onClick={() => {
                 window.history.back()
               }}

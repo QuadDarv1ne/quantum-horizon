@@ -157,7 +157,7 @@ describe("useIsMobile", () => {
 
   it("should handle window resize", async () => {
     let currentMatches = true
-    let changeCallback: ((event: MediaQueryListEvent) => void) | null = null
+    let changeCallback: ((event: MediaQueryListEvent) => void) | undefined
 
     window.matchMedia = vi.fn().mockImplementation(
       () =>

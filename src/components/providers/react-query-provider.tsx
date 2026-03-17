@@ -15,7 +15,7 @@ export function ReactQueryProvider({ children }: { children: React.ReactNode }) 
             retry: 1,
           },
         },
-      }),
+      })
   )
 
   return (

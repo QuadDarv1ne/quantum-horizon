@@ -104,7 +104,7 @@ export async function DELETE(request: NextRequest) {
 
     await db.bookmark.delete({
       where: {
-        id,
+        id: Number(id),
         userId,
       },
     })

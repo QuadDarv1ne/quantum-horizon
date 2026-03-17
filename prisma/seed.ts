@@ -59,7 +59,7 @@ async function main() {
     // Создание записи прогресса
     await prisma.userProgress.create({
       data: {
-        userId: user.id,
+        userId: String(user.id),
         topic: "general",
         completedCount: 0,
       },
@@ -68,7 +68,7 @@ async function main() {
     // Создание настроек пользователя
     await prisma.userSettings.create({
       data: {
-        userId: user.id,
+        userId: String(user.id),
         theme: "system",
         language: "ru",
       },

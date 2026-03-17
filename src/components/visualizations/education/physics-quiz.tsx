@@ -276,7 +276,7 @@ export function PhysicsQuiz() {
     return (
       <div className="space-y-4 text-center">
         <div className="text-4xl font-bold text-purple-400">{text.score}</div>
-        <div className="text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-cyan-400">
+        <div className="bg-gradient-to-r from-green-400 to-cyan-400 bg-clip-text text-6xl font-bold text-transparent">
           {score} {text.of} {currentQuestions.length}
         </div>
         <div className="text-2xl">
@@ -316,7 +316,7 @@ export function PhysicsQuiz() {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center text-xs">
+      <div className="flex items-center justify-between text-xs">
         <span className="text-purple-400">
           {language === "ru"
             ? "Вопрос"
@@ -339,8 +339,8 @@ export function PhysicsQuiz() {
         </span>
       </div>
 
-      <div className="bg-gradient-to-r from-purple-900/30 to-cyan-900/30 rounded-lg p-4 border border-purple-500/30">
-        <div className="text-white font-medium mb-4">{q.question}</div>
+      <div className="rounded-lg border border-purple-500/30 bg-gradient-to-r from-purple-900/30 to-cyan-900/30 p-4">
+        <div className="mb-4 font-medium text-white">{q.question}</div>
 
         <div className="space-y-2">
           {q.options.map((option, index) => (
@@ -350,14 +350,14 @@ export function PhysicsQuiz() {
                 handleAnswer(index)
               }}
               disabled={answered}
-              className={`w-full text-left px-4 py-3 rounded-lg transition-all text-sm ${
+              className={`w-full rounded-lg px-4 py-3 text-left text-sm transition-all ${
                 answered
                   ? index === q.correct
-                    ? "bg-green-600/50 border-2 border-green-400"
+                    ? "border-2 border-green-400 bg-green-600/50"
                     : index === selectedAnswer
-                      ? "bg-red-600/50 border-2 border-red-400"
+                      ? "border-2 border-red-400 bg-red-600/50"
                       : "bg-gray-800/50 opacity-50"
-                  : "bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700 hover:border-purple-500"
+                  : "border border-gray-700 bg-gray-800/50 hover:border-purple-500 hover:bg-gray-700/50"
               }`}
             >
               <span className="mr-2">{String.fromCharCode(65 + index)}.</span>
@@ -370,18 +370,18 @@ export function PhysicsQuiz() {
       {answered && (
         <div className="space-y-3">
           <div
-            className={`p-3 rounded-lg text-sm ${selectedAnswer === q.correct ? "bg-green-900/30 border border-green-500/30" : "bg-red-900/30 border border-red-500/30"}`}
+            className={`rounded-lg p-3 text-sm ${selectedAnswer === q.correct ? "border border-green-500/30 bg-green-900/30" : "border border-red-500/30 bg-red-900/30"}`}
           >
             <div
               className={
                 selectedAnswer === q.correct
-                  ? "text-green-400 font-semibold"
-                  : "text-red-400 font-semibold"
+                  ? "font-semibold text-green-400"
+                  : "font-semibold text-red-400"
               }
             >
               {selectedAnswer === q.correct ? text.correct : text.incorrect}
             </div>
-            <div className="text-gray-400 mt-1">{q.explanation}</div>
+            <div className="mt-1 text-gray-400">{q.explanation}</div>
           </div>
 
           <Button

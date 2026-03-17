@@ -17,9 +17,4 @@ export const translations: Record<Language, Translation> = {
 }
 
 // Export individual translations for direct import
-export {
-  ruTranslations as ru,
-  enTranslations as en,
-  zhTranslations as zh,
-  heTranslations as he,
-}
+export { ruTranslations as ru, enTranslations as en, zhTranslations as zh, heTranslations as he }

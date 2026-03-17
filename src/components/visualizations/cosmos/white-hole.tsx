@@ -205,7 +205,7 @@ export function WhiteHoleVisualization({ isDark }: WhiteHoleVisualizationProps) 
     <div className="space-y-4">
       <canvas
         ref={canvasRef}
-        className="w-full h-[350px] rounded-lg"
+        className="h-[350px] w-full rounded-lg"
         aria-label="White hole: theoretical reverse of black hole"
         role="img"
       />
@@ -213,7 +213,7 @@ export function WhiteHoleVisualization({ isDark }: WhiteHoleVisualizationProps) 
       <div className="space-y-1">
         <div className="flex justify-between text-xs">
           <span className={isDark ? "text-cyan-400" : "text-cyan-700"}>Mass</span>
-          <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+          <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
             {massSolar} M☉
           </span>
         </div>
@@ -229,14 +229,14 @@ export function WhiteHoleVisualization({ isDark }: WhiteHoleVisualizationProps) 
       </div>
 
       <div
-        className={`rounded-lg p-3 border text-sm ${
-          isDark ? "bg-cyan-900/20 border-cyan-500/20" : "bg-cyan-50 border-cyan-200"
+        className={`rounded-lg border p-3 text-sm ${
+          isDark ? "border-cyan-500/20 bg-cyan-900/20" : "border-cyan-200 bg-cyan-50"
         }`}
       >
-        <div className={isDark ? "text-cyan-300 font-semibold" : "text-cyan-700 font-semibold"}>
+        <div className={isDark ? "font-semibold text-cyan-300" : "font-semibold text-cyan-700"}>
           ⚪ What is a White Hole?
         </div>
-        <p className={isDark ? "text-gray-300 mt-1" : "text-gray-700 mt-1"}>
+        <p className={isDark ? "mt-1 text-gray-300" : "mt-1 text-gray-700"}>
           A theoretical object, the reverse of a black hole. Matter can only <strong>leave</strong>{" "}
           it, but cannot enter from outside. It exists only as a mathematical solution to Einstein's
           field equations, but has never been observed.
@@ -245,11 +245,11 @@ export function WhiteHoleVisualization({ isDark }: WhiteHoleVisualizationProps) 
 
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div
-          className={`rounded p-2 border ${
-            isDark ? "bg-gray-800/50 border-gray-700" : "bg-gray-100 border-gray-300"
+          className={`rounded border p-2 ${
+            isDark ? "border-gray-700 bg-gray-800/50" : "border-gray-300 bg-gray-100"
           }`}
         >
-          <div className={isDark ? "text-red-400 font-semibold" : "text-red-600 font-semibold"}>
+          <div className={isDark ? "font-semibold text-red-400" : "font-semibold text-red-600"}>
             🕳️ Black Hole
           </div>
           <div className={isDark ? "text-gray-400" : "text-gray-600"}>
@@ -257,11 +257,11 @@ export function WhiteHoleVisualization({ isDark }: WhiteHoleVisualizationProps) 
           </div>
         </div>
         <div
-          className={`rounded p-2 border ${
-            isDark ? "bg-cyan-950/30 border-cyan-500/20" : "bg-cyan-50 border-cyan-200"
+          className={`rounded border p-2 ${
+            isDark ? "border-cyan-500/20 bg-cyan-950/30" : "border-cyan-200 bg-cyan-50"
           }`}
         >
-          <div className={isDark ? "text-cyan-400 font-semibold" : "text-cyan-700 font-semibold"}>
+          <div className={isDark ? "font-semibold text-cyan-400" : "font-semibold text-cyan-700"}>
             ⚪ White Hole
           </div>
           <div className={isDark ? "text-gray-400" : "text-gray-600"}>
@@ -271,14 +271,14 @@ export function WhiteHoleVisualization({ isDark }: WhiteHoleVisualizationProps) 
       </div>
 
       <div
-        className={`rounded-lg p-3 border text-sm ${
-          isDark ? "bg-purple-900/20 border-purple-500/20" : "bg-purple-50 border-purple-200"
+        className={`rounded-lg border p-3 text-sm ${
+          isDark ? "border-purple-500/20 bg-purple-900/20" : "border-purple-200 bg-purple-50"
         }`}
       >
-        <div className={isDark ? "text-purple-300 font-semibold" : "text-purple-700 font-semibold"}>
+        <div className={isDark ? "font-semibold text-purple-300" : "font-semibold text-purple-700"}>
           🌌 Wormholes
         </div>
-        <p className={isDark ? "text-gray-400 mt-1" : "text-gray-600 mt-1"}>
+        <p className={isDark ? "mt-1 text-gray-400" : "mt-1 text-gray-600"}>
           A black hole and white hole could be connected by an "Einstein-Rosen bridge" — a
           hypothetical tunnel through spacetime.
         </p>

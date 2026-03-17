@@ -147,7 +147,7 @@ export function CMBVisualization({ isDark }: CMBVisualizationProps) {
     <div className="space-y-3">
       <canvas
         ref={canvasRef}
-        className="w-full h-56 rounded-lg"
+        className="h-56 w-full rounded-lg"
         aria-label="Эквивалентность массы и энергии: калькулятор E=mc²"
         role="img"
         aria-live="polite"
@@ -158,7 +158,7 @@ export function CMBVisualization({ isDark }: CMBVisualizationProps) {
         <div className="space-y-1">
           <div className="flex justify-between text-xs">
             <span className="text-red-400">T (K)</span>
-            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+            <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
               {temperature.toFixed(3)}
             </span>
           </div>
@@ -186,13 +186,13 @@ export function CMBVisualization({ isDark }: CMBVisualizationProps) {
         </div>
       </div>
 
-      <div className="bg-blue-900/20 rounded-lg p-3 border border-blue-500/20 text-xs">
-        <div className="text-blue-300 font-semibold mb-1">🌌 Реликтовое излучение (CMB)</div>
+      <div className="rounded-lg border border-blue-500/20 bg-blue-900/20 p-3 text-xs">
+        <div className="mb-1 font-semibold text-blue-300">🌌 Реликтовое излучение (CMB)</div>
         <p className={isDark ? "text-gray-400" : "text-gray-600"}>
           Космический микроволновый фон — это свет, испущенный ~380 000 лет после Большого взрыва,
           когда Вселенная стала прозрачной. Температура 2.725 K с флуктуациями ~10⁻⁵.
         </p>
-        <p className="text-cyan-400 mt-1">
+        <p className="mt-1 text-cyan-400">
           Изучено спутниками COBE, WMAP, Planck — подтверждает теорию Большого взрыва!
         </p>
       </div>

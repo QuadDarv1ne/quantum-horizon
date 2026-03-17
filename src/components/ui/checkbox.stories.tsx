@@ -54,7 +54,7 @@ export const WithDescription: Story = {
         <Checkbox {...args} id="notification" />
         <Label htmlFor="notification">Enable notifications</Label>
       </div>
-      <p className="text-sm text-muted-foreground">
+      <p className="text-muted-foreground text-sm">
         You will receive email updates about your account.
       </p>
     </div>

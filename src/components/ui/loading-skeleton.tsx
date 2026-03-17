@@ -144,17 +144,17 @@ export function PageSkeleton() {
 export function FullScreenLoader({ message = "Загрузка..." }: { message?: string }) {
   return (
     <div
-      className="fixed inset-0 flex flex-col items-center justify-center bg-slate-950/80 backdrop-blur-sm z-50"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-950/80 backdrop-blur-sm"
       role="status"
       aria-label={message}
     >
       <div className="relative">
-        <div className="h-16 w-16 rounded-full border-4 border-indigo-500/30 border-t-indigo-500 animate-spin" />
+        <div className="h-16 w-16 animate-spin rounded-full border-4 border-indigo-500/30 border-t-indigo-500" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="h-8 w-8 rounded-full bg-indigo-500/50 animate-pulse" />
+          <div className="h-8 w-8 animate-pulse rounded-full bg-indigo-500/50" />
         </div>
       </div>
-      <p className="mt-4 text-slate-400 animate-pulse">{message}</p>
+      <p className="mt-4 animate-pulse text-slate-400">{message}</p>
     </div>
   )
 }
@@ -171,7 +171,7 @@ export function InlineLoader({ size = "sm" }: { size?: "sm" | "md" | "lg" }) {
 
   return (
     <div
-      className={`${sizes[size]} rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin`}
+      className={`${sizes[size]} animate-spin rounded-full border-2 border-indigo-500/30 border-t-indigo-500`}
       role="status"
       aria-label="Loading"
     />

@@ -21,7 +21,7 @@ export function LengthContractionVisualization({ isDark }: LengthContractionVisu
   return (
     <div className="space-y-4">
       <div
-        className="relative h-40 rounded-lg overflow-hidden"
+        className="relative h-40 overflow-hidden rounded-lg"
         style={{
           background: isDark
             ? "linear-gradient(180deg, #0a0515 0%, #150a20 100%)"
@@ -30,7 +30,7 @@ export function LengthContractionVisualization({ isDark }: LengthContractionVisu
       >
         {/* Grid */}
         {showGrid && (
-          <svg className="absolute inset-0 w-full h-full opacity-20">
+          <svg className="absolute inset-0 h-full w-full opacity-20">
             {[...Array(20)].map((_, i) => (
               <line
                 key={`v${i}`}
@@ -57,7 +57,7 @@ export function LengthContractionVisualization({ isDark }: LengthContractionVisu
         )}
 
         {/* Moving object */}
-        <div className="absolute top-4 left-1/2 transform -translate-x-1/2">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 transform">
           <div
             className={`h-8 rounded ${
               isDark
@@ -66,13 +66,13 @@ export function LengthContractionVisualization({ isDark }: LengthContractionVisu
             }`}
             style={{ width: `${String(contractedLength)}px` }}
           />
-          <div className={`text-center text-xs mt-1 ${isDark ? "text-blue-300" : "text-blue-700"}`}>
+          <div className={`mt-1 text-center text-xs ${isDark ? "text-blue-300" : "text-blue-700"}`}>
             Moving: {contractedLength.toFixed(1)} m
           </div>
         </div>
 
         {/* Stationary reference */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 transform">
           <div
             className={`h-8 rounded ${
               isDark
@@ -82,7 +82,7 @@ export function LengthContractionVisualization({ isDark }: LengthContractionVisu
             style={{ width: "100px" }}
           />
           <div
-            className={`text-center text-xs mt-1 ${isDark ? "text-green-300" : "text-green-700"}`}
+            className={`mt-1 text-center text-xs ${isDark ? "text-green-300" : "text-green-700"}`}
           >
             At rest: 100 m
           </div>
@@ -90,7 +90,7 @@ export function LengthContractionVisualization({ isDark }: LengthContractionVisu
 
         {/* Velocity arrow */}
         <div
-          className={`absolute top-1/2 right-4 transform -translate-y-1/2 text-sm ${
+          className={`absolute top-1/2 right-4 -translate-y-1/2 transform text-sm ${
             isDark ? "text-orange-400" : "text-orange-600"
           }`}
         >
@@ -101,7 +101,7 @@ export function LengthContractionVisualization({ isDark }: LengthContractionVisu
       <div className="space-y-1">
         <div className="flex justify-between text-xs">
           <span className={isDark ? "text-orange-400" : "text-orange-700"}>Velocity</span>
-          <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+          <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
             {String((velocity * 100).toFixed(0))}% c
           </span>
         </div>
@@ -128,14 +128,14 @@ export function LengthContractionVisualization({ isDark }: LengthContractionVisu
       </Button>
 
       <div
-        className={`rounded-lg p-3 border text-sm ${
-          isDark ? "bg-purple-900/20 border-purple-500/20" : "bg-purple-50 border-purple-200"
+        className={`rounded-lg border p-3 text-sm ${
+          isDark ? "border-purple-500/20 bg-purple-900/20" : "border-purple-200 bg-purple-50"
         }`}
       >
-        <div className={`font-semibold mb-1 ${isDark ? "text-purple-300" : "text-purple-700"}`}>
+        <div className={`mb-1 font-semibold ${isDark ? "text-purple-300" : "text-purple-700"}`}>
           📐 Length contraction formula:
         </div>
-        <div className={`font-mono text-center ${isDark ? "text-white" : "text-gray-900"}`}>
+        <div className={`text-center font-mono ${isDark ? "text-white" : "text-gray-900"}`}>
           L = L₀ / γ = L₀ · √(1 - v²/c²)
         </div>
         <p className={`mt-2 ${isDark ? "text-gray-400" : "text-gray-600"}`}>

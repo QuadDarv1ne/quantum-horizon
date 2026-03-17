@@ -88,8 +88,14 @@ export function VisualizationControls({
         )}
       </Button>
 
-      <div className="flex flex-1 items-center gap-2" role="group" aria-label="Animation speed control">
-        <span className={textColor} id="speed-label">Speed: {animationSpeed.toFixed(1)}x</span>
+      <div
+        className="flex flex-1 items-center gap-2"
+        role="group"
+        aria-label="Animation speed control"
+      >
+        <span className={textColor} id="speed-label">
+          Speed: {animationSpeed.toFixed(1)}x
+        </span>
         <Slider
           value={[animationSpeed]}
           min={0.1}

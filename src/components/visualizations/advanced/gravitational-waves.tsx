@@ -177,7 +177,7 @@ export function GravitationalWavesVisualization({ isDark }: GravitationalWavesVi
     <div className="space-y-3">
       <canvas
         ref={canvasRef}
-        className="w-full h-56 rounded-lg"
+        className="h-56 w-full rounded-lg"
         aria-label="Гравитационные волны: рябь пространства-времени"
         role="img"
       />
@@ -186,7 +186,7 @@ export function GravitationalWavesVisualization({ isDark }: GravitationalWavesVi
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className="text-orange-400">M₁</span>
-            <span className="text-white font-mono">{mass1} M☉</span>
+            <span className="font-mono text-white">{mass1} M☉</span>
           </div>
           <Slider
             value={[mass1]}
@@ -201,7 +201,7 @@ export function GravitationalWavesVisualization({ isDark }: GravitationalWavesVi
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className="text-blue-400">M₂</span>
-            <span className="text-white font-mono">{mass2} M☉</span>
+            <span className="font-mono text-white">{mass2} M☉</span>
           </div>
           <Slider
             value={[mass2]}
@@ -216,7 +216,7 @@ export function GravitationalWavesVisualization({ isDark }: GravitationalWavesVi
         <div className="space-y-1">
           <div className="flex justify-between">
             <span className="text-green-400">Расст.</span>
-            <span className="text-white font-mono">{distance} км</span>
+            <span className="font-mono text-white">{distance} км</span>
           </div>
           <Slider
             value={[distance]}
@@ -242,19 +242,19 @@ export function GravitationalWavesVisualization({ isDark }: GravitationalWavesVi
       </Button>
 
       <div className="grid grid-cols-2 gap-2 text-xs">
-        <div className="bg-purple-950/30 rounded p-2 border border-purple-500/20">
-          <div className="text-purple-400 font-semibold">LIGO, 2015</div>
+        <div className="rounded border border-purple-500/20 bg-purple-950/30 p-2">
+          <div className="font-semibold text-purple-400">LIGO, 2015</div>
           <div className="text-gray-400">Первое обнаружение GW150914</div>
         </div>
-        <div className="bg-cyan-950/30 rounded p-2 border border-cyan-500/20">
-          <div className="text-cyan-400 font-semibold">Деформация h</div>
+        <div className="rounded border border-cyan-500/20 bg-cyan-950/30 p-2">
+          <div className="font-semibold text-cyan-400">Деформация h</div>
           <div className="text-gray-400">~10⁻²¹ (безмерная)</div>
         </div>
       </div>
 
-      <div className="bg-purple-900/20 rounded-lg p-2 border border-purple-500/20 text-xs">
-        <div className="text-purple-300 font-semibold">〰️ Гравитационные волны</div>
-        <p className="text-gray-400 mt-1">
+      <div className="rounded-lg border border-purple-500/20 bg-purple-900/20 p-2 text-xs">
+        <div className="font-semibold text-purple-300">〰️ Гравитационные волны</div>
+        <p className="mt-1 text-gray-400">
           Рябь пространства-времени от ускоренных масс. Объекты с ~30 M☉ сливаются за доли секунды,
           излучая больше энергии, чем все звёзды Вселенной вместе!
         </p>

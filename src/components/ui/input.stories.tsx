@@ -45,7 +45,7 @@ export const WithText: Story = {
     <div className="grid w-full max-w-sm items-center gap-1.5">
       <Label htmlFor="email-2">{args.placeholder || "Email"}</Label>
       <Input {...args} id="email-2" />
-      <p className="text-sm text-muted-foreground">Enter your email address.</p>
+      <p className="text-muted-foreground text-sm">Enter your email address.</p>
     </div>
   ),
   args: {

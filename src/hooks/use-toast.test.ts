@@ -243,7 +243,7 @@ describe("useToast", () => {
       const toastResult = result.current.toast({
         title: "Original Title",
       })
-      updateFn = toastResult.update
+      updateFn = toastResult.update as typeof updateFn
     })
 
     expect(updateFn).toBeDefined()

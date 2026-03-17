@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     // Создание записи прогресса
     await db.userProgress.create({
       data: {
-        userId: user.id,
+        userId: String(user.id),
         topic: "general",
         completedCount: 0,
       },
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     // Создание настроек пользователя
     await db.userSettings.create({
       data: {
-        userId: user.id,
+        userId: String(user.id),
         theme: "system",
         language: "ru",
       },

@@ -58,11 +58,11 @@ export default function SignInPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 p-4">
-      <Card className="w-full max-w-md bg-slate-900/80 border-slate-700 text-white backdrop-blur-sm">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 p-4">
+      <Card className="w-full max-w-md border-slate-700 bg-slate-900/80 text-white backdrop-blur-sm">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">⧫ Quantum Horizon</CardTitle>
-          <CardDescription className="text-slate-400 text-center">
+          <CardTitle className="text-center text-2xl font-bold">⧫ Quantum Horizon</CardTitle>
+          <CardDescription className="text-center text-slate-400">
             Войдите для сохранения прогресса
           </CardDescription>
         </CardHeader>
@@ -81,7 +81,7 @@ export default function SignInPage() {
                 }}
                 required
                 disabled={isLoading}
-                className="bg-slate-800 border-slate-600"
+                className="border-slate-600 bg-slate-800"
                 autoComplete="email"
               />
             </div>
@@ -96,14 +96,14 @@ export default function SignInPage() {
                 }}
                 required
                 disabled={isLoading}
-                className="bg-slate-800 border-slate-600"
+                className="border-slate-600 bg-slate-800"
                 autoComplete="current-password"
               />
             </div>
 
             {/* Сообщения об ошибках */}
             {searchParams.get("error") && (
-              <Alert variant="destructive" className="bg-red-950/50 border-red-800">
+              <Alert variant="destructive" className="border-red-800 bg-red-950/50">
                 <AlertDescription>
                   {searchParams.get("error") === "OAuthAccountNotLinked"
                     ? "Этот email уже используется другим способом входа"
@@ -138,14 +138,14 @@ export default function SignInPage() {
             </div>
           </div>
 
-          <p className="text-xs text-center text-slate-500">
+          <p className="text-center text-xs text-slate-500">
             Нет аккаунта?{" "}
             <a href="/auth/signup" className="text-indigo-400 hover:underline">
               Зарегистрироваться
             </a>
           </p>
 
-          <p className="text-xs text-center text-slate-600">
+          <p className="text-center text-xs text-slate-600">
             Продолжая, вы соглашаетесь с нашими Условиями использования и Политикой
             конфиденциальности
           </p>

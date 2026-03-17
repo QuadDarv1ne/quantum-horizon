@@ -7,9 +7,7 @@ import { useEffect, useState } from "react"
  * Использует aria-live регионы
  */
 export function SrOnly({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="sr-only">{children}</span>
-  )
+  return <span className="sr-only">{children}</span>
 }
 
 /**
@@ -18,20 +16,18 @@ export function SrOnly({ children }: { children: React.ReactNode }) {
 export function useAnnounce() {
   const [message, setMessage] = useState<string>("")
 
-  const announce = (
-    newMessage: string,
-    priority: "polite" | "assertive" = "polite",
-  ) => {
+  const announce = (newMessage: string, priority: "polite" | "assertive" = "polite") => {
     setMessage("")
     // Небольшая задержка для гарантированного обновления
-    setTimeout(() => {
-      setMessage(newMessage)
-    }, priority === "assertive" ? 0 : 100)
+    setTimeout(
+      () => {
+        setMessage(newMessage)
+      },
+      priority === "assertive" ? 0 : 100
+    )
   }
 
-  return { message, announce, LiveRegion: () => (
-    <LiveRegion message={message} />
-  ) }
+  return { message, announce, LiveRegion: () => <LiveRegion message={message} /> }
 }
 
 interface LiveRegionProps {
@@ -46,12 +42,7 @@ export function LiveRegion({ message, priority = "polite" }: LiveRegionProps) {
   if (!message) return null
 
   return (
-    <div
-      role="status"
-      aria-live={priority}
-      aria-atomic="true"
-      className="sr-only"
-    >
+    <div role="status" aria-live={priority} aria-atomic="true" className="sr-only">
       {message}
     </div>
   )
@@ -63,16 +54,14 @@ export function LiveRegion({ message, priority = "polite" }: LiveRegionProps) {
 export function Announcer({
   message,
   priority = "polite",
-}: { message: string; priority?: "polite" | "assertive" }) {
+}: {
+  message: string
+  priority?: "polite" | "assertive"
+}) {
   if (!message) return null
 
   return (
-    <div
-      role="status"
-      aria-live={priority}
-      aria-atomic="true"
-      className="sr-only"
-    >
+    <div role="status" aria-live={priority} aria-atomic="true" className="sr-only">
       {message}
     </div>
   )

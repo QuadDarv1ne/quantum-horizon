@@ -53,7 +53,10 @@ export function VisualizationSelector({ selected, onSelect, isDark }: Visualizat
 
   const renderSection = (title: string, items: VisualizationOption[]) => (
     <div role="group" aria-label={title}>
-      <h3 className={`mb-2 text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-600"}`} id={`${title}-label`}>
+      <h3
+        className={`mb-2 text-sm font-medium ${isDark ? "text-gray-400" : "text-gray-600"}`}
+        id={`${title}-label`}
+      >
         {title}
       </h3>
       <div className="flex flex-wrap gap-2" role="radiogroup" aria-labelledby={`${title}-label`}>
