@@ -5,7 +5,11 @@ import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
-import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectIsPlaying,
+  selectAnimationSpeed,
+} from "@/stores/visualization-store"
 import { QueryParam } from "@/hooks/use-url-sync"
 
 interface SolarSystemVisualizationProps {
@@ -29,7 +33,8 @@ interface StarPosition {
 }
 
 export function SolarSystemVisualization({ isDark }: SolarSystemVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const isPlaying = useVisualizationStore(selectIsPlaying)
+  const animationSpeed = useVisualizationStore(selectAnimationSpeed)
   const { togglePlaying, setAnimationSpeed } = useVisualizationStore()
 
   const [speed, setSpeed] = useState(1)

@@ -7,14 +7,19 @@ import { Slider } from "@/components/ui/slider"
 import { Card, CardContent } from "@/components/ui/card"
 import { plancksLaw, wiensDisplacementLaw, stefanBoltzmannLaw } from "@/lib/physics"
 import { QueryParam } from "@/hooks/use-url-sync"
-import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectIsPlaying,
+  selectAnimationSpeed,
+} from "@/stores/visualization-store"
 
 interface ThermalRadiationVisualizationProps {
   isDark: boolean
 }
 
 export function ThermalRadiationVisualization({ isDark }: ThermalRadiationVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const isPlaying = useVisualizationStore(selectIsPlaying)
+  const animationSpeed = useVisualizationStore(selectAnimationSpeed)
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
   const [temperature, setTemperature] = useState(() => QueryParam.getNumber("therm.temp", 5000))

@@ -7,7 +7,11 @@ import { Slider } from "@/components/ui/slider"
 import { Card, CardContent } from "@/components/ui/card"
 import { latentHeat as _latentHeat, clapeyronClausius as _clapeyronClausius } from "@/lib/physics"
 import { QueryParam } from "@/hooks/use-url-sync"
-import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectIsPlaying,
+  selectAnimationSpeed,
+} from "@/stores/visualization-store"
 
 interface PhaseTransitionVisualizationProps {
   isDark: boolean
@@ -24,7 +28,8 @@ interface Molecule {
 }
 
 export function PhaseTransitionVisualization({ isDark }: PhaseTransitionVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const isPlaying = useVisualizationStore(selectIsPlaying)
+  const animationSpeed = useVisualizationStore(selectAnimationSpeed)
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
   const [temperature, setTemperature] = useState(() => QueryParam.getNumber("phase.temp", 273))

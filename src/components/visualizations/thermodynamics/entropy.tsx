@@ -7,7 +7,11 @@ import { Slider } from "@/components/ui/slider"
 import { Card, CardContent } from "@/components/ui/card"
 import { averageKineticEnergy } from "@/lib/physics"
 import { QueryParam } from "@/hooks/use-url-sync"
-import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectIsPlaying,
+  selectAnimationSpeed,
+} from "@/stores/visualization-store"
 
 interface EntropyVisualizationProps {
   isDark: boolean
@@ -22,7 +26,8 @@ interface Particle {
 }
 
 export function EntropyVisualization({ isDark }: EntropyVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const isPlaying = useVisualizationStore(selectIsPlaying)
+  const animationSpeed = useVisualizationStore(selectAnimationSpeed)
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
   const [particleCount, setParticleCount] = useState(() =>

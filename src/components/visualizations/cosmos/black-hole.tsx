@@ -4,7 +4,11 @@ import { useState, useRef, useCallback, useEffect } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Button } from "@/components/ui/button"
-import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectIsPlaying,
+  selectAnimationSpeed,
+} from "@/stores/visualization-store"
 import { QueryParam } from "@/hooks/use-url-sync"
 import { G, c, M_SUN } from "@/lib/constants"
 
@@ -19,7 +23,8 @@ interface GradientCache {
 }
 
 export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const isPlaying = useVisualizationStore(selectIsPlaying)
+  const animationSpeed = useVisualizationStore(selectAnimationSpeed)
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
   const [mass, setMass] = useState(() => QueryParam.getNumber("bh.mass", 10))

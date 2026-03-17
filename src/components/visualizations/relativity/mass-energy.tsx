@@ -4,7 +4,11 @@ import { useEffect, useCallback, useRef } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Button } from "@/components/ui/button"
-import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectIsPlaying,
+  selectAnimationSpeed,
+} from "@/stores/visualization-store"
 import { QueryParam } from "@/hooks/use-url-sync"
 
 const _c = 299792458 // Speed of light
@@ -19,7 +23,8 @@ interface GradientCache {
 }
 
 export function MassEnergyVisualization({ isDark }: MassEnergyVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const isPlaying = useVisualizationStore(selectIsPlaying)
+  const animationSpeed = useVisualizationStore(selectAnimationSpeed)
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
   const timeRef = useRef(0)

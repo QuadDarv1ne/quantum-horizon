@@ -8,7 +8,11 @@ import { Card, CardContent } from "@/components/ui/card"
 import { idealGasLaw, rmsVelocity, averageKineticEnergy } from "@/lib/physics"
 import { k_B, N_A } from "@/lib/constants"
 import { QueryParam } from "@/hooks/use-url-sync"
-import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectIsPlaying,
+  selectAnimationSpeed,
+} from "@/stores/visualization-store"
 
 interface IdealGasVisualizationProps {
   isDark: boolean
@@ -23,7 +27,8 @@ interface Molecule {
 }
 
 export function IdealGasVisualization({ isDark }: IdealGasVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const isPlaying = useVisualizationStore(selectIsPlaying)
+  const animationSpeed = useVisualizationStore(selectAnimationSpeed)
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
   const [pressure, setPressure] = useState(() => QueryParam.getNumber("gas.pressure", 1))

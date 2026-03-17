@@ -99,6 +99,9 @@
       "probability": "|ψ|² — 概率密度",
       "waveFunction": "ψ(x) — 波函数",
       "measure": "测量",
+      "measureModeActive": "🔴 测量模式（位置固定）",
+      "measureModeInactive": "⚪ 观察模式（波函数）",
+      "copyUrl": "🔗 复制网址",
       "schrodinger": "薛定谔方程解：",
       "energyFormula": "E_n = n²π²ℏ² / 2mL²",
       "energyQuantized": "能量是量子化的！粒子不能具有零能量 (n≥1) — 这是与经典物理的根本区别。"

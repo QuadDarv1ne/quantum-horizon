@@ -1,7 +1,7 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-18 01:30 (проверки пройдены)
+**Обновлено:** 2026-03-17 20:30 (исправлены бесконечные ререндеры)
 **Статус:** ✅ dev и main синхронизированы
 
 ---
@@ -29,12 +29,13 @@
 
 | #   | Проблема                                      | Файл                             | Приоритет      | Статус                 |
 | --- | --------------------------------------------- | -------------------------------- | -------------- | ---------------------- |
-| 1   | **page.tsx 9700+ строк**                      | `src/app/page.tsx`               | 🔴 Критический | ✅ Решено (интеграция) |
-| 2   | **Нет разделения на компоненты визуализаций** | `src/components/visualizations/` | 🔴 Критический | ✅ Решено              |
-| 3   | **useEffect/useCallback/useMemo в page.tsx**  | Множество inline                 | 🔴 Критический | ✅ Решено              |
-| 4   | **translations как any**                      | `src/lib/translations.ts`        | 🟠 Высокий     | ✅ Уже типизировано    |
-| 5   | **Магия чисел в анимациях**                   | Хардкод значений                 | 🟠 Высокий     | ✅ Решено              |
-| 6   | **Нет тестов для физических расчётов**        | Отсутствуют                      | 🟠 Высокий     | ✅ Решено              |
+| 1   | **Бесконечные ререндеры в визуализациях**     | Множество компонентов            | 🔴 Критический | ✅ Решено (2026-03-17) |
+| 2   | **page.tsx 9700+ строк**                      | `src/app/page.tsx`               | 🔴 Критический | ✅ Решено (интеграция) |
+| 3   | **Нет разделения на компоненты визуализаций** | `src/components/visualizations/` | 🔴 Критический | ✅ Решено              |
+| 4   | **useEffect/useCallback/useMemo в page.tsx**  | Множество inline                 | 🔴 Критический | ✅ Решено              |
+| 5   | **translations как any**                      | `src/lib/translations.ts`        | 🟠 Высокий     | ✅ Уже типизировано    |
+| 6   | **Магия чисел в анимациях**                   | Хардкод значений                 | 🟠 Высокий     | ✅ Решено              |
+| 7   | **Нет тестов для физических расчётов**        | Отсутствуют                      | 🟠 Высокий     | ✅ Решено              |
 
 ---
 
@@ -398,13 +399,13 @@ src/
 
 ## 🔁 Синхронизация
 
-**Последняя синхронизация:** 2026-03-18 01:30
+**Последняя синхронизация:** 2026-03-17 20:30
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                       |
-| ------ | ------ | --------------- | -------------------------------------- |
-| dev    | ✅     | 0               | 4ada533 docs: обновить todo.md (01:00) |
-| main   | ✅     | 0               | 09be94b Merge branch 'dev'             |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки              |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                              |
+| ------ | ------ | --------------- | --------------------------------------------- |
+| dev    | ✅     | 0               | fix: исправлены бесконечные ререндеры (20:30) |
+| main   | ✅     | 0               | 09be94b Merge branch 'dev'                    |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                     |
 
 **Проверки:**
 
@@ -412,6 +413,7 @@ src/
 - ✅ Lint: 0 ошибок
 - ✅ Сборка: успешна
 - ✅ Анимации: все 42 визуализации работают
+- ✅ Консоль: без ошибок (MISSING_MESSAGE исправлены)
 
 **Статус анимаций:**
 
@@ -428,7 +430,70 @@ src/
 
 ### ✅ Выполненная работа (2026-03-11 — 2026-03-17)
 
-**Последние изменения:**
+**Последние изменения (2026-03-17 20:30):**
+
+- ✅ Исправлены бесконечные ререндеры в 24 компонентах визуализаций
+- ✅ Исправлен `slider.tsx` — стабилизирован массив `_values` через `useMemo`
+- ✅ Добавлены ключи переводов: `measureModeActive`, `measureModeInactive`, `copyUrl`
+- ✅ Переводы добавлены в: `ru.json`, `zh.json`, `he.json`
+- ✅ Изменён подход к селекторам Zustand — inline-селекторы вместо `selectPlaybackSettings`
+- ✅ Приложение работает без ошибок в консоли
+
+**Исправленные файлы (бесконечные ререндеры):**
+
+**Thermodynamics (5):**
+
+- `thermodynamics/thermal-radiation.tsx`
+- `thermodynamics/phase-transition.tsx`
+- `thermodynamics/ideal-gas.tsx`
+- `thermodynamics/entropy.tsx`
+- `thermodynamics/carnot-engine.tsx`
+
+**Relativity (2):**
+
+- `relativity/mass-energy.tsx`
+- `relativity/time-dilation.tsx`
+
+**Quantum (10):**
+
+- `quantum/wave-function.tsx`
+- `quantum/uncertainty.tsx`
+- `quantum/tunneling.tsx`
+- `quantum/superconductivity.tsx`
+- `quantum/schrodingers-cat.tsx`
+- `quantum/radioactive-decay.tsx`
+- `quantum/quantum-entanglement.tsx`
+- `quantum/atomic-model.tsx`
+- `quantum/double-slit.tsx`
+- `quantum/photoelectric-effect.tsx`
+- `quantum/brownian-motion.tsx`
+
+**Cosmos (8):**
+
+- `cosmos/black-hole.tsx`
+- `cosmos/big-bang.tsx`
+- `cosmos/protoplanetary-disk.tsx`
+- `cosmos/quasar.tsx`
+- `cosmos/solar-system.tsx`
+- `cosmos/pulsar.tsx`
+- `cosmos/wormhole.tsx`
+- `cosmos/neutron-star.tsx`
+
+**UI компоненты:**
+
+- `src/components/ui/slider.tsx`
+
+**Хранилище:**
+
+- `src/stores/visualization-store.ts` — добавлены `selectIsPlaying`, `selectAnimationSpeed`
+
+**Переводы:**
+
+- `src/i18n/messages/ru.json`
+- `src/i18n/messages/zh.json`
+- `src/i18n/messages/he.json`
+
+**Предыдущие изменения:**
 
 - ✅ page.tsx: 9709 → 161 строка (декомпозиция на 5 секций)
 - ✅ 5 компонентов секций: Quantum, Relativity, Cosmos, Thermodynamics, Advanced
@@ -570,6 +635,7 @@ src/
 
 ### Проблемные места
 
+- ✅ Бесконечные ререндеры — исправлены (2026-03-17)
 - ⚠️ Мало тестов для отдельных визуализаций (только base компоненты + некоторые quantum/cosmos покрыты)
 - ✅ page.tsx 161 строка (цель < 200 — **достигнута**)
 - ⚠️ OneDrive синхронизация может блокировать lock-файлы
