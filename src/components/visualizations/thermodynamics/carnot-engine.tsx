@@ -7,7 +7,11 @@ import { Slider } from "@/components/ui/slider"
 import { Card, CardContent } from "@/components/ui/card"
 import { carnotEfficiency } from "@/lib/physics"
 import { QueryParam } from "@/hooks/use-url-sync"
-import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectIsPlaying,
+  selectAnimationSpeed,
+} from "@/stores/visualization-store"
 
 interface CarnotEngineVisualizationProps {
   isDark: boolean
@@ -21,7 +25,8 @@ interface EngineState {
 }
 
 export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const isPlaying = useVisualizationStore(selectIsPlaying)
+  const animationSpeed = useVisualizationStore(selectAnimationSpeed)
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
   const [tempHot, setTempHot] = useState(() => QueryParam.getNumber("carnot.tempHot", 500))

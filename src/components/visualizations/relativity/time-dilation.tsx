@@ -4,11 +4,7 @@ import { useRef, useEffect, useCallback } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Button } from "@/components/ui/button"
-import {
-  useVisualizationStore,
-  selectTimeDilationSettings,
-  selectPlaybackSettings,
-} from "@/stores/visualization-store"
+import { useVisualizationStore } from "@/stores/visualization-store"
 import { QueryParam } from "@/hooks/use-url-sync"
 import { c } from "@/lib/constants"
 
@@ -17,8 +13,10 @@ interface TimeDilationVisualizationProps {
 }
 
 export function TimeDilationVisualization({ isDark }: TimeDilationVisualizationProps) {
-  const { velocity, showClock } = useVisualizationStore(selectTimeDilationSettings)
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const velocity = useVisualizationStore((state) => state.timeDilation.velocity)
+  const showClock = useVisualizationStore((state) => state.timeDilation.showClock)
+  const isPlaying = useVisualizationStore((state) => state.isPlaying)
+  const animationSpeed = useVisualizationStore((state) => state.animationSpeed)
   const { setVelocity, togglePlaying } = useVisualizationStore()
 
   const timeOffset = useRef(0)

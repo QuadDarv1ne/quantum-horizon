@@ -6,7 +6,11 @@ import { useRef, useState, useCallback, useEffect } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Button } from "@/components/ui/button"
-import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectIsPlaying,
+  selectAnimationSpeed,
+} from "@/stores/visualization-store"
 
 interface AtomicModelVisualizationProps {
   isDark: boolean
@@ -28,7 +32,8 @@ interface Electron {
 }
 
 export function AtomicModelVisualization({ isDark }: AtomicModelVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const isPlaying = useVisualizationStore(selectIsPlaying)
+  const animationSpeed = useVisualizationStore(selectAnimationSpeed)
   const { togglePlaying, setAnimationSpeed } = useVisualizationStore()
 
   const [element, setElement] = useState<ElementKey>("H")

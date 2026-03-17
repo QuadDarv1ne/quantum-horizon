@@ -5,14 +5,19 @@ import { useRef, useState, useCallback } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Slider } from "@/components/ui/slider"
-import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectIsPlaying,
+  selectAnimationSpeed,
+} from "@/stores/visualization-store"
 
 interface NeutronStarVisualizationProps {
   isDark: boolean
 }
 
 export function NeutronStarVisualization({ isDark }: NeutronStarVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const isPlaying = useVisualizationStore(selectIsPlaying)
+  const animationSpeed = useVisualizationStore(selectAnimationSpeed)
   const { togglePlaying, setAnimationSpeed } = useVisualizationStore()
 
   const [rotationPeriod, setRotationPeriod] = useState(33)

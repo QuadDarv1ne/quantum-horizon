@@ -4,14 +4,19 @@ import { useRef, useState, useCallback } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Slider } from "@/components/ui/slider"
-import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectIsPlaying,
+  selectAnimationSpeed,
+} from "@/stores/visualization-store"
 
 interface TunnelingVisualizationProps {
   isDark: boolean
 }
 
 export function TunnelingVisualization({ isDark }: TunnelingVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const isPlaying = useVisualizationStore(selectIsPlaying)
+  const animationSpeed = useVisualizationStore(selectAnimationSpeed)
   const { togglePlaying, setAnimationSpeed } = useVisualizationStore()
 
   const [barrierHeight, setBarrierHeight] = useState(50)

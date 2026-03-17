@@ -3,7 +3,11 @@
 import { useState, useCallback, useRef } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
-import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectIsPlaying,
+  selectAnimationSpeed,
+} from "@/stores/visualization-store"
 import { h_bar } from "@/lib/constants"
 
 interface UncertaintyVisualizationProps {
@@ -11,7 +15,8 @@ interface UncertaintyVisualizationProps {
 }
 
 export function UncertaintyVisualization({ isDark }: UncertaintyVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const isPlaying = useVisualizationStore(selectIsPlaying)
+  const animationSpeed = useVisualizationStore(selectAnimationSpeed)
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
   const [deltaX, setDeltaX] = useState(50)

@@ -27,10 +27,8 @@ vi.mock("@/stores/visualization-store", () => {
   })
   return {
     useVisualizationStore: mockStore,
-    selectPlaybackSettings: (state: { isPlaying: boolean; animationSpeed: number }) => ({
-      isPlaying: state.isPlaying,
-      animationSpeed: state.animationSpeed,
-    }),
+    selectIsPlaying: (state: { isPlaying: boolean }) => state.isPlaying,
+    selectAnimationSpeed: (state: { animationSpeed: number }) => state.animationSpeed,
   }
 })
 

@@ -6,7 +6,11 @@ import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Slider } from "@/components/ui/slider"
 import { Button } from "@/components/ui/button"
-import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectIsPlaying,
+  selectAnimationSpeed,
+} from "@/stores/visualization-store"
 
 interface BrownianMotionVisualizationProps {
   isDark: boolean
@@ -27,7 +31,8 @@ interface Molecule {
 }
 
 export function BrownianMotionVisualization({ isDark }: BrownianMotionVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const isPlaying = useVisualizationStore(selectIsPlaying)
+  const animationSpeed = useVisualizationStore(selectAnimationSpeed)
   const { togglePlaying, setAnimationSpeed } = useVisualizationStore()
 
   const [particleCount, setParticleCount] = useState(5)

@@ -99,6 +99,9 @@
       "probability": "|ψ|² — צפיפות הסתברות",
       "waveFunction": "ψ(x) — פונקציית גל",
       "measure": "מדידה",
+      "measureModeActive": "🔴 מצב מדידה (מיקום מקובע)",
+      "measureModeInactive": "⚪ מצב תצפית (פונקציית גל)",
+      "copyUrl": "🔗 העתק כתובת URL",
       "schrodinger": "פתרון משוואת שרדינגר:",
       "energyFormula": "E_n = n²π²ℏ² / 2mL²",
       "energyQuantized": "האנרגיה קוונטית! החלקיק לא יכול להיות בעל אנרגיה אפס (n≥1) — זה הבדל יסודי מהפיזיקה הקלאסית."

@@ -101,9 +101,11 @@ export const selectVisualizationSettings = (state: VisualizationState) => ({
 export const selectPlaybackSettings = (state: VisualizationState) => ({
   isPlaying: state.isPlaying,
   animationSpeed: state.animationSpeed,
-  togglePlaying: state.togglePlaying,
-  setAnimationSpeed: state.setAnimationSpeed,
 })
+
+// Отдельные селекторы для предотвращения лишних ререндеров
+export const selectIsPlaying = (state: VisualizationState) => state.isPlaying
+export const selectAnimationSpeed = (state: VisualizationState) => state.animationSpeed
 
 export const selectWaveFunctionSettings = (state: VisualizationState) => state.waveFunction
 

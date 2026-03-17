@@ -6,7 +6,11 @@ import { VisualizationControls } from "../base/visualization-controls"
 import { Slider } from "@/components/ui/slider"
 import { Card, CardContent } from "@/components/ui/card"
 import { QueryParam } from "@/hooks/use-url-sync"
-import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectIsPlaying,
+  selectAnimationSpeed,
+} from "@/stores/visualization-store"
 
 interface PulsarVisualizationProps {
   isDark: boolean
@@ -23,7 +27,8 @@ interface Particle {
 }
 
 export function PulsarVisualization({ isDark }: PulsarVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const isPlaying = useVisualizationStore(selectIsPlaying)
+  const animationSpeed = useVisualizationStore(selectAnimationSpeed)
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
   const [rotationSpeed, setRotationSpeed] = useState(() =>

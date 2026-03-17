@@ -4,7 +4,11 @@ import { useRef, useState, useCallback } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Button } from "@/components/ui/button"
-import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectIsPlaying,
+  selectAnimationSpeed,
+} from "@/stores/visualization-store"
 
 interface SchrodingersCatVisualizationProps {
   isDark: boolean
@@ -13,7 +17,8 @@ interface SchrodingersCatVisualizationProps {
 type CatState = "alive" | "dead" | "superposition"
 
 export function SchrodingersCatVisualization({ isDark }: SchrodingersCatVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const isPlaying = useVisualizationStore(selectIsPlaying)
+  const animationSpeed = useVisualizationStore(selectAnimationSpeed)
   const { togglePlaying, setAnimationSpeed } = useVisualizationStore()
 
   const [observationCount, setObservationCount] = useState(0)

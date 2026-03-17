@@ -6,7 +6,11 @@ import { useRef, useState, useCallback } from "react"
 import { VisualizationCanvas } from "../base/visualization-canvas"
 import { VisualizationControls } from "../base/visualization-controls"
 import { Slider } from "@/components/ui/slider"
-import { useVisualizationStore, selectPlaybackSettings } from "@/stores/visualization-store"
+import {
+  useVisualizationStore,
+  selectIsPlaying,
+  selectAnimationSpeed,
+} from "@/stores/visualization-store"
 
 interface PhotoelectricEffectVisualizationProps {
   isDark: boolean
@@ -31,7 +35,8 @@ interface Electron {
 export function PhotoelectricEffectVisualization({
   isDark,
 }: PhotoelectricEffectVisualizationProps) {
-  const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
+  const isPlaying = useVisualizationStore(selectIsPlaying)
+  const animationSpeed = useVisualizationStore(selectAnimationSpeed)
   const { togglePlaying, setAnimationSpeed } = useVisualizationStore()
 
   const [frequency, setFrequency] = useState(50)
