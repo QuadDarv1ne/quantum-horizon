@@ -198,7 +198,7 @@ export function HRDiagramVisualization({ isDark }: HRDiagramVisualizationProps) 
     <div className="space-y-4">
       <canvas
         ref={canvasRef}
-        className="w-full h-[400px] rounded-lg"
+        className="h-[400px] w-full rounded-lg"
         aria-label="Hertzsprung-Russell diagram: stellar classification"
         role="img"
       />
@@ -207,7 +207,7 @@ export function HRDiagramVisualization({ isDark }: HRDiagramVisualizationProps) 
         {stars.slice(0, 4).map((star) => (
           <div
             key={star.name}
-            className={`rounded p-1.5 text-center cursor-pointer transition-colors ${
+            className={`cursor-pointer rounded p-1.5 text-center transition-colors ${
               isDark ? "bg-gray-800/50 hover:bg-gray-700/50" : "bg-gray-200/50 hover:bg-gray-300/50"
             }`}
             onClick={() => {
@@ -224,11 +224,11 @@ export function HRDiagramVisualization({ isDark }: HRDiagramVisualizationProps) 
 
       {selectedStar && (
         <div
-          className={`rounded-lg p-3 border ${
-            isDark ? "bg-gray-800/50 border-gray-700" : "bg-gray-100 border-gray-300"
+          className={`rounded-lg border p-3 ${
+            isDark ? "border-gray-700 bg-gray-800/50" : "border-gray-300 bg-gray-100"
           }`}
         >
-          <div className="flex justify-between items-center mb-2">
+          <div className="mb-2 flex items-center justify-between">
             <span className="font-bold" style={{ color: selectedStar.color }}>
               {selectedStar.name}
             </span>
@@ -250,8 +250,8 @@ export function HRDiagramVisualization({ isDark }: HRDiagramVisualizationProps) 
       )}
 
       <div
-        className={`rounded-lg p-3 border text-sm ${
-          isDark ? "bg-blue-900/20 border-blue-500/20" : "bg-blue-50 border-blue-200"
+        className={`rounded-lg border p-3 text-sm ${
+          isDark ? "border-blue-500/20 bg-blue-900/20" : "border-blue-200 bg-blue-50"
         }`}
       >
         <p className={isDark ? "text-gray-300" : "text-gray-700"}>

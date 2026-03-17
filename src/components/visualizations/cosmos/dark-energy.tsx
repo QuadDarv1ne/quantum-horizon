@@ -198,7 +198,7 @@ export function DarkEnergyVisualization({ isDark }: DarkEnergyVisualizationProps
     <div className="space-y-3">
       <canvas
         ref={canvasRef}
-        className="w-full h-56 rounded-lg"
+        className="h-56 w-full rounded-lg"
         aria-label="Сокращение длины: лоренцево сокращение движущегося объекта"
         role="img"
         aria-live="polite"
@@ -209,7 +209,7 @@ export function DarkEnergyVisualization({ isDark }: DarkEnergyVisualizationProps
         <div className="space-y-1">
           <div className="flex justify-between text-xs">
             <span className="text-purple-400">Тёмная энергия %</span>
-            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+            <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
               {darkEnergyFraction}%
             </span>
           </div>
@@ -226,7 +226,7 @@ export function DarkEnergyVisualization({ isDark }: DarkEnergyVisualizationProps
         <div className="space-y-1">
           <div className="flex justify-between text-xs">
             <span className="text-blue-400">Расширение H</span>
-            <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+            <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
               {expansionRate.toFixed(1)}
             </span>
           </div>
@@ -255,14 +255,14 @@ export function DarkEnergyVisualization({ isDark }: DarkEnergyVisualizationProps
         </Button>
       </div>
 
-      <div className="bg-purple-900/20 rounded-lg p-3 border border-purple-500/20 text-xs">
-        <div className="text-purple-300 font-semibold mb-1">💫 Тёмная энергия</div>
+      <div className="rounded-lg border border-purple-500/20 bg-purple-900/20 p-3 text-xs">
+        <div className="mb-1 font-semibold text-purple-300">💫 Тёмная энергия</div>
         <p className={isDark ? "text-gray-400" : "text-gray-600"}>
           Загадочная сила, составляющая ~68% Вселенной и вызывающая ускоренное расширение. Открыта в
           1998 г. (Нобелевская премия 2011). Природа неизвестна — возможно, энергия вакуума или
           модификация гравитации.
         </p>
-        <p className="text-cyan-400 mt-1">Без неё галактики разбегались бы медленнее!</p>
+        <p className="mt-1 text-cyan-400">Без неё галактики разбегались бы медленнее!</p>
       </div>
     </div>
   )

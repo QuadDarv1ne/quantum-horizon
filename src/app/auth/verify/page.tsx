@@ -26,11 +26,11 @@ export default function VerifyRequestPage() {
   }, [router])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 p-4">
-      <Card className="w-full max-w-md bg-slate-900/80 border-slate-700 text-white backdrop-blur-sm">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 p-4">
+      <Card className="w-full max-w-md border-slate-700 bg-slate-900/80 text-white backdrop-blur-sm">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">✉️ Проверьте почту</CardTitle>
-          <CardDescription className="text-slate-400 text-center">
+          <CardTitle className="text-center text-2xl font-bold">✉️ Проверьте почту</CardTitle>
+          <CardDescription className="text-center text-slate-400">
             Ссылка для входа отправлена
           </CardDescription>
         </CardHeader>
@@ -42,7 +42,7 @@ export default function VerifyRequestPage() {
           <div className="text-center">
             <p className="text-sm text-slate-400">
               Перенаправление на страницу входа через{" "}
-              <span className="text-indigo-400 font-semibold">{countdown}</span> сек...
+              <span className="font-semibold text-indigo-400">{countdown}</span> сек...
             </p>
           </div>
 

@@ -436,12 +436,12 @@ export function StandardModelVisualization({ isDark }: StandardModelVisualizatio
     <div className="space-y-3">
       <canvas
         ref={canvasRef}
-        className="w-full h-56 rounded-lg cursor-pointer"
+        className="h-56 w-full cursor-pointer rounded-lg"
         aria-label="Стандартная модель: кварки, лептоны, бозоны"
         role="img"
       />
 
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex flex-wrap gap-2">
         <Button
           onClick={() => {
             setSelectedParticle("u")
@@ -511,8 +511,8 @@ export function StandardModelVisualization({ isDark }: StandardModelVisualizatio
       </div>
 
       <div
-        className={`rounded-lg p-2 border text-xs ${
-          isDark ? "bg-purple-900/20 border-purple-500/20" : "bg-purple-50 border-purple-200"
+        className={`rounded-lg border p-2 text-xs ${
+          isDark ? "border-purple-500/20 bg-purple-900/20" : "border-purple-200 bg-purple-50"
         }`}
       >
         <div className={`font-semibold ${isDark ? "text-purple-300" : "text-purple-700"}`}>

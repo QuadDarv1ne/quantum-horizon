@@ -2,10 +2,11 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import { render, screen } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
 import { VisualizationSelector } from "./visualization-selector"
+import type { VisualizationType } from "@/stores/visualization-store"
 
 describe("VisualizationSelector", () => {
   const mockProps = {
-    selected: null as string | null,
+    selected: null as VisualizationType | null,
     onSelect: vi.fn(),
     isDark: true,
   }

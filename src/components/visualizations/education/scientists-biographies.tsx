@@ -252,27 +252,27 @@ export function ScientistsBiographies() {
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
         {currentScientists.map((scientist, index) => (
           <button
             key={index}
             onClick={() => {
               setSelectedScientist(selectedScientist === index ? null : index)
             }}
-            className={`p-3 rounded-lg text-center transition-all ${
+            className={`rounded-lg p-3 text-center transition-all ${
               selectedScientist === index
-                ? "bg-gradient-to-br from-purple-600/50 to-cyan-600/50 border-2"
-                : "bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700"
+                ? "border-2 bg-gradient-to-br from-purple-600/50 to-cyan-600/50"
+                : "border border-gray-700 bg-gray-800/50 hover:bg-gray-700/50"
             }`}
             style={{ borderColor: selectedScientist === index ? scientist.color : undefined }}
           >
             <div
-              className="w-12 h-12 mx-auto rounded-full flex items-center justify-center text-2xl font-bold mb-2"
+              className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full text-2xl font-bold"
               style={{ backgroundColor: scientist.color + "30", color: scientist.color }}
             >
               {scientist.name.charAt(0)}
             </div>
-            <div className="text-xs font-medium text-white truncate">{scientist.name}</div>
+            <div className="truncate text-xs font-medium text-white">{scientist.name}</div>
             <div className="text-[10px] text-gray-500">{scientist.years}</div>
           </button>
         ))}
@@ -280,12 +280,12 @@ export function ScientistsBiographies() {
 
       {selectedScientist !== null && (
         <div
-          className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-xl p-4 border animate-fadeIn"
+          className="animate-fadeIn rounded-xl border bg-gradient-to-br from-gray-800/80 to-gray-900/80 p-4"
           style={{ borderColor: currentScientists[selectedScientist].color + "50" }}
         >
           <div className="flex items-start gap-4">
             <div
-              className="w-16 h-16 rounded-full flex items-center justify-center text-3xl font-bold flex-shrink-0"
+              className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full text-3xl font-bold"
               style={{
                 backgroundColor: currentScientists[selectedScientist].color + "20",
                 color: currentScientists[selectedScientist].color,
@@ -294,13 +294,13 @@ export function ScientistsBiographies() {
               {currentScientists[selectedScientist].name.charAt(0)}
             </div>
 
-            <div className="flex-1 min-w-0">
+            <div className="min-w-0 flex-1">
               <h3 className="text-lg font-bold text-white">
                 {currentScientists[selectedScientist].name}
               </h3>
-              <div className="flex flex-wrap gap-2 mt-1">
+              <div className="mt-1 flex flex-wrap gap-2">
                 <span
-                  className="text-xs px-2 py-0.5 rounded-full"
+                  className="rounded-full px-2 py-0.5 text-xs"
                   style={{
                     backgroundColor: currentScientists[selectedScientist].color + "30",
                     color: currentScientists[selectedScientist].color,
@@ -308,7 +308,7 @@ export function ScientistsBiographies() {
                 >
                   {currentScientists[selectedScientist].years}
                 </span>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-gray-700 text-gray-300">
+                <span className="rounded-full bg-gray-700 px-2 py-0.5 text-xs text-gray-300">
                   {currentScientists[selectedScientist].field}
                 </span>
               </div>
@@ -317,28 +317,28 @@ export function ScientistsBiographies() {
 
           <div className="mt-4 space-y-3">
             <div>
-              <div className="text-xs text-gray-500 mb-1">{labels.achievements}</div>
+              <div className="mb-1 text-xs text-gray-500">{labels.achievements}</div>
               <div className="text-sm text-cyan-300">
                 {currentScientists[selectedScientist].achievement}
               </div>
             </div>
 
             <div>
-              <div className="text-xs text-gray-500 mb-1">{labels.nobel}</div>
+              <div className="mb-1 text-xs text-gray-500">{labels.nobel}</div>
               <div className="text-sm text-yellow-400">
                 {currentScientists[selectedScientist].nobel}
               </div>
             </div>
 
-            <div className="bg-gray-800/50 rounded-lg p-3 border-l-2 border-purple-500">
-              <p className="text-sm italic text-gray-300">
+            <div className="rounded-lg border-l-2 border-purple-500 bg-gray-800/50 p-3">
+              <p className="text-sm text-gray-300 italic">
                 {currentScientists[selectedScientist].quote}
               </p>
             </div>
 
             <div>
-              <div className="text-xs text-gray-500 mb-1">{labels.bio}</div>
-              <p className="text-sm text-gray-300 leading-relaxed">
+              <div className="mb-1 text-xs text-gray-500">{labels.bio}</div>
+              <p className="text-sm leading-relaxed text-gray-300">
                 {currentScientists[selectedScientist].bio}
               </p>
             </div>
@@ -346,8 +346,8 @@ export function ScientistsBiographies() {
         </div>
       )}
 
-      <div className="bg-purple-900/20 rounded-lg p-3 border border-purple-500/20 text-xs">
-        <div className="text-purple-300 font-semibold mb-1">{labels.great}</div>
+      <div className="rounded-lg border border-purple-500/20 bg-purple-900/20 p-3 text-xs">
+        <div className="mb-1 font-semibold text-purple-300">{labels.great}</div>
         <p className="text-gray-400">{labels.desc}</p>
       </div>
     </div>

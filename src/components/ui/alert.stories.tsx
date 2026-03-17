@@ -23,9 +23,7 @@ export const Default: Story = {
   render: () => (
     <Alert className="w-[350px]">
       <AlertTitle>Heads up!</AlertTitle>
-      <AlertDescription>
-        You can add components to your app using the cli.
-      </AlertDescription>
+      <AlertDescription>You can add components to your app using the cli.</AlertDescription>
     </Alert>
   ),
 }
@@ -34,9 +32,7 @@ export const Destructive: Story = {
   render: () => (
     <Alert variant="destructive" className="w-[350px]">
       <AlertTitle>Error</AlertTitle>
-      <AlertDescription>
-        Something went wrong. Please try again.
-      </AlertDescription>
+      <AlertDescription>Something went wrong. Please try again.</AlertDescription>
     </Alert>
   ),
 }
@@ -57,9 +53,7 @@ export const WithIcon: Story = {
         <path d="M12 5v14" />
       </svg>
       <AlertTitle>Info</AlertTitle>
-      <AlertDescription>
-        New features available in version 2.0
-      </AlertDescription>
+      <AlertDescription>New features available in version 2.0</AlertDescription>
     </Alert>
   ),
 }

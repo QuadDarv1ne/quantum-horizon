@@ -100,8 +100,25 @@ describe("Physical Constants", () => {
   })
 
   it("all constants are positive numbers", () => {
-    const constants = [G, c, h, h_bar, k_B, M_SUN, eV, m_e, m_p, epsilon_0, mu_0, e, R_E, M_E, AU, sigma_SB]
-    constants.forEach(constant => {
+    const constants = [
+      G,
+      c,
+      h,
+      h_bar,
+      k_B,
+      M_SUN,
+      eV,
+      m_e,
+      m_p,
+      epsilon_0,
+      mu_0,
+      e,
+      R_E,
+      M_E,
+      AU,
+      sigma_SB,
+    ]
+    constants.forEach((constant) => {
       expect(typeof constant).toBe("number")
       expect(constant).toBeGreaterThan(0)
     })

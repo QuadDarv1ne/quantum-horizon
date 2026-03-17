@@ -36,11 +36,11 @@ export const WithMultipleContent: Story = {
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="flex justify-between">
-          <span className="text-sm text-muted-foreground">Status</span>
+          <span className="text-muted-foreground text-sm">Status</span>
           <span className="text-sm font-medium">Active</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-sm text-muted-foreground">Progress</span>
+          <span className="text-muted-foreground text-sm">Progress</span>
           <span className="text-sm font-medium">75%</span>
         </div>
       </CardContent>
@@ -50,12 +50,10 @@ export const WithMultipleContent: Story = {
 
 export const Dark: Story = {
   render: () => (
-    <Card className="w-[350px] bg-slate-900 border-slate-700">
+    <Card className="w-[350px] border-slate-700 bg-slate-900">
       <CardHeader>
         <CardTitle className="text-white">Dark Theme</CardTitle>
-        <CardDescription className="text-slate-400">
-          Card with dark styling
-        </CardDescription>
+        <CardDescription className="text-slate-400">Card with dark styling</CardDescription>
       </CardHeader>
       <CardContent>
         <p className="text-slate-300">Content in dark mode.</p>

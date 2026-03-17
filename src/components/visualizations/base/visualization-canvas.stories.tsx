@@ -66,7 +66,7 @@ export const Default: Story = {
     }
 
     return (
-      <div className="w-full h-[400px]">
+      <div className="h-[400px] w-full">
         <VisualizationCanvas draw={drawFn} isDark={true} />
       </div>
     )
@@ -90,7 +90,7 @@ export const LightMode: Story = {
     }
 
     return (
-      <div className="w-full h-[400px]">
+      <div className="h-[400px] w-full">
         <VisualizationCanvas draw={drawFn} isDark={false} />
       </div>
     )
@@ -136,7 +136,7 @@ export const WithCustomDraw: Story = {
     }
 
     return (
-      <div className="w-full h-[400px]">
+      <div className="h-[400px] w-full">
         <VisualizationCanvas draw={drawWave} isDark={true} />
       </div>
     )

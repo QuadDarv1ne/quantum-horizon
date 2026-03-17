@@ -31,7 +31,11 @@ export function Navigation({ activeSection, onSectionChange, isDark }: Navigatio
       aria-label="Main navigation"
     >
       <div className="mx-auto max-w-6xl px-4 py-2">
-        <div className="flex flex-wrap justify-center gap-2" role="tablist" aria-label="Visualization sections">
+        <div
+          className="flex flex-wrap justify-center gap-2"
+          role="tablist"
+          aria-label="Visualization sections"
+        >
           {NAV_ITEMS.map((tab, index) => (
             <Button
               key={tab.id}

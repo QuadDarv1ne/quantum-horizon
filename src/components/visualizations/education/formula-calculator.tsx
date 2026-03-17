@@ -267,7 +267,7 @@ export function FormulaCalculator() {
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex flex-wrap gap-2">
         {(Object.keys(FORMULAS) as Category[]).map((cat) => (
           <Button
             key={cat}
@@ -285,7 +285,7 @@ export function FormulaCalculator() {
 
       <div className="space-y-2">
         <label className="text-xs text-purple-400">Выберите формулу:</label>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex flex-wrap gap-2">
           {FORMULAS[category].map((f) => (
             <Button
               key={f.id}
@@ -296,7 +296,7 @@ export function FormulaCalculator() {
               }}
               variant={formula === f.id ? "default" : "outline"}
               size="sm"
-              className={`text-xs font-mono ${formula === f.id ? "bg-cyan-600" : "border-cyan-500/50 text-cyan-300"}`}
+              className={`font-mono text-xs ${formula === f.id ? "bg-cyan-600" : "border-cyan-500/50 text-cyan-300"}`}
             >
               {f.name}
             </Button>
@@ -315,7 +315,7 @@ export function FormulaCalculator() {
               onChange={(e) => {
                 setInputs({ ...inputs, [input]: e.target.value })
               }}
-              className="w-full px-3 py-2 rounded-lg bg-gray-800/50 border border-gray-700 text-white text-sm focus:border-cyan-500 focus:outline-none"
+              className="w-full rounded-lg border border-gray-700 bg-gray-800/50 px-3 py-2 text-sm text-white focus:border-cyan-500 focus:outline-none"
               placeholder={input}
             />
           </div>
@@ -330,16 +330,16 @@ export function FormulaCalculator() {
       </Button>
 
       {result && (
-        <div className="bg-gradient-to-r from-purple-900/30 to-cyan-900/30 rounded-lg p-4 border border-purple-500/30">
-          <div className="text-xs text-purple-400 mb-1">Результат:</div>
-          <div className="text-2xl font-mono text-white">
-            {result} {resultUnit && <span className="text-cyan-400 text-lg">{resultUnit}</span>}
+        <div className="rounded-lg border border-purple-500/30 bg-gradient-to-r from-purple-900/30 to-cyan-900/30 p-4">
+          <div className="mb-1 text-xs text-purple-400">Результат:</div>
+          <div className="font-mono text-2xl text-white">
+            {result} {resultUnit && <span className="text-lg text-cyan-400">{resultUnit}</span>}
           </div>
         </div>
       )}
 
-      <div className="bg-gray-800/30 rounded-lg p-3 text-xs">
-        <div className="text-gray-400 mb-2">📋 Константы:</div>
+      <div className="rounded-lg bg-gray-800/30 p-3 text-xs">
+        <div className="mb-2 text-gray-400">📋 Константы:</div>
         <div className="grid grid-cols-2 gap-2 text-gray-500">
           <div>c = 2.998×10⁸ м/с</div>
           <div>h = 6.626×10⁻³⁴ Дж·с</div>

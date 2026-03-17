@@ -101,8 +101,8 @@ export default function ResetPasswordPage() {
 
   if (tokenValid === null) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 p-4">
-        <Card className="w-full max-w-md bg-slate-900/80 border-slate-700 text-white">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 p-4">
+        <Card className="w-full max-w-md border-slate-700 bg-slate-900/80 text-white">
           <CardContent className="pt-6">
             <p className="text-center text-slate-400">Проверка токена...</p>
           </CardContent>
@@ -113,16 +113,16 @@ export default function ResetPasswordPage() {
 
   if (!tokenValid) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 p-4">
-        <Card className="w-full max-w-md bg-slate-900/80 border-slate-700 text-white">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 p-4">
+        <Card className="w-full max-w-md border-slate-700 bg-slate-900/80 text-white">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center">⚠️ Ошибка</CardTitle>
-            <CardDescription className="text-slate-400 text-center">
+            <CardTitle className="text-center text-2xl font-bold">⚠️ Ошибка</CardTitle>
+            <CardDescription className="text-center text-slate-400">
               Токен недействителен
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Alert variant="destructive" className="bg-red-950/50 border-red-800">
+            <Alert variant="destructive" className="border-red-800 bg-red-950/50">
               <AlertDescription className="text-slate-300">
                 {error ?? "Токен сброса пароля недействителен или истек"}
               </AlertDescription>
@@ -142,11 +142,11 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 p-4">
-      <Card className="w-full max-w-md bg-slate-900/80 border-slate-700 text-white backdrop-blur-sm">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 p-4">
+      <Card className="w-full max-w-md border-slate-700 bg-slate-900/80 text-white backdrop-blur-sm">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">🔒 Сброс пароля</CardTitle>
-          <CardDescription className="text-slate-400 text-center">
+          <CardTitle className="text-center text-2xl font-bold">🔒 Сброс пароля</CardTitle>
+          <CardDescription className="text-center text-slate-400">
             {email && `Для: ${email}`}
           </CardDescription>
         </CardHeader>
@@ -164,7 +164,7 @@ export default function ResetPasswordPage() {
                 required
                 minLength={8}
                 disabled={isLoading}
-                className="bg-slate-800 border-slate-600"
+                className="border-slate-600 bg-slate-800"
                 autoComplete="new-password"
               />
             </div>
@@ -180,13 +180,13 @@ export default function ResetPasswordPage() {
                 required
                 minLength={8}
                 disabled={isLoading}
-                className="bg-slate-800 border-slate-600"
+                className="border-slate-600 bg-slate-800"
                 autoComplete="new-password"
               />
             </div>
 
             {error && (
-              <Alert variant="destructive" className="bg-red-950/50 border-red-800">
+              <Alert variant="destructive" className="border-red-800 bg-red-950/50">
                 <AlertDescription className="text-slate-300">{error}</AlertDescription>
               </Alert>
             )}
@@ -200,7 +200,7 @@ export default function ResetPasswordPage() {
             </Button>
           </form>
 
-          <p className="text-xs text-center text-slate-500">
+          <p className="text-center text-xs text-slate-500">
             <a
               href="/auth/signin"
               onClick={(e) => {

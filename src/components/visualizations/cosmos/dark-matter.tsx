@@ -214,7 +214,7 @@ export function DarkMatterVisualization({ isDark }: DarkMatterVisualizationProps
     <div className="space-y-4">
       <canvas
         ref={canvasRef}
-        className="w-full h-[350px] rounded-lg"
+        className="h-[350px] w-full rounded-lg"
         aria-label="Dark matter: galaxy rotation curves"
         role="img"
       />
@@ -224,7 +224,7 @@ export function DarkMatterVisualization({ isDark }: DarkMatterVisualizationProps
           <span className={isDark ? "text-purple-400" : "text-purple-700"}>
             Dark matter fraction
           </span>
-          <span className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+          <span className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
             {darkMatterFraction}%
           </span>
         </div>
@@ -256,29 +256,29 @@ export function DarkMatterVisualization({ isDark }: DarkMatterVisualizationProps
 
       <div className="grid grid-cols-2 gap-2 text-xs">
         <div
-          className={`rounded p-2 border ${
-            isDark ? "bg-purple-950/30 border-purple-500/20" : "bg-purple-50 border-purple-200"
+          className={`rounded border p-2 ${
+            isDark ? "border-purple-500/20 bg-purple-950/30" : "border-purple-200 bg-purple-50"
           }`}
         >
           <div
-            className={isDark ? "text-purple-400 font-semibold" : "text-purple-700 font-semibold"}
+            className={isDark ? "font-semibold text-purple-400" : "font-semibold text-purple-700"}
           >
             Dark Matter
           </div>
-          <div className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+          <div className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
             ~27% of Universe
           </div>
           <div className={isDark ? "text-gray-400" : "text-gray-600"}>Does not emit light</div>
         </div>
         <div
-          className={`rounded p-2 border ${
-            isDark ? "bg-blue-950/30 border-blue-500/20" : "bg-blue-50 border-blue-200"
+          className={`rounded border p-2 ${
+            isDark ? "border-blue-500/20 bg-blue-950/30" : "border-blue-200 bg-blue-50"
           }`}
         >
-          <div className={isDark ? "text-blue-400 font-semibold" : "text-blue-700 font-semibold"}>
+          <div className={isDark ? "font-semibold text-blue-400" : "font-semibold text-blue-700"}>
             Dark Energy
           </div>
-          <div className={isDark ? "text-white font-mono" : "text-gray-900 font-mono"}>
+          <div className={isDark ? "font-mono text-white" : "font-mono text-gray-900"}>
             ~68% of Universe
           </div>
           <div className={isDark ? "text-gray-400" : "text-gray-600"}>Accelerates expansion</div>
@@ -286,8 +286,8 @@ export function DarkMatterVisualization({ isDark }: DarkMatterVisualizationProps
       </div>
 
       <div
-        className={`rounded-lg p-3 border text-sm ${
-          isDark ? "bg-purple-900/20 border-purple-500/20" : "bg-purple-50 border-purple-200"
+        className={`rounded-lg border p-3 text-sm ${
+          isDark ? "border-purple-500/20 bg-purple-900/20" : "border-purple-200 bg-purple-50"
         }`}
       >
         <p className={isDark ? "text-gray-300" : "text-gray-700"}>
