@@ -23,18 +23,12 @@ interface Molecule {
   phase: Phase
 }
 
-export function PhaseTransitionVisualization({
-  isDark,
-}: PhaseTransitionVisualizationProps) {
+export function PhaseTransitionVisualization({ isDark }: PhaseTransitionVisualizationProps) {
   const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
-  const [temperature, setTemperature] = useState(() =>
-    QueryParam.getNumber("phase.temp", 273)
-  )
-  const [pressure, setPressure] = useState(() =>
-    QueryParam.getNumber("phase.pressure", 1)
-  )
+  const [temperature, setTemperature] = useState(() => QueryParam.getNumber("phase.temp", 273))
+  const [pressure, setPressure] = useState(() => QueryParam.getNumber("phase.pressure", 1))
   const [moleculeCount, setMoleculeCount] = useState(() =>
     QueryParam.getNumber("phase.molecules", 80)
   )
@@ -57,7 +51,7 @@ export function PhaseTransitionVisualization({
   // Determine phase based on temperature and pressure
   const meltingPointAt1Atm = 273
   const boilingPointAt1Atm = 373
-  
+
   const getPhase = useCallback((temp: number, press: number): Phase => {
     // Simplified phase diagram for water
     const _triplePointTemp = 273.16
@@ -107,9 +101,7 @@ export function PhaseTransitionVisualization({
       bgGradient.addColorStop(0, isDarkMode ? "#0a0a1a" : "#f0f4ff")
       bgGradient.addColorStop(
         1,
-        tempRatio > 0.5
-          ? isDarkMode ? "#1a0a0a" : "#fff0f0"
-          : isDarkMode ? "#0a1a1a" : "#f0ffff"
+        tempRatio > 0.5 ? (isDarkMode ? "#1a0a0a" : "#fff0f0") : isDarkMode ? "#0a1a1a" : "#f0ffff"
       )
       ctx.fillStyle = bgGradient
       ctx.fillRect(0, 0, width, height)
@@ -297,7 +289,11 @@ export function PhaseTransitionVisualization({
       ctx.fillStyle = isDarkMode ? "#e2e8f0" : "#1a202c"
       ctx.font = "bold 13px monospace"
       ctx.textAlign = "left"
-      ctx.fillText(`Фаза: ${currentPhase === "solid" ? "Твёрдая" : currentPhase === "liquid" ? "Жидкая" : "Газ"}`, margin + 10, height - 28)
+      ctx.fillText(
+        `Фаза: ${currentPhase === "solid" ? "Твёрдая" : currentPhase === "liquid" ? "Жидкая" : "Газ"}`,
+        margin + 10,
+        height - 28
+      )
 
       // Phase transition info
       const transitionTemp = currentPhase === "solid" ? meltingPointAt1Atm : boilingPointAt1Atm
@@ -313,19 +309,21 @@ export function PhaseTransitionVisualization({
   )
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative h-full w-full">
       <VisualizationCanvas draw={draw} isDark={isDark} />
-      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-4 items-end">
-        <Card className="bg-background/90 backdrop-blur border-primary/20">
-          <CardContent className="p-4 space-y-3 min-w-[340px]">
+      <div className="absolute right-4 bottom-4 left-4 flex flex-wrap items-end gap-4">
+        <Card className="bg-background/90 border-primary/20 backdrop-blur">
+          <CardContent className="min-w-[340px] space-y-3 p-4">
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Температура</span>
-                <span className="text-sm text-muted-foreground">{temperature} K</span>
+                <span className="text-muted-foreground text-sm">{temperature} K</span>
               </div>
               <Slider
                 value={[temperature]}
-                onValueChange={([v]) => setTemperature(v)}
+                onValueChange={([v]) => {
+                  setTemperature(v)
+                }}
                 min={200}
                 max={700}
                 step={10}
@@ -335,11 +333,13 @@ export function PhaseTransitionVisualization({
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Давление</span>
-                <span className="text-sm text-muted-foreground">{pressure.toFixed(2)} атм</span>
+                <span className="text-muted-foreground text-sm">{pressure.toFixed(2)} атм</span>
               </div>
               <Slider
                 value={[pressure]}
-                onValueChange={([v]) => setPressure(v)}
+                onValueChange={([v]) => {
+                  setPressure(v)
+                }}
                 min={0.1}
                 max={2}
                 step={0.1}
@@ -349,11 +349,13 @@ export function PhaseTransitionVisualization({
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Молекулы</span>
-                <span className="text-sm text-muted-foreground">{moleculeCount}</span>
+                <span className="text-muted-foreground text-sm">{moleculeCount}</span>
               </div>
               <Slider
                 value={[moleculeCount]}
-                onValueChange={([v]) => setMoleculeCount(v)}
+                onValueChange={([v]) => {
+                  setMoleculeCount(v)
+                }}
                 min={20}
                 max={150}
                 step={10}

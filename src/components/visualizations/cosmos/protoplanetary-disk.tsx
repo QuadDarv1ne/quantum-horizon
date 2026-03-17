@@ -28,30 +28,16 @@ interface Planetesimal {
   cleared: boolean
 }
 
-export function ProtoplanetaryDiskVisualization({
-  isDark,
-}: ProtoplanetaryDiskVisualizationProps) {
+export function ProtoplanetaryDiskVisualization({ isDark }: ProtoplanetaryDiskVisualizationProps) {
   const { isPlaying, animationSpeed } = useVisualizationStore(selectPlaybackSettings)
   const { setAnimationSpeed, togglePlaying } = useVisualizationStore()
 
-  const [starAge, setStarAge] = useState(() =>
-    QueryParam.getNumber("disk.age", 1)
-  )
-  const [diskMass, setDiskMass] = useState(() =>
-    QueryParam.getNumber("disk.mass", 1)
-  )
-  const [viewAngle, setViewAngle] = useState(() =>
-    QueryParam.getNumber("disk.angle", 30)
-  )
-  const [showPlanets, setShowPlanets] = useState(() =>
-    QueryParam.getBoolean("disk.planets", true)
-  )
-  const [showGas, setShowGas] = useState(() =>
-    QueryParam.getBoolean("disk.gas", true)
-  )
-  const [showDust, setShowDust] = useState(() =>
-    QueryParam.getBoolean("disk.dust", true)
-  )
+  const [starAge, setStarAge] = useState(() => QueryParam.getNumber("disk.age", 1))
+  const [diskMass, setDiskMass] = useState(() => QueryParam.getNumber("disk.mass", 1))
+  const [viewAngle, setViewAngle] = useState(() => QueryParam.getNumber("disk.angle", 30))
+  const [showPlanets, setShowPlanets] = useState(() => QueryParam.getBoolean("disk.planets", true))
+  const [showGas, setShowGas] = useState(() => QueryParam.getBoolean("disk.gas", true))
+  const [showDust, setShowDust] = useState(() => QueryParam.getBoolean("disk.dust", true))
 
   const diskParticlesRef = useRef<DiskParticle[]>([])
   const planetesimalsRef = useRef<Planetesimal[]>([])
@@ -98,7 +84,12 @@ export function ProtoplanetaryDiskVisualization({
         angle: Math.random() * Math.PI * 2,
         radius,
         speed: 0.002 * Math.sqrt(50 / radius),
-        size: type === "gas" ? 2 + Math.random() * 3 : type === "planetesimal" ? 4 + Math.random() * 4 : 1 + Math.random() * 2,
+        size:
+          type === "gas"
+            ? 2 + Math.random() * 3
+            : type === "planetesimal"
+              ? 4 + Math.random() * 4
+              : 1 + Math.random() * 2,
         brightness: 0.4 + Math.random() * 0.6,
         type,
       })
@@ -206,7 +197,15 @@ export function ProtoplanetaryDiskVisualization({
           gasGradient.addColorStop(1, "rgba(50, 200, 150, 0)")
           ctx.fillStyle = gasGradient
           ctx.beginPath()
-          ctx.ellipse(centerX, centerY, diskOuterRadius, diskOuterRadius * foreshortening, 0, 0, Math.PI * 2)
+          ctx.ellipse(
+            centerX,
+            centerY,
+            diskOuterRadius,
+            diskOuterRadius * foreshortening,
+            0,
+            0,
+            Math.PI * 2
+          )
           ctx.fill()
         }
 
@@ -229,13 +228,13 @@ export function ProtoplanetaryDiskVisualization({
           let color: string
           if (p.type === "gas") {
             const hue = 180 + (p.radius / diskOuterRadius) * 60
-            color = `hsla(${hue}, 60%, 60%, ${p.brightness * 0.5})`
+            color = `hsla(${hue.toFixed(0)}, 60%, 60%, ${(p.brightness * 0.5).toFixed(2)})`
           } else if (p.type === "planetesimal") {
-            color = `hsla(30, 70%, ${50 + p.brightness * 20}%, ${p.brightness})`
+            color = `hsla(30, 70%, ${(50 + p.brightness * 20).toFixed(0)}%, ${p.brightness.toFixed(2)})`
           } else {
             // Dust
             const hue = 30 + (1 - p.radius / diskOuterRadius) * 30
-            color = `hsla(${hue}, 70%, ${50 + p.brightness * 20}%, ${p.brightness * 0.8})`
+            color = `hsla(${hue.toFixed(0)}, 70%, ${(50 + p.brightness * 20).toFixed(0)}%, ${(p.brightness * 0.8).toFixed(2)})`
           }
 
           ctx.fillStyle = color
@@ -284,7 +283,14 @@ export function ProtoplanetaryDiskVisualization({
 
           // Atmosphere glow for outer planets
           if (p.radius > 100) {
-            const atmosphereGradient = ctx.createRadialGradient(x, y, planetSize, x, y, planetSize * 2)
+            const atmosphereGradient = ctx.createRadialGradient(
+              x,
+              y,
+              planetSize,
+              x,
+              y,
+              planetSize * 2
+            )
             atmosphereGradient.addColorStop(0, "rgba(100, 150, 255, 0.3)")
             atmosphereGradient.addColorStop(1, "rgba(100, 150, 255, 0)")
             ctx.fillStyle = atmosphereGradient
@@ -318,7 +324,15 @@ export function ProtoplanetaryDiskVisualization({
           gapGradient.addColorStop(1, "rgba(0, 0, 0, 0)")
           ctx.fillStyle = gapGradient
           ctx.beginPath()
-          ctx.ellipse(centerX, centerY, p.radius + 15, (p.radius + 15) * foreshortening, 0, 0, Math.PI * 2)
+          ctx.ellipse(
+            centerX,
+            centerY,
+            p.radius + 15,
+            (p.radius + 15) * foreshortening,
+            0,
+            0,
+            Math.PI * 2
+          )
           ctx.fill()
         })
       }
@@ -348,14 +362,14 @@ export function ProtoplanetaryDiskVisualization({
       // Planet count
       const planetCount = planetesimalsRef.current.length
       ctx.fillStyle = isDarkMode ? "#64748b" : "#94a3b8"
-      ctx.fillText(`Протопланет: ${planetCount}`, width - 250, 138)
+      ctx.fillText("Протопланет: " + String(planetCount), width - 250, 138)
 
       // Disk temperature at different radii
       const innerTemp = 1500 - starAge * 100
       const outerTemp = 50 - starAge * 5
       ctx.font = "10px monospace"
-      ctx.fillText(`T(внутр): ~${String(Math.max(500, innerTemp))}K`, width - 250, 155)
-      ctx.fillText(`T(внеш): ~${String(Math.max(10, outerTemp))}K`, width - 250, 168)
+      ctx.fillText("T(внутр): ~" + Math.max(500, innerTemp).toFixed(0) + "K", width - 250, 155)
+      ctx.fillText("T(внеш): ~" + Math.max(10, outerTemp).toFixed(0) + "K", width - 250, 168)
 
       // Evolution progress bar
       const barWidth = 200
@@ -378,19 +392,21 @@ export function ProtoplanetaryDiskVisualization({
   )
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative h-full w-full">
       <VisualizationCanvas draw={draw} isDark={isDark} />
-      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-4 items-end">
-        <Card className="bg-background/90 backdrop-blur border-primary/20">
-          <CardContent className="p-4 space-y-3 min-w-[360px]">
+      <div className="absolute right-4 bottom-4 left-4 flex flex-wrap items-end gap-4">
+        <Card className="bg-background/90 border-primary/20 backdrop-blur">
+          <CardContent className="min-w-[360px] space-y-3 p-4">
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Возраст звезды</span>
-                <span className="text-sm text-muted-foreground">{starAge.toFixed(1)} млн лет</span>
+                <span className="text-muted-foreground text-sm">{starAge.toFixed(1)} млн лет</span>
               </div>
               <Slider
                 value={[starAge]}
-                onValueChange={([v]) => setStarAge(v)}
+                onValueChange={([v]) => {
+                  setStarAge(v)
+                }}
                 min={0.1}
                 max={10}
                 step={0.5}
@@ -400,11 +416,13 @@ export function ProtoplanetaryDiskVisualization({
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Масса диска</span>
-                <span className="text-sm text-muted-foreground">{diskMass.toFixed(1)} × M_J</span>
+                <span className="text-muted-foreground text-sm">{diskMass.toFixed(1)} × M_J</span>
               </div>
               <Slider
                 value={[diskMass]}
-                onValueChange={([v]) => setDiskMass(v)}
+                onValueChange={([v]) => {
+                  setDiskMass(v)
+                }}
                 min={0.5}
                 max={3}
                 step={0.1}
@@ -414,37 +432,45 @@ export function ProtoplanetaryDiskVisualization({
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Угол обзора</span>
-                <span className="text-sm text-muted-foreground">{viewAngle.toFixed(0)}°</span>
+                <span className="text-muted-foreground text-sm">{viewAngle.toFixed(0)}°</span>
               </div>
               <Slider
                 value={[viewAngle]}
-                onValueChange={([v]) => setViewAngle(v)}
+                onValueChange={([v]) => {
+                  setViewAngle(v)
+                }}
                 min={0}
                 max={80}
                 step={5}
                 className="w-full"
               />
             </div>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => setShowPlanets(!showPlanets)}
-                className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                onClick={() => {
+                  setShowPlanets(!showPlanets)
+                }}
+                className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
                   showPlanets ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80"
                 }`}
               >
                 Планеты
               </button>
               <button
-                onClick={() => setShowGas(!showGas)}
-                className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                onClick={() => {
+                  setShowGas(!showGas)
+                }}
+                className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
                   showGas ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80"
                 }`}
               >
                 Газ
               </button>
               <button
-                onClick={() => setShowDust(!showDust)}
-                className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                onClick={() => {
+                  setShowDust(!showDust)
+                }}
+                className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
                   showDust ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80"
                 }`}
               >

@@ -1,0 +1,5 @@
+export { QuantumSection } from "./quantum-section"
+export { RelativitySection } from "./relativity-section"
+export { CosmosSection } from "./cosmos-section"
+export { ThermodynamicsSection } from "./thermodynamics-section"
+export { AdvancedSection } from "./advanced-section"

@@ -26,18 +26,12 @@ export function WormholeVisualization({ isDark }: WormholeVisualizationProps) {
   const [wormholeRadius, setWormholeRadius] = useState(() =>
     QueryParam.getNumber("wormhole.radius", 1)
   )
-  const [distance, setDistance] = useState(() =>
-    QueryParam.getNumber("wormhole.distance", 5)
-  )
+  const [distance, setDistance] = useState(() => QueryParam.getNumber("wormhole.distance", 5))
   const [rotationSpeed, setRotationSpeed] = useState(() =>
     QueryParam.getNumber("wormhole.rotation", 0.5)
   )
-  const [showGrid, setShowGrid] = useState(() =>
-    QueryParam.getBoolean("wormhole.grid", true)
-  )
-  const [showStars, setShowStars] = useState(() =>
-    QueryParam.getBoolean("wormhole.stars", true)
-  )
+  const [showGrid, setShowGrid] = useState(() => QueryParam.getBoolean("wormhole.grid", true))
+  const [showStars, setShowStars] = useState(() => QueryParam.getBoolean("wormhole.stars", true))
 
   const starsRef = useRef<Star[]>([])
   const timeRef = useRef(0)
@@ -192,7 +186,9 @@ export function WormholeVisualization({ isDark }: WormholeVisualizationProps) {
         centerY,
         mouthRadius * 1.5,
         mouthRadius * 0.5,
-        0, 0, Math.PI * 2
+        0,
+        0,
+        Math.PI * 2
       )
       ctx.fill()
 
@@ -214,7 +210,9 @@ export function WormholeVisualization({ isDark }: WormholeVisualizationProps) {
         centerY,
         mouthRadius * 1.5,
         mouthRadius * 0.5,
-        0, 0, Math.PI * 2
+        0,
+        0,
+        Math.PI * 2
       )
       ctx.fill()
 
@@ -245,7 +243,7 @@ export function WormholeVisualization({ isDark }: WormholeVisualizationProps) {
       // Particles flowing through wormhole
       const particleCount = 30
       for (let i = 0; i < particleCount; i++) {
-        const t = ((timeRef.current * 0.5 + i / particleCount) % 1)
+        const t = (timeRef.current * 0.5 + i / particleCount) % 1
         const z = (t - 0.5) * length
         const perspective = 500 / (500 + z + distance * 20)
         const x = centerX + Math.cos(timeRef.current * 2 + i) * throatRadius * perspective * 0.5
@@ -307,19 +305,23 @@ export function WormholeVisualization({ isDark }: WormholeVisualizationProps) {
   )
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative h-full w-full">
       <VisualizationCanvas draw={draw} isDark={isDark} />
-      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-4 items-end">
-        <Card className="bg-background/90 backdrop-blur border-primary/20">
-          <CardContent className="p-4 space-y-3 min-w-[340px]">
+      <div className="absolute right-4 bottom-4 left-4 flex flex-wrap items-end gap-4">
+        <Card className="bg-background/90 border-primary/20 backdrop-blur">
+          <CardContent className="min-w-[340px] space-y-3 p-4">
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Радиус горла</span>
-                <span className="text-sm text-muted-foreground">{wormholeRadius.toFixed(1)} × r_s</span>
+                <span className="text-muted-foreground text-sm">
+                  {wormholeRadius.toFixed(1)} × r_s
+                </span>
               </div>
               <Slider
                 value={[wormholeRadius]}
-                onValueChange={([v]) => setWormholeRadius(v)}
+                onValueChange={([v]) => {
+                  setWormholeRadius(v)
+                }}
                 min={0.5}
                 max={3}
                 step={0.1}
@@ -329,11 +331,15 @@ export function WormholeVisualization({ isDark }: WormholeVisualizationProps) {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Длина моста</span>
-                <span className="text-sm text-muted-foreground">{distance.toFixed(1)} × 1000 км</span>
+                <span className="text-muted-foreground text-sm">
+                  {distance.toFixed(1)} × 1000 км
+                </span>
               </div>
               <Slider
                 value={[distance]}
-                onValueChange={([v]) => setDistance(v)}
+                onValueChange={([v]) => {
+                  setDistance(v)
+                }}
                 min={2}
                 max={10}
                 step={0.5}
@@ -343,29 +349,37 @@ export function WormholeVisualization({ isDark }: WormholeVisualizationProps) {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-sm font-medium">Скорость вращения</span>
-                <span className="text-sm text-muted-foreground">{(rotationSpeed * 100).toFixed(0)}%</span>
+                <span className="text-muted-foreground text-sm">
+                  {(rotationSpeed * 100).toFixed(0)}%
+                </span>
               </div>
               <Slider
                 value={[rotationSpeed]}
-                onValueChange={([v]) => setRotationSpeed(v)}
+                onValueChange={([v]) => {
+                  setRotationSpeed(v)
+                }}
                 min={0}
                 max={2}
                 step={0.1}
                 className="w-full"
               />
             </div>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => setShowGrid(!showGrid)}
-                className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                onClick={() => {
+                  setShowGrid(!showGrid)
+                }}
+                className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
                   showGrid ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80"
                 }`}
               >
                 Сетка
               </button>
               <button
-                onClick={() => setShowStars(!showStars)}
-                className={`px-3 py-1.5 rounded text-xs font-medium transition-colors ${
+                onClick={() => {
+                  setShowStars(!showStars)
+                }}
+                className={`rounded px-3 py-1.5 text-xs font-medium transition-colors ${
                   showStars ? "bg-primary text-primary-foreground" : "bg-muted hover:bg-muted/80"
                 }`}
               >

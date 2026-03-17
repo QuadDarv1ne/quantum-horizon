@@ -1,50 +1,19 @@
 ﻿"use client"
 
 import { useState, useEffect } from "react"
-import { useTranslations, useLocale } from "next-intl"
+import { useLocale } from "next-intl"
 import { SideMenu } from "@/components/layout/side-menu"
 import { HeaderControls } from "@/components/layout/header-controls"
 import { Navigation } from "@/components/layout/navigation"
-import { VisualizationCard } from "@/components/visualizations/base/visualization-card"
 import {
-  WaveFunctionVisualization,
-  UncertaintyVisualization,
-  TimeDilationVisualization,
-  MassEnergyVisualization,
-  BlackHoleVisualization,
-  TunnelingVisualization,
-  LengthContractionVisualization,
-  HRDiagramVisualization,
-  NeutronStarVisualization,
-  DoubleSlitVisualization,
-  DarkMatterVisualization,
-  WhiteHoleVisualization,
-  GravitationalWavesVisualization,
-  QuantumEntanglementVisualization,
-  AtomicModelVisualization,
-  RadioactiveDecayVisualization,
-  SuperconductivityVisualization,
-  StandardModelVisualization,
-  SolarSystemVisualization,
-  CMBVisualization,
-  DarkEnergyVisualization,
-  WormholeVisualization,
-  PulsarVisualization,
-  QuasarVisualization,
-  ProtoplanetaryDiskVisualization,
-  ThermalRadiationVisualization,
-  EntropyVisualization,
-  PhaseTransitionVisualization,
-  IdealGasVisualization,
-  CarnotEngineVisualization,
-  PhysicsQuiz,
-  ScientistsBiographies,
-  FormulaCalculator,
-  PhysicsTimeline,
-} from "@/components/visualizations/lazy"
+  QuantumSection,
+  RelativitySection,
+  CosmosSection,
+  ThermodynamicsSection,
+  AdvancedSection,
+} from "@/components/sections"
 import { SECTIONS, type Section, type Language } from "@/lib/constants-ui"
-
-type Theme = "dark" | "light"
+import type { Theme } from "@/types"
 
 const STORAGE_KEYS = {
   THEME: "physics-theme",
@@ -52,7 +21,6 @@ const STORAGE_KEYS = {
 } as const
 
 export default function Home() {
-  const t = useTranslations()
   const locale = useLocale()
 
   const [activeSection, setActiveSection] = useState<Section>("quantum")
@@ -153,13 +121,12 @@ export default function Home() {
             }}
             isDark={isDark}
           />
-
           <div className="text-center">
             <h1 className="mb-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-2xl font-bold text-transparent md:text-4xl">
-              {t("title")}
+              Quantum Horizon
             </h1>
             <p className={`text-sm md:text-base ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-              {t("subtitle")}
+              Интерактивные визуализации законов физики
             </p>
           </div>
         </div>
@@ -172,336 +139,18 @@ export default function Home() {
       />
 
       <main className="mx-auto max-w-6xl space-y-6 px-4 py-6">
-        {activeSection === "quantum" && (
-          <>
-            <VisualizationCard
-              title={t("waveFunction")}
-              description={t("waveFunctionDesc")}
-              color="purple"
-              isDark={isDark}
-            >
-              <WaveFunctionVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("uncertainty")}
-              description={t("uncertaintyDesc")}
-              color="blue"
-              isDark={isDark}
-            >
-              <UncertaintyVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("tunneling")}
-              description={t("tunnelingDesc")}
-              color="green"
-              isDark={isDark}
-            >
-              <TunnelingVisualization isDark={isDark} />
-            </VisualizationCard>
-          </>
-        )}
-
-        {activeSection === "relativity" && (
-          <>
-            <VisualizationCard
-              title={t("timeDilation")}
-              description={t("timeDilationDesc")}
-              color="orange"
-              isDark={isDark}
-            >
-              <TimeDilationVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("lengthContraction")}
-              description={t("lengthContractionDesc")}
-              color="purple"
-              isDark={isDark}
-            >
-              <LengthContractionVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("massEnergy")}
-              description={t("massEnergyDesc")}
-              color="yellow"
-              isDark={isDark}
-            >
-              <MassEnergyVisualization isDark={isDark} />
-            </VisualizationCard>
-          </>
-        )}
-
-        {activeSection === "cosmos" && (
-          <>
-            <VisualizationCard
-              title={t("hrDiagram")}
-              description={t("hrDiagramDesc")}
-              color="blue"
-              isDark={isDark}
-            >
-              <HRDiagramVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("neutronStar")}
-              description={t("neutronStarDesc")}
-              color="cyan"
-              isDark={isDark}
-            >
-              <NeutronStarVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("blackHole")}
-              description={t("blackHoleDesc")}
-              color="red"
-              isDark={isDark}
-            >
-              <BlackHoleVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("whiteHole")}
-              description={t("whiteHoleDesc")}
-              color="cyan"
-              isDark={isDark}
-            >
-              <WhiteHoleVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("solarSystem")}
-              description={t("solarSystemDesc")}
-              color="yellow"
-              isDark={isDark}
-            >
-              <SolarSystemVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("cmb")}
-              description={t("cmbDesc")}
-              color="blue"
-              isDark={isDark}
-            >
-              <CMBVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("darkEnergy")}
-              description={t("darkEnergyDesc")}
-              color="purple"
-              isDark={isDark}
-            >
-              <DarkEnergyVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("wormhole")}
-              description={t("wormholeDesc")}
-              color="purple"
-              isDark={isDark}
-            >
-              <WormholeVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("pulsar")}
-              description={t("pulsarDesc")}
-              color="cyan"
-              isDark={isDark}
-            >
-              <PulsarVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("quasar")}
-              description={t("quasarDesc")}
-              color="orange"
-              isDark={isDark}
-            >
-              <QuasarVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("protoplanetaryDisk")}
-              description={t("protoplanetaryDiskDesc")}
-              color="green"
-              isDark={isDark}
-            >
-              <ProtoplanetaryDiskVisualization isDark={isDark} />
-            </VisualizationCard>
-          </>
-        )}
-
-        {activeSection === "advanced" && (
-          <>
-            <VisualizationCard
-              title={t("doubleSlit")}
-              description={t("doubleSlitDesc")}
-              color="pink"
-              isDark={isDark}
-            >
-              <DoubleSlitVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("darkMatter")}
-              description={t("darkMatterDesc")}
-              color="purple"
-              isDark={isDark}
-            >
-              <DarkMatterVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("gravitationalWaves")}
-              description={t("gravitationalWavesDesc")}
-              color="purple"
-              isDark={isDark}
-            >
-              <GravitationalWavesVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("quantumEntanglement")}
-              description={t("quantumEntanglementDesc")}
-              color="pink"
-              isDark={isDark}
-            >
-              <QuantumEntanglementVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("atomicModel")}
-              description={t("atomicModelDesc")}
-              color="cyan"
-              isDark={isDark}
-            >
-              <AtomicModelVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("radioactiveDecay")}
-              description={t("radioactiveDecayDesc")}
-              color="green"
-              isDark={isDark}
-            >
-              <RadioactiveDecayVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("superconductivity")}
-              description={t("superconductivityDesc")}
-              color="cyan"
-              isDark={isDark}
-            >
-              <SuperconductivityVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("standardModel")}
-              description={t("standardModelDesc")}
-              color="yellow"
-              isDark={isDark}
-            >
-              <StandardModelVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("calculator")}
-              description={t("calculatorDesc")}
-              color="purple"
-              isDark={isDark}
-            >
-              <FormulaCalculator />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("timeline")}
-              description={t("timelineDesc")}
-              color="purple"
-              isDark={isDark}
-            >
-              <PhysicsTimeline />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("physicsQuiz")}
-              description={t("physicsQuizDesc")}
-              color="cyan"
-              isDark={isDark}
-            >
-              <PhysicsQuiz />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("scientists")}
-              description={t("scientistsDesc")}
-              color="yellow"
-              isDark={isDark}
-            >
-              <ScientistsBiographies />
-            </VisualizationCard>
-          </>
-        )}
-
-        {activeSection === "thermodynamics" && (
-          <>
-            <VisualizationCard
-              title={t("thermalRadiation")}
-              description={t("thermalRadiationDesc")}
-              color="orange"
-              isDark={isDark}
-            >
-              <ThermalRadiationVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("entropy")}
-              description={t("entropyDesc")}
-              color="blue"
-              isDark={isDark}
-            >
-              <EntropyVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("phaseTransition")}
-              description={t("phaseTransitionDesc")}
-              color="cyan"
-              isDark={isDark}
-            >
-              <PhaseTransitionVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("idealGas")}
-              description={t("idealGasDesc")}
-              color="green"
-              isDark={isDark}
-            >
-              <IdealGasVisualization isDark={isDark} />
-            </VisualizationCard>
-
-            <VisualizationCard
-              title={t("carnotEngine")}
-              description={t("carnotEngineDesc")}
-              color="red"
-              isDark={isDark}
-            >
-              <CarnotEngineVisualization isDark={isDark} />
-            </VisualizationCard>
-          </>
-        )}
+        {activeSection === "quantum" && <QuantumSection isDark={isDark} />}
+        {activeSection === "relativity" && <RelativitySection isDark={isDark} />}
+        {activeSection === "cosmos" && <CosmosSection isDark={isDark} />}
+        {activeSection === "thermodynamics" && <ThermodynamicsSection isDark={isDark} />}
+        {activeSection === "advanced" && <AdvancedSection isDark={isDark} />}
       </main>
 
       <footer className={`mt-6 border-t py-4 ${isDark ? "border-gray-800" : "border-gray-200"}`}>
         <div className="mx-auto max-w-6xl px-4 text-center text-xs">
-          <p className={isDark ? "text-gray-500" : "text-gray-600"}>{t("footer")}</p>
+          <p className={isDark ? "text-gray-500" : "text-gray-600"}>
+            © 2026 Quantum Horizon. Образовательный проект по физике
+          </p>
           <p className={`mt-1 ${isDark ? "text-gray-600" : "text-gray-500"}`}>
             ⌨️ {locale === "ru" && "Клавиши: 1-5 разделы, M меню, Esc закрыть"}
             {locale === "en" && "Keys: 1-5 sections, M menu, Esc close"}
