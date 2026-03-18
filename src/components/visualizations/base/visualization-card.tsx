@@ -3,6 +3,8 @@
 import { FullscreenWrapper } from "./fullscreen-wrapper"
 import { ErrorBoundary } from "@/components/ui/error-boundary"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { cardHoverEffects } from "@/lib/micro-interactions"
+import { cn } from "@/lib/utils"
 
 type CardColor = "purple" | "blue" | "green" | "orange" | "yellow" | "red" | "cyan" | "pink"
 
@@ -55,15 +57,17 @@ export function VisualizationCard({
   isDark,
 }: VisualizationCardProps) {
   const bgColor = isDark ? "bg-gradient-to-br from-gray-900 to-gray-950" : "bg-white"
-  const hoverGlow = isDark
-    ? "hover:shadow-lg hover:shadow-purple-500/10"
-    : "hover:shadow-lg hover:shadow-gray-200"
 
   const descColor = isDark ? "" : "text-gray-600"
 
   return (
     <Card
-      className={`group relative overflow-hidden border transition-all duration-500 ${borderColors[color]} ${bgColor} ${hoverGlow}`}
+      className={cn(
+        "group relative overflow-hidden border transition-all duration-500",
+        borderColors[color],
+        bgColor,
+        cardHoverEffects({ effect: "combined" })
+      )}
       role="region"
       aria-labelledby={`card-title-${title.replace(/\s+/g, "-").toLowerCase()}`}
       aria-describedby={`card-desc-${title.replace(/\s+/g, "-").toLowerCase()}`}

@@ -2,13 +2,14 @@
 
 import { Button } from "@/components/ui/button"
 import { CommandPalette } from "@/components/ui/command-palette"
+import { MobileNavigation } from "@/components/ui/mobile-navigation"
 import { LANGUAGES, type Section, type Language } from "@/lib/constants-ui"
 
 interface HeaderControlsProps {
   locale: string
   theme: "dark" | "light"
   onThemeChange: (theme: "dark" | "light") => void
-  onMenuOpen: () => void
+  _onMenuOpen?: () => void
   isDark: boolean
   activeSection: Section
   onSectionChange: (section: Section) => void
@@ -20,7 +21,7 @@ export function HeaderControls({
   locale,
   theme,
   onThemeChange,
-  onMenuOpen,
+  _onMenuOpen,
   isDark,
   activeSection,
   onSectionChange,
@@ -67,6 +68,17 @@ export function HeaderControls({
 
       {/* Controls */}
       <div className="flex items-center gap-2">
+        {/* Mobile Navigation Drawer */}
+        <MobileNavigation
+          activeSection={activeSection}
+          onSectionChange={onSectionChange}
+          theme={theme}
+          onThemeChange={onThemeChange}
+          language={language}
+          onLanguageChange={onLanguageChange}
+          isDark={isDark}
+        />
+
         {/* Command Palette */}
         <div className="hidden w-full max-w-xs md:block">
           <CommandPalette
@@ -128,17 +140,6 @@ export function HeaderControls({
           title={isDark ? "Светлая тема" : "Тёмная тема"}
         >
           <span className="text-base">{isDark ? "☀️" : "🌙"}</span>
-        </Button>
-
-        {/* Menu Button */}
-        <Button
-          onClick={onMenuOpen}
-          variant="outline"
-          size="icon"
-          className={iconButtonClass}
-          title="Меню"
-        >
-          <span className="text-base">☰</span>
         </Button>
       </div>
     </div>
