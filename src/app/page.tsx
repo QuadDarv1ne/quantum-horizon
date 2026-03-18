@@ -133,7 +133,7 @@ export default function Home() {
             locale={locale}
             theme={theme}
             onThemeChange={handleThemeChange}
-            onMenuOpen={() => {
+            _onMenuOpen={() => {
               setMenuOpen(true)
             }}
             isDark={isDark}
