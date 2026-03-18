@@ -329,6 +329,16 @@ src/
 
 ### 🔵 Фаза 5: Дополнительные функции (по желанию)
 
+#### 5.0 Инфраструктурные улучшения
+
+```
+Приоритет: Низкий
+Сложность: Низкая
+```
+
+- [ ] **Multiple lockfiles** — удалить лишний `package-lock.json` в корне пользователя (`C:\Users\maksi\package-lock.json`)
+- [ ] **Middleware deprecated** — переименовать `middleware.ts` → `proxy.ts` (Next.js рекомендует использовать proxy вместо middleware)
+
 #### 5.1 PWA
 
 ```
