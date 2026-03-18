@@ -677,11 +677,11 @@ src/
 
 **Последняя синхронизация:** 2026-03-18 ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                     |
-| ------ | ------ | --------------- | ------------------------------------ |
-| dev    | ✅     | 0               | b4617e3 feat: add user activity hook |
-| main   | ✅     | 0               | b4617e3 feat: add user activity hook |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки            |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                        |
+| ------ | ------ | --------------- | --------------------------------------- |
+| dev    | ✅     | 0               | c0d8a74 feat: add activity API endpoint |
+| main   | ✅     | 0               | c0d8a74 feat: add activity API endpoint |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки               |
 
 **Изменения отправлены:**
 
@@ -695,6 +695,10 @@ src/
   - trackVisualizationView() — просмотр визуализации (+10 XP)
   - trackAchievementUnlock() — получение достижения (+500 XP)
   - Optimistic updates для неаутентифицированных пользователей
+- ✅ `src/app/api/activity/route.ts` — API endpoint для активности
+  - GET /api/activity — получение списка активностей
+  - POST /api/activity — логирование новой активности
+  - Интеграция с Prisma (UserActivity модель)
 
 **User Progress API Integration (2026-03-18):**
 
@@ -738,8 +742,8 @@ src/
 
 **Статус:**
 
-- ✅ Commit в dev: b4617e3
-- ✅ Merge dev → main: b4617e3
+- ✅ Commit в dev: c0d8a74
+- ✅ Merge dev → main: c0d8a74
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
