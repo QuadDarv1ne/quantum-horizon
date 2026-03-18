@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
 "use client"
 
 import { useState } from "react"
 import { User, Award, BookOpen, Clock, TrendingUp, Star, Trophy, Target } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useUserProgress } from "@/hooks/api/use-user-progress"
 
 interface UserProgress {
   userId: string
