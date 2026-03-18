@@ -3,7 +3,7 @@
 **Дата:** 2026-03-11
 **Обновлено:** 2026-03-18 (294 тестов ✅, сборка ✅)
 **Статус:** ✅ dev и main синхронизированы
-**Версия:** 1.4.7-stable
+**Версия:** 1.4.8-stable
 
 ---
 
@@ -527,13 +527,13 @@ src/
 
 #### 3.2 React Query интеграция
 
-**Статус:** ⚠️ Частично (установлен, не используется активно)
+**Статус:** ✅ Выполнено
 
 **Задачи:**
 
-- [ ] Создать API endpoints для данных
-- [ ] Использовать useQuery для получения данных
-- [ ] Настроить кэширование
+- [x] Создать API endpoints для данных — 8 endpoints (achievements, activity, visualizations, auth)
+- [x] Использовать useQuery для получения данных — 8 hooks (useAPOD, useSatellite, useAuth, etc.)
+- [x] Настроить кэширование — React Query с staleTime, gcTime, retry logic
 
 #### 3.3 Storybook
 
@@ -745,8 +745,8 @@ src/
 
 | Ветка  | Статус | Коммиты впереди | Последний коммит             |
 | ------ | ------ | --------------- | ---------------------------- |
-| dev    | ✅     | 0               | b6c4945 docs: update todo.md |
-| main   | ✅     | 0               | b6c4945 docs: update todo.md |
+| dev    | ✅     | 0               | 451709f docs: update todo.md |
+| main   | ✅     | 0               | 451709f docs: update todo.md |
 | origin | ✅     | Синхронизирован | Push выполнен в обе ветки    |
 
 **Изменения отправлены:**
@@ -761,6 +761,7 @@ src/
 - ✅ tsc: 0 ошибок
 - ✅ postcss.config.js добавлен для Tailwind v4
 - ✅ proxy.ts переименован из middleware.ts (Next.js 16)
+- ✅ Phase 3.2 React Query — все задачи выполнены
 - ✅ Phase 4.1 Performance — все задачи выполнены
 - ✅ Phase 4.2 A11y — все задачи выполнены
 - ✅ Phase 5.1 PWA — все задачи выполнены
@@ -768,8 +769,8 @@ src/
 
 **Статус:**
 
-- ✅ Commit в dev: b6c4945
-- ✅ Merge dev → main: b6c4945
+- ✅ Commit в dev: 451709f
+- ✅ Merge dev → main: 451709f
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
@@ -803,11 +804,12 @@ src/
 
 **Последние изменения (2026-03-18) — Обновление todo.md:**
 
+- ✅ Phase 3.2 React Query — отмечены выполненные задачи (endpoints, hooks, кэширование)
 - ✅ Phase 4.1 Performance — отмечены выполненные задачи (code splitting, lazy loading, memoization)
 - ✅ Phase 4.2 A11y — отмечены выполненные задачи (ARIA, keyboard navigation, screen reader, focus)
 - ✅ Phase 5.1 PWA — отмечены выполненные задачи (service worker, manifest, offline)
 - ✅ Phase 5.2 Analytics — отмечен Web Vitals
-- ✅ Версия обновлена: 1.4.7-stable
+- ✅ Версия обновлена: 1.4.8-stable
 
 **Последние изменения (2026-03-18) — UX/UI Enhancements:**
 
