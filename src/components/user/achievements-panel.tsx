@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client"
 
 import { useState } from "react"
@@ -17,6 +18,7 @@ import {
   Target,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useAchievements } from "@/hooks/api/use-achievements"
 
 interface Achievement {
   id: string
@@ -38,9 +40,10 @@ interface AchievementsPanelProps {
 
 export function AchievementsPanel({ className }: AchievementsPanelProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const { achievements: apiAchievements, loading, error } = useAchievements()
 
-  // Mock achievements data
-  const [achievements, setAchievements] = useState<Achievement[]>([
+  // Mock achievements data (fallback for non-authenticated users)
+  const mockAchievements: Achievement[] = [
     // Learning Category
     {
       id: "learn_001",
@@ -197,7 +200,10 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
       progress: 4,
       maxProgress: 6,
     },
-  ])
+  ]
+
+  // Use API data if available, otherwise use mock data
+  const achievements = apiAchievements.length > 0 ? apiAchievements : mockAchievements
 
   const categories = [
     { id: "all", name: "All", icon: <Award className="size-4" /> },
