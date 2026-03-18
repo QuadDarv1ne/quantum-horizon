@@ -209,5 +209,16 @@
     "deleteSuccess": "קביעה מוגדרת נמחקה",
     "applySuccess": "קביעה מוגדרת הוחלה",
     "deleteDefaultError": "לא ניתן למחוק קביעת ברירת מחדל"
+  },
+  "splitScreen": {
+    "title": "השווה",
+    "left": "שמאל",
+    "right": "ימין",
+    "swap": "החלף",
+    "selectInstruction": "בחר שתי ויזואליזציות להשוואה",
+    "selectSubtext": "השתמש בתפריטים הנגללים למעלה לבחירת ויזואליזציות",
+    "fullscreen": "מסך מלא",
+    "exitFullscreen": "צא ממסך מלא",
+    "close": "סגור"
   }
 }

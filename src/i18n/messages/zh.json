@@ -209,5 +209,16 @@
     "deleteSuccess": "预设已删除",
     "applySuccess": "预设已应用",
     "deleteDefaultError": "无法删除默认预设"
+  },
+  "splitScreen": {
+    "title": "比较",
+    "left": "左侧",
+    "right": "右侧",
+    "swap": "交换",
+    "selectInstruction": "选择两个可视化进行比较",
+    "selectSubtext": "使用上面的下拉菜单选择可视化",
+    "fullscreen": "全屏模式",
+    "exitFullscreen": "退出全屏",
+    "close": "关闭"
   }
 }

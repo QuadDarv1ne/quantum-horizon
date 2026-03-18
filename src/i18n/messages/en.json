@@ -213,5 +213,16 @@
     "deleteSuccess": "Preset deleted",
     "applySuccess": "Preset applied",
     "deleteDefaultError": "Cannot delete default preset"
+  },
+  "splitScreen": {
+    "title": "Compare",
+    "left": "Left",
+    "right": "Right",
+    "swap": "Swap",
+    "selectInstruction": "Select two visualizations to compare",
+    "selectSubtext": "Use the dropdowns above to select visualizations",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit Fullscreen",
+    "close": "Close"
   }
 }
