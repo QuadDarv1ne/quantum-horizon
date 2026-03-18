@@ -51,8 +51,11 @@ interface UserProfileProps {
 }
 
 export function UserProfile({ className }: UserProfileProps) {
-  // Mock data (in production, fetch from database)
-  const [userProgress, setUserProgress] = useState<UserProgress>({
+  // Get real data from API
+  const { stats, progress, loading: progressLoading } = useUserProgress()
+
+  // Mock data as fallback (in production, fetch from database)
+  const mockUserProgress: UserProgress = {
     userId: "user_001",
     username: "SpaceExplorer",
     level: 12,
@@ -148,7 +151,24 @@ export function UserProfile({ className }: UserProfileProps) {
         xpEarned: 120,
       },
     ],
-  })
+  }
+
+  // Use API stats if available, otherwise use mock data
+  const userProgress: UserProgress = stats
+    ? {
+        userId: "user_001",
+        username: "SpaceExplorer",
+        level: stats.level,
+        xp: stats.totalXP,
+        xpToNextLevel: stats.level * 500,
+        coursesCompleted: stats.completedCourses,
+        totalStudyTime: stats.totalTimeSpent,
+        streak: stats.currentStreak,
+        achievements: [], // Will be populated from achievements API
+        currentCourses: [],
+        recentActivity: [],
+      }
+    : mockUserProgress
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
