@@ -679,8 +679,8 @@ src/
 
 | Ветка  | Статус | Коммиты впереди | Последний коммит                                      |
 | ------ | ------ | --------------- | ----------------------------------------------------- |
-| dev    | ✅     | 0               | 590def7 fix: Resolve all TypeScript and ESLint errors |
-| main   | ✅     | 0               | e6660a3 Merge dev into main - resolve conflicts       |
+| dev    | ✅     | 0               | b687ac8 docs: Update sync status with lint fixes info |
+| main   | ✅     | 0               | 4409273 Merge branch 'dev'                            |
 | origin | ✅     | Синхронизирован | Push выполнен в обе ветки                             |
 
 **Изменения отправлены:**
@@ -709,8 +709,8 @@ src/
 
 **Статус:**
 
-- ✅ Commit в dev: 590def7
-- ✅ Merge dev → main: e6660a3
+- ✅ Commit в dev: b687ac8
+- ✅ Merge dev → main: 4409273
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
