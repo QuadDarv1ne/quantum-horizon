@@ -677,13 +677,24 @@ src/
 
 **Последняя синхронизация:** 2026-03-18 ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                                |
-| ------ | ------ | --------------- | ----------------------------------------------- |
-| dev    | ✅     | 0               | 8f4cb19 feat: fully integrate user progress API |
-| main   | ✅     | 0               | 8f4cb19 feat: fully integrate user progress API |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                       |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                     |
+| ------ | ------ | --------------- | ------------------------------------ |
+| dev    | ✅     | 0               | b4617e3 feat: add user activity hook |
+| main   | ✅     | 0               | b4617e3 feat: add user activity hook |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки            |
 
 **Изменения отправлены:**
+
+**User Activity API (2026-03-18):**
+
+- ✅ `src/hooks/api/use-activity.ts` — новый хук для активности пользователя (146 строк)
+  - useActivity() — получение списка активностей
+  - logActivity() — логирование действий с XP
+  - trackLessonComplete() — завершение урока (+100 XP)
+  - trackQuizPass() — прохождение теста (+50-150 XP)
+  - trackVisualizationView() — просмотр визуализации (+10 XP)
+  - trackAchievementUnlock() — получение достижения (+500 XP)
+  - Optimistic updates для неаутентифицированных пользователей
 
 **User Progress API Integration (2026-03-18):**
 
@@ -727,8 +738,8 @@ src/
 
 **Статус:**
 
-- ✅ Commit в dev: 8f4cb19
-- ✅ Merge dev → main: 8f4cb19
+- ✅ Commit в dev: b4617e3
+- ✅ Merge dev → main: b4617e3
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
