@@ -11,8 +11,8 @@ const intlMiddleware = createMiddleware({
   localeDetection: true, // Автоматическое определение локали
 })
 
-// Комбинированный middleware
-export default async function middleware(request: NextRequest) {
+// Комбинированный proxy
+export default async function proxy(request: NextRequest) {
   // Сначала обрабатываем i18n
   const intlResponse = intlMiddleware(request)
 
