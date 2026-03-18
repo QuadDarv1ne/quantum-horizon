@@ -1,9 +1,9 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-18 (UX/UI Enhancements ✅)
+**Обновлено:** 2026-03-18 (TypeScript/ESLint Fixes ✅)
 **Статус:** ✅ dev и main синхронизированы
-**Версия:** 1.4.0-ux-ui-enhancements
+**Версия:** 1.4.1-typescript-fixes
 
 ---
 
@@ -743,26 +743,23 @@ src/
 
 **Последняя синхронизация:** 2026-03-18 ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит           |
-| ------ | ------ | --------------- | -------------------------- |
-| dev    | ✅     | 0               | d06873b UX/UI Enhancements |
-| main   | ✅     | 0               | d06873b UX/UI Enhancements |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки  |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                |
+| ------ | ------ | --------------- | ------------------------------- |
+| dev    | ✅     | 0               | e2a4860 TypeScript/ESLint Fixes |
+| main   | ✅     | 0               | e2a4860 TypeScript/ESLint Fixes |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки       |
 
 **Изменения отправлены:**
 
-**UX/UI Enhancements (2026-03-18):**
+**TypeScript/ESLint Fixes (2026-03-18):**
 
-- ✅ `src/components/ui/contextual-help.tsx` — контекстная справка (256 строк)
-- ✅ `src/components/ui/enhanced-command-palette.tsx` — улучшенная палитра команд (291 строка)
-- ✅ `src/components/ui/micro-interactions.tsx` — микро-взаимодействия (236 строк)
-- ✅ `src/components/ui/mobile-navigation.tsx` — улучшенная мобильная навигация (284 строки)
-- ✅ `src/components/ui/onboarding-tour.tsx` — тур по приложению (273 строки)
-- ✅ `src/components/ui/presentation-mode.tsx` — режим презентации (252 строки)
-- ✅ `src/components/ui/quick-actions.tsx` — быстрые действия (211 строк)
-- ✅ `UX_UI_ENHANCEMENTS_SUMMARY.md` — сводка улучшений (370 строк)
-- ✅ Обновлён `src/app/page.tsx` — интеграция новых компонентов
-- ✅ Обновлены тесты для UI компонентов
+- ✅ `src/app/page.tsx` — упрощён, удалены неиспользуемые импорты
+- ✅ `src/components/api/*.tsx` — добавлены default export (4 файла)
+- ✅ `src/components/user/*.tsx` — добавлены default export (2 файла)
+- ✅ `src/hooks/api/use-achievements.ts` — типизация APIResponse
+- ✅ `src/hooks/api/use-user-progress.ts` — типизация APIResponse
+- ✅ `src/hooks/use-canvas-animation-enhanced.ts` — исправлены warnings
+- ✅ `src/components/user/achievements-panel.tsx` — type guards для union типов
 
 **Проверки:**
 
@@ -773,8 +770,8 @@ src/
 
 **Статус:**
 
-- ✅ Commit в dev: d06873b
-- ✅ Merge dev → main: d06873b
+- ✅ Commit в dev: e2a4860
+- ✅ Merge dev → main: e2a4860
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
