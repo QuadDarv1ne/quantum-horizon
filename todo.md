@@ -677,21 +677,24 @@ src/
 
 **Последняя синхронизация:** 2026-03-18 ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                 |
-| ------ | ------ | --------------- | -------------------------------- |
-| dev    | ✅     | 0               | 9965431 feat: user progress hook |
-| main   | ✅     | 0               | 9965431 feat: user progress hook |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки        |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                                |
+| ------ | ------ | --------------- | ----------------------------------------------- |
+| dev    | ✅     | 0               | 8f4cb19 feat: fully integrate user progress API |
+| main   | ✅     | 0               | 8f4cb19 feat: fully integrate user progress API |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                       |
 
 **Изменения отправлены:**
 
-**User Progress API (2026-03-18):**
+**User Progress API Integration (2026-03-18):**
 
 - ✅ `src/hooks/api/use-user-progress.ts` — новый хук для прогресса пользователя
   - useUserProgress() — получение прогресса по темам
   - calculateStats() — расчёт статистики (курсы, время, streak, XP, level)
   - updateProgress() — обновление прогресса с optimistic updates
-  - Интеграция с /api/visualizations/progress и /api/visualizations/bookmarks
+- ✅ `src/components/user/user-profile.tsx` — полная интеграция useUserProgress
+  - Замена mock данных на реальные из API
+  - Fallback на mock данные при отсутствии API
+  - Динамическое обновление статистики
 
 **Achievements API (2026-03-18):**
 
@@ -699,7 +702,6 @@ src/
   - useAchievements() — получение списка достижений
   - React Query integration (кэширование)
   - Optimistic updates
-- ✅ `src/components/user/achievements-panel.tsx` — обновлён компонент
 
 **TypeScript/ESLint Fixes (2026-03-18):**
 
@@ -725,8 +727,8 @@ src/
 
 **Статус:**
 
-- ✅ Commit в dev: 9965431
-- ✅ Merge dev → main: 9965431
+- ✅ Commit в dev: 8f4cb19
+- ✅ Merge dev → main: 8f4cb19
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
