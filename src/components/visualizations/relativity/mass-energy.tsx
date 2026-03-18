@@ -52,21 +52,21 @@ export function MassEnergyVisualization({ isDark }: MassEnergyVisualizationProps
       }
       const time = timeRef.current
 
+      // Constants - computed once per frame
+      const radius = 80
+
       // Clear canvas
       ctx.fillStyle = isDarkMode ? "#0f172a" : "#f8fafc"
       ctx.fillRect(0, 0, width, height)
 
-      // Draw mass-energy equivalence visualization
-      const _mass = 1 // 1 kg for demonstration
-
       // Cache gradients (optimization)
       if (!gradientCache.current) {
-        const massGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, 80)
+        const massGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, radius)
         massGradient.addColorStop(0, isDarkMode ? "#60a5fa" : "#3b82f6")
         massGradient.addColorStop(0.5, isDarkMode ? "#3b82f6" : "#2563eb")
         massGradient.addColorStop(1, isDarkMode ? "#1e40af" : "#1d4ed8")
 
-        const energyGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, 80)
+        const energyGradient = ctx.createRadialGradient(0, 0, 0, 0, 0, radius)
         energyGradient.addColorStop(0, "#fef3c7")
         energyGradient.addColorStop(0.5, "#fbbf24")
         energyGradient.addColorStop(1, "#d97706")
@@ -79,7 +79,7 @@ export function MassEnergyVisualization({ isDark }: MassEnergyVisualizationProps
       ctx.translate(centerX - 150, centerY)
 
       ctx.beginPath()
-      ctx.arc(0, 0, 80, 0, Math.PI * 2)
+      ctx.arc(0, 0, radius, 0, Math.PI * 2)
       ctx.fillStyle = gradientCache.current.massGradient
       ctx.fill()
 
@@ -100,11 +100,11 @@ export function MassEnergyVisualization({ isDark }: MassEnergyVisualizationProps
       // Energy representation (waves/particles)
       for (let i = 0; i < 5; i++) {
         const phase = time + (i * Math.PI * 2) / 5
-        const radius = 60 + Math.sin(phase * 2) * 20
+        const waveRadius = 60 + Math.sin(phase * 2) * 20
         const alpha = 0.3 + Math.sin(phase) * 0.2
 
         ctx.beginPath()
-        ctx.arc(0, 0, radius, phase, phase + Math.PI)
+        ctx.arc(0, 0, waveRadius, phase, phase + Math.PI)
         ctx.strokeStyle = `rgba(251, 191, 36, ${String(alpha)})`
         ctx.lineWidth = 3
         ctx.stroke()
@@ -112,7 +112,7 @@ export function MassEnergyVisualization({ isDark }: MassEnergyVisualizationProps
 
       // Energy core
       ctx.beginPath()
-      ctx.arc(0, 0, 80, 0, Math.PI * 2)
+      ctx.arc(0, 0, radius, 0, Math.PI * 2)
       ctx.fillStyle = gradientCache.current.energyGradient
       ctx.fill()
 
