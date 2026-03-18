@@ -6,6 +6,9 @@ import { SideMenu } from "@/components/layout/side-menu"
 import { HeaderControls } from "@/components/layout/header-controls"
 import { Navigation } from "@/components/layout/navigation"
 import { AnimatedBackground } from "@/components/layout/animated-background"
+import { OnboardingTour, useOnboarding } from "@/components/ui/onboarding-tour"
+import { EnhancedCommandPalette, useCommandPalette } from "@/components/ui/enhanced-command-palette"
+import { QuickActions } from "@/components/ui/quick-actions"
 import {
   QuantumSection,
   RelativitySection,
@@ -133,6 +136,10 @@ export default function Home() {
   })
   const [menuOpen, setMenuOpen] = useState(false)
 
+  // Initialize hooks
+  const { showOnboarding } = useOnboarding()
+  const { isOpen: commandPaletteOpen, close: closeCommandPalette } = useCommandPalette()
+
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.THEME, theme)
   }, [theme])
@@ -186,6 +193,23 @@ export default function Home() {
       }`}
       dir={isRTL ? "rtl" : "ltr"}
     >
+      {/* Interactive Onboarding Tour */}
+      {showOnboarding && <OnboardingTour />}
+
+      {/* Enhanced Command Palette (Ctrl+K) */}
+      <EnhancedCommandPalette
+        isOpen={commandPaletteOpen}
+        onClose={closeCommandPalette}
+        activeSection={activeSection}
+        onSectionChange={setActiveSection}
+        theme={theme}
+        onThemeChange={handleThemeChange}
+        isDark={isDark}
+      />
+
+      {/* Quick Actions Floating Buttons */}
+      <QuickActions />
+
       {/* Animated background particles */}
       {isDark && (
         <div className="pointer-events-none fixed inset-0 overflow-hidden">

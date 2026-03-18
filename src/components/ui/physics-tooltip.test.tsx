@@ -62,7 +62,7 @@ describe("PhysicsTooltip", () => {
     const dialog = await screen.findByRole("dialog")
     expect(dialog).toBeInTheDocument()
 
-    const closeButton = await screen.findByRole("button")
+    const closeButton = await screen.findByRole("button", { name: /close/i })
     await user.click(closeButton)
 
     // Ждём закрытия диалога

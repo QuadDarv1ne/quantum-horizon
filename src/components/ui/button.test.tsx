@@ -24,20 +24,24 @@ describe("Button", () => {
 
   it("applies variant classes", () => {
     const { rerender } = render(<Button variant="default">Default</Button>)
-    expect(screen.getByRole("button")).toHaveClass("bg-primary")
+    expect(screen.getByRole("button")).toHaveClass(
+      "bg-gradient-to-r",
+      "from-purple-600",
+      "to-blue-600"
+    )
 
     rerender(<Button variant="destructive">Destructive</Button>)
-    expect(screen.getByRole("button")).toHaveClass("bg-destructive")
+    expect(screen.getByRole("button")).toHaveClass("from-red-600", "to-orange-600")
   })
 
   it("applies size classes", () => {
     const { rerender } = render(<Button size="default">Default</Button>)
-    expect(screen.getByRole("button")).toHaveClass("h-9")
+    expect(screen.getByRole("button")).toHaveClass("h-10")
 
     rerender(<Button size="sm">Small</Button>)
-    expect(screen.getByRole("button")).toHaveClass("h-8")
+    expect(screen.getByRole("button")).toHaveClass("h-9")
 
     rerender(<Button size="lg">Large</Button>)
-    expect(screen.getByRole("button")).toHaveClass("h-10")
+    expect(screen.getByRole("button")).toHaveClass("h-12")
   })
 })

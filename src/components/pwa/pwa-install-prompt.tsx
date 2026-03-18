@@ -24,7 +24,7 @@ export function PWAInstallPrompt() {
       e.preventDefault()
       console.log("PWA: Install prompt available")
       setDeferredPrompt(e as BeforeInstallPromptEvent)
-      
+
       // Show prompt after 30 seconds or on second visit
       const hasVisited = localStorage.getItem("qh_visited")
       if (hasVisited) {
@@ -50,7 +50,7 @@ export function PWAInstallPrompt() {
     try {
       await deferredPrompt.prompt()
       const choice = await deferredPrompt.userChoice
-      
+
       console.log(`PWA: User ${choice.outcome}`)
       setShowPrompt(false)
       setDeferredPrompt(null)
@@ -60,12 +60,14 @@ export function PWAInstallPrompt() {
   }
 
   const handleDismiss = () => {
-    setShowPrompt(false)
-    localStorage.setItem("qh_dismiss_install", "true")
+    if (typeof window !== "undefined") {
+      setShowPrompt(false)
+      localStorage.setItem("qh_dismiss_install", "true")
+    }
   }
 
   // Don't show if dismissed
-  if (localStorage.getItem("qh_dismiss_install") === "true") {
+  if (typeof window !== "undefined" && localStorage.getItem("qh_dismiss_install") === "true") {
     return null
   }
 
@@ -74,7 +76,7 @@ export function PWAInstallPrompt() {
   }
 
   return (
-    <div className="fixed right-4 bottom-20 z-50 max-w-sm rounded-lg border bg-card p-4 shadow-lg">
+    <div className="bg-card fixed right-4 bottom-20 z-50 max-w-sm rounded-lg border p-4 shadow-lg">
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-600">
@@ -82,14 +84,12 @@ export function PWAInstallPrompt() {
           </div>
           <div>
             <h4 className="text-sm font-semibold">Установить Quantum Horizon</h4>
-            <p className="text-xs text-muted-foreground">
-              Быстрый доступ к приложению офлайн
-            </p>
+            <p className="text-muted-foreground text-xs">Быстрый доступ к приложению офлайн</p>
           </div>
         </div>
         <button
           onClick={handleDismiss}
-          className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
+          className="text-muted-foreground hover:bg-accent hover:text-foreground rounded p-1"
         >
           <X className="h-4 w-4" />
         </button>

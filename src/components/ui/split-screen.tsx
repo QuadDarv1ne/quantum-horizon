@@ -113,6 +113,7 @@ export function SplitScreen({
         )}
       >
         <DialogHeader className="flex-shrink-0 border-b p-4">
+          <DialogTitle className="sr-only">Сравнение визуализаций</DialogTitle>
           <div className="flex items-center justify-between">
             <div className="flex flex-1 items-center gap-4">
               <div className="flex flex-1 items-center gap-2">
@@ -143,6 +144,7 @@ export function SplitScreen({
                 onClick={handleSwap}
                 disabled={!leftVis || !rightVis}
                 className="shrink-0"
+                aria-label="Поменять местами"
               >
                 <ArrowRightLeft className="h-4 w-4" />
               </Button>

@@ -39,7 +39,7 @@ describe("SplitScreen", () => {
     const compareButton = screen.getByRole("button", { name: /сравнить/i })
     await user.default.click(compareButton)
 
-    const leftSelect = await screen.findByPlaceholderText("Левая")
+    const leftSelect = await screen.findByText("Левая")
     expect(leftSelect).toBeInTheDocument()
   })
 
@@ -50,7 +50,7 @@ describe("SplitScreen", () => {
     const compareButton = screen.getByRole("button", { name: /сравнить/i })
     await user.default.click(compareButton)
 
-    const rightSelect = await screen.findByPlaceholderText("Правая")
+    const rightSelect = await screen.findByText("Правая")
     expect(rightSelect).toBeInTheDocument()
   })
 
@@ -61,7 +61,7 @@ describe("SplitScreen", () => {
     const compareButton = screen.getByRole("button", { name: /сравнить/i })
     await user.default.click(compareButton)
 
-    const swapButton = await screen.findByRole("button")
+    const swapButton = await screen.findByRole("button", { name: /поменять местами/i })
     expect(swapButton).toBeInTheDocument()
   })
 })
