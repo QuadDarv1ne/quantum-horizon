@@ -1,9 +1,9 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-18 (TypeScript/ESLint Fixes ✅)
+**Обновлено:** 2026-03-18 (309 тестов ✅)
 **Статус:** ✅ dev и main синхронизированы
-**Версия:** 1.4.1-typescript-fixes
+**Версия:** 1.4.2-tests-309
 
 ---
 
@@ -743,35 +743,27 @@ src/
 
 **Последняя синхронизация:** 2026-03-18 ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                |
-| ------ | ------ | --------------- | ------------------------------- |
-| dev    | ✅     | 0               | e2a4860 TypeScript/ESLint Fixes |
-| main   | ✅     | 0               | e2a4860 TypeScript/ESLint Fixes |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки       |
+| Ветка  | Статус | Коммиты впереди | Последний коммит          |
+| ------ | ------ | --------------- | ------------------------- |
+| dev    | ✅     | 0               | e6c2a3d todo.md update    |
+| main   | ✅     | 0               | e6c2a3d todo.md update    |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки |
 
 **Изменения отправлены:**
 
-**TypeScript/ESLint Fixes (2026-03-18):**
+**Tests Update (2026-03-18):**
 
-- ✅ `src/app/page.tsx` — упрощён, удалены неиспользуемые импорты
-- ✅ `src/components/api/*.tsx` — добавлены default export (4 файла)
-- ✅ `src/components/user/*.tsx` — добавлены default export (2 файла)
-- ✅ `src/hooks/api/use-achievements.ts` — типизация APIResponse
-- ✅ `src/hooks/api/use-user-progress.ts` — типизация APIResponse
-- ✅ `src/hooks/use-canvas-animation-enhanced.ts` — исправлены warnings
-- ✅ `src/components/user/achievements-panel.tsx` — type guards для union типов
-
-**Проверки:**
-
+- ✅ 309 unit-тестов passing (26 файлов)
+- ✅ 24 E2E тестов passing
+- ✅ 43+ Storybook stories
 - ✅ Сборка: успешна
 - ✅ Lint: 0 ошибок
 - ✅ tsc: 0 ошибок
-- ✅ Format: все файлы отформатированы
 
 **Статус:**
 
-- ✅ Commit в dev: e2a4860
-- ✅ Merge dev → main: e2a4860
+- ✅ Commit в dev: e6c2a3d
+- ✅ Merge dev → main: e6c2a3d
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
@@ -786,7 +778,7 @@ src/
 - ✅ TypeScript: 0 ошибок
 - ✅ ESLint: 0 ошибок
 - ✅ 24 E2E тестов passing
-- ✅ 238 unit-тестов passing
+- ✅ 309 unit-тестов passing (26 файлов)
 - ✅ 43+ Storybook stories
 - ✅ 50 физических формул
 - ✅ 93 компонента визуализаций (включая stories)
