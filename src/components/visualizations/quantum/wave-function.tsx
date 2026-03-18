@@ -53,8 +53,15 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
       // Store canvas ref for click handler
       canvasRef.current = ctx.canvas
 
+      // Constants - computed once per frame
       const L = width * 0.8
       const offsetX = (width - L) / 2
+      const maxN = 5
+      const energyHeight = (height - 60) / (maxN + 1)
+      const amplitude = energyHeight * 0.35
+      const baseY = height - 30 - quantumNumber * energyHeight
+      const angularFrequency = quantumNumber * 2
+      const phaseFactor = Math.cos(angularFrequency * time)
 
       // Clear canvas
       ctx.fillStyle = isDarkMode ? "#0a0a1a" : "#f8fafc"
@@ -79,9 +86,6 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
       ctx.fillText("x=L", offsetX + L, height - 8)
 
       // Energy levels with proper physics
-      const maxN = 5
-      const energyHeight = (height - 60) / (maxN + 1)
-
       for (let i = 1; i <= maxN; i++) {
         const y = height - 30 - i * energyHeight
 
@@ -120,14 +124,6 @@ export function WaveFunctionVisualization({ isDark }: WaveFunctionVisualizationP
       // Wave function ψ(x,t) with proper time evolution
       // ψ(x,t) = ψ(x) · e^(-iE_n*t/ℏ) = ψ(x) · cos(ω_n·t) where ω_n = E_n/ℏ
       // For visualization, we show Re[ψ(x,t)] = ψ(x) · cos(E_n·t/ℏ)
-      const amplitude = energyHeight * 0.35
-      const baseY = height - 30 - quantumNumber * energyHeight
-
-      // Energy for this quantum number: E_n = n²π²ℏ²/2mL²
-      // Angular frequency: ω_n = E_n/ℏ = n²π²ℏ/2mL²
-      // For visualization, use scaled frequency
-      const angularFrequency = quantumNumber * 2 // Scaled for visualization
-      const phaseFactor = Math.cos(angularFrequency * time)
 
       // Draw wave function with time evolution
       ctx.beginPath()
