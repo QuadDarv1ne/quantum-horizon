@@ -677,11 +677,11 @@ src/
 
 **Последняя синхронизация:** 2026-03-18 (Database Integration) ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                                          |
-| ------ | ------ | --------------- | --------------------------------------------------------- |
-| dev    | ✅     | 0               | 0a41b9a feat: Database integration with new API endpoints |
-| main   | ✅     | 0               | 1043273 Merge dev into main - sync status update          |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                                 |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                                                |
+| ------ | ------ | --------------- | --------------------------------------------------------------- |
+| dev    | ✅     | 0               | e095b64 docs: Update sync status with database integration info |
+| main   | ✅     | 0               | d414e51 Merge branch 'dev'                                      |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                                       |
 
 **Изменения отправлены:**
 
@@ -716,9 +716,9 @@ src/
 
 **Статус:**
 
-- ✅ Commit в dev: 0a41b9a
-- ⚠️ Merge dev → main: требуется (main отстал на 1 коммит)
-- ⚠️ Push в origin: dev синхронизирован, main требует обновления
+- ✅ Commit в dev: e095b64
+- ✅ Merge dev → main: d414e51
+- ✅ Push в origin: dev + main синхронизированы
 
 ---
 
