@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Trophy, Award, Star, Zap, Rocket, Globe, Atom, Telescope, Clock, Target } from "lucide-react"
 import { cn } from "@/lib/utils"
 

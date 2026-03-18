@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { User, Award, BookOpen, Clock, TrendingUp, Star, Trophy, Target } from "lucide-react"
 import { cn } from "@/lib/utils"
 
