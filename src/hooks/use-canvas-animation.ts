@@ -30,6 +30,14 @@ export interface CanvasAnimationOptions {
 
 /**
  * Хук для анимации canvas с оптимизацией производительности
+ *
+ * Оптимизации:
+ * - FPS limiting для снижения CPU usage
+ * - IntersectionObserver для паузы когда не виден
+ * - Reduced motion поддержка
+ * - ResizeObserver для адаптивного размера
+ * - Delta time calculation для плавной анимации
+ * - Early exit для невидимых canvas
  */
 export function useCanvasAnimation(
   canvasRef: React.RefObject<HTMLCanvasElement | null>,
@@ -45,6 +53,8 @@ export function useCanvasAnimation(
   const isVisibleRef = useRef<boolean>(true)
   const reducedMotionRef = useRef<boolean>(false)
   const rafIntervalRef = useRef<number>(1000 / fpsLimit)
+  const frameCountRef = useRef<number>(0)
+  const lastFpsUpdateRef = useRef<number>(0)
 
   const setupCanvasCallback = useCallback(() => {
     const canvas = canvasRef.current
@@ -126,6 +136,21 @@ export function useCanvasAnimation(
           return
         }
         accumulatorRef.current = 0
+      }
+
+      // FPS monitoring (debug only)
+      if (process.env.NODE_ENV === "development") {
+        frameCountRef.current++
+        if (timestamp - lastFpsUpdateRef.current >= 1000) {
+          const fps = Math.round(
+            (frameCountRef.current * 1000) / (timestamp - lastFpsUpdateRef.current)
+          )
+          if (fps < 30) {
+            console.warn(`[Canvas] Low FPS: ${String(fps)}. Consider reducing complexity.`)
+          }
+          frameCountRef.current = 0
+          lastFpsUpdateRef.current = timestamp
+        }
       }
 
       const rect = canvas.getBoundingClientRect()
