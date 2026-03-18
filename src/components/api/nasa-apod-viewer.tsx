@@ -4,15 +4,19 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Image from "next/image"
 import { ExternalLink, Download, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { VisualizationLoader } from "@/components/ui/visualization-loader"
 import { PhysicsTooltip, TooltipTrigger } from "@/components/ui/physics-tooltip-enhanced"
 import { cn } from "@/lib/utils"
+import { useAPOD } from "@/hooks/api/use-apod"
 
 interface APODData {
   date: string
@@ -31,40 +35,14 @@ interface NASAAPODViewerProps {
 }
 
 export function NASAAPODViewer({ className, showDateSelector = true }: NASAAPODViewerProps) {
-  const [data, setData] = useState<APODData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toISOString().split("T")[0]
   )
 
-  const fetchAPOD = async (date: string = selectedDate) => {
-    try {
-      setLoading(true)
-      setError(null)
-      
-      const apiKey = process.env.NEXT_PUBLIC_NASA_API_KEY || "DEMO_KEY"
-      const response = await fetch(
-        `https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${date}`
-      )
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      
-      const result: APODData = await response.json()
-      setData(result)
-    } catch (err) {
-      console.error("Failed to fetch APOD:", err)
-      setError(err instanceof Error ? err.message : "Failed to load APOD")
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchAPOD(selectedDate)
-  }, [selectedDate])
+  const { data, isLoading, error, refetch } = useAPOD({
+    date: selectedDate,
+    enabled: true,
+  })
 
   const handleDownload = async () => {
     if (!data?.hdurl) return
@@ -85,7 +63,7 @@ export function NASAAPODViewer({ className, showDateSelector = true }: NASAAPODV
     }
   }
 
-  if (loading) {
+  if (isLoading) {
     return <VisualizationLoader className={className} />
   }
 
@@ -98,8 +76,8 @@ export function NASAAPODViewer({ className, showDateSelector = true }: NASAAPODV
         <div className="text-center space-y-4">
           <div className="text-4xl">😕</div>
           <h3 className="text-lg font-semibold">Failed to load APOD</h3>
-          <p className="text-sm text-muted-foreground">{error}</p>
-          <Button onClick={() => fetchAPOD()} variant="outline">
+          <p className="text-sm text-muted-foreground">{error?.message}</p>
+          <Button onClick={() => refetch()} variant="outline">
             Try Again
           </Button>
         </div>
