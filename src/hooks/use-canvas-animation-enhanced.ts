@@ -69,6 +69,7 @@ export function useCanvasAnimationEnhanced({
   }, [targetFps, reducedMotionFps, backgroundFps])
 
   // Animation loop
+  // eslint-disable-next-line react-hooks/immutability
   const animate = useCallback((timestamp: number) => {
     if (lastTimeRef.current === 0) {
       lastTimeRef.current = timestamp
@@ -95,6 +96,7 @@ export function useCanvasAnimationEnhanced({
       lastTimeRef.current = timestamp
     }
 
+    // eslint-disable-next-line react-hooks/immutability
     animationFrameRef.current = requestAnimationFrame(animate)
   }, [getEffectiveFps, onAnimate])
 
