@@ -677,13 +677,21 @@ src/
 
 **Последняя синхронизация:** 2026-03-18 ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                 |
-| ------ | ------ | --------------- | -------------------------------- |
-| dev    | ✅     | 0               | 1acaaa3 docs: Update sync status |
-| main   | ✅     | 0               | 922c36f Merge branch 'dev'       |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки        |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                    |
+| ------ | ------ | --------------- | ----------------------------------- |
+| dev    | ✅     | 0               | 76619e5 feat: achievements API hook |
+| main   | ✅     | 0               | 76619e5 feat: achievements API hook |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки           |
 
 **Изменения отправлены:**
+
+**Achievements API (2026-03-18):**
+
+- ✅ `src/hooks/api/use-achievements.ts` — новый хук для достижений (126 строк)
+  - useAchievements() — получение списка достижений
+  - React Query integration (кэширование)
+  - Optimistic updates
+- ✅ `src/components/user/achievements-panel.tsx` — обновлён компонент
 
 **TypeScript/ESLint Fixes (2026-03-18):**
 
@@ -709,8 +717,8 @@ src/
 
 **Статус:**
 
-- ✅ Commit в dev: 1acaaa3
-- ✅ Merge dev → main: 922c36f
+- ✅ Commit в dev: 76619e5
+- ✅ Merge dev → main: 76619e5
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
