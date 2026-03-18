@@ -677,13 +677,21 @@ src/
 
 **Последняя синхронизация:** 2026-03-18 ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                    |
-| ------ | ------ | --------------- | ----------------------------------- |
-| dev    | ✅     | 0               | 76619e5 feat: achievements API hook |
-| main   | ✅     | 0               | 76619e5 feat: achievements API hook |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки           |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                 |
+| ------ | ------ | --------------- | -------------------------------- |
+| dev    | ✅     | 0               | 9965431 feat: user progress hook |
+| main   | ✅     | 0               | 9965431 feat: user progress hook |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки        |
 
 **Изменения отправлены:**
+
+**User Progress API (2026-03-18):**
+
+- ✅ `src/hooks/api/use-user-progress.ts` — новый хук для прогресса пользователя
+  - useUserProgress() — получение прогресса по темам
+  - calculateStats() — расчёт статистики (курсы, время, streak, XP, level)
+  - updateProgress() — обновление прогресса с optimistic updates
+  - Интеграция с /api/visualizations/progress и /api/visualizations/bookmarks
 
 **Achievements API (2026-03-18):**
 
@@ -717,8 +725,8 @@ src/
 
 **Статус:**
 
-- ✅ Commit в dev: 76619e5
-- ✅ Merge dev → main: 76619e5
+- ✅ Commit в dev: 9965431
+- ✅ Merge dev → main: 9965431
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
