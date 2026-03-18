@@ -21,7 +21,10 @@ import {
 const memoCache = new Map<string, number>()
 const MEMO_LIMIT = 1000
 
-function memoize<T extends (...args: any[]) => number>(fn: T, keyFn: (...args: any[]) => string): T {
+function _memoize<T extends (...args: any[]) => number>(
+  fn: T,
+  keyFn: (...args: any[]) => string
+): T {
   return ((...args: Parameters<T>) => {
     const key = keyFn(...args)
     if (memoCache.has(key)) {

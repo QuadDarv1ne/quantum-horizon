@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable @typescript-eslint/require-await */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
@@ -105,13 +103,13 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
     const loadSpaceWeather = async () => {
       try {
         setLoading(true)
-        
+
         // In production: fetch from NASA DONKI API
         // const response = await fetch('https://api.nasa.gov/DONKI/swx?startDate=...')
-        
+
         // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+
         setSolarFlares(mockSolarFlares)
         setSolarWind(mockSolarWind)
         setAuroraForecast(mockAuroraForecast)
@@ -123,12 +121,17 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
     }
 
     loadSpaceWeather()
-    
+
     // Update every 5 minutes
-    const interval = setInterval(() => {
-      void loadSpaceWeather()
-    }, 5 * 60 * 1000)
-    return () => clearInterval(interval)
+    const interval = setInterval(
+      () => {
+        void loadSpaceWeather()
+      },
+      5 * 60 * 1000
+    )
+    return () => {
+      clearInterval(interval)
+    }
   }, [])
 
   if (loading) {
@@ -137,16 +140,17 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
 
   if (error) {
     return (
-      <div className={cn(
-        "flex items-center justify-center p-8 rounded-xl border bg-card",
-        className
-      )}>
-        <div className="text-center space-y-4">
+      <div
+        className={cn("bg-card flex items-center justify-center rounded-xl border p-8", className)}
+      >
+        <div className="space-y-4 text-center">
           <div className="text-4xl">☢️</div>
           <h3 className="text-lg font-semibold">Radiation Storm Detected</h3>
-          <p className="text-sm text-muted-foreground">{error}</p>
+          <p className="text-muted-foreground text-sm">{error}</p>
           <button
-            onClick={() => window.location.reload()}
+            onClick={() => {
+              window.location.reload()
+            }}
             className="rounded-md bg-purple-600 px-4 py-2 text-white hover:bg-purple-700"
           >
             Reconnect Sensors
@@ -157,24 +161,25 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
   }
 
   const getFlareSeverity = (class_: string) => {
-    if (class_.startsWith("X")) return { level: "Extreme", color: "text-red-500", bg: "bg-red-500/20" }
-    if (class_.startsWith("M")) return { level: "Moderate", color: "text-orange-500", bg: "bg-orange-500/20" }
-    if (class_.startsWith("C")) return { level: "Minor", color: "text-yellow-500", bg: "bg-yellow-500/20" }
+    if (class_.startsWith("X"))
+      return { level: "Extreme", color: "text-red-500", bg: "bg-red-500/20" }
+    if (class_.startsWith("M"))
+      return { level: "Moderate", color: "text-orange-500", bg: "bg-orange-500/20" }
+    if (class_.startsWith("C"))
+      return { level: "Minor", color: "text-yellow-500", bg: "bg-yellow-500/20" }
     return { level: "Low", color: "text-green-500", bg: "bg-green-500/20" }
   }
 
   const getKpSeverity = (kp: number) => {
     if (kp >= 8) return { level: "Extreme Storm", color: "text-red-500", bg: "bg-red-500/20" }
-    if (kp >= 6) return { level: "Moderate Storm", color: "text-orange-500", bg: "bg-orange-500/20" }
+    if (kp >= 6)
+      return { level: "Moderate Storm", color: "text-orange-500", bg: "bg-orange-500/20" }
     if (kp >= 4) return { level: "Active", color: "text-yellow-500", bg: "bg-yellow-500/20" }
     return { level: "Quiet", color: "text-green-500", bg: "bg-green-500/20" }
   }
 
   return (
-    <div className={cn(
-      "overflow-hidden rounded-xl border bg-card shadow-lg",
-      className
-    )}>
+    <div className={cn("bg-card overflow-hidden rounded-xl border shadow-lg", className)}>
       {/* Header */}
       <div className="border-b bg-gradient-to-r from-yellow-500/10 via-orange-500/10 to-red-500/10 p-6">
         <div className="flex items-start justify-between gap-4">
@@ -183,7 +188,7 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
               <Sun className="size-8 text-yellow-500" />
               <h3 className="text-2xl font-bold">☀️ Space Weather Dashboard</h3>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Real-time solar activity and geomagnetic conditions
             </p>
           </div>
@@ -206,7 +211,7 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Zap className="size-5 text-yellow-500" />
-            <h4 className="font-semibold text-lg">Recent Solar Flares</h4>
+            <h4 className="text-lg font-semibold">Recent Solar Flares</h4>
           </div>
 
           <div className="space-y-3">
@@ -215,10 +220,7 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
               return (
                 <div
                   key={flare.flrID}
-                  className={cn(
-                    "rounded-lg border p-4 transition-all",
-                    severity.bg
-                  )}
+                  className={cn("rounded-lg border p-4 transition-all", severity.bg)}
                 >
                   <div className="flex items-start justify-between">
                     <div className="space-y-2">
@@ -232,8 +234,8 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
                           </span>
                         )}
                       </div>
-                      
-                      <div className="text-sm text-muted-foreground">
+
+                      <div className="text-muted-foreground text-sm">
                         <div>Peak: {new Date(flare.peakTime).toLocaleString()}</div>
                         <div>Location: {flare.sourceLocation}</div>
                         {flare.note && <div>Note: {flare.note}</div>}
@@ -244,7 +246,7 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
                       href={flare.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-md bg-background px-3 py-1 text-xs hover:bg-accent"
+                      className="bg-background hover:bg-accent rounded-md px-3 py-1 text-xs"
                     >
                       Details →
                     </a>
@@ -260,45 +262,47 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
           {/* Solar Wind */}
           <div className="flex items-center gap-2">
             <Wind className="size-5 text-blue-500" />
-            <h4 className="font-semibold text-lg">Solar Wind</h4>
+            <h4 className="text-lg font-semibold">Solar Wind</h4>
           </div>
 
           {solarWind && (
             <div className="grid grid-cols-2 gap-3 rounded-lg border p-4">
               <div className="space-y-1">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="text-muted-foreground flex items-center gap-2 text-sm">
                   <TrendingUp className="size-4" />
                   Speed
                 </div>
                 <div className="text-2xl font-bold">{solarWind.speed}</div>
-                <div className="text-xs text-muted-foreground">km/s</div>
+                <div className="text-muted-foreground text-xs">km/s</div>
               </div>
 
               <div className="space-y-1">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="text-muted-foreground flex items-center gap-2 text-sm">
                   <Radio className="size-4" />
                   Density
                 </div>
                 <div className="text-2xl font-bold">{solarWind.density}</div>
-                <div className="text-xs text-muted-foreground">protons/cm³</div>
+                <div className="text-muted-foreground text-xs">protons/cm³</div>
               </div>
 
               <div className="space-y-1">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="text-muted-foreground flex items-center gap-2 text-sm">
                   <Thermometer className="size-4" />
                   Temperature
                 </div>
-                <div className="text-2xl font-bold">{(solarWind.temperature / 1000).toFixed(1)}K</div>
-                <div className="text-xs text-muted-foreground">thousands</div>
+                <div className="text-2xl font-bold">
+                  {(solarWind.temperature / 1000).toFixed(1)}K
+                </div>
+                <div className="text-muted-foreground text-xs">thousands</div>
               </div>
 
               <div className="space-y-1">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="text-muted-foreground flex items-center gap-2 text-sm">
                   <Shield className="size-4" />
                   B-Field
                 </div>
                 <div className="text-2xl font-bold">{solarWind.magneticField}</div>
-                <div className="text-xs text-muted-foreground">nanoTesla</div>
+                <div className="text-muted-foreground text-xs">nanoTesla</div>
               </div>
             </div>
           )}
@@ -306,32 +310,34 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
           {/* Aurora Forecast */}
           <div className="mt-6 flex items-center gap-2">
             <Cloud className="size-5 text-purple-500" />
-            <h4 className="font-semibold text-lg">Aurora Forecast</h4>
+            <h4 className="text-lg font-semibold">Aurora Forecast</h4>
           </div>
 
           {auroraForecast && (
-            <div className={cn(
-              "rounded-lg border p-4",
-              getKpSeverity(auroraForecast.kpIndex).bg
-            )}>
+            <div className={cn("rounded-lg border p-4", getKpSeverity(auroraForecast.kpIndex).bg)}>
               <div className="mb-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className={cn("text-4xl font-bold", getKpSeverity(auroraForecast.kpIndex).color)}>
+                  <div
+                    className={cn(
+                      "text-4xl font-bold",
+                      getKpSeverity(auroraForecast.kpIndex).color
+                    )}
+                  >
                     Kp {auroraForecast.kpIndex}
                   </div>
                   <div>
-                    <div className={cn("font-semibold", getKpSeverity(auroraForecast.kpIndex).color)}>
+                    <div
+                      className={cn("font-semibold", getKpSeverity(auroraForecast.kpIndex).color)}
+                    >
                       {getKpSeverity(auroraForecast.kpIndex).level}
                     </div>
-                    <div className="text-sm text-muted-foreground">
-                      {auroraForecast.visibility}
-                    </div>
+                    <div className="text-muted-foreground text-sm">{auroraForecast.visibility}</div>
                   </div>
                 </div>
 
                 <div className="text-right">
                   <div className="text-3xl font-bold">{auroraForecast.probability}%</div>
-                  <div className="text-xs text-muted-foreground">Probability</div>
+                  <div className="text-muted-foreground text-xs">Probability</div>
                 </div>
               </div>
 
@@ -350,13 +356,13 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
               </div>
 
               {/* Kp Index Scale */}
-              <div className="mt-4 h-2 w-full rounded-full bg-gradient-to-r from-green-500 via-yellow-500 via-orange-500 to-red-500">
+              <div className="mt-4 h-2 w-full rounded-full bg-gradient-to-r from-green-500 via-orange-500 via-yellow-500 to-red-500">
                 <div
                   className="relative h-4 w-1 rounded-full bg-white shadow-lg"
                   style={{ left: `${((auroraForecast.kpIndex / 9) * 100).toFixed(1)}%` }}
                 />
               </div>
-              <div className="mt-1 flex justify-between text-xs text-muted-foreground">
+              <div className="text-muted-foreground mt-1 flex justify-between text-xs">
                 <span>Quiet</span>
                 <span>Storm</span>
               </div>
@@ -366,16 +372,16 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
       </div>
 
       {/* Educational Section */}
-      <div className="border-t bg-muted/50 p-6">
+      <div className="bg-muted/50 border-t p-6">
         <div className="grid gap-6 md:grid-cols-3">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <AlertTriangle className="size-5 text-orange-500" />
               <h4 className="font-semibold">Why It Matters</h4>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Space weather can disrupt satellite communications, GPS navigation, power grids, 
-              and pose radiation risks to astronauts and airline passengers.
+            <p className="text-muted-foreground text-sm">
+              Space weather can disrupt satellite communications, GPS navigation, power grids, and
+              pose radiation risks to astronauts and airline passengers.
             </p>
           </div>
 
@@ -384,9 +390,9 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
               <Shield className="size-5 text-blue-500" />
               <h4 className="font-semibold">Earth's Protection</h4>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Our planet's magnetic field shields us from most harmful solar radiation, 
-              creating beautiful auroras near the poles as charged particles interact with the atmosphere.
+            <p className="text-muted-foreground text-sm">
+              Our planet's magnetic field shields us from most harmful solar radiation, creating
+              beautiful auroras near the poles as charged particles interact with the atmosphere.
             </p>
           </div>
 
@@ -395,9 +401,9 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
               <Sun className="size-5 text-yellow-500" />
               <h4 className="font-semibold">Solar Cycle</h4>
             </div>
-            <p className="text-sm text-muted-foreground">
-              The Sun goes through an 11-year cycle of activity. We're currently approaching 
-              Solar Maximum (expected 2025), meaning more flares and auroras!
+            <p className="text-muted-foreground text-sm">
+              The Sun goes through an 11-year cycle of activity. We're currently approaching Solar
+              Maximum (expected 2025), meaning more flares and auroras!
             </p>
           </div>
         </div>

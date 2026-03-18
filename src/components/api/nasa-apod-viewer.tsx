@@ -1,12 +1,8 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 "use client"
 
 import { useState } from "react"
@@ -35,9 +31,7 @@ interface NASAAPODViewerProps {
 }
 
 export function NASAAPODViewer({ className, showDateSelector = true }: NASAAPODViewerProps) {
-  const [selectedDate, setSelectedDate] = useState<string>(
-    new Date().toISOString().split("T")[0]
-  )
+  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split("T")[0])
 
   const { data, isLoading, error, refetch } = useAPOD({
     date: selectedDate,
@@ -46,7 +40,7 @@ export function NASAAPODViewer({ className, showDateSelector = true }: NASAAPODV
 
   const handleDownload = async () => {
     if (!data?.hdurl) return
-    
+
     try {
       const response = await fetch(data.hdurl)
       const blob = await response.blob()
@@ -69,14 +63,13 @@ export function NASAAPODViewer({ className, showDateSelector = true }: NASAAPODV
 
   if (error) {
     return (
-      <div className={cn(
-        "flex items-center justify-center p-8 rounded-xl border bg-card",
-        className
-      )}>
-        <div className="text-center space-y-4">
+      <div
+        className={cn("bg-card flex items-center justify-center rounded-xl border p-8", className)}
+      >
+        <div className="space-y-4 text-center">
           <div className="text-4xl">😕</div>
           <h3 className="text-lg font-semibold">Failed to load APOD</h3>
-          <p className="text-sm text-muted-foreground">{error?.message}</p>
+          <p className="text-muted-foreground text-sm">{error.message}</p>
           <Button onClick={() => refetch()} variant="outline">
             Try Again
           </Button>
@@ -86,10 +79,7 @@ export function NASAAPODViewer({ className, showDateSelector = true }: NASAAPODV
   }
 
   return (
-    <div className={cn(
-      "overflow-hidden rounded-xl border bg-card shadow-lg",
-      className
-    )}>
+    <div className={cn("bg-card overflow-hidden rounded-xl border shadow-lg", className)}>
       {/* Header */}
       <div className="border-b bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-pink-500/10 p-6">
         <div className="flex items-start justify-between gap-4">
@@ -98,15 +88,17 @@ export function NASAAPODViewer({ className, showDateSelector = true }: NASAAPODV
               <span className="text-3xl">🌌</span>
               <h3 className="text-2xl font-bold">{data?.title}</h3>
             </div>
-            
+
             {showDateSelector && (
               <div className="flex items-center gap-2">
-                <Calendar className="size-4 text-muted-foreground" />
+                <Calendar className="text-muted-foreground size-4" />
                 <input
                   type="date"
                   value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                  className="rounded-md border bg-background px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  onChange={(e) => {
+                    setSelectedDate(e.target.value)
+                  }}
+                  className="bg-background rounded-md border px-3 py-1 text-sm focus:ring-2 focus:ring-purple-500 focus:outline-none"
                   max={new Date().toISOString().split("T")[0]}
                   min="1995-06-16" // First APOD image
                 />
@@ -124,22 +116,12 @@ export function NASAAPODViewer({ className, showDateSelector = true }: NASAAPODV
                 <span className="text-sm">What is APOD?</span>
               </TooltipTrigger>
             </PhysicsTooltip>
-            
-            <Button
-              onClick={handleDownload}
-              variant="outline"
-              size="sm"
-              title="Download HD image"
-            >
+
+            <Button onClick={handleDownload} variant="outline" size="sm" title="Download HD image">
               <Download className="size-4" />
             </Button>
-            
-            <Button
-              variant="default"
-              size="sm"
-              asChild
-              title="View on NASA"
-            >
+
+            <Button variant="default" size="sm" asChild title="View on NASA">
               <a
                 href={`https://apod.nasa.gov/apod/ap${data?.date.replace(/-/g, "")}.html`}
                 target="_blank"
@@ -167,18 +149,13 @@ export function NASAAPODViewer({ className, showDateSelector = true }: NASAAPODV
               priority
             />
             {data.copyright && (
-              <div className="absolute bottom-2 right-2 rounded-md bg-black/70 px-3 py-1 text-xs text-white">
+              <div className="absolute right-2 bottom-2 rounded-md bg-black/70 px-3 py-1 text-xs text-white">
                 © {data.copyright}
               </div>
             )}
           </>
         ) : (
-          <iframe
-            src={data?.url ?? ""}
-            title={data?.title}
-            className="size-full"
-            allowFullScreen
-          />
+          <iframe src={data?.url ?? ""} title={data?.title} className="size-full" allowFullScreen />
         )}
       </div>
 
@@ -189,21 +166,23 @@ export function NASAAPODViewer({ className, showDateSelector = true }: NASAAPODV
         </div>
 
         {/* Metadata */}
-        <div className="mt-4 flex flex-wrap gap-4 text-xs text-muted-foreground">
+        <div className="text-muted-foreground mt-4 flex flex-wrap gap-4 text-xs">
           <div className="flex items-center gap-1">
             <span className="font-medium">Date:</span>
-            <span>{new Date(data?.date || "").toLocaleDateString("en-US", { 
-              year: "numeric", 
-              month: "long", 
-              day: "numeric" 
-            })}</span>
+            <span>
+              {new Date(data?.date || "").toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </span>
           </div>
-          
+
           <div className="flex items-center gap-1">
             <span className="font-medium">Media Type:</span>
             <span className="capitalize">{data?.media_type}</span>
           </div>
-          
+
           <div className="flex items-center gap-1">
             <span className="font-medium">Version:</span>
             <span>{data?.service_version}</span>
@@ -222,7 +201,7 @@ export function NASAAPODViewer({ className, showDateSelector = true }: NASAAPODV
               🔭 Search on NASA.gov
             </a>
           </Button>
-          
+
           <Button variant="outline" size="sm" asChild>
             <a
               href={`https://images.nasa.gov/search?q=${encodeURIComponent(data?.title || "")}`}

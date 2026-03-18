@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 "use client"
 
 import { useState, useEffect } from "react"
@@ -14,33 +14,22 @@ import { PhysicsTooltip, TooltipTrigger } from "@/components/ui/physics-tooltip-
 import { cn } from "@/lib/utils"
 
 // Dynamic import for leaflet (avoid SSR issues)
-const MapContainer = dynamic(
-  () => import("react-leaflet").then((mod) => mod.MapContainer),
-  { 
-    ssr: false,
-    loading: () => <VisualizationLoader className="h-[400px]" />
-  }
-)
+const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), {
+  ssr: false,
+  loading: () => <VisualizationLoader className="h-[400px]" />,
+})
 
-const TileLayer = dynamic(
-  () => import("react-leaflet").then((mod) => mod.TileLayer),
-  { ssr: false }
-)
+const TileLayer = dynamic(() => import("react-leaflet").then((mod) => mod.TileLayer), {
+  ssr: false,
+})
 
-const Marker = dynamic(
-  () => import("react-leaflet").then((mod) => mod.Marker),
-  { ssr: false }
-)
+const Marker = dynamic(() => import("react-leaflet").then((mod) => mod.Marker), { ssr: false })
 
-const Popup = dynamic(
-  () => import("react-leaflet").then((mod) => mod.Popup),
-  { ssr: false }
-)
+const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), { ssr: false })
 
-const CircleMarker = dynamic(
-  () => import("react-leaflet").then((mod) => mod.CircleMarker),
-  { ssr: false }
-)
+const CircleMarker = dynamic(() => import("react-leaflet").then((mod) => mod.CircleMarker), {
+  ssr: false,
+})
 
 interface SatelliteData {
   id: number
@@ -63,10 +52,10 @@ interface SatelliteTrackerProps {
   showMultipleSatellites?: boolean
 }
 
-export function SatelliteTracker({ 
-  className, 
+export function SatelliteTracker({
+  className,
   satelliteId = 25544,
-  showMultipleSatellites = false 
+  showMultipleSatellites = false,
 }: SatelliteTrackerProps) {
   const [satellites, setSatellites] = useState<SatelliteData[]>([])
   const [loading, setLoading] = useState(true)
@@ -90,14 +79,14 @@ export function SatelliteTracker({
     try {
       setLoading(true)
       setError(null)
-      
-      const ids = showMultipleSatellites 
+
+      const ids = showMultipleSatellites
         ? [25544, 48274, 43013, 37849] // ISS, Chinese Space Station, Hubble, GPS
         : [satelliteId]
-      
+
       const results = await Promise.all(ids.map(fetchSatellite))
       const validResults = results.filter(Boolean) as SatelliteData[]
-      
+
       setSatellites(validResults)
       setLastUpdate(new Date())
     } catch (err) {
@@ -110,10 +99,12 @@ export function SatelliteTracker({
 
   useEffect(() => {
     fetchAllSatellites()
-    
+
     // Update every 5 seconds
     const interval = setInterval(fetchAllSatellites, 5000)
-    return () => clearInterval(interval)
+    return () => {
+      clearInterval(interval)
+    }
   }, [satelliteId, showMultipleSatellites])
 
   if (loading && satellites.length === 0) {
@@ -122,14 +113,13 @@ export function SatelliteTracker({
 
   if (error && satellites.length === 0) {
     return (
-      <div className={cn(
-        "flex items-center justify-center p-8 rounded-xl border bg-card",
-        className
-      )}>
-        <div className="text-center space-y-4">
+      <div
+        className={cn("bg-card flex items-center justify-center rounded-xl border p-8", className)}
+      >
+        <div className="space-y-4 text-center">
           <div className="text-4xl">📡</div>
           <h3 className="text-lg font-semibold">Signal Lost</h3>
-          <p className="text-sm text-muted-foreground">{error}</p>
+          <p className="text-muted-foreground text-sm">{error}</p>
           <button
             onClick={() => fetchAllSatellites()}
             className="rounded-md bg-purple-600 px-4 py-2 text-white hover:bg-purple-700"
@@ -142,10 +132,7 @@ export function SatelliteTracker({
   }
 
   return (
-    <div className={cn(
-      "overflow-hidden rounded-xl border bg-card shadow-lg",
-      className
-    )}>
+    <div className={cn("bg-card overflow-hidden rounded-xl border shadow-lg", className)}>
       {/* Header */}
       <div className="border-b bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-purple-500/10 p-6">
         <div className="flex items-start justify-between gap-4">
@@ -154,8 +141,8 @@ export function SatelliteTracker({
               <Globe className="size-8 text-blue-500" />
               <h3 className="text-2xl font-bold">🛰️ Satellite Tracker</h3>
             </div>
-            
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+
+            <div className="text-muted-foreground flex items-center gap-2 text-sm">
               <Clock className="size-4" />
               <span>Live tracking • Updated {lastUpdate.toLocaleTimeString()}</span>
             </div>
@@ -184,19 +171,17 @@ export function SatelliteTracker({
           style={{ background: "#0f172a" }}
         >
           <TileLayer
-            attribution='© OpenStreetMap contributors | © NASA'
+            attribution="© OpenStreetMap contributors | © NASA"
             url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
           />
-          
+
           {satellites.map((sat) => (
             <div key={sat.id}>
               {/* Satellite marker */}
-              <Marker
-                position={[sat.latitude, sat.longitude]}
-              >
+              <Marker position={[sat.latitude, sat.longitude]}>
                 <Popup>
                   <div className="space-y-2">
-                    <h4 className="font-bold text-lg">{sat.name}</h4>
+                    <h4 className="text-lg font-bold">{sat.name}</h4>
                     <div className="space-y-1 text-sm">
                       <div className="flex justify-between gap-4">
                         <span>🌍 Altitude:</span>
@@ -237,11 +222,11 @@ export function SatelliteTracker({
         </MapContainer>
 
         {/* Overlay stats */}
-        <div className="absolute bottom-4 left-4 right-4 flex gap-4">
+        <div className="absolute right-4 bottom-4 left-4 flex gap-4">
           {satellites.map((sat) => (
             <div
               key={sat.id}
-              className="flex-1 rounded-lg bg-black/70 backdrop-blur-sm p-3 text-white"
+              className="flex-1 rounded-lg bg-black/70 p-3 text-white backdrop-blur-sm"
             >
               <div className="flex items-center gap-2">
                 <Satellite className="size-4 text-blue-400" />
@@ -281,7 +266,7 @@ export function SatelliteTracker({
                 <Zap className="size-4 text-yellow-500" />
                 <h4 className="font-semibold">{sat.name}</h4>
               </div>
-              
+
               <dl className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <dt className="text-muted-foreground">NORAD ID:</dt>
@@ -289,10 +274,12 @@ export function SatelliteTracker({
                 </div>
                 <div className="flex justify-between">
                   <dt className="text-muted-foreground">Visibility:</dt>
-                  <dd className={cn(
-                    "capitalize",
-                    sat.visibility === "daylight" ? "text-yellow-500" : "text-blue-500"
-                  )}>
+                  <dd
+                    className={cn(
+                      "capitalize",
+                      sat.visibility === "daylight" ? "text-yellow-500" : "text-blue-500"
+                    )}
+                  >
                     {sat.visibility}
                   </dd>
                 </div>

@@ -1,5 +1,4 @@
-﻿/* eslint-disable @typescript-eslint/no-unsafe-return */
-"use client"
+﻿"use client"
 
 import { useState, useEffect, Suspense } from "react"
 import { useLocale } from "next-intl"
@@ -18,55 +17,104 @@ import { SECTIONS, type Section, type Language } from "@/lib/constants-ui"
 import type { Theme } from "@/types"
 
 // Lazy load heavy API components
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const NASAAPODViewer = () => (
-  <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="animate-pulse text-muted-foreground">Loading...</div></div>}>
-    <NASAAPODViewerLazy />
+  <Suspense
+    fallback={
+      <div className="flex h-96 items-center justify-center">
+        <div className="text-muted-foreground animate-pulse">Loading...</div>
+      </div>
+    }
+  >
+    <_NASAAPODViewerLazy />
   </Suspense>
 )
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const SatelliteTracker = () => (
-  <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="animate-pulse text-muted-foreground">Loading...</div></div>}>
-    <SatelliteTrackerLazy />
+  <Suspense
+    fallback={
+      <div className="flex h-96 items-center justify-center">
+        <div className="text-muted-foreground animate-pulse">Loading...</div>
+      </div>
+    }
+  >
+    <_SatelliteTrackerLazy />
   </Suspense>
 )
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ExoplanetExplorer = () => (
-  <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="animate-pulse text-muted-foreground">Loading...</div></div>}>
-    <ExoplanetExplorerLazy />
+  <Suspense
+    fallback={
+      <div className="flex h-96 items-center justify-center">
+        <div className="text-muted-foreground animate-pulse">Loading...</div>
+      </div>
+    }
+  >
+    <_ExoplanetExplorerLazy />
   </Suspense>
 )
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const SpaceWeatherDashboard = () => (
-  <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="animate-pulse text-muted-foreground">Loading...</div></div>}>
-    <SpaceWeatherDashboardLazy />
+  <Suspense
+    fallback={
+      <div className="flex h-96 items-center justify-center">
+        <div className="text-muted-foreground animate-pulse">Loading...</div>
+      </div>
+    }
+  >
+    <_SpaceWeatherDashboardLazy />
   </Suspense>
 )
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const UserProfile = () => (
-  <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="animate-pulse text-muted-foreground">Loading...</div></div>}>
-    <UserProfileLazy />
+  <Suspense
+    fallback={
+      <div className="flex h-96 items-center justify-center">
+        <div className="text-muted-foreground animate-pulse">Loading...</div>
+      </div>
+    }
+  >
+    <_UserProfileLazy />
   </Suspense>
 )
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const AchievementsPanel = () => (
-  <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="animate-pulse text-muted-foreground">Loading...</div></div>}>
-    <AchievementsPanelLazy />
+  <Suspense
+    fallback={
+      <div className="flex h-96 items-center justify-center">
+        <div className="text-muted-foreground animate-pulse">Loading...</div>
+      </div>
+    }
+  >
+    <_AchievementsPanelLazy />
   </Suspense>
 )
 
 // Actual lazy-loaded components
-// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-const NASAAPODViewerLazy = () => import("@/components/api/nasa-apod-viewer").then(mod => ({ default: mod.NASAAPODViewer })) as any
-// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-const SatelliteTrackerLazy = () => import("@/components/api/satellite-tracker").then(mod => ({ default: mod.SatelliteTracker })) as any
-// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-const ExoplanetExplorerLazy = () => import("@/components/api/exoplanet-explorer").then(mod => ({ default: mod.ExoplanetExplorer })) as any
-// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-const SpaceWeatherDashboardLazy = () => import("@/components/api/space-weather-dashboard").then(mod => ({ default: mod.SpaceWeatherDashboard })) as any
-// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-const UserProfileLazy = () => import("@/components/user/user-profile").then(mod => ({ default: mod.UserProfile })) as any
-// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-const AchievementsPanelLazy = () => import("@/components/user/achievements-panel").then(mod => ({ default: mod.AchievementsPanel })) as any
+const _NASAAPODViewerLazy = () =>
+  import("@/components/api/nasa-apod-viewer").then((mod) => ({ default: mod.NASAAPODViewer }))
+
+const _SatelliteTrackerLazy = () =>
+  import("@/components/api/satellite-tracker").then((mod) => ({ default: mod.SatelliteTracker }))
+
+const _ExoplanetExplorerLazy = () =>
+  import("@/components/api/exoplanet-explorer").then((mod) => ({ default: mod.ExoplanetExplorer }))
+
+const _SpaceWeatherDashboardLazy = () =>
+  import("@/components/api/space-weather-dashboard").then((mod) => ({
+    default: mod.SpaceWeatherDashboard,
+  }))
+
+const _UserProfileLazy = () =>
+  import("@/components/user/user-profile").then((mod) => ({ default: mod.UserProfile }))
+
+const _AchievementsPanelLazy = () =>
+  import("@/components/user/achievements-panel").then((mod) => ({ default: mod.AchievementsPanel }))
 
 const STORAGE_KEYS = {
   THEME: "physics-theme",

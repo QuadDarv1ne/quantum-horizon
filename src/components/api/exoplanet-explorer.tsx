@@ -1,12 +1,7 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
-/* eslint-disable @typescript-eslint/no-misused-promises */
+
 /* eslint-disable @typescript-eslint/require-await */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 "use client"
 
 import { useState, useEffect, useRef } from "react"
@@ -52,7 +47,7 @@ function Planet3D({ radius, color, distance, orbitSpeed, isSelected, onClick }: 
       const t = clock.getElapsedTime() * orbitSpeed
       meshRef.current.position.x = Math.cos(t) * distance
       meshRef.current.position.z = Math.sin(t) * distance
-      
+
       // Self rotation
       meshRef.current.rotation.y += 0.01
     }
@@ -70,8 +65,12 @@ function Planet3D({ radius, color, distance, orbitSpeed, isSelected, onClick }: 
       <mesh
         ref={meshRef}
         onClick={onClick}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
+        onPointerOver={() => {
+          setHovered(true)
+        }}
+        onPointerOut={() => {
+          setHovered(false)
+        }}
         scale={hovered || isSelected ? 1.2 : 1}
       >
         <sphereGeometry args={[radius, 32, 32]} />
@@ -82,10 +81,10 @@ function Planet3D({ radius, color, distance, orbitSpeed, isSelected, onClick }: 
           metalness={0.5}
           roughness={0.7}
         />
-        
+
         {hovered && (
           <Html distanceFactor={10}>
-            <div className="rounded-lg bg-black/90 px-3 py-2 text-xs text-white whitespace-nowrap backdrop-blur-sm">
+            <div className="rounded-lg bg-black/90 px-3 py-2 text-xs whitespace-nowrap text-white backdrop-blur-sm">
               Click for details
             </div>
           </Html>
@@ -207,8 +206,8 @@ export function ExoplanetExplorer({ className }: ExoplanetExplorerProps) {
 
   const getPlanetColor = (temperature: number): string => {
     if (temperature > 1000) return "#ff6b35" // Hot - orange/red
-    if (temperature > 500) return "#f4a261"  // Warm - light orange
-    if (temperature > 200) return "#2ec4b6"  // Habitable - teal/blue
+    if (temperature > 500) return "#f4a261" // Warm - light orange
+    if (temperature > 200) return "#2ec4b6" // Habitable - teal/blue
     return "#3a86ff" // Cold - blue
   }
 
@@ -231,16 +230,17 @@ export function ExoplanetExplorer({ className }: ExoplanetExplorerProps) {
 
   if (error) {
     return (
-      <div className={cn(
-        "flex items-center justify-center p-8 rounded-xl border bg-card",
-        className
-      )}>
-        <div className="text-center space-y-4">
+      <div
+        className={cn("bg-card flex items-center justify-center rounded-xl border p-8", className)}
+      >
+        <div className="space-y-4 text-center">
           <div className="text-4xl">🪐</div>
           <h3 className="text-lg font-semibold">Lost in Space</h3>
-          <p className="text-sm text-muted-foreground">{error}</p>
+          <p className="text-muted-foreground text-sm">{error}</p>
           <button
-            onClick={() => window.location.reload()}
+            onClick={() => {
+              window.location.reload()
+            }}
             className="rounded-md bg-purple-600 px-4 py-2 text-white hover:bg-purple-700"
           >
             Warp Again
@@ -253,10 +253,7 @@ export function ExoplanetExplorer({ className }: ExoplanetExplorerProps) {
   const selectedData = selectedPlanet !== null ? planets[selectedPlanet] : null
 
   return (
-    <div className={cn(
-      "overflow-hidden rounded-xl border bg-card shadow-lg",
-      className
-    )}>
+    <div className={cn("bg-card overflow-hidden rounded-xl border shadow-lg", className)}>
       {/* Header */}
       <div className="border-b bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 p-6">
         <div className="flex items-start justify-between gap-4">
@@ -265,7 +262,7 @@ export function ExoplanetExplorer({ className }: ExoplanetExplorerProps) {
               <Telescope className="size-8 text-purple-500" />
               <h3 className="text-2xl font-bold">🪐 Exoplanet Explorer</h3>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Interactive 3D visualization of discovered exoplanets
             </p>
           </div>
@@ -289,15 +286,11 @@ export function ExoplanetExplorer({ className }: ExoplanetExplorerProps) {
           <Canvas camera={{ position: [0, 10, 15], fov: 50 }}>
             <ambientLight intensity={0.3} />
             <pointLight position={[0, 0, 0]} intensity={2} color="#fef3c7" />
-            
+
             {/* Central star */}
             <mesh>
               <sphereGeometry args={[1.5, 32, 32]} />
-              <meshStandardMaterial
-                color="#fef3c7"
-                emissive="#fbbf24"
-                emissiveIntensity={2}
-              />
+              <meshStandardMaterial color="#fef3c7" emissive="#fbbf24" emissiveIntensity={2} />
             </mesh>
 
             {/* Planets */}
@@ -309,24 +302,21 @@ export function ExoplanetExplorer({ className }: ExoplanetExplorerProps) {
                 distance={getOrbitDistance(index)}
                 orbitSpeed={getOrbitSpeed(planet.pl_orbper)}
                 isSelected={selectedPlanet === index}
-                onClick={() => setSelectedPlanet(index)}
+                onClick={() => {
+                  setSelectedPlanet(index)
+                }}
               />
             ))}
 
             {/* Background */}
             <StarField />
-            
+
             {/* Controls */}
-            <OrbitControls
-              enableZoom={true}
-              enablePan={true}
-              minDistance={5}
-              maxDistance={50}
-            />
+            <OrbitControls enableZoom={true} enablePan={true} minDistance={5} maxDistance={50} />
           </Canvas>
 
           {/* Overlay instructions */}
-          <div className="absolute bottom-4 left-4 right-4 flex justify-between text-xs text-white/70">
+          <div className="absolute right-4 bottom-4 left-4 flex justify-between text-xs text-white/70">
             <span>🖱️ Drag to rotate • Scroll to zoom</span>
             <span>Click planet for details</span>
           </div>
@@ -336,23 +326,25 @@ export function ExoplanetExplorer({ className }: ExoplanetExplorerProps) {
         <div className="flex flex-col gap-4 p-6">
           {/* Planet List */}
           <div className="space-y-2">
-            <h4 className="font-semibold text-lg">Discovered Planets ({planets.length})</h4>
-            <div className="max-h-[300px] overflow-y-auto space-y-2 rounded-lg border p-2">
+            <h4 className="text-lg font-semibold">Discovered Planets ({planets.length})</h4>
+            <div className="max-h-[300px] space-y-2 overflow-y-auto rounded-lg border p-2">
               {planets.map((planet, index) => (
                 <button
                   key={planet.pl_name}
-                  onClick={() => setSelectedPlanet(index)}
+                  onClick={() => {
+                    setSelectedPlanet(index)
+                  }}
                   className={cn(
-                    "w-full p-3 text-left rounded-lg transition-all duration-200",
+                    "w-full rounded-lg p-3 text-left transition-all duration-200",
                     selectedPlanet === index
-                      ? "bg-gradient-to-r from-purple-500/20 to-blue-500/20 border-purple-500/50"
-                      : "border hover:bg-accent"
+                      ? "border-purple-500/50 bg-gradient-to-r from-purple-500/20 to-blue-500/20"
+                      : "hover:bg-accent border"
                   )}
                 >
                   <div className="flex items-center justify-between">
                     <div>
                       <div className="font-semibold">{planet.pl_name}</div>
-                      <div className="text-xs text-muted-foreground">
+                      <div className="text-muted-foreground text-xs">
                         ⭐ {planet.hostname} • 🌡️ {planet.pl_eqt}K
                       </div>
                     </div>
@@ -376,50 +368,55 @@ export function ExoplanetExplorer({ className }: ExoplanetExplorerProps) {
 
               <div className="grid gap-3 md:grid-cols-2">
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="text-muted-foreground flex items-center gap-2 text-sm">
                     <Ruler className="size-4" />
                     <span>Radius</span>
                   </div>
                   <div className="font-mono">
-                    {(selectedData.pl_radj * 11.2).toFixed(2)} R⊕ 
-                    <span className="text-xs text-muted-foreground ml-1">
+                    {(selectedData.pl_radj * 11.2).toFixed(2)} R⊕
+                    <span className="text-muted-foreground ml-1 text-xs">
                       ({selectedData.pl_radj.toFixed(2)} RJ)
                     </span>
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="text-muted-foreground flex items-center gap-2 text-sm">
                     <Thermometer className="size-4" />
                     <span>Temperature</span>
                   </div>
-                  <div className={cn(
-                    "font-mono",
-                    selectedData.pl_eqt > 300 ? "text-red-500" :
-                    selectedData.pl_eqt > 200 ? "text-green-500" : "text-blue-500"
-                  )}>
+                  <div
+                    className={cn(
+                      "font-mono",
+                      selectedData.pl_eqt > 300
+                        ? "text-red-500"
+                        : selectedData.pl_eqt > 200
+                          ? "text-green-500"
+                          : "text-blue-500"
+                    )}
+                  >
                     {selectedData.pl_eqt}K
-                    <span className="text-xs text-muted-foreground ml-1">
+                    <span className="text-muted-foreground ml-1 text-xs">
                       ({(selectedData.pl_eqt - 273.15).toFixed(1)}°C)
                     </span>
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="text-muted-foreground flex items-center gap-2 text-sm">
                     <Clock className="size-4" />
                     <span>Orbital Period</span>
                   </div>
                   <div className="font-mono">
                     {selectedData.pl_orbper.toFixed(1)} days
-                    <span className="text-xs text-muted-foreground ml-1">
+                    <span className="text-muted-foreground ml-1 text-xs">
                       ({(selectedData.pl_orbper / 365).toFixed(2)} years)
                     </span>
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <div className="text-muted-foreground flex items-center gap-2 text-sm">
                     <Orbit className="size-4" />
                     <span>Discovery</span>
                   </div>
@@ -433,28 +430,34 @@ export function ExoplanetExplorer({ className }: ExoplanetExplorerProps) {
               <div className="rounded-lg border p-3">
                 <div className="mb-2 text-sm font-medium">Habitability Zone</div>
                 <div className="flex gap-1">
-                  <div className={cn(
-                    "flex-1 rounded py-1 text-center text-xs",
-                    selectedData.pl_eqt < 200 
-                      ? "bg-blue-500/20 text-blue-500 border border-blue-500/50" 
-                      : "bg-gray-500/10 text-gray-500"
-                  )}>
+                  <div
+                    className={cn(
+                      "flex-1 rounded py-1 text-center text-xs",
+                      selectedData.pl_eqt < 200
+                        ? "border border-blue-500/50 bg-blue-500/20 text-blue-500"
+                        : "bg-gray-500/10 text-gray-500"
+                    )}
+                  >
                     ❄️ Too Cold
                   </div>
-                  <div className={cn(
-                    "flex-1 rounded py-1 text-center text-xs",
-                    selectedData.pl_eqt >= 200 && selectedData.pl_eqt <= 300
-                      ? "bg-green-500/20 text-green-500 border border-green-500/50" 
-                      : "bg-gray-500/10 text-gray-500"
-                  )}>
+                  <div
+                    className={cn(
+                      "flex-1 rounded py-1 text-center text-xs",
+                      selectedData.pl_eqt >= 200 && selectedData.pl_eqt <= 300
+                        ? "border border-green-500/50 bg-green-500/20 text-green-500"
+                        : "bg-gray-500/10 text-gray-500"
+                    )}
+                  >
                     ✅ Habitable
                   </div>
-                  <div className={cn(
-                    "flex-1 rounded py-1 text-center text-xs",
-                    selectedData.pl_eqt > 300 
-                      ? "bg-red-500/20 text-red-500 border border-red-500/50" 
-                      : "bg-gray-500/10 text-gray-500"
-                  )}>
+                  <div
+                    className={cn(
+                      "flex-1 rounded py-1 text-center text-xs",
+                      selectedData.pl_eqt > 300
+                        ? "border border-red-500/50 bg-red-500/20 text-red-500"
+                        : "bg-gray-500/10 text-gray-500"
+                    )}
+                  >
                     🔥 Too Hot
                   </div>
                 </div>
@@ -462,7 +465,9 @@ export function ExoplanetExplorer({ className }: ExoplanetExplorerProps) {
 
               {/* Coordinates */}
               <div className="rounded-lg border bg-black/20 p-3 font-mono text-xs">
-                <div>RA: {selectedData.ra.toFixed(2)}° | Dec: {selectedData.dec.toFixed(2)}°</div>
+                <div>
+                  RA: {selectedData.ra.toFixed(2)}° | Dec: {selectedData.dec.toFixed(2)}°
+                </div>
                 <div className="text-muted-foreground mt-1">
                   System: {selectedData.sy_snum} stars • {selectedData.sy_pnum} planets
                 </div>
@@ -471,7 +476,7 @@ export function ExoplanetExplorer({ className }: ExoplanetExplorerProps) {
           )}
 
           {!selectedData && (
-            <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed p-8 text-center text-muted-foreground">
+            <div className="text-muted-foreground flex flex-1 items-center justify-center rounded-lg border border-dashed p-8 text-center">
               <div>
                 <Telescope className="mx-auto mb-2 size-12 opacity-50" />
                 <p>Select a planet to view details</p>

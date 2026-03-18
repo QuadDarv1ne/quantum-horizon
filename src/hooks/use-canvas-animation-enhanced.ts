@@ -1,10 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable react-hooks/immutability */
 "use client"
 
 import { useEffect, useRef, useCallback } from "react"
-// eslint-disable-next-line react-hooks/immutability
 
 interface UseCanvasAnimationOptions {
   targetFps?: number
@@ -46,6 +42,12 @@ export function useCanvasAnimationEnhanced({
   const lastFpsUpdateRef = useRef<number>(0)
   const reducedMotionRef = useRef<boolean>(false)
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
+  const onAnimateRef = useRef(onAnimate)
+
+  // Update onAnimate ref when it changes
+  useEffect(() => {
+    onAnimateRef.current = onAnimate
+  }, [onAnimate])
 
   /**
    * Настройка canvas для HiDPI/Retina дисплеев
@@ -68,38 +70,6 @@ export function useCanvasAnimationEnhanced({
     return targetFps
   }, [targetFps, reducedMotionFps, backgroundFps])
 
-  // Animation loop
-  // eslint-disable-next-line react-hooks/immutability
-  const animate = useCallback((timestamp: number) => {
-    if (lastTimeRef.current === 0) {
-      lastTimeRef.current = timestamp
-    }
-
-    const deltaTime = timestamp - lastTimeRef.current
-    const effectiveFps = getEffectiveFps()
-    const frameInterval = 1000 / effectiveFps
-
-    if (deltaTime >= frameInterval) {
-      // Calculate FPS
-      frameCountRef.current++
-      if (timestamp - lastFpsUpdateRef.current >= 1000) {
-        fpsRef.current = frameCountRef.current
-        frameCountRef.current = 0
-        lastFpsUpdateRef.current = timestamp
-      }
-
-      // Call animation callback
-      if (onAnimate) {
-        onAnimate(deltaTime)
-      }
-
-      lastTimeRef.current = timestamp
-    }
-
-    // eslint-disable-next-line react-hooks/immutability
-    animationFrameRef.current = requestAnimationFrame(animate)
-  }, [getEffectiveFps, onAnimate])
-
   // Start/stop animation
   useEffect(() => {
     const canvas = canvasRef.current
@@ -110,6 +80,34 @@ export function useCanvasAnimationEnhanced({
 
     setupCanvas(canvas, ctx)
     ctxRef.current = ctx
+
+    // Animation loop using ref to avoid circular dependency
+    const animate = (timestamp: number) => {
+      if (lastTimeRef.current === 0) {
+        lastTimeRef.current = timestamp
+      }
+
+      const deltaTime = timestamp - lastTimeRef.current
+      const effectiveFps = getEffectiveFps()
+      const frameInterval = 1000 / effectiveFps
+
+      if (deltaTime >= frameInterval) {
+        frameCountRef.current++
+        if (timestamp - lastFpsUpdateRef.current >= 1000) {
+          fpsRef.current = frameCountRef.current
+          frameCountRef.current = 0
+          lastFpsUpdateRef.current = timestamp
+        }
+
+        if (onAnimateRef.current) {
+          onAnimateRef.current(deltaTime)
+        }
+
+        lastTimeRef.current = timestamp
+      }
+
+      animationFrameRef.current = requestAnimationFrame(animate)
+    }
 
     animationFrameRef.current = requestAnimationFrame(animate)
 
@@ -140,8 +138,7 @@ export function useCanvasAnimationEnhanced({
       }
       resizeObserver.disconnect()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animate, setupCanvas, pauseWhenHidden])
+  }, [setupCanvas, pauseWhenHidden, getEffectiveFps])
 
   // Reduced motion media query
   useEffect(() => {

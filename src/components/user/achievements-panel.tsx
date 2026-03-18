@@ -1,10 +1,21 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-/* eslint-disable @typescript-eslint/no-misused-promises */
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import { useState } from "react"
-import { Trophy, Award, Star, Zap, Rocket, Globe, Atom, Telescope, Clock, Target } from "lucide-react"
+import {
+  Trophy,
+  Award,
+  Star,
+  Zap,
+  Rocket,
+  Globe,
+  Atom,
+  Telescope,
+  Clock,
+  Target,
+} from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface Achievement {
@@ -27,7 +38,7 @@ interface AchievementsPanelProps {
 
 export function AchievementsPanel({ className }: AchievementsPanelProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("all")
-  
+
   // Mock achievements data
   const [achievements, setAchievements] = useState<Achievement[]>([
     // Learning Category
@@ -81,7 +92,7 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
       progress: 3,
       maxProgress: 10,
     },
-    
+
     // Exploration Category
     {
       id: "explore_001",
@@ -120,7 +131,7 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
       progress: 4,
       maxProgress: 10,
     },
-    
+
     // Social Category
     {
       id: "social_001",
@@ -147,7 +158,7 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
       progress: 12,
       maxProgress: 20,
     },
-    
+
     // Special Category
     {
       id: "special_001",
@@ -196,9 +207,10 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
     { id: "special", name: "Special", icon: <Star className="size-4" /> },
   ]
 
-  const filteredAchievements = selectedCategory === "all"
-    ? achievements
-    : achievements.filter(a => a.category === selectedCategory)
+  const filteredAchievements =
+    selectedCategory === "all"
+      ? achievements
+      : achievements.filter((a) => a.category === selectedCategory)
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
@@ -242,16 +254,13 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
 
   const stats = {
     total: achievements.length,
-    unlocked: achievements.filter(a => a.unlocked).length,
-    locked: achievements.filter(a => !a.unlocked).length,
-    totalXP: achievements.filter(a => a.unlocked).reduce((sum, a) => sum + a.xpReward, 0),
+    unlocked: achievements.filter((a) => a.unlocked).length,
+    locked: achievements.filter((a) => !a.unlocked).length,
+    totalXP: achievements.filter((a) => a.unlocked).reduce((sum, a) => sum + a.xpReward, 0),
   }
 
   return (
-    <div className={cn(
-      "overflow-hidden rounded-xl border bg-card shadow-lg",
-      className
-    )}>
+    <div className={cn("bg-card overflow-hidden rounded-xl border shadow-lg", className)}>
       {/* Header */}
       <div className="border-b bg-gradient-to-r from-yellow-500/10 via-purple-500/10 to-pink-500/10 p-6">
         <div className="flex items-start justify-between gap-4">
@@ -260,19 +269,21 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
               <Trophy className="size-8 text-yellow-500" />
               <h3 className="text-2xl font-bold">🏆 Achievements</h3>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Unlock achievements by exploring and learning
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="rounded-lg border bg-background p-3 text-center">
-              <div className="text-2xl font-bold text-yellow-500">{stats.unlocked}/{stats.total}</div>
-              <div className="text-xs text-muted-foreground">Unlocked</div>
+            <div className="bg-background rounded-lg border p-3 text-center">
+              <div className="text-2xl font-bold text-yellow-500">
+                {stats.unlocked}/{stats.total}
+              </div>
+              <div className="text-muted-foreground text-xs">Unlocked</div>
             </div>
-            <div className="rounded-lg border bg-background p-3 text-center">
+            <div className="bg-background rounded-lg border p-3 text-center">
               <div className="text-2xl font-bold text-purple-500">{stats.totalXP}</div>
-              <div className="text-xs text-muted-foreground">Total XP</div>
+              <div className="text-muted-foreground text-xs">Total XP</div>
             </div>
           </div>
         </div>
@@ -284,7 +295,9 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
           {categories.map((category) => (
             <button
               key={category.id}
-              onClick={() => setSelectedCategory(category.id)}
+              onClick={() => {
+                setSelectedCategory(category.id)
+              }}
               className={cn(
                 "flex items-center gap-2 rounded-full px-4 py-2 text-sm transition-all",
                 selectedCategory === category.id
@@ -312,7 +325,7 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
                 "relative overflow-hidden rounded-xl border-2 p-4 transition-all duration-300",
                 achievement.unlocked
                   ? cn(colors.bg, colors.border, "shadow-lg", colors.glow)
-                  : "border-gray-700 bg-muted/50 opacity-60"
+                  : "bg-muted/50 border-gray-700 opacity-60"
               )}
             >
               {/* Icon & Title */}
@@ -325,13 +338,16 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
                 )}
               </div>
 
-              <h4 className={cn("mb-1 font-bold", achievement.unlocked ? "" : "text-muted-foreground")}>
+              <h4
+                className={cn(
+                  "mb-1 font-bold",
+                  achievement.unlocked ? "" : "text-muted-foreground"
+                )}
+              >
                 {achievement.name}
               </h4>
-              
-              <p className="mb-3 text-xs text-muted-foreground">
-                {achievement.description}
-              </p>
+
+              <p className="text-muted-foreground mb-3 text-xs">{achievement.description}</p>
 
               {/* Progress Bar */}
               {!achievement.unlocked && (
@@ -357,7 +373,7 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
                   +{achievement.xpReward} XP
                 </div>
                 {achievement.unlocked && achievement.unlockedAt && (
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-muted-foreground text-xs">
                     {achievement.unlockedAt.toLocaleDateString()}
                   </div>
                 )}
@@ -377,32 +393,37 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
       </div>
 
       {/* Footer Stats */}
-      <div className="border-t bg-muted/50 p-6">
+      <div className="bg-muted/50 border-t p-6">
         <div className="grid gap-4 md:grid-cols-4">
-          <div className="rounded-lg border bg-background p-4 text-center">
-            <Rocket className={cn("mx-auto mb-2 size-6", stats.unlocked === stats.total ? "text-green-500" : "text-blue-500")} />
+          <div className="bg-background rounded-lg border p-4 text-center">
+            <Rocket
+              className={cn(
+                "mx-auto mb-2 size-6",
+                stats.unlocked === stats.total ? "text-green-500" : "text-blue-500"
+              )}
+            />
             <div className="text-2xl font-bold">
               {((stats.unlocked / stats.total) * 100).toFixed(1)}%
             </div>
-            <div className="text-xs text-muted-foreground">Completion Rate</div>
+            <div className="text-muted-foreground text-xs">Completion Rate</div>
           </div>
-          
-          <div className="rounded-lg border bg-background p-4 text-center">
-            <Target className="size-6 mx-auto mb-2 text-purple-500" />
+
+          <div className="bg-background rounded-lg border p-4 text-center">
+            <Target className="mx-auto mb-2 size-6 text-purple-500" />
             <div className="text-2xl font-bold">{stats.locked}</div>
-            <div className="text-xs text-muted-foreground">Remaining</div>
+            <div className="text-muted-foreground text-xs">Remaining</div>
           </div>
-          
-          <div className="rounded-lg border bg-background p-4 text-center">
-            <Award className="size-6 mx-auto mb-2 text-yellow-500" />
+
+          <div className="bg-background rounded-lg border p-4 text-center">
+            <Award className="mx-auto mb-2 size-6 text-yellow-500" />
             <div className="text-2xl font-bold">{stats.unlocked}</div>
-            <div className="text-xs text-muted-foreground">Earned</div>
+            <div className="text-muted-foreground text-xs">Earned</div>
           </div>
-          
-          <div className="rounded-lg border bg-background p-4 text-center">
-            <Star className="size-6 mx-auto mb-2 text-orange-500" />
+
+          <div className="bg-background rounded-lg border p-4 text-center">
+            <Star className="mx-auto mb-2 size-6 text-orange-500" />
             <div className="text-2xl font-bold">{stats.totalXP}</div>
-            <div className="text-xs text-muted-foreground">Total XP</div>
+            <div className="text-muted-foreground text-xs">Total XP</div>
           </div>
         </div>
       </div>

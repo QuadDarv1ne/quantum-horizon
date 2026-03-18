@@ -54,12 +54,13 @@ async function main() {
       },
     })
 
-    console.log(`✅ Created user: ${String(user.email)} (${user.role})`)
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    console.log(`✅ Created user: ${user.email} (${user.role})`)
 
     // Создание записи прогресса
     await prisma.userProgress.create({
       data: {
-        userId: String(user.id),
+        userId: user.id,
         topic: "general",
         completedCount: 0,
       },
@@ -68,13 +69,14 @@ async function main() {
     // Создание настроек пользователя
     await prisma.userSettings.create({
       data: {
-        userId: String(user.id),
+        userId: user.id,
         theme: "system",
         language: "ru",
       },
     })
 
-    console.log(`   📊 Created progress and settings for ${String(user.email)}`)
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    console.log(`   📊 Created progress and settings for ${user.email}`)
   }
 
   console.log("\n🎉 Seed completed!")

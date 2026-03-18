@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
@@ -186,10 +185,7 @@ export function UserProfile({ className }: UserProfileProps) {
   }
 
   return (
-    <div className={cn(
-      "overflow-hidden rounded-xl border bg-card shadow-lg",
-      className
-    )}>
+    <div className={cn("bg-card overflow-hidden rounded-xl border shadow-lg", className)}>
       {/* Header - Profile Summary */}
       <div className="border-b bg-gradient-to-r from-purple-500/10 via-blue-500/10 to-cyan-500/10 p-6">
         <div className="flex items-start justify-between gap-4">
@@ -197,7 +193,7 @@ export function UserProfile({ className }: UserProfileProps) {
             <div className="rounded-full bg-gradient-to-br from-purple-500 to-blue-500 p-4">
               <User className="size-8 text-white" />
             </div>
-            
+
             <div className="space-y-2">
               <div className="flex items-center gap-2">
                 <h3 className="text-2xl font-bold">{userProgress.username}</h3>
@@ -205,17 +201,21 @@ export function UserProfile({ className }: UserProfileProps) {
                   Level {userProgress.level}
                 </span>
               </div>
-              
+
               {/* XP Progress Bar */}
               <div className="w-[300px] space-y-1">
                 <div className="flex justify-between text-xs">
                   <span className="text-muted-foreground">XP Progress</span>
-                  <span className="font-medium">{userProgress.xp} / {userProgress.xpToNextLevel}</span>
+                  <span className="font-medium">
+                    {userProgress.xp} / {userProgress.xpToNextLevel}
+                  </span>
                 </div>
                 <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
                   <div
                     className="h-full bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-500"
-                    style={{ width: `${((userProgress.xp / userProgress.xpToNextLevel) * 100).toFixed(1)}%` }}
+                    style={{
+                      width: `${((userProgress.xp / userProgress.xpToNextLevel) * 100).toFixed(1)}%`,
+                    }}
                   />
                 </div>
               </div>
@@ -234,13 +234,17 @@ export function UserProfile({ className }: UserProfileProps) {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="rounded-lg border bg-background p-3 text-center">
-              <div className="text-2xl font-bold text-purple-500">{userProgress.coursesCompleted}</div>
-              <div className="text-xs text-muted-foreground">Courses Done</div>
+            <div className="bg-background rounded-lg border p-3 text-center">
+              <div className="text-2xl font-bold text-purple-500">
+                {userProgress.coursesCompleted}
+              </div>
+              <div className="text-muted-foreground text-xs">Courses Done</div>
             </div>
-            <div className="rounded-lg border bg-background p-3 text-center">
-              <div className="text-2xl font-bold text-blue-500">{formatTime(userProgress.totalStudyTime)}</div>
-              <div className="text-xs text-muted-foreground">Study Time</div>
+            <div className="bg-background rounded-lg border p-3 text-center">
+              <div className="text-2xl font-bold text-blue-500">
+                {formatTime(userProgress.totalStudyTime)}
+              </div>
+              <div className="text-muted-foreground text-xs">Study Time</div>
             </div>
           </div>
         </div>
@@ -252,7 +256,7 @@ export function UserProfile({ className }: UserProfileProps) {
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Target className="size-5 text-purple-500" />
-            <h4 className="font-semibold text-lg">Current Courses</h4>
+            <h4 className="text-lg font-semibold">Current Courses</h4>
           </div>
 
           <div className="space-y-3">
@@ -261,15 +265,13 @@ export function UserProfile({ className }: UserProfileProps) {
                 <div className="mb-2 flex items-start justify-between">
                   <div className="space-y-1">
                     <h5 className="font-medium">{course.courseName}</h5>
-                    <div className="text-xs text-muted-foreground">
-                      Next: {course.nextLesson}
-                    </div>
+                    <div className="text-muted-foreground text-xs">Next: {course.nextLesson}</div>
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold text-purple-500">{course.progress}%</div>
                   </div>
                 </div>
-                
+
                 {/* Progress Bar */}
                 <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
                   <div
@@ -290,7 +292,7 @@ export function UserProfile({ className }: UserProfileProps) {
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Trophy className="size-5 text-yellow-500" />
-            <h4 className="font-semibold text-lg">Achievements</h4>
+            <h4 className="text-lg font-semibold">Achievements</h4>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -303,7 +305,7 @@ export function UserProfile({ className }: UserProfileProps) {
                 )}
               >
                 <div className="mb-2 text-2xl">{achievement.icon}</div>
-                <div className="font-semibold text-sm">{achievement.name}</div>
+                <div className="text-sm font-semibold">{achievement.name}</div>
                 <div className="text-xs opacity-70">{achievement.description}</div>
                 <div className="mt-2 text-xs opacity-50">
                   {achievement.unlockedAt.toLocaleDateString()}
@@ -312,17 +314,17 @@ export function UserProfile({ className }: UserProfileProps) {
             ))}
           </div>
 
-          <button className="w-full rounded-md border border-dashed py-2 text-sm text-muted-foreground hover:bg-accent">
+          <button className="text-muted-foreground hover:bg-accent w-full rounded-md border border-dashed py-2 text-sm">
             View All Achievements →
           </button>
         </div>
       </div>
 
       {/* Recent Activity */}
-      <div className="border-t bg-muted/50 p-6">
+      <div className="bg-muted/50 border-t p-6">
         <div className="flex items-center gap-2">
           <Clock className="size-5 text-blue-500" />
-          <h4 className="font-semibold text-lg">Recent Activity</h4>
+          <h4 className="text-lg font-semibold">Recent Activity</h4>
         </div>
 
         <div className="mt-4 space-y-3">
@@ -332,12 +334,12 @@ export function UserProfile({ className }: UserProfileProps) {
               className="flex items-center justify-between rounded-lg border p-3"
             >
               <div className="flex items-center gap-3">
-                <div className="rounded-full bg-background p-2">
+                <div className="bg-background rounded-full p-2">
                   {getActivityIcon(activity.type)}
                 </div>
                 <div>
-                  <div className="font-medium text-sm">{activity.description}</div>
-                  <div className="text-xs text-muted-foreground">
+                  <div className="text-sm font-medium">{activity.description}</div>
+                  <div className="text-muted-foreground text-xs">
                     {activity.timestamp.toLocaleString()}
                   </div>
                 </div>
@@ -355,19 +357,21 @@ export function UserProfile({ className }: UserProfileProps) {
         <div className="grid gap-4 md:grid-cols-4">
           <div className="text-center">
             <div className="text-3xl font-bold text-purple-500">{userProgress.level}</div>
-            <div className="text-xs text-muted-foreground">Current Level</div>
+            <div className="text-muted-foreground text-xs">Current Level</div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold text-blue-500">{userProgress.coursesCompleted}</div>
-            <div className="text-xs text-muted-foreground">Courses Completed</div>
+            <div className="text-muted-foreground text-xs">Courses Completed</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-cyan-500">{formatTime(userProgress.totalStudyTime)}</div>
-            <div className="text-xs text-muted-foreground">Total Study Time</div>
+            <div className="text-3xl font-bold text-cyan-500">
+              {formatTime(userProgress.totalStudyTime)}
+            </div>
+            <div className="text-muted-foreground text-xs">Total Study Time</div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold text-orange-500">{userProgress.streak}</div>
-            <div className="text-xs text-muted-foreground">Day Streak</div>
+            <div className="text-muted-foreground text-xs">Day Streak</div>
           </div>
         </div>
       </div>
