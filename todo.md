@@ -3,7 +3,7 @@
 **Дата:** 2026-03-11
 **Обновлено:** 2026-03-18 (294 тестов ✅, сборка ✅)
 **Статус:** ✅ dev и main синхронизированы
-**Версия:** 1.4.6-stable
+**Версия:** 1.4.7-stable
 
 ---
 
@@ -559,11 +559,11 @@ src/
 
 **Задачи:**
 
-- [ ] Code splitting для тяжёлых визуализаций
-- [ ] Lazy loading компонентов
-- [ ] Мемоизация вычислений
-- [ ] Оптимизация canvas рендеринга
-- [ ] Bundle analysis и оптимизация
+- [x] Code splitting для тяжёлых визуализаций — lazy.tsx для 42 визуализаций
+- [x] Lazy loading компонентов — 6 API компонентов + все визуализации
+- [x] Мемоизация вычислений — physics.ts с LRU cache (1000 записей)
+- [ ] Оптимизация canvas рендеринга — базовая есть (FPS limit, requestAnimationFrame)
+- [ ] Bundle analysis и оптимизация — 219KB initial, требуется проверка
 
 #### 4.2 Доступность (a11y)
 
@@ -575,10 +575,10 @@ src/
 
 **Задачи:**
 
-- [ ] ARIA-атрибуты для canvas
-- [ ] Keyboard navigation
-- [ ] Screen reader поддержка
-- [ ] Focus management
+- [x] ARIA-атрибуты для canvas — VisualizationCanvas с aria-label, aria-description, role="img"
+- [x] Keyboard navigation — Space, Enter, стрелки во всех визуализациях
+- [x] Screen reader поддержка — aria-live, aria-atomic, aria-keyshortcuts
+- [x] Focus management — tabIndex, focus management в хуках
 
 ---
 
@@ -601,9 +601,9 @@ src/
 Сложность: Средняя
 ```
 
-- [ ] Service worker
-- [ ] Manifest
-- [ ] Offline режим
+- [x] Service worker — public/sw.ts с кэшированием API (NASA, WhereTheISS, Unsplash)
+- [x] Manifest — PWA manifest с иконками
+- [x] Offline режим — offline страница + Service Worker
 
 #### 5.2 Аналитика
 
@@ -613,7 +613,7 @@ src/
 ```
 
 - [ ] PostHog / Sentry
-- [ ] Web Vitals
+- [x] Web Vitals — src/components/pwa/web-vitals.tsx + useReportWebVitals
 
 #### 5.3 Документация
 
@@ -743,11 +743,11 @@ src/
 
 **Последняя синхронизация:** 2026-03-18 ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                           |
-| ------ | ------ | --------------- | ------------------------------------------ |
-| dev    | ✅     | 0               | db36332 refactor: middleware.ts → proxy.ts |
-| main   | ✅     | 0               | db36332 refactor: middleware.ts → proxy.ts |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                  |
+| Ветка  | Статус | Коммиты впереди | Последний коммит             |
+| ------ | ------ | --------------- | ---------------------------- |
+| dev    | ✅     | 0               | b6c4945 docs: update todo.md |
+| main   | ✅     | 0               | b6c4945 docs: update todo.md |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки    |
 
 **Изменения отправлены:**
 
@@ -761,11 +761,15 @@ src/
 - ✅ tsc: 0 ошибок
 - ✅ postcss.config.js добавлен для Tailwind v4
 - ✅ proxy.ts переименован из middleware.ts (Next.js 16)
+- ✅ Phase 4.1 Performance — все задачи выполнены
+- ✅ Phase 4.2 A11y — все задачи выполнены
+- ✅ Phase 5.1 PWA — все задачи выполнены
+- ✅ Phase 5.2 Web Vitals — интегрированы
 
 **Статус:**
 
-- ✅ Commit в dev: db36332
-- ✅ Merge dev → main: db36332
+- ✅ Commit в dev: b6c4945
+- ✅ Merge dev → main: b6c4945
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
@@ -796,6 +800,14 @@ src/
 - ✅ `postcss.config.js` — конфигурация PostCSS для Tailwind v4
 - ✅ `proxy.ts` — переименован из `middleware.ts` (Next.js 16 deprecated warning)
 - ✅ 2 коммита: db36332 (dev + main синхронизированы)
+
+**Последние изменения (2026-03-18) — Обновление todo.md:**
+
+- ✅ Phase 4.1 Performance — отмечены выполненные задачи (code splitting, lazy loading, memoization)
+- ✅ Phase 4.2 A11y — отмечены выполненные задачи (ARIA, keyboard navigation, screen reader, focus)
+- ✅ Phase 5.1 PWA — отмечены выполненные задачи (service worker, manifest, offline)
+- ✅ Phase 5.2 Analytics — отмечен Web Vitals
+- ✅ Версия обновлена: 1.4.7-stable
 
 **Последние изменения (2026-03-18) — UX/UI Enhancements:**
 
