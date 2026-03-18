@@ -187,5 +187,27 @@
     "intermediate": "בינוני",
     "advanced": "מתקדם",
     "minutes": "דקות"
+  },
+  "presets": {
+    "title": "קביעות מוגדרות",
+    "save": "שמור",
+    "export": "ייצא",
+    "import": "ייבא",
+    "delete": "מחק",
+    "apply": "החל",
+    "name": "שם",
+    "description": "תיאור",
+    "noPresets": "אין קביעות שמורות",
+    "default": "ברירת מחדל",
+    "custom": "מותאם אישית",
+    "saveTitle": "שמור קביעה מוגדרת",
+    "importTitle": "ייבא קביעות מוגדרות",
+    "exportSuccess": "קביעות יוצאו ללוח",
+    "importSuccess": "קביעות יובאו",
+    "importError": "שגיאת ייבוא: פורמט JSON לא חוקי",
+    "saveSuccess": "קביעה מוגדרת נשמרה",
+    "deleteSuccess": "קביעה מוגדרת נמחקה",
+    "applySuccess": "קביעה מוגדרת הוחלה",
+    "deleteDefaultError": "לא ניתן למחוק קביעת ברירת מחדל"
   }
 }

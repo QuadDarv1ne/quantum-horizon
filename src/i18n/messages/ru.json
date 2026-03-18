@@ -187,5 +187,27 @@
     "intermediate": "Средний",
     "advanced": "Продвинутый",
     "minutes": "мин"
+  },
+  "presets": {
+    "title": "Пресеты",
+    "save": "Сохранить",
+    "export": "Экспорт",
+    "import": "Импорт",
+    "delete": "Удалить",
+    "apply": "Применить",
+    "name": "Название",
+    "description": "Описание",
+    "noPresets": "Нет сохранённых пресетов",
+    "default": "Стандартный",
+    "custom": "Пользовательский",
+    "saveTitle": "Сохранить пресет",
+    "importTitle": "Импортировать пресеты",
+    "exportSuccess": "Пресеты экспортированы в буфер обмена",
+    "importSuccess": "Пресеты импортированы",
+    "importError": "Ошибка импорта: неверный формат JSON",
+    "saveSuccess": "Пресет сохранён",
+    "deleteSuccess": "Пресет удалён",
+    "applySuccess": "Пресет применён",
+    "deleteDefaultError": "Нельзя удалить стандартный пресет"
   }
 }

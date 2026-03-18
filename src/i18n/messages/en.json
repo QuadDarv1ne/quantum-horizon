@@ -191,5 +191,27 @@
     "intermediate": "Intermediate",
     "advanced": "Advanced",
     "minutes": "min"
+  },
+  "presets": {
+    "title": "Presets",
+    "save": "Save",
+    "export": "Export",
+    "import": "Import",
+    "delete": "Delete",
+    "apply": "Apply",
+    "name": "Name",
+    "description": "Description",
+    "noPresets": "No saved presets",
+    "default": "Default",
+    "custom": "Custom",
+    "saveTitle": "Save Preset",
+    "importTitle": "Import Presets",
+    "exportSuccess": "Presets exported to clipboard",
+    "importSuccess": "Presets imported",
+    "importError": "Import error: invalid JSON format",
+    "saveSuccess": "Preset saved",
+    "deleteSuccess": "Preset deleted",
+    "applySuccess": "Preset applied",
+    "deleteDefaultError": "Cannot delete default preset"
   }
 }

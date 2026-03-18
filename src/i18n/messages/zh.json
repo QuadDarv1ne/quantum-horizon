@@ -187,5 +187,27 @@
     "intermediate": "中级",
     "advanced": "高级",
     "minutes": "分钟"
+  },
+  "presets": {
+    "title": "预设",
+    "save": "保存",
+    "export": "导出",
+    "import": "导入",
+    "delete": "删除",
+    "apply": "应用",
+    "name": "名称",
+    "description": "描述",
+    "noPresets": "无保存的预设",
+    "default": "默认",
+    "custom": "自定义",
+    "saveTitle": "保存预设",
+    "importTitle": "导入预设",
+    "exportSuccess": "预设已导出到剪贴板",
+    "importSuccess": "预设已导入",
+    "importError": "导入错误：JSON 格式无效",
+    "saveSuccess": "预设已保存",
+    "deleteSuccess": "预设已删除",
+    "applySuccess": "预设已应用",
+    "deleteDefaultError": "无法删除默认预设"
   }
 }
