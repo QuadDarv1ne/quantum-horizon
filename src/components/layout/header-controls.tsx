@@ -1,7 +1,8 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { LANGUAGES } from "@/lib/constants-ui"
+import { CommandPalette } from "@/components/ui/command-palette"
+import { LANGUAGES, type Section, type Language } from "@/lib/constants-ui"
 
 interface HeaderControlsProps {
   locale: string
@@ -9,6 +10,10 @@ interface HeaderControlsProps {
   onThemeChange: (theme: "dark" | "light") => void
   onMenuOpen: () => void
   isDark: boolean
+  activeSection: Section
+  onSectionChange: (section: Section) => void
+  language: string
+  onLanguageChange: (lang: Language) => void
 }
 
 export function HeaderControls({
@@ -17,6 +22,10 @@ export function HeaderControls({
   onThemeChange,
   onMenuOpen,
   isDark,
+  activeSection,
+  onSectionChange,
+  language,
+  onLanguageChange,
 }: HeaderControlsProps) {
   const handleLanguageChange = (lang: (typeof LANGUAGES)[number]) => {
     if (typeof window !== "undefined") {
@@ -58,6 +67,32 @@ export function HeaderControls({
 
       {/* Controls */}
       <div className="flex items-center gap-2">
+        {/* Command Palette */}
+        <div className="hidden w-full max-w-xs md:block">
+          <CommandPalette
+            activeSection={activeSection}
+            onSectionChange={onSectionChange}
+            theme={theme}
+            onThemeChange={onThemeChange}
+            language={language}
+            onLanguageChange={onLanguageChange}
+            isDark={isDark}
+          />
+        </div>
+
+        {/* Mobile Command Palette Trigger */}
+        <Button
+          onClick={() => {
+            const event = new KeyboardEvent("keydown", { key: "k", ctrlKey: true })
+            document.dispatchEvent(event)
+          }}
+          variant="outline"
+          size="icon"
+          className={iconButtonClass}
+          title="Search (Ctrl+K)"
+        >
+          <span className="text-base">🔍</span>
+        </Button>
         {/* Language Switcher */}
         <div className="hidden gap-1 sm:flex">
           {LANGUAGES.map((lang) => (

@@ -5,6 +5,7 @@ import { useLocale } from "next-intl"
 import { SideMenu } from "@/components/layout/side-menu"
 import { HeaderControls } from "@/components/layout/header-controls"
 import { Navigation } from "@/components/layout/navigation"
+import { AnimatedBackground } from "@/components/layout/animated-background"
 import {
   QuantumSection,
   RelativitySection,
@@ -94,6 +95,9 @@ export default function Home() {
         </div>
       )}
 
+      {/* Animated background with particles */}
+      <AnimatedBackground isDark={isDark} />
+
       <SideMenu
         isOpen={menuOpen}
         onClose={() => {
@@ -133,6 +137,10 @@ export default function Home() {
               setMenuOpen(true)
             }}
             isDark={isDark}
+            activeSection={activeSection}
+            onSectionChange={setActiveSection}
+            language={locale}
+            onLanguageChange={handleLanguageChange}
           />
 
           <div className="mt-6 text-center">
