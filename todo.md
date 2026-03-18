@@ -675,13 +675,13 @@ src/
 
 ## 🔁 Синхронизация
 
-**Последняя синхронизация:** 2026-03-18 (Database Integration) ✅
+**Последняя синхронизация:** 2026-03-18 ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                                                |
-| ------ | ------ | --------------- | --------------------------------------------------------------- |
-| dev    | ✅     | 0               | e095b64 docs: Update sync status with database integration info |
-| main   | ✅     | 0               | d414e51 Merge branch 'dev'                                      |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                                       |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                       |
+| ------ | ------ | --------------- | -------------------------------------- |
+| dev    | ✅     | 0               | dcde28a docs: Final sync status update |
+| main   | ✅     | 0               | 4a04420 Merge branch 'dev'             |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки              |
 
 **Изменения отправлены:**
 
@@ -699,13 +699,7 @@ src/
   - DYNAMIC_CACHE_PATTERNS для внешних API
   - Логирование кэширования
 - ✅ `src/components/pwa/pwa-install-prompt.tsx` — компонент установки PWA
-  - BeforeInstallPromptEvent обработка
-  - Отложенное отображение (30 сек или 2-й визит)
-  - localStorage для отслеживания посещений
-  - Кнопки: "Установить" / "Позже"
-  - Dismiss кнопка с сохранением в localStorage
 - ✅ `src/components/pwa/web-vitals.tsx` — метрики производительности
-- ✅ `todo.md` — обновлена документация
 
 **Проверки:**
 
@@ -716,8 +710,8 @@ src/
 
 **Статус:**
 
-- ✅ Commit в dev: e095b64
-- ✅ Merge dev → main: d414e51
+- ✅ Commit в dev: dcde28a
+- ✅ Merge dev → main: 4a04420
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
