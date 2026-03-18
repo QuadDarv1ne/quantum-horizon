@@ -1,11 +1,47 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-19 (Phase 2: Performance Optimizations ✅)
+**Обновлено:** 2026-03-18 (PWA Improvements ✅)
 **Статус:** ✅ dev и main синхронизированы
-**Версия:** 1.1.0-phase2
+**Версия:** 1.2.0-pwa
 
 ---
+
+---
+
+## 🚀 Phase 3: PWA Support (2026-03-18) ✅
+
+### ✅ Выполненные задачи (PWA функциональность)
+
+**1. Service Worker Enhancement:**
+
+- ✅ `public/sw.ts` — улучшенное кэширование
+  - DYNAMIC_CACHE_PATTERNS для API (NASA, WhereTheISS, Unsplash)
+  - Кэширование статических активов
+  - Логирование событий кэширования
+  - Offline fallback поддержка
+
+**2. PWA Install Prompt:**
+
+- ✅ `src/components/pwa/pwa-install-prompt.tsx` — компонент установки
+  - BeforeInstallPromptEvent обработка
+  - Умное отображение (30 сек или 2-й визит)
+  - localStorage для управления состоянием
+  - UX: кнопки "Установить" / "Позже" / "Dismiss"
+
+**3. Web Vitals Integration:**
+
+- ✅ `src/components/pwa/web-vitals.tsx` — метрики производительности
+  - LCP (Largest Contentful Paint)
+  - FID (First Input Delay)
+  - CLS (Cumulative Layout Shift)
+  - Отправка аналитики
+
+**Метрики Phase 3:**
+
+- **PWA компонентов:** 2 новых (install prompt, web vitals)
+- **Service Worker:** улучшенное кэширование API
+- **Коммиты:** 3 (dev + main синхронизированы)
 
 ---
 
@@ -528,26 +564,28 @@ src/
 
 ## 📈 Метрики для отслеживания
 
-| Метрика                  | Было | Стало | Цель            | Статус      |
-| ------------------------ | ---- | ----- | --------------- | ----------- |
-| Строк в page.tsx         | 9709 | 209   | < 200           | ⚠️ 209 стр  |
-| Компонентов визуализаций | 33   | 93    | 20+             | ✅ 93 файла |
-| Unit тестов              | 223  | 238   | 100+            | ✅ 238      |
-| E2E тестов               | 14   | 24    | 15+             | ✅ 24       |
-| Storybook stories        | 41   | 43+   | 30+             | ✅ 43+      |
-| Bundle size              | ?    | 219KB | < 500KB initial | ✅ 219KB    |
-| Lighthouse Performance   | ?    | ⏳    | > 90            | ⏳ Проверка |
-| Lighthouse Accessibility | ?    | ⏳    | > 90            | ⏳ Проверка |
-| Физических формул        | 80   | 50    | 20+             | ✅ 50       |
-| Eslint ошибок            | 56   | 0     | 0               | ✅ 0        |
-| TypeScript ошибок        | 15   | 0     | 0               | ✅ 0        |
-| i18n интеграция          | ⚠️   | ✅    | 100%            | ✅ Готово   |
-| Performance оптимизации  | ⚠️   | ✅    | Базовые         | ✅ Готово   |
-| A11y (доступность)       | ⚠️   | ✅    | ARIA + keyboard | ✅ Готово   |
-| Middleware i18n          | ⚠️   | ✅    | localeDetection | ✅ Готово   |
-| Секций компонентов       | 0    | 5     | 5               | ✅ 5        |
-| Сборка                   | ⚠️   | ✅    | Без ошибок      | ✅ Пройдена |
-| Дизайн/UI                | ⚠️   | ✅    | Современный     | ✅ Готово   |
+| Метрика                  | Было | Стало | Цель            | Статус       |
+| ------------------------ | ---- | ----- | --------------- | ------------ |
+| Строк в page.tsx         | 9709 | 161   | < 200           | ✅ 161 стр   |
+| Компонентов визуализаций | 33   | 93    | 20+             | ✅ 93 файла  |
+| Unit тестов              | 223  | 238   | 100+            | ✅ 238       |
+| E2E тестов               | 14   | 24    | 15+             | ✅ 24        |
+| Storybook stories        | 41   | 43+   | 30+             | ✅ 43+       |
+| Bundle size              | ?    | 219KB | < 500KB initial | ✅ 219KB     |
+| Lighthouse Performance   | ?    | ⏳    | > 90            | ⏳ Проверка  |
+| Lighthouse Accessibility | ?    | ⏳    | > 90            | ⏳ Проверка  |
+| Физических формул        | 80   | 95    | 20+             | ✅ 95        |
+| Eslint ошибок            | 56   | 0     | 0               | ✅ 0         |
+| TypeScript ошибок        | 15   | 0     | 0               | ✅ 0         |
+| i18n интеграция          | ⚠️   | ✅    | 100%            | ✅ Готово    |
+| Performance оптимизации  | ⚠️   | ✅    | Базовые         | ✅ Готово    |
+| A11y (доступность)       | ⚠️   | ✅    | ARIA + keyboard | ✅ Готово    |
+| Middleware i18n          | ⚠️   | ✅    | localeDetection | ✅ Готово    |
+| Секций компонентов       | 0    | 5     | 5               | ✅ 5         |
+| Сборка                   | ⚠️   | ✅    | Без ошибок      | ✅ Пройдена  |
+| Дизайн/UI                | ⚠️   | ✅    | Современный     | ✅ Готово    |
+| PWA Support              | ❌   | ✅    | Service Worker  | ✅ Готово    |
+| Service Worker           | ❌   | ✅    | Кэширование API | ✅ Готово    |
 
 ---
 
@@ -563,11 +601,11 @@ src/
 6. ✅ Написано 60+ тестов (60+ passing)
 7. ✅ Сборка проходит успешно
 8. ✅ Lint без ошибок
-9. ✅ page.tsx сокращён с 9709 до 516 строк
-10. ✅ Создано 42 компонента визуализаций (квантовая механика, СТО, космология, термодинамика, образование)
+9. ✅ page.tsx сокращён с 9709 до 161 строки
+10. ✅ Создано 93 компонента визуализаций (квантовая механика, СТО, космология, термодинамика, образование)
 11. ✅ Добавлены Storybook stories
 12. ✅ Интеграция всех компонентов в page.tsx завершена
-13. ✅ 223 unit-теста passing
+13. ✅ 238 unit-тестов passing
 14. ✅ 24 E2E тестов passing
 15. ✅ Lazy loading для всех визуализаций через lazy.tsx
 16. ✅ 50 Storybook stories
@@ -591,6 +629,9 @@ src/
 34. ✅ 93 компонента визуализаций (включая stories)
 35. ✅ Исправлены TypeScript/ESLint ошибки (2026-03-17 21:45)
 36. ✅ 0 ошибок lint, 0 ошибок tsc
+37. ✅ PWA: Service Worker с кэшированием API
+38. ✅ PWA: Install prompt компонент
+39. ✅ Web Vitals интеграция
 
 ### 📋 Следующие задачи
 
@@ -598,6 +639,7 @@ src/
 2. [ ] Оптимизировать производительность визуализаций
 3. [ ] Добавить больше Stories для Storybook
 4. [ ] React Query интеграция для данных
+5. [ ] Bundle size оптимизация
 
 ---
 
@@ -635,23 +677,26 @@ src/
 
 **Последняя синхронизация:** 2026-03-18 (PWA Improvements) ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                                                   |
-| ------ | ------ | --------------- | ------------------------------------------------------------------ |
-| dev    | ✅     | 0               | b3e36a1 docs: Update todo.md with PWA improvements and sync status |
-| main   | ✅     | 0               | 7cd78fa Merge branch 'dev' into main - PWA improvements            |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                                          |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                                         |
+| ------ | ------ | --------------- | -------------------------------------------------------- |
+| dev    | ✅     | 0               | 6dd39cd docs: Final sync status update                   |
+| main   | ✅     | 0               | 1043273 Merge dev into main - sync status update         |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                                |
 
 **Изменения отправлены:**
 
 **PWA улучшения (2026-03-18):**
 
 - ✅ `public/sw.ts` — кэширование динамического контента (Unsplash, NASA API, WhereTheISS)
+  - DYNAMIC_CACHE_PATTERNS для внешних API
+  - Логирование кэширования
 - ✅ `src/components/pwa/pwa-install-prompt.tsx` — компонент установки PWA
   - BeforeInstallPromptEvent обработка
   - Отложенное отображение (30 сек или 2-й визит)
   - localStorage для отслеживания посещений
   - Кнопки: "Установить" / "Позже"
   - Dismiss кнопка с сохранением в localStorage
+- ✅ `src/components/pwa/web-vitals.tsx` — метрики производительности
 - ✅ `todo.md` — обновлена документация
 
 **Проверки:**
@@ -663,8 +708,8 @@ src/
 
 **Статус:**
 
-- ✅ Commit в dev: b3e36a1
-- ✅ Merge dev → main: 7cd78fa
+- ✅ Commit в dev: 6dd39cd
+- ✅ Merge dev → main: 1043273
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
@@ -950,8 +995,9 @@ src/
 - ✅ A11y: ARIA атрибуты на всех компонентах
 - ✅ A11y: Keyboard navigation (Space, R, 1-5, стрелки)
 - ✅ Middleware i18n с automatic locale detection
-- ✅ Service Worker собран (sw.js)
+- ✅ Service Worker с кэшированием API (sw.js)
 - ✅ PWA install prompt компонент
+- ✅ Web Vitals интеграция
 - ✅ package.json фикс (node вместо bun)
 
 ### Проблемные места
@@ -961,7 +1007,9 @@ src/
 - ✅ page.tsx 161 строка (цель < 200 — **достигнута**)
 - ⚠️ OneDrive синхронизация может блокировать lock-файлы
 - ⚠️ React Query не используется активно
+- ⚠️ Нет замеров Lighthouse Performance/Accessibility
+- ⚠️ Bundle size требует оптимизации (219KB initial)
 
 ---
 
-**Следующее обновление:** После замеров Lighthouse и Bundle size
+**Следующее обновление:** После замеров Lighthouse и Bundle size оптимизации

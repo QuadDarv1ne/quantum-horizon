@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 // ============================================
@@ -129,4 +129,30 @@ model UserSettings {
   updatedAt DateTime @updatedAt
 
   @@map("user_settings")
+}
+
+/// User achievements
+model UserAchievement {
+  id           String   @id @default(cuid())
+  userId       String
+  achievementId String
+  unlockedAt   DateTime @default(now())
+  progress     Int      @default(0)
+  target       Int      @default(1)
+  
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}
+
+/// Activity history
+model UserActivity {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String
+  topic     String?
+  xpGained Int      @default(0)
+  createdAt DateTime @default(now())
+  
+  @@index([userId])
+  @@map("user_activity")
 }

@@ -96,15 +96,15 @@ export async function DELETE(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
-    const id = searchParams.get("id")
+    const topic = searchParams.get("topic")
 
-    if (!id) {
-      return NextResponse.json({ error: "Bookmark ID is required" }, { status: 400 })
+    if (!topic) {
+      return NextResponse.json({ error: "Topic is required" }, { status: 400 })
     }
 
-    await db.bookmark.delete({
+    await db.bookmark.deleteMany({
       where: {
-        id: Number(id),
+        topic,
         userId,
       },
     })
