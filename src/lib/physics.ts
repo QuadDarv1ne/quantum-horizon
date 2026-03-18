@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 // Физические формулы и расчёты
-
 import {
   G,
   c,
@@ -15,6 +16,27 @@ import {
   R,
   wiensConstant,
 } from "./constants"
+
+// Simple memoization cache for expensive calculations
+const memoCache = new Map<string, number>()
+const MEMO_LIMIT = 1000
+
+function memoize<T extends (...args: any[]) => number>(fn: T, keyFn: (...args: any[]) => string): T {
+  return ((...args: Parameters<T>) => {
+    const key = keyFn(...args)
+    if (memoCache.has(key)) {
+      return memoCache.get(key)!
+    }
+    const result = fn(...args)
+    if (memoCache.size >= MEMO_LIMIT) {
+      // Clear oldest entry when limit reached
+      const firstKey = memoCache.keys().next().value
+      if (firstKey) memoCache.delete(firstKey)
+    }
+    memoCache.set(key, result)
+    return result
+  }) as T
+}
 
 /**
  * Расчёт фактора Лоренца
