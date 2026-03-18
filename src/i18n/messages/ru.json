@@ -164,5 +164,28 @@
     "keyConcepts": "Ключевые понятия",
     "applications": "Применение",
     "historicalContext": "Исторический контекст"
+  },
+  "learning": {
+    "title": "Обучение",
+    "unavailable": "недоступно",
+    "start": "Начать обучение",
+    "next": "Далее",
+    "back": "Назад",
+    "startQuiz": "Начать тест",
+    "finishQuiz": "Завершить тест",
+    "restart": "Пройти заново",
+    "step": "Шаг",
+    "of": "из",
+    "question": "Вопрос",
+    "answer": "Ваш ответ",
+    "correctAnswer": "Правильный ответ",
+    "score": "Вы набрали",
+    "correct": "из",
+    "congratulations": "Поздравляем!",
+    "goodJob": "Хорошая работа!",
+    "beginner": "Начальный",
+    "intermediate": "Средний",
+    "advanced": "Продвинутый",
+    "minutes": "мин"
   }
 }

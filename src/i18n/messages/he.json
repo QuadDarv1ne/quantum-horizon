@@ -164,5 +164,28 @@
     "keyConcepts": "מושגי מפתח",
     "applications": "יישומים",
     "historicalContext": "הקשר היסטורי"
+  },
+  "learning": {
+    "title": "למידה",
+    "unavailable": "לא זמין",
+    "start": "התחל ללמוד",
+    "next": "הבא",
+    "back": "חזור",
+    "startQuiz": "התחל חידון",
+    "finishQuiz": "סיים חידון",
+    "restart": "התחל מחדש",
+    "step": "שלב",
+    "of": "מתוך",
+    "question": "שאלה",
+    "answer": "התשובה שלך",
+    "correctAnswer": "תשובה נכונה",
+    "score": "ציון",
+    "correct": "מתוך",
+    "congratulations": "ברכות!",
+    "goodJob": "עבודה טובה!",
+    "beginner": "מתחיל",
+    "intermediate": "בינוני",
+    "advanced": "מתקדם",
+    "minutes": "דקות"
   }
 }

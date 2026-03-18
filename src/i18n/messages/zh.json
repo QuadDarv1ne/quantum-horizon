@@ -164,5 +164,28 @@
     "keyConcepts": "关键概念",
     "applications": "应用",
     "historicalContext": "历史背景"
+  },
+  "learning": {
+    "title": "学习",
+    "unavailable": "不可用",
+    "start": "开始学习",
+    "next": "下一步",
+    "back": "返回",
+    "startQuiz": "开始测试",
+    "finishQuiz": "完成测试",
+    "restart": "重新开始",
+    "step": "步骤",
+    "of": "/",
+    "question": "问题",
+    "answer": "你的答案",
+    "correctAnswer": "正确答案",
+    "score": "你得了",
+    "correct": "分之",
+    "congratulations": "恭喜！",
+    "goodJob": "做得好！",
+    "beginner": "初级",
+    "intermediate": "中级",
+    "advanced": "高级",
+    "minutes": "分钟"
   }
 }

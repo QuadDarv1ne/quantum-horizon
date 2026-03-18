@@ -168,5 +168,28 @@
     "keyConcepts": "Key Concepts",
     "applications": "Applications",
     "historicalContext": "Historical Context"
+  },
+  "learning": {
+    "title": "Learning",
+    "unavailable": "Unavailable",
+    "start": "Start Learning",
+    "next": "Next",
+    "back": "Back",
+    "startQuiz": "Start Quiz",
+    "finishQuiz": "Finish Quiz",
+    "restart": "Restart",
+    "step": "Step",
+    "of": "of",
+    "question": "Question",
+    "answer": "Your Answer",
+    "correctAnswer": "Correct Answer",
+    "score": "You scored",
+    "correct": "out of",
+    "congratulations": "Congratulations!",
+    "goodJob": "Good Job!",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "minutes": "min"
   }
 }
