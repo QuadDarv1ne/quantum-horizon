@@ -156,5 +156,13 @@
     "ariaTimeDilation": "相对论速度下时间膨胀动画",
     "ariaLengthContraction": "洛伦兹长度收缩可视化",
     "ariaMassEnergy": "质能等价计算器"
+  },
+  "physicsInfo": {
+    "info": "信息",
+    "aboutPhenomenon": "关于现象",
+    "formula": "公式",
+    "keyConcepts": "关键概念",
+    "applications": "应用",
+    "historicalContext": "历史背景"
   }
 }

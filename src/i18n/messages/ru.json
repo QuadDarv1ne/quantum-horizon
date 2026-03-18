@@ -156,5 +156,13 @@
     "ariaTimeDilation": "Анимация замедления времени при релятивистских скоростях",
     "ariaLengthContraction": "Визуализация лоренцева сокращения длины",
     "ariaMassEnergy": "Калькулятор эквивалентности массы и энергии"
+  },
+  "physicsInfo": {
+    "info": "Информация",
+    "aboutPhenomenon": "О явлении",
+    "formula": "Формула",
+    "keyConcepts": "Ключевые понятия",
+    "applications": "Применение",
+    "historicalContext": "Исторический контекст"
   }
 }

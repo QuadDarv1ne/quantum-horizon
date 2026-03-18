@@ -156,5 +156,13 @@
     "ariaTimeDilation": "אנימציה של התארכות זמן במהירויות יחסותיות",
     "ariaLengthContraction": "ויזואליזציה של התכווצות לורנץ",
     "ariaMassEnergy": "מחשבון שקילות מסה-אנרגיה"
+  },
+  "physicsInfo": {
+    "info": "מידע",
+    "aboutPhenomenon": "אודות התופעה",
+    "formula": "נוסחה",
+    "keyConcepts": "מושגי מפתח",
+    "applications": "יישומים",
+    "historicalContext": "הקשר היסטורי"
   }
 }

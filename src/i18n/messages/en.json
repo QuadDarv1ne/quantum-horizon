@@ -160,5 +160,13 @@
     "ariaTimeDilation": "Time dilation animation at relativistic velocities",
     "ariaLengthContraction": "Lorentz length contraction visualization",
     "ariaMassEnergy": "Mass-energy equivalence calculator"
+  },
+  "physicsInfo": {
+    "info": "Info",
+    "aboutPhenomenon": "About Phenomenon",
+    "formula": "Formula",
+    "keyConcepts": "Key Concepts",
+    "applications": "Applications",
+    "historicalContext": "Historical Context"
   }
 }
