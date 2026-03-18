@@ -1,1 +1,51 @@
-"use strict";(()=>{var s="quantum-horizon-v1",i=["/","/offline","/favicon.svg"];self.addEventListener("install",n=>{n.waitUntil(caches.open(s).then(e=>e.addAll(i))),self.skipWaiting()});self.addEventListener("activate",n=>{n.waitUntil(caches.keys().then(e=>Promise.all(e.filter(t=>t!==s).map(t=>caches.delete(t))))),self.clients.claim()});self.addEventListener("fetch",n=>{let{request:e}=n;e.method==="GET"&&e.url.startsWith("http")&&n.respondWith(fetch(e).then(t=>{let a=t.clone();return t.status===200&&caches.open(s).then(r=>{r.put(e,a)}),t}).catch(()=>caches.match(e).then(t=>t||(e.mode==="navigate"?caches.match("/offline"):new Response("Offline",{status:503})))))});self.addEventListener("message",n=>{n.data?.type==="SKIP_WAITING"&&self.skipWaiting()});})();
+"use strict"
+;(() => {
+  var n = "quantum-horizon-v1",
+    r = ["/", "/offline", "/favicon.svg"]
+  self.addEventListener("install", (s) => {
+    ;(s.waitUntil(
+      caches
+        .open(n)
+        .then((e) => (console.log("Service Worker: Caching static assets"), e.addAll(r)))
+    ),
+      self.skipWaiting())
+  })
+  self.addEventListener("activate", (s) => {
+    ;(s.waitUntil(
+      caches.keys().then((e) => Promise.all(e.filter((t) => t !== n).map((t) => caches.delete(t))))
+    ),
+      self.clients.claim())
+  })
+  self.addEventListener("fetch", (s) => {
+    let { request: e } = s
+    e.method === "GET" &&
+      e.url.startsWith("http") &&
+      s.respondWith(
+        fetch(e)
+          .then((t) => {
+            let a = t.clone()
+            return (
+              t.status === 200 &&
+                caches.open(n).then((i) => {
+                  i.put(e, a)
+                }),
+              t
+            )
+          })
+          .catch(() =>
+            caches
+              .match(e)
+              .then(
+                (t) =>
+                  t ||
+                  (e.mode === "navigate"
+                    ? caches.match("/offline")
+                    : new Response("Offline", { status: 503 }))
+              )
+          )
+      )
+  })
+  self.addEventListener("message", (s) => {
+    s.data?.type === "SKIP_WAITING" && self.skipWaiting()
+  })
+})()

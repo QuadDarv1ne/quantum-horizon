@@ -49,6 +49,8 @@ export function useCanvasAnimationEnhanced({
     onAnimateRef.current = onAnimate
   }, [onAnimate])
 
+  const _deps = deps // deps для перезапуска анимации
+
   /**
    * Настройка canvas для HiDPI/Retina дисплеев
    */

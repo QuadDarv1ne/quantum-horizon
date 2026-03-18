@@ -429,3 +429,5 @@ function Thermometer({ className }: { className?: string }) {
     </svg>
   )
 }
+
+export default SpaceWeatherDashboard

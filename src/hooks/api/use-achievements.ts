@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
@@ -10,17 +12,10 @@ interface UserAchievement {
   unlockedAt: string
 }
 
-interface AchievementData {
-  id: string
-  name: string
-  description: string
-  icon: string
-  category: string
-  rarity: string
-  xpReward: number
-  unlocked: boolean
-  progress: number
-  maxProgress: number
+interface APIResponse {
+  success: boolean
+  data?: UserAchievement[]
+  newlyUnlocked?: boolean
 }
 
 export function useAchievements() {
@@ -33,18 +28,18 @@ export function useAchievements() {
     try {
       setLoading(true)
       const response = await fetch("/api/achievements")
-      
+
       if (!response.ok) {
         if (response.status === 401) {
           // User not authenticated - use mock data
           console.log("User not authenticated, using mock data")
           return
         }
-        throw new Error(`HTTP error! status: ${response.status}`)
+        throw new Error(`HTTP error! status: ${String(response.status)}`)
       }
 
-      const result = await response.json()
-      
+      const result: APIResponse = await response.json()
+
       if (result.success && result.data) {
         setAchievements(result.data)
       }
@@ -57,60 +52,64 @@ export function useAchievements() {
   }, [])
 
   // Unlock or update achievement
-  const unlockAchievement = useCallback(async (achievementId: string, progress = 1, target = 1) => {
-    try {
-      const response = await fetch("/api/achievements", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          achievementId,
-          progress,
-          target,
-        }),
-      })
+  const unlockAchievement = useCallback(
+    async (achievementId: string, progress = 1, target = 1) => {
+      try {
+        const response = await fetch("/api/achievements", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            achievementId,
+            progress,
+            target,
+          }),
+        })
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          console.log("Not authenticated - simulating achievement unlock")
-          // Optimistically update local state
-          setAchievements(prev => {
-            const existing = prev.find(a => a.achievementId === achievementId)
-            if (existing) {
-              return prev.map(a => 
-                a.achievementId === achievementId 
-                  ? { ...a, progress: a.progress + progress }
-                  : a
-              )
-            }
-            return [...prev, {
-              id: `temp_${Date.now()}`,
-              achievementId,
-              progress,
-              target,
-              unlockedAt: new Date().toISOString(),
-            }]
-          })
-          return true
+        if (!response.ok) {
+          if (response.status === 401) {
+            console.log("Not authenticated - simulating achievement unlock")
+            // Optimistically update local state
+            setAchievements((prev) => {
+              const existing = prev.find((a) => a.achievementId === achievementId)
+              if (existing) {
+                return prev.map((a) =>
+                  a.achievementId === achievementId ? { ...a, progress: a.progress + progress } : a
+                )
+              }
+              return [
+                ...prev,
+                {
+                  id: `temp_${Date.now()}`,
+                  achievementId,
+                  progress,
+                  target,
+                  unlockedAt: new Date().toISOString(),
+                },
+              ]
+            })
+            return true
+          }
+          throw new Error(`HTTP error! status: ${String(response.status)}`)
         }
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
 
-      const result = await response.json()
-      
-      if (result.success) {
-        // Refresh achievements list
-        await fetchAchievements()
-        return result.newlyUnlocked || false
+        const result: APIResponse = await response.json()
+
+        if (result.success) {
+          // Refresh achievements list
+          await fetchAchievements()
+          return result.newlyUnlocked ?? false
+        }
+
+        return false
+      } catch (err) {
+        console.error("Failed to unlock achievement:", err)
+        return false
       }
-      
-      return false
-    } catch (err) {
-      console.error("Failed to unlock achievement:", err)
-      return false
-    }
-  }, [fetchAchievements])
+    },
+    [fetchAchievements]
+  )
 
   useEffect(() => {
     void fetchAchievements()

@@ -217,3 +217,5 @@ export function NASAAPODViewer({ className, showDateSelector = true }: NASAAPODV
     </div>
   )
 }
+
+export default NASAAPODViewer

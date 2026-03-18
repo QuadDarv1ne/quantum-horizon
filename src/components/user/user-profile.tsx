@@ -400,3 +400,5 @@ export function UserProfile({ className }: UserProfileProps) {
     </div>
   )
 }
+
+export default UserProfile

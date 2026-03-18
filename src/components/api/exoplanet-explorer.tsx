@@ -488,3 +488,5 @@ export function ExoplanetExplorer({ className }: ExoplanetExplorerProps) {
     </div>
   )
 }
+
+export default ExoplanetExplorer

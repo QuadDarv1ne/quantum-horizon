@@ -310,3 +310,5 @@ export function SatelliteTracker({
     </div>
   )
 }
+
+export default SatelliteTracker

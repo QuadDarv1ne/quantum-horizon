@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client"
 
 import { useState } from "react"
@@ -216,7 +214,7 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
   const filteredAchievements =
     selectedCategory === "all"
       ? achievements
-      : achievements.filter((a) => a.category === selectedCategory)
+      : achievements.filter((a) => "category" in a && a.category === selectedCategory)
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
@@ -260,9 +258,11 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
 
   const stats = {
     total: achievements.length,
-    unlocked: achievements.filter((a) => a.unlocked).length,
-    locked: achievements.filter((a) => !a.unlocked).length,
-    totalXP: achievements.filter((a) => a.unlocked).reduce((sum, a) => sum + a.xpReward, 0),
+    unlocked: achievements.filter((a) => "unlocked" in a && a.unlocked).length,
+    locked: achievements.filter((a) => !("unlocked" in a) || !a.unlocked).length,
+    totalXP: achievements
+      .filter((a) => "unlocked" in a && a.unlocked)
+      .reduce((sum, a) => sum + ("xpReward" in a ? a.xpReward : 0), 0),
   }
 
   return (
@@ -321,23 +321,26 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
       {/* Achievements Grid */}
       <div className="grid gap-4 p-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredAchievements.map((achievement) => {
-          const colors = getRarityColor(achievement.rarity)
-          const progressPercent = (achievement.progress / achievement.maxProgress) * 100
+          const rarity = "rarity" in achievement ? achievement.rarity : "common"
+          const colors = getRarityColor(rarity)
+          const progress = "progress" in achievement ? achievement.progress : 0
+          const maxProgress = "maxProgress" in achievement ? achievement.maxProgress : 1
+          const progressPercent = (progress / maxProgress) * 100
 
           return (
             <div
               key={achievement.id}
               className={cn(
                 "relative overflow-hidden rounded-xl border-2 p-4 transition-all duration-300",
-                achievement.unlocked
+                "unlocked" in achievement && achievement.unlocked
                   ? cn(colors.bg, colors.border, "shadow-lg", colors.glow)
                   : "bg-muted/50 border-gray-700 opacity-60"
               )}
             >
               {/* Icon & Title */}
               <div className="mb-3 flex items-start justify-between">
-                <div className="text-4xl">{achievement.icon}</div>
-                {achievement.unlocked && (
+                <div className="text-4xl">{"icon" in achievement ? achievement.icon : "🏆"}</div>
+                {"unlocked" in achievement && achievement.unlocked && (
                   <div className={cn("rounded-full p-1", colors.bg)}>
                     <Zap className={cn("size-4", colors.text)} />
                   </div>
@@ -347,21 +350,23 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
               <h4
                 className={cn(
                   "mb-1 font-bold",
-                  achievement.unlocked ? "" : "text-muted-foreground"
+                  "unlocked" in achievement && achievement.unlocked ? "" : "text-muted-foreground"
                 )}
               >
-                {achievement.name}
+                {"name" in achievement ? achievement.name : "Achievement"}
               </h4>
 
-              <p className="text-muted-foreground mb-3 text-xs">{achievement.description}</p>
+              <p className="text-muted-foreground mb-3 text-xs">
+                {"description" in achievement ? achievement.description : ""}
+              </p>
 
               {/* Progress Bar */}
-              {!achievement.unlocked && (
+              {!("unlocked" in achievement) || !achievement.unlocked ? (
                 <div className="mb-2 space-y-1">
                   <div className="flex justify-between text-xs">
                     <span className="text-muted-foreground">Progress</span>
                     <span className="font-medium">
-                      {achievement.progress}/{achievement.maxProgress}
+                      {progress}/{maxProgress}
                     </span>
                   </div>
                   <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-700">
@@ -371,22 +376,25 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
                     />
                   </div>
                 </div>
-              )}
+              ) : null}
 
               {/* XP Reward */}
               <div className="flex items-center justify-between">
                 <div className={cn("text-xs font-bold", colors.text)}>
-                  +{achievement.xpReward} XP
+                  +{"xpReward" in achievement ? achievement.xpReward : 0} XP
                 </div>
-                {achievement.unlocked && achievement.unlockedAt && (
-                  <div className="text-muted-foreground text-xs">
-                    {achievement.unlockedAt.toLocaleDateString()}
-                  </div>
-                )}
+                {"unlocked" in achievement &&
+                  achievement.unlocked &&
+                  "unlockedAt" in achievement &&
+                  achievement.unlockedAt && (
+                    <div className="text-muted-foreground text-xs">
+                      {new Date(achievement.unlockedAt).toLocaleDateString()}
+                    </div>
+                  )}
               </div>
 
               {/* Locked Overlay */}
-              {!achievement.unlocked && (
+              {(!("unlocked" in achievement) || !achievement.unlocked) && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[1px]">
                   <div className="rounded-full bg-black/80 p-3">
                     <Clock className="size-6 text-gray-400" />
@@ -436,3 +444,5 @@ export function AchievementsPanel({ className }: AchievementsPanelProps) {
     </div>
   )
 }
+
+export default AchievementsPanel
