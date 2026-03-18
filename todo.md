@@ -635,25 +635,30 @@ src/
 
 ## 🔁 Синхронизация
 
-**Последняя синхронизация:** 2026-03-19 00:00 ✅
+**Последняя синхронизация:** 2026-03-18 00:00 (Phase 2: Performance Optimizations) ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                                                |
-| ------ | ------ | --------------- | --------------------------------------------------------------- |
-| dev    | ✅     | 0               | 1eaf7c6 fix: ESLint disable comments and cleanup                |
-| main   | ✅     | 0               | a7c67b4 Merge branch 'dev' into main - Phase 1 API Integrations |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                                       |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                                      |
+| ------ | ------ | --------------- | ----------------------------------------------------- |
+| dev    | ✅     | 0               | 662f25f docs: Update todo.md with Phase 2 completion  |
+| main   | ✅     | 0               |.Merge branch 'dev' into main - Phase 2 Performance    |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                             |
 
 **Изменения отправлены:**
 
-**Исправления:**
+**Phase 2: Performance Optimizations (2026-03-19):**
 
-- ✅ `src/app/page.tsx` — исправлен тип `_onMenuOpen` в HeaderControls
-- ✅ `src/components/api/exoplanet-explorer.tsx` — eslint игноры
-- ✅ `src/components/api/satellite-tracker.tsx` — eslint игноры
-- ✅ `src/components/api/space-weather-dashboard.tsx` — eslint игноры
-- ✅ `src/components/user/user-profile.tsx` — eslint игноры
-- ✅ `src/components/user/achievements-panel.tsx` — eslint игноры
-- ✅ `src/hooks/use-canvas-animation-enhanced.ts` — исправлена ошибка immutability
+- ✅ React Query integration (useAPOD, useSatellite, useMultipleSatellites)
+- ✅ Lazy loading для 6 тяжёлых API компонентов
+- ✅ Memoization для физических расчётов (physics.ts)
+- ✅ NASAAPODViewer обновлён
+- ✅ SatelliteTracker с обновлением каждые 5 сек
+
+**PWA улучшения (2026-03-18):**
+
+- ✅ `public/sw.ts` — кэширование динамического контента (Unsplash, NASA API, WhereTheISS)
+- ✅ `src/components/pwa/pwa-install-prompt.tsx` — компонент установки PWA
+- ✅ Отложенная установка (30 сек или второй визит)
+- ✅ UX: prompt с кнопками "Установить" / "Позже"
 
 **Проверки:**
 
@@ -664,17 +669,17 @@ src/
 
 **Статус:**
 
-- ✅ Commit в dev: 1eaf7c6
-- ✅ Merge dev → main: a7c67b4
+- ✅ Commit в dev: 662f25f
+- ✅ Merge dev → main: выполнен
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
 
 ## 📝 Заметки
 
-### ✅ Выполненная работа (2026-03-11 — 2026-03-19)
+### ✅ Выполненная работа (2026-03-11 — 2026-03-18)
 
-**Текущее состояние (2026-03-19 00:00):**
+**Текущее состояние (2026-03-18 00:00):**
 
 - ✅ Сборка: проходит успешно
 - ✅ TypeScript: 0 ошибок
@@ -686,9 +691,28 @@ src/
 - ✅ 93 компонента визуализаций (включая stories)
 - ✅ 5 компонентов секций
 - ✅ dev и main синхронизированы
-- ✅ Дизайн обновлён: современные градиенты, анимации, glassmorphism
+- ✅ PWA: Service Worker с кэшированием динамического контента
+- ✅ PWA: Install prompt компонент
 
-**Последние изменения (2026-03-18 22:30) — Обновление дизайна:**
+**Последние изменения (2026-03-18) — PWA улучшения:**
+
+- ✅ `public/sw.ts` — DYNAMIC_CACHE_PATTERNS для API (NASA, WhereTheISS, Unsplash)
+- ✅ `public/sw.ts` — логирование кэширования
+- ✅ `src/components/pwa/pwa-install-prompt.tsx` — новый компонент
+  - BeforeInstallPromptEvent обработка
+  - Отложенное отображение (30 сек или 2-й визит)
+  - localStorage для отслеживания посещений
+  - Кнопки: "Установить" / "Позже"
+  -Dismiss кнопка с сохранением в localStorage
+
+**Предыдущие изменения (2026-03-19 00:00) — Phase 2 Performance:**
+
+- ✅ React Query integration: useAPOD, useSatellite, useMultipleSatellites
+- ✅ Lazy loading: NASAAPODViewer, SatelliteTracker, ExoplanetExplorer, SpaceWeatherDashboard, UserProfile, AchievementsPanel
+- ✅ Memoization: physics.ts с LRU cache (1000 записей)
+- ✅ 3 коммита: dev + main синхронизированы
+
+**Предыдущие изменения (2026-03-18 22:30) — Обновление дизайна:**
 
 - ✅ `globals.css` — современная цветовая палитра (OKLCH), кастомные анимации
 - ✅ `page.tsx` — анимированный фон, градиенты, glassmorphism, плавающие частицы
@@ -933,6 +957,7 @@ src/
 - ✅ A11y: Keyboard navigation (Space, R, 1-5, стрелки)
 - ✅ Middleware i18n с automatic locale detection
 - ✅ Service Worker собран (sw.js)
+- ✅ PWA install prompt компонент
 - ✅ package.json фикс (node вместо bun)
 
 ### Проблемные места

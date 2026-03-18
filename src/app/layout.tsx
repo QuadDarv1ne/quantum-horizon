@@ -5,6 +5,7 @@ import { getLocale, getMessages } from "next-intl/server"
 import { notFound } from "next/navigation"
 import { ReactQueryProvider } from "@/components/providers/react-query-provider"
 import { ServiceWorkerRegistration } from "@/components/pwa/service-worker-registration"
+import { PWAInstallPrompt } from "@/components/pwa/pwa-install-prompt"
 import { WebVitals } from "@/components/pwa/web-vitals"
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
@@ -64,6 +65,7 @@ export default async function RootLayout({
             {children}
             <Toaster />
             <ServiceWorkerRegistration />
+            <PWAInstallPrompt />
             <WebVitals />
           </ReactQueryProvider>
         </NextIntlClientProvider>

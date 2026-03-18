@@ -10,11 +10,17 @@
 
 const CACHE_NAME = "quantum-horizon-v1"
 const STATIC_ASSETS = ["/", "/offline", "/favicon.svg"]
+const DYNAMIC_CACHE_PATTERNS = [
+  /^https:\/\/images\.unsplash\.com/,
+  /^https:\/\/api\.wheretheiss\.at/,
+  /^https:\/\/api\.nasa\.gov/,
+]
 
 // Install event - cache static assets
 self.addEventListener("install", (event) => {
   ;(event as ServiceWorkerInstallEvent).waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
+      console.log("Service Worker: Caching static assets")
       return cache.addAll(STATIC_ASSETS)
     })
   )
