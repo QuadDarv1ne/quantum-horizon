@@ -19,7 +19,6 @@
   - staleTime: 1 hour
   - gcTime: 24 hours
   - retry: 2
-  
 - ✅ `src/hooks/api/use-satellite.ts` — Satellite tracking hooks
   - useSatellite() — single satellite (refetchInterval: 5s)
   - useMultipleSatellites() — multiple satellites
@@ -39,7 +38,6 @@
   - SpaceWeatherDashboard
   - UserProfile
   - AchievementsPanel
-  
 - ✅ Suspense-based загрузка с fallback UI
 - ✅ Three.js и Leaflet загружаются on-demand
 - ✅ Уменьшение initial bundle size
@@ -637,11 +635,11 @@ src/
 
 **Последняя синхронизация:** 2026-03-18 00:00 (Phase 2: Performance Optimizations) ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                                      |
-| ------ | ------ | --------------- | ----------------------------------------------------- |
-| dev    | ✅     | 0               | 662f25f docs: Update todo.md with Phase 2 completion  |
-| main   | ✅     | 0               |.Merge branch 'dev' into main - Phase 2 Performance    |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                             |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                                     |
+| ------ | ------ | --------------- | ---------------------------------------------------- |
+| dev    | ✅     | 0               | 662f25f docs: Update todo.md with Phase 2 completion |
+| main   | ✅     | 0               | .Merge branch 'dev' into main - Phase 2 Performance  |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                            |
 
 **Изменения отправлены:**
 
@@ -703,7 +701,7 @@ src/
   - Отложенное отображение (30 сек или 2-й визит)
   - localStorage для отслеживания посещений
   - Кнопки: "Установить" / "Позже"
-  -Dismiss кнопка с сохранением в localStorage
+    -Dismiss кнопка с сохранением в localStorage
 
 **Предыдущие изменения (2026-03-19 00:00) — Phase 2 Performance:**
 
