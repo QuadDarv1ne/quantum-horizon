@@ -48,15 +48,16 @@ export function SchrodingersCatVisualization({ isDark }: SchrodingersCatVisualiz
       const time = timeRef.current
       const superpositionPhase = superpositionPhaseRef.current
 
-      ctx.fillStyle = isDarkMode ? "#0a0a15" : "#1a1a2e"
-      ctx.fillRect(0, 0, width, height)
-
-      // Box
+      // Constants - computed once per frame
       const boxWidth = 120
       const boxHeight = 100
       const boxX = centerX - boxWidth / 2
       const boxY = centerY - boxHeight / 2 - 20
 
+      ctx.fillStyle = isDarkMode ? "#0a0a15" : "#1a1a2e"
+      ctx.fillRect(0, 0, width, height)
+
+      // Box
       ctx.strokeStyle = isDarkMode ? "rgba(100, 100, 150, 0.8)" : "rgba(150, 150, 200, 0.8)"
       ctx.lineWidth = 3
       ctx.strokeRect(boxX, boxY, boxWidth, boxHeight)

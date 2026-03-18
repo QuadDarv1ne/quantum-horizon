@@ -80,7 +80,7 @@ export function BlackHoleVisualization({ isDark }: BlackHoleVisualizationProps) 
       const centerY = height / 2
       const isDarkMode = _isDark
 
-      // Schwarzschild radius: r_s = 2GM/c²
+      // Constants - computed once per frame
       const M = mass * M_SUN
       const r_s = (2 * G * M) / (c * c)
       const scale = 50 / r_s
