@@ -3,7 +3,7 @@
 **Дата:** 2026-03-11
 **Обновлено:** 2026-03-18 (294 тестов ✅, сборка ✅)
 **Статус:** ✅ dev и main синхронизированы
-**Версия:** 1.4.5-stable
+**Версия:** 1.4.6-stable
 
 ---
 
@@ -592,7 +592,7 @@ src/
 ```
 
 - [ ] **Multiple lockfiles** — удалить лишний `package-lock.json` в корне пользователя (`C:\Users\maksi\package-lock.json`)
-- [ ] **Middleware deprecated** — переименовать `middleware.ts` → `proxy.ts` (Next.js рекомендует использовать proxy вместо middleware)
+- [x] **Middleware deprecated** — переименовать `middleware.ts` → `proxy.ts` (Next.js рекомендует использовать proxy вместо middleware)
 
 #### 5.1 PWA
 
@@ -743,11 +743,11 @@ src/
 
 **Последняя синхронизация:** 2026-03-18 ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                     |
-| ------ | ------ | --------------- | ------------------------------------ |
-| dev    | ✅     | 0               | e6071fa chore: add postcss.config.js |
-| main   | ✅     | 0               | e6071fa chore: add postcss.config.js |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки            |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                           |
+| ------ | ------ | --------------- | ------------------------------------------ |
+| dev    | ✅     | 0               | db36332 refactor: middleware.ts → proxy.ts |
+| main   | ✅     | 0               | db36332 refactor: middleware.ts → proxy.ts |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                  |
 
 **Изменения отправлены:**
 
@@ -760,11 +760,12 @@ src/
 - ✅ Lint: 0 ошибок
 - ✅ tsc: 0 ошибок
 - ✅ postcss.config.js добавлен для Tailwind v4
+- ✅ proxy.ts переименован из middleware.ts (Next.js 16)
 
 **Статус:**
 
-- ✅ Commit в dev: e6071fa
-- ✅ Merge dev → main: e6071fa
+- ✅ Commit в dev: db36332
+- ✅ Merge dev → main: db36332
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
@@ -793,7 +794,8 @@ src/
 **Последние изменения (2026-03-18) — Инфраструктура:**
 
 - ✅ `postcss.config.js` — конфигурация PostCSS для Tailwind v4
-- ✅ 1 коммит: e6071fa (dev + main синхронизированы)
+- ✅ `proxy.ts` — переименован из `middleware.ts` (Next.js 16 deprecated warning)
+- ✅ 2 коммита: db36332 (dev + main синхронизированы)
 
 **Последние изменения (2026-03-18) — UX/UI Enhancements:**
 
