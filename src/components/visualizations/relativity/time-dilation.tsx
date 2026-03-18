@@ -6,7 +6,6 @@ import { VisualizationControls } from "../base/visualization-controls"
 import { Button } from "@/components/ui/button"
 import { useVisualizationStore } from "@/stores/visualization-store"
 import { QueryParam } from "@/hooks/use-url-sync"
-import { c } from "@/lib/constants"
 
 interface TimeDilationVisualizationProps {
   isDark: boolean
@@ -40,18 +39,18 @@ export function TimeDilationVisualization({ isDark }: TimeDilationVisualizationP
       const centerY = height / 2
       const isDark = _isDark
 
-      // Clear canvas
-      ctx.fillStyle = isDark ? "#0f172a" : "#f8fafc"
-      ctx.fillRect(0, 0, width, height)
-
-      // Calculate time dilation factor (Lorentz factor)
-      const _v = velocity * c
+      // Constants - computed once per frame
       const gamma = 1 / Math.sqrt(1 - velocity * velocity)
+      const contractedLength = 100 / gamma
 
       // Update animation
       if (isPlaying) {
         timeOffset.current += (delta / 1000) * animationSpeed
       }
+
+      // Clear canvas
+      ctx.fillStyle = isDark ? "#0f172a" : "#f8fafc"
+      ctx.fillRect(0, 0, width, height)
 
       // Draw stationary frame (observer)
       ctx.save()
@@ -74,7 +73,6 @@ export function TimeDilationVisualization({ isDark }: TimeDilationVisualizationP
       ctx.translate(centerX + 150, centerY)
 
       // Length contraction visualization
-      const contractedLength = 100 / gamma
       const xPos = Math.sin(timeOffset.current * 0.5) * 50
 
       // Spaceship body
