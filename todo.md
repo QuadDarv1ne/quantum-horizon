@@ -633,30 +633,26 @@ src/
 
 ## 🔁 Синхронизация
 
-**Последняя синхронизация:** 2026-03-18 00:00 (Phase 2: Performance Optimizations) ✅
+**Последняя синхронизация:** 2026-03-18 (PWA Improvements) ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                                     |
-| ------ | ------ | --------------- | ---------------------------------------------------- |
-| dev    | ✅     | 0               | 662f25f docs: Update todo.md with Phase 2 completion |
-| main   | ✅     | 0               | .Merge branch 'dev' into main - Phase 2 Performance  |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                            |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                                                   |
+| ------ | ------ | --------------- | ------------------------------------------------------------------ |
+| dev    | ✅     | 0               | b3e36a1 docs: Update todo.md with PWA improvements and sync status |
+| main   | ✅     | 0               | 7cd78fa Merge branch 'dev' into main - PWA improvements            |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                                          |
 
 **Изменения отправлены:**
-
-**Phase 2: Performance Optimizations (2026-03-19):**
-
-- ✅ React Query integration (useAPOD, useSatellite, useMultipleSatellites)
-- ✅ Lazy loading для 6 тяжёлых API компонентов
-- ✅ Memoization для физических расчётов (physics.ts)
-- ✅ NASAAPODViewer обновлён
-- ✅ SatelliteTracker с обновлением каждые 5 сек
 
 **PWA улучшения (2026-03-18):**
 
 - ✅ `public/sw.ts` — кэширование динамического контента (Unsplash, NASA API, WhereTheISS)
 - ✅ `src/components/pwa/pwa-install-prompt.tsx` — компонент установки PWA
-- ✅ Отложенная установка (30 сек или второй визит)
-- ✅ UX: prompt с кнопками "Установить" / "Позже"
+  - BeforeInstallPromptEvent обработка
+  - Отложенное отображение (30 сек или 2-й визит)
+  - localStorage для отслеживания посещений
+  - Кнопки: "Установить" / "Позже"
+  - Dismiss кнопка с сохранением в localStorage
+- ✅ `todo.md` — обновлена документация
 
 **Проверки:**
 
@@ -667,8 +663,8 @@ src/
 
 **Статус:**
 
-- ✅ Commit в dev: 662f25f
-- ✅ Merge dev → main: выполнен
+- ✅ Commit в dev: b3e36a1
+- ✅ Merge dev → main: 7cd78fa
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
