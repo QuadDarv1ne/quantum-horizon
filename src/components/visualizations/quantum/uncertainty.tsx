@@ -40,12 +40,13 @@ export function UncertaintyVisualization({ isDark }: UncertaintyVisualizationPro
         timeRef.current += (delta / 1000) * animationSpeed
       }
 
+      // Constants - computed once per frame
+      const minDeltaP = h_bar / (2 * deltaX * 1e-10)
+      const deltaPHeight = 80 / (deltaX / 50)
+
       // Clear canvas
       ctx.fillStyle = isDarkMode ? "#0f172a" : "#f8fafc"
       ctx.fillRect(0, 0, width, height)
-
-      // Heisenberg uncertainty: Δx · Δp ≥ ℏ/2
-      const minDeltaP = h_bar / (2 * deltaX * 1e-10) // Convert to SI units for display
 
       // Draw position uncertainty region
       ctx.fillStyle = isDarkMode ? "rgba(59, 130, 246, 0.3)" : "rgba(59, 130, 246, 0.2)"
@@ -74,7 +75,6 @@ export function UncertaintyVisualization({ isDark }: UncertaintyVisualizationPro
       ctx.fillText(`Δx = ${(deltaX * 1e-10).toExponential(2)} m`, centerX, centerY + 150)
 
       // Draw momentum uncertainty as horizontal band
-      const deltaPHeight = 80 / (deltaX / 50) // Inverse relationship
       ctx.fillStyle = isDarkMode ? "rgba(251, 191, 36, 0.3)" : "rgba(251, 191, 36, 0.2)"
       ctx.fillRect(centerX - 150, centerY - deltaPHeight / 2, 300, deltaPHeight)
 

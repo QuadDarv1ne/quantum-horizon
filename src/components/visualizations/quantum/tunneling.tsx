@@ -41,14 +41,36 @@ export function TunnelingVisualization({ isDark }: TunnelingVisualizationProps) 
       }
       const time = timeRef.current
 
+      // Constants - computed once per frame
+      const baseY = height * 0.6
+      const waveAmplitude = 40
+      const barrierX = width * 0.35
+      const barrierW = (barrierWidth / 100) * width * 0.4
+      const barrierTop = baseY - (barrierHeight / 100) * 80
+      const energyY = baseY - (energy / 100) * 80
+
+      // Calculate transmission probability (simplified)
+      const transmissionProb =
+        energy < barrierHeight
+          ? Math.exp(-2 * Math.sqrt((barrierHeight - energy) / 20) * (barrierWidth / 20))
+          : 1 -
+            Math.pow(
+              (Math.sqrt(barrierHeight / energy) - 1) / (Math.sqrt(barrierHeight / energy) + 1),
+              2
+            )
+
+      // Wave numbers
+      const k1 = 0.15
+      const k2Real =
+        energy > barrierHeight
+          ? k1 * Math.sqrt(energy / barrierHeight)
+          : k1 * Math.sqrt((barrierHeight - energy) / 50)
+      const isOscillating = energy > barrierHeight
+
       ctx.fillStyle = isDarkMode ? "#050510" : "#f8fafc"
       ctx.fillRect(0, 0, width, height)
 
-      const baseY = height * 0.6
-      const waveAmplitude = 40
-
       // Energy level line
-      const energyY = baseY - (energy / 100) * 80
       ctx.strokeStyle = isDarkMode ? "rgba(255, 200, 100, 0.5)" : "rgba(255, 150, 50, 0.5)"
       ctx.setLineDash([5, 5])
       ctx.beginPath()
@@ -62,10 +84,6 @@ export function TunnelingVisualization({ isDark }: TunnelingVisualizationProps) 
       ctx.fillText("E (particle energy)", 10, energyY - 5)
 
       // Potential barrier
-      const barrierX = width * 0.35
-      const barrierW = (barrierWidth / 100) * width * 0.4
-      const barrierTop = baseY - (barrierHeight / 100) * 80
-
       ctx.fillStyle = isDarkMode ? "rgba(255, 100, 100, 0.3)" : "rgba(255, 100, 100, 0.2)"
       ctx.fillRect(barrierX, barrierTop, barrierW, baseY - barrierTop)
       ctx.strokeStyle = isDarkMode ? "rgba(255, 100, 100, 0.8)" : "rgba(255, 50, 50, 0.8)"
@@ -76,24 +94,6 @@ export function TunnelingVisualization({ isDark }: TunnelingVisualizationProps) 
       ctx.font = "10px sans-serif"
       ctx.textAlign = "center"
       ctx.fillText("Barrier V₀", barrierX + barrierW / 2, barrierTop - 5)
-
-      // Calculate transmission probability (simplified)
-      const transmissionProb =
-        energy < barrierHeight
-          ? Math.exp(-2 * Math.sqrt((barrierHeight - energy) / 20) * (barrierWidth / 20))
-          : 1 -
-            Math.pow(
-              (Math.sqrt(barrierHeight / energy) - 1) / (Math.sqrt(barrierHeight / energy) + 1),
-              2
-            )
-
-      // Wave function
-      const k1 = 0.15
-      const k2Real =
-        energy > barrierHeight
-          ? k1 * Math.sqrt(energy / barrierHeight)
-          : k1 * Math.sqrt((barrierHeight - energy) / 50)
-      const isOscillating = energy > barrierHeight
 
       // Incoming wave (left of barrier)
       ctx.beginPath()
