@@ -677,41 +677,40 @@ src/
 
 **Последняя синхронизация:** 2026-03-18 ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                       |
-| ------ | ------ | --------------- | -------------------------------------- |
-| dev    | ✅     | 0               | dcde28a docs: Final sync status update |
-| main   | ✅     | 0               | 4a04420 Merge branch 'dev'             |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки              |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                                      |
+| ------ | ------ | --------------- | ----------------------------------------------------- |
+| dev    | ✅     | 0               | 590def7 fix: Resolve all TypeScript and ESLint errors |
+| main   | ✅     | 0               | e6660a3 Merge dev into main - resolve conflicts       |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                             |
 
 **Изменения отправлены:**
 
-**Database Integration (2026-03-18):**
+**TypeScript/ESLint Fixes (2026-03-18):**
 
-- ✅ `prisma/schema.prisma` — UserAchievement и UserActivity модели
-- ✅ `src/app/api/achievements/route.ts` — API для достижений (GET/POST)
-- ✅ `src/app/api/visualizations/bookmarks/route.ts` — обновлён
-- ✅ SQLite для разработки (file-based)
-- ✅ Seed script с тестовыми аккаунтами
+- ✅ `src/hooks/use-canvas-animation-enhanced.ts` — переписан для устранения circular dependency
+- ✅ `src/app/page.tsx` — исправлены unused vars warnings
+- ✅ `src/components/api/nasa-apod-viewer.tsx` — исправлен unnecessary optional chain
+- ✅ `src/lib/physics.ts` — renamed unused memoize function
+- ✅ `prisma/seed.ts` — исправлены restrict-template-expressions
+- ✅ `src/app/api/auth/**` — удалены unnecessary type conversions
 
 **PWA улучшения (2026-03-18):**
 
 - ✅ `public/sw.ts` — кэширование динамического контента (Unsplash, NASA API, WhereTheISS)
-  - DYNAMIC_CACHE_PATTERNS для внешних API
-  - Логирование кэширования
 - ✅ `src/components/pwa/pwa-install-prompt.tsx` — компонент установки PWA
 - ✅ `src/components/pwa/web-vitals.tsx` — метрики производительности
 
 **Проверки:**
 
 - ✅ Сборка: успешна
-- ✅ Lint: 0 ошибок
+- ✅ Lint: 0 ошибок (3 warnings)
 - ✅ tsc: 0 ошибок
 - ✅ Format: все файлы отформатированы
 
 **Статус:**
 
-- ✅ Commit в dev: dcde28a
-- ✅ Merge dev → main: 4a04420
+- ✅ Commit в dev: 590def7
+- ✅ Merge dev → main: e6660a3
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
