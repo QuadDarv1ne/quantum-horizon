@@ -59,9 +59,16 @@ describe("PhysicsTooltip", () => {
     const infoButton = screen.getByRole("button", { name: /физическая информация/i })
     await user.click(infoButton)
 
+    const dialog = await screen.findByRole("dialog")
+    expect(dialog).toBeInTheDocument()
+
     const closeButton = await screen.findByRole("button")
     await user.click(closeButton)
 
-    await expect(screen.findByRole("dialog", {}, { timeout: 100 })).rejects.toThrow()
+    // Ждём закрытия диалога
+    await new Promise((resolve) => setTimeout(resolve, 300))
+
+    const dialogAfterClose = screen.queryByRole("dialog")
+    expect(dialogAfterClose).not.toBeInTheDocument()
   })
 })
