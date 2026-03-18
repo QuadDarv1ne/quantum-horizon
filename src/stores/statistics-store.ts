@@ -181,7 +181,7 @@ export const useStatisticsStore = create<StatisticsState>()(
     }),
     {
       name: STATISTICS_STORAGE_KEY,
-      storage: createJSONStorage(() => (typeof window !== "undefined" ? localStorage : undefined)),
+      storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         statistics: state.statistics,
       }),

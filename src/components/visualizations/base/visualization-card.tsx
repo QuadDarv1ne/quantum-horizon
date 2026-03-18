@@ -15,14 +15,14 @@ interface VisualizationCardProps {
 }
 
 const borderColors: Record<CardColor, string> = {
-  purple: "border-purple-500/30",
-  blue: "border-blue-500/30",
-  green: "border-green-500/30",
-  orange: "border-orange-500/30",
-  yellow: "border-yellow-500/30",
-  red: "border-red-500/30",
-  cyan: "border-cyan-500/30",
-  pink: "border-pink-500/30",
+  purple: "border-purple-500/30 hover:border-purple-500/50",
+  blue: "border-blue-500/30 hover:border-blue-500/50",
+  green: "border-green-500/30 hover:border-green-500/50",
+  orange: "border-orange-500/30 hover:border-orange-500/50",
+  yellow: "border-yellow-500/30 hover:border-yellow-500/50",
+  red: "border-red-500/30 hover:border-red-500/50",
+  cyan: "border-cyan-500/30 hover:border-cyan-500/50",
+  pink: "border-pink-500/30 hover:border-pink-500/50",
 }
 
 const textColors: Record<CardColor, string> = {
@@ -36,6 +36,17 @@ const textColors: Record<CardColor, string> = {
   pink: "text-pink-400 dark:text-pink-600",
 }
 
+const bgGradients: Record<CardColor, string> = {
+  purple: "from-purple-500/5 to-blue-500/5",
+  blue: "from-blue-500/5 to-cyan-500/5",
+  green: "from-green-500/5 to-emerald-500/5",
+  orange: "from-orange-500/5 to-amber-500/5",
+  yellow: "from-yellow-500/5 to-orange-500/5",
+  red: "from-red-500/5 to-pink-500/5",
+  cyan: "from-cyan-500/5 to-blue-500/5",
+  pink: "from-pink-500/5 to-rose-500/5",
+}
+
 export function VisualizationCard({
   title,
   description,
@@ -44,26 +55,44 @@ export function VisualizationCard({
   isDark,
 }: VisualizationCardProps) {
   const bgColor = isDark ? "bg-gradient-to-br from-gray-900 to-gray-950" : "bg-white"
+  const hoverGlow = isDark
+    ? "hover:shadow-lg hover:shadow-purple-500/10"
+    : "hover:shadow-lg hover:shadow-gray-200"
 
   const descColor = isDark ? "" : "text-gray-600"
 
   return (
     <Card
-      className={`${borderColors[color]} ${bgColor}`}
+      className={`group relative overflow-hidden border transition-all duration-500 ${borderColors[color]} ${bgColor} ${hoverGlow}`}
       role="region"
       aria-labelledby={`card-title-${title.replace(/\s+/g, "-").toLowerCase()}`}
       aria-describedby={`card-desc-${title.replace(/\s+/g, "-").toLowerCase()}`}
     >
-      <CardHeader className="pb-2">
-        <CardTitle
-          id={`card-title-${title.replace(/\s+/g, "-").toLowerCase()}`}
-          className={`text-lg ${textColors[color]}`}
-        >
-          {title}
-        </CardTitle>
+      {/* Animated gradient overlay */}
+      <div
+        className={`absolute inset-0 bg-gradient-to-br ${bgGradients[color]} opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
+      />
+
+      {/* Glow effect on hover */}
+      <div
+        className={`absolute -inset-px bg-gradient-to-r ${bgGradients[color]} opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-20`}
+      />
+
+      <CardHeader className="relative pb-2">
+        <div className="flex items-center gap-2">
+          <div
+            className={`h-2 w-2 rounded-full bg-gradient-to-r ${bgGradients[color].replace("from-", "from-").split(" ")[0].replace("/5", "")} animate-pulse`}
+          />
+          <CardTitle
+            id={`card-title-${title.replace(/\s+/g, "-").toLowerCase()}`}
+            className={`text-lg transition-colors duration-300 ${textColors[color]}`}
+          >
+            {title}
+          </CardTitle>
+        </div>
         <CardDescription
           id={`card-desc-${title.replace(/\s+/g, "-").toLowerCase()}`}
-          className={`text-xs ${descColor}`}
+          className={`relative text-xs transition-colors duration-300 ${descColor}`}
         >
           {description}
         </CardDescription>
