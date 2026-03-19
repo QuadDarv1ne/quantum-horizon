@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { render, screen } from "@testing-library/react"
 import { PresetManager } from "./preset-manager"
+import { useVisualizationStore } from "@/stores/visualization-store"
 
 // Mock localStorage
 beforeEach(() => {
@@ -10,10 +11,19 @@ beforeEach(() => {
   Storage.prototype.clear = vi.fn()
 })
 
-describe.skip("PresetManager", () => {
+// Mock Zustand store
+vi.mock("@/stores/visualization-store", () => ({
+  useVisualizationStore: vi.fn(),
+}))
+
+describe("PresetManager", () => {
   beforeEach(() => {
     vi.clearAllMocks()
     vi.spyOn(Storage.prototype, "getItem").mockReturnValue(null)
+    vi.mocked(useVisualizationStore).mockReturnValue({
+      settings: {},
+      updateSettings: vi.fn(),
+    })
   })
 
   it("рендерит кнопку пресетов", () => {

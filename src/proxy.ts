@@ -25,7 +25,7 @@ const registerRatelimit =
       })
     : null
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // Rate limiting для API аутентификации
