@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast"
+import { fetchWithTimeout } from "@/lib/fetch-with-timeout"
 
 export default function ForgotPasswordPage() {
   const router = useRouter()
@@ -24,7 +25,8 @@ export default function ForgotPasswordPage() {
     setIsLoading(true)
 
     try {
-      const response = await fetch("/api/auth/reset-password", {
+      const response = await fetchWithTimeout("/api/auth/reset-password", {
+        timeoutMs: 10000,
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

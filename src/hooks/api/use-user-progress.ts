@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { fetchWithTimeout } from "@/lib/fetch-with-timeout"
 
 interface UserProgressData {
   id: string
@@ -39,7 +40,9 @@ export function useUserProgress() {
   const fetchProgress = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await fetch("/api/visualizations/progress")
+      const response = await fetchWithTimeout("/api/visualizations/progress", {
+        timeoutMs: 10000,
+      })
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -66,7 +69,8 @@ export function useUserProgress() {
   const updateProgress = useCallback(
     async (topic: string, title: string): Promise<boolean> => {
       try {
-        const response = await fetch("/api/visualizations/bookmarks", {
+        const response = await fetchWithTimeout("/api/visualizations/bookmarks", {
+          timeoutMs: 10000,
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -127,33 +131,37 @@ export function useUserProgress() {
 
   // Calculate stats from progress data
   const calculateStats = useCallback(() => {
-    if (progress.length === 0) {
-      setStats(null)
-      return
-    }
+    setProgress((currentProgress) => {
+      if (currentProgress.length === 0) {
+        setStats(null)
+        return currentProgress
+      }
 
-    const totalCourses = progress.length
-    const completedCourses = progress.filter((p) => p.completedCount >= 1).length
-    const totalTimeSpent = progress.reduce((sum, p) => sum + p.completedCount * 15, 0) // ~15 min per topic
+      const totalCourses = currentProgress.length
+      const completedCourses = currentProgress.filter((p) => p.completedCount >= 1).length
+      const totalTimeSpent = currentProgress.reduce((sum, p) => sum + p.completedCount * 15, 0) // ~15 min per topic
 
-    // Mock streak calculation (real implementation would track daily activity)
-    const currentStreak = Math.min(progress.length, 7)
-    const bestStreak = Math.max(currentStreak, 14)
+      // Mock streak calculation (real implementation would track daily activity)
+      const currentStreak = Math.min(currentProgress.length, 7)
+      const bestStreak = Math.max(currentStreak, 14)
 
-    // Calculate XP from achievements and progress
-    const totalXP = completedCourses * 50 + Math.floor(totalTimeSpent / 10) * 10
-    const level = Math.floor(totalXP / 500) + 1
+      // Calculate XP from achievements and progress
+      const totalXP = completedCourses * 50 + Math.floor(totalTimeSpent / 10) * 10
+      const level = Math.floor(totalXP / 500) + 1
 
-    setStats({
-      totalCourses,
-      completedCourses,
-      totalTimeSpent,
-      currentStreak,
-      bestStreak,
-      totalXP,
-      level,
+      setStats({
+        totalCourses,
+        completedCourses,
+        totalTimeSpent,
+        currentStreak,
+        bestStreak,
+        totalXP,
+        level,
+      })
+
+      return currentProgress
     })
-  }, [progress])
+  }, [])
 
   useEffect(() => {
     void fetchProgress()
@@ -161,7 +169,7 @@ export function useUserProgress() {
 
   useEffect(() => {
     calculateStats()
-  }, [progress, calculateStats])
+  }, [calculateStats])
 
   return {
     progress,

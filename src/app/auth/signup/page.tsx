@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast"
+import { fetchWithTimeout } from "@/lib/fetch-with-timeout"
 
 export default function SignUpPage() {
   const router = useRouter()
@@ -26,7 +27,8 @@ export default function SignUpPage() {
     setError(null)
 
     try {
-      const response = await fetch("/api/auth/register", {
+      const response = await fetchWithTimeout("/api/auth/register", {
+        timeoutMs: 10000,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),

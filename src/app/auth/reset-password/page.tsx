@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast"
+import { fetchWithTimeout } from "@/lib/fetch-with-timeout"
 
 export default function ResetPasswordPage() {
   const searchParams = useSearchParams()
@@ -32,7 +33,9 @@ export default function ResetPasswordPage() {
 
     const checkToken = async () => {
       try {
-        const response = await fetch(`/api/auth/reset-password?token=${token}`)
+        const response = await fetchWithTimeout(`/api/auth/reset-password?token=${token}`, {
+          timeoutMs: 10000,
+        })
         const data = (await response.json()) as { valid?: boolean; email?: string; error?: string }
 
         if (response.ok && data.valid) {
@@ -68,7 +71,8 @@ export default function ResetPasswordPage() {
     setIsLoading(true)
 
     try {
-      const response = await fetch("/api/auth/reset-password", {
+      const response = await fetchWithTimeout("/api/auth/reset-password", {
+        timeoutMs: 10000,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token, password }),

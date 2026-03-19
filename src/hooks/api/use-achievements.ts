@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { fetchWithTimeout } from "@/lib/fetch-with-timeout"
 
 interface UserAchievement {
   id: string
@@ -31,7 +32,9 @@ export function useAchievements() {
   const fetchAchievements = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await fetch("/api/achievements")
+      const response = await fetchWithTimeout("/api/achievements", {
+        timeoutMs: 10000,
+      })
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -59,7 +62,8 @@ export function useAchievements() {
   const unlockAchievement = useCallback(
     async (achievementId: string, progress = 1, target = 1): Promise<boolean> => {
       try {
-        const response = await fetch("/api/achievements", {
+        const response = await fetchWithTimeout("/api/achievements", {
+          timeoutMs: 10000,
           method: "POST",
           headers: {
             "Content-Type": "application/json",

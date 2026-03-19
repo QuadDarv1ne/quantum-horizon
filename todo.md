@@ -1,11 +1,73 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-18 (20:30) — исправлены лаги, мигание онбординга, ошибки Turbopack
+**Обновлено:** 2026-03-19 (02:00) — исправлены потенциальные бесконечные загрузки, добавлены таймауты
 **Статус:** ✅ dev и main синхронизированы
-**Версия:** 1.4.8-stable
+**Версия:** 1.4.9-stable
 
 ---
+
+---
+
+## 🔧 Bug Fixes (2026-03-19 02:00) ✅
+
+### ✅ Исправленные проблемы (Бесконечные загрузки)
+
+**1. Добавлены таймауты ко всем fetch-запросам:**
+
+- ✅ Создана утилита `src/lib/fetch-with-timeout.ts`
+  - FetchTimeoutError класс
+  - Таймаут по умолчанию: 10 секунд
+  - AbortController для отмены запроса
+  - Корректная очистка таймера в finally
+
+**2. Обновлены хуки с fetchWithTimeout:**
+
+- ✅ `src/hooks/api/use-user-progress.ts` — fetchProgress, updateProgress
+- ✅ `src/hooks/api/use-activity.ts` — fetchActivities, logActivity
+- ✅ `src/hooks/api/use-achievements.ts` — fetchAchievements, unlockAchievement
+- ✅ `src/hooks/api/use-auth.ts` — signUp (fetchWithTimeout + finally)
+
+**3. Обновлены страницы аутентификации:**
+
+- ✅ `src/app/auth/signup/page.tsx` — регистрация с таймаутом
+- ✅ `src/app/auth/signin/page.tsx` — уже использовал finally
+- ✅ `src/app/auth/forgot-password/page.tsx` — сброс пароля с таймаутом
+- ✅ `src/app/auth/reset-password/page.tsx` — проверка токена + сброс с таймаутом
+
+**4. Исправлены зависимости useEffect:**
+
+- ✅ `src/hooks/api/use-user-progress.ts` — удалена лишняя зависимость `calculateStats`
+
+```typescript
+// Было:
+useEffect(() => {
+  calculateStats()
+}, [progress, calculateStats])
+// Стало:
+useEffect(() => {
+  calculateStats()
+}, [progress])
+```
+
+**5. Исправлен useSignIn в use-auth.ts:**
+
+- ✅ signInWithProvider — переместил setIsLoading(false) в finally
+
+```typescript
+// Было:
+catch (err) { setError(errorMessage); setIsLoading(false) }
+// Стало:
+catch (err) { setError(errorMessage) }
+finally { setIsLoading(false) }
+```
+
+**Результат:**
+
+- Все fetch-запросы имеют таймаут 10 секунд
+- isLoading сбрасывается только в finally
+- Нет потенциальных бесконечных загрузок
+- Сборка проходит успешно
 
 ---
 
@@ -747,16 +809,16 @@ src/
 40. ✅ Исправлен конфликт SW routes (удалён `src/app/sw.js/route.ts`) — 2026-03-18 20:15
 41. ✅ Исправлены лаги и ошибки Turbopack (очистка кэша) — 2026-03-18 20:20
 42. ✅ Исправлено мигание Onboarding Tour (`initialized` флаг) — 2026-03-18 20:30
+43. ✅ Исправлены потенциальные бесконечные загрузки (таймауты, finally) — 2026-03-19 02:00
 
 ### 📋 Следующие задачи
 
 1. [ ] Замерить Lighthouse Performance и Accessibility
 2. [ ] Оптимизировать производительность визуализаций (canvas FPS)
 3. [ ] Добавить больше Stories для Storybook
-4. [ ] React Query интеграция для данных
-5. [ ] Bundle size оптимизация (проверить после Lighthouse)
-6. [ ] Протестировать PWA install prompt в production
-7. [ ] Проверить работу Service Worker с кэшированием API
+4. [ ] Bundle size оптимизация (проверить после Lighthouse)
+5. [ ] Протестировать PWA install prompt в production
+6. [ ] Проверить работу Service Worker с кэшированием API
 
 ---
 
@@ -792,37 +854,32 @@ src/
 
 ## 🔁 Синхронизация
 
-**Последняя синхронизация:** 2026-03-18 ✅
+**Последняя синхронизация:** 2026-03-19 ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит             |
-| ------ | ------ | --------------- | ---------------------------- |
-| dev    | ✅     | 0               | 451709f docs: update todo.md |
-| main   | ✅     | 0               | 451709f docs: update todo.md |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки    |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                     |
+| ------ | ------ | --------------- | ------------------------------------ |
+| dev    | ✅     | 0               | fix: бесконечные загрузки (таймауты) |
+| main   | ⏳     | 0               | 451709f docs: update todo.md         |
+| origin | ⏳     | Требуется push  | —                                    |
 
 **Изменения отправлены:**
 
-**Stable Release (2026-03-18):**
+**Stable Release (2026-03-19):**
 
-- ✅ 294 unit-тестов passing (21 файл)
-- ✅ 24 E2E тестов passing
-- ✅ 43+ Storybook stories
+- ✅ fetchWithTimeout утилита (10 секунд таймаут)
+- ✅ 4 API хука обновлены (use-user-progress, use-activity, use-achievements, use-auth)
+- ✅ 4 страницы аутентификации обновлены (signup, signin, forgot-password, reset-password)
+- ✅ Исправлены зависимости useEffect
+- ✅ Исправлен useSignIn (finally вместо catch)
 - ✅ Сборка: успешна
 - ✅ Lint: 0 ошибок
 - ✅ tsc: 0 ошибок
-- ✅ postcss.config.js добавлен для Tailwind v4
-- ✅ proxy.ts переименован из middleware.ts (Next.js 16)
-- ✅ Phase 3.2 React Query — все задачи выполнены
-- ✅ Phase 4.1 Performance — все задачи выполнены
-- ✅ Phase 4.2 A11y — все задачи выполнены
-- ✅ Phase 5.1 PWA — все задачи выполнены
-- ✅ Phase 5.2 Web Vitals — интегрированы
 
 **Статус:**
 
-- ✅ Commit в dev: 451709f
-- ✅ Merge dev → main: 451709f
-- ✅ Push в origin: dev + main синхронизированы
+- ✅ Commit в dev: готов
+- ⏳ Merge dev → main: требуется
+- ⏳ Push в origin: требуется
 
 ---
 

@@ -5,6 +5,7 @@
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { fetchWithTimeout } from "@/lib/fetch-with-timeout"
 
 // ==================== TYPES ====================
 
@@ -113,6 +114,7 @@ export function useSignIn() {
           ? err.message
           : String(err instanceof Error ? err : "Failed to sign in")
       setError(errorMessage)
+    } finally {
       setIsLoading(false)
     }
   }
@@ -143,7 +145,8 @@ export function useSignUp() {
 
     try {
       // Регистрация через API (требуется реализация)
-      const response = await fetch("/api/auth/register", {
+      const response = await fetchWithTimeout("/api/auth/register", {
+        timeoutMs: 10000,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, name }),

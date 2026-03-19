@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { fetchWithTimeout } from "@/lib/fetch-with-timeout"
 
 interface UserActivity {
   id: string
@@ -32,7 +33,9 @@ export function useActivity() {
   const fetchActivities = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await fetch("/api/activity")
+      const response = await fetchWithTimeout("/api/activity", {
+        timeoutMs: 10000,
+      })
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -59,7 +62,8 @@ export function useActivity() {
   const logActivity = useCallback(
     async (action: string, topic?: string, xpGained = 0): Promise<boolean> => {
       try {
-        const response = await fetch("/api/activity", {
+        const response = await fetchWithTimeout("/api/activity", {
+          timeoutMs: 10000,
           method: "POST",
           headers: {
             "Content-Type": "application/json",
