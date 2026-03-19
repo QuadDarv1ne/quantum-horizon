@@ -54,8 +54,8 @@ export function PWAInstallPrompt() {
       console.log(`PWA: User ${choice.outcome}`)
       setShowPrompt(false)
       setDeferredPrompt(null)
-    } catch (error) {
-      console.error("PWA: Install prompt error:", error)
+    } catch {
+      // Install failed silently
     }
   }
 

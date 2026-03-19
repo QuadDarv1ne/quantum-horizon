@@ -103,7 +103,7 @@ export function ShareVisualization({
         })
       } catch (error) {
         if ((error as Error).name !== "AbortError") {
-          console.error("Share failed:", error)
+          // User aborted, don't log
         }
       }
     } else {

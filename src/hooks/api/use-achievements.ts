@@ -49,7 +49,6 @@ export function useAchievements() {
         setAchievements(result.data)
       }
     } catch (err) {
-      console.error("Failed to fetch achievements:", err)
       setError(err instanceof Error ? err.message : "Unknown error")
     } finally {
       setLoading(false)
@@ -108,8 +107,7 @@ export function useAchievements() {
         }
 
         return false
-      } catch (err) {
-        console.error("Failed to unlock achievement:", err)
+      } catch {
         return false
       }
     },
