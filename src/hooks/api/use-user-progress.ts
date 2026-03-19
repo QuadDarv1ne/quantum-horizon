@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
@@ -26,6 +24,11 @@ interface APIResponse {
   data?: UserProgressData[]
 }
 
+interface UpdateProgressBody {
+  topic: string
+  title: string
+}
+
 export function useUserProgress() {
   const [progress, setProgress] = useState<UserProgressData[]>([])
   const [stats, setStats] = useState<UserStats | null>(null)
@@ -46,7 +49,7 @@ export function useUserProgress() {
         throw new Error(`HTTP error! status: ${String(response.status)}`)
       }
 
-      const result: APIResponse = await response.json()
+      const result = (await response.json()) as APIResponse
 
       if (result.success && result.data) {
         setProgress(result.data)
@@ -61,7 +64,7 @@ export function useUserProgress() {
 
   // Update progress for a topic
   const updateProgress = useCallback(
-    async (topic: string, title: string) => {
+    async (topic: string, title: string): Promise<boolean> => {
       try {
         const response = await fetch("/api/visualizations/bookmarks", {
           method: "POST",
@@ -71,7 +74,7 @@ export function useUserProgress() {
           body: JSON.stringify({
             topic,
             title,
-          }),
+          } satisfies UpdateProgressBody),
         })
 
         if (!response.ok) {
@@ -94,7 +97,7 @@ export function useUserProgress() {
               return [
                 ...prev,
                 {
-                  id: `temp_${Date.now()}`,
+                  id: `temp_${String(Date.now())}`,
                   topic,
                   completedCount: 1,
                   lastCompleted: new Date().toISOString(),
@@ -106,7 +109,7 @@ export function useUserProgress() {
           throw new Error(`HTTP error! status: ${String(response.status)}`)
         }
 
-        const result: APIResponse = await response.json()
+        const result = (await response.json()) as APIResponse
 
         if (result.success) {
           await fetchProgress()

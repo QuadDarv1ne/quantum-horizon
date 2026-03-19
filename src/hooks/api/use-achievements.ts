@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
@@ -16,6 +14,12 @@ interface APIResponse {
   success: boolean
   data?: UserAchievement[]
   newlyUnlocked?: boolean
+}
+
+interface UnlockAchievementBody {
+  achievementId: string
+  progress: number
+  target: number
 }
 
 export function useAchievements() {
@@ -38,7 +42,7 @@ export function useAchievements() {
         throw new Error(`HTTP error! status: ${String(response.status)}`)
       }
 
-      const result: APIResponse = await response.json()
+      const result = (await response.json()) as APIResponse
 
       if (result.success && result.data) {
         setAchievements(result.data)
@@ -53,7 +57,7 @@ export function useAchievements() {
 
   // Unlock or update achievement
   const unlockAchievement = useCallback(
-    async (achievementId: string, progress = 1, target = 1) => {
+    async (achievementId: string, progress = 1, target = 1): Promise<boolean> => {
       try {
         const response = await fetch("/api/achievements", {
           method: "POST",
@@ -64,7 +68,7 @@ export function useAchievements() {
             achievementId,
             progress,
             target,
-          }),
+          } satisfies UnlockAchievementBody),
         })
 
         if (!response.ok) {
@@ -81,7 +85,7 @@ export function useAchievements() {
               return [
                 ...prev,
                 {
-                  id: `temp_${Date.now()}`,
+                  id: `temp_${String(Date.now())}`,
                   achievementId,
                   progress,
                   target,
@@ -94,7 +98,7 @@ export function useAchievements() {
           throw new Error(`HTTP error! status: ${String(response.status)}`)
         }
 
-        const result: APIResponse = await response.json()
+        const result = (await response.json()) as APIResponse
 
         if (result.success) {
           // Refresh achievements list
