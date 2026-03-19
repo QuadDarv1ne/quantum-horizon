@@ -138,19 +138,11 @@ export function useCanvasAnimation(
         accumulatorRef.current = 0
       }
 
-      // FPS monitoring (debug only)
-      if (process.env.NODE_ENV === "development") {
-        frameCountRef.current++
-        if (timestamp - lastFpsUpdateRef.current >= 1000) {
-          const fps = Math.round(
-            (frameCountRef.current * 1000) / (timestamp - lastFpsUpdateRef.current)
-          )
-          if (fps < 30) {
-            console.warn(`[Canvas] Low FPS: ${String(fps)}. Consider reducing complexity.`)
-          }
-          frameCountRef.current = 0
-          lastFpsUpdateRef.current = timestamp
-        }
+      // FPS monitoring
+      frameCountRef.current++
+      if (timestamp - lastFpsUpdateRef.current >= 1000) {
+        frameCountRef.current = 0
+        lastFpsUpdateRef.current = timestamp
       }
 
       const rect = canvas.getBoundingClientRect()
