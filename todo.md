@@ -1146,12 +1146,11 @@ src/
 
 **Критический приоритет:**
 
-1. 🔴 **npm audit fix --force** — исправить 15 транзитивных уязвимостей (4 high)
-   - Обновить @hono/node-server, hono (XSS уязвимости)
-   - Обновить elliptic (криптографические проблемы)
-   - Обновить lodash (Prototype Pollution)
-   - ⚠️ Требует breaking changes: Prisma@6, Storybook@7
-   - Решение: тестировать после изменений
+1. ✅ **npm audit fix** — 4 high уязвимости исправлены
+   - ✅ Prisma обновлён (транзитивные hono, @hono/node-server)
+   - ⚠️ Осталось 3 high (транзитивные vitest — flatted)
+   - ⚠️ Осталось 8 moderate (транзитивные Storybook — elliptic, esbuild)
+   - Решение: требует breaking changes (Storybook v10+, vitest)
 
 **Средний приоритет:**
 
