@@ -38,13 +38,17 @@ export function PresentationMode({
   }, [isActive, onToggle])
 
   const handleSavePreset = useCallback(() => {
-    // TODO: Implement preset saving logic
-    console.log("Saving preset...")
-  }, [])
+    const preset = {
+      timestamp: Date.now(),
+      settings: { isFullscreen, showControls },
+    }
+    localStorage.setItem("presentation-preset", JSON.stringify(preset))
+  }, [isFullscreen, showControls])
 
   const handleReset = useCallback(() => {
-    // TODO: Implement reset logic
-    console.log("Resetting to defaults...")
+    localStorage.removeItem("presentation-preset")
+    setIsFullscreen(false)
+    setShowControls(true)
   }, [])
 
   return (

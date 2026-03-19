@@ -74,9 +74,13 @@ export function EnhancedCommandPalette({
       shortcut: "L",
       category: "settings" as const,
       action: () => {
-        // TODO: Implement language cycling
-        console.log("Cycle language")
-        onClose()
+        const languages = ["ru", "en", "zh", "he"]
+        const current = localStorage.getItem("NEXT_LOCALE") || "ru"
+        const currentIndex = languages.indexOf(current)
+        const nextIndex = (currentIndex + 1) % languages.length
+        const nextLanguage = languages[nextIndex]
+        localStorage.setItem("NEXT_LOCALE", nextLanguage)
+        window.location.reload()
       },
     },
 

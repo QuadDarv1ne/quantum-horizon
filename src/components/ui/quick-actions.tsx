@@ -6,6 +6,7 @@ import { ArrowUp, MessageCircle, Lightbulb, BookOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { MicroInteraction } from "./micro-interactions"
 import { cn } from "@/lib/utils"
+import { useOnboarding } from "@/components/ui/onboarding-tour"
 
 interface QuickActionsProps {
   className?: string
@@ -18,6 +19,7 @@ export function QuickActions({ className }: QuickActionsProps) {
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [visible, setVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
+  const { showOnboarding, completeOnboarding } = useOnboarding()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,14 +46,10 @@ export function QuickActions({ className }: QuickActionsProps) {
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
-  const openFeedback = () => {
-    // TODO: Implement feedback modal
-    console.log("Opening feedback...")
-  }
-
   const openHelp = () => {
-    // TODO: Implement help/tour
-    console.log("Opening help...")
+    if (!showOnboarding) {
+      window.location.reload()
+    }
   }
 
   return (
@@ -95,7 +93,9 @@ export function QuickActions({ className }: QuickActionsProps) {
           <MicroInteraction whileHover={{ scale: 1.1, y: -2 }} whileTap={{ scale: 0.9 }}>
             <Button
               size="icon"
-              onClick={openFeedback}
+              onClick={() =>
+                window.open("https://github.com/QuadDarv1ne/quantum-horizon/issues", "_blank")
+              }
               className="bg-background/80 h-12 w-12 rounded-full border shadow-lg backdrop-blur-sm"
               title="Send Feedback"
             >
