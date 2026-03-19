@@ -310,3 +310,6 @@ prisma/migrations/
 
 # Bun
 .bun
+
+# Service Worker (compiled )
+public/sw.js

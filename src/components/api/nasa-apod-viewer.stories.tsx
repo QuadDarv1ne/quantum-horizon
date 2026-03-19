@@ -46,5 +46,9 @@ export const Loading: Story = {
   args: {
     showDateSelector: false,
   },
-  render: () => <div className="w-[800px]"><NASAAPODViewer /></div>,
+  render: () => (
+    <div className="w-[800px]">
+      <NASAAPODViewer />
+    </div>
+  ),
 }

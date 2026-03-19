@@ -37,8 +37,7 @@ export const buttonVariants = cva(
 )
 
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {}
 
 /**
  * Micro-interaction utilities
@@ -50,20 +49,20 @@ export const microInteractions = {
     active: "active:scale-95",
     tap: "active:scale-90",
   },
-  
+
   // Shadow effects
   shadow: {
     glow: "hover:shadow-lg hover:shadow-purple-500/25",
     elevation: "hover:-translate-y-0.5 hover:shadow-xl",
     pulse: "animate-pulse-shadow",
   },
-  
+
   // Gradient effects
   gradient: {
     shift: "hover:bg-gradient-to-r hover:from-purple-600 hover:to-blue-600",
     shimmer: "animate-shimmer",
   },
-  
+
   // Opacity effects
   opacity: {
     fade: "hover:opacity-90",
@@ -74,24 +73,22 @@ export const microInteractions = {
 /**
  * Card hover effects
  */
-export const cardHoverEffects = cva(
-  "transition-all duration-300",
-  {
-    variants: {
-      effect: {
-        none: "",
-        lift: "hover:-translate-y-1 hover:shadow-xl",
-        glow: "hover:shadow-2xl hover:shadow-purple-500/20",
-        border: "hover:border-purple-500/50 hover:shadow-lg",
-        gradient: "hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-blue-500/10",
-        combined: "hover:-translate-y-1 hover:shadow-2xl hover:shadow-purple-500/20 hover:border-purple-500/50",
-      },
+export const cardHoverEffects = cva("transition-all duration-300", {
+  variants: {
+    effect: {
+      none: "",
+      lift: "hover:-translate-y-1 hover:shadow-xl",
+      glow: "hover:shadow-2xl hover:shadow-purple-500/20",
+      border: "hover:border-purple-500/50 hover:shadow-lg",
+      gradient: "hover:bg-gradient-to-br hover:from-purple-500/10 hover:to-blue-500/10",
+      combined:
+        "hover:-translate-y-1 hover:shadow-2xl hover:shadow-purple-500/20 hover:border-purple-500/50",
     },
-    defaultVariants: {
-      effect: "lift",
-    },
-  }
-)
+  },
+  defaultVariants: {
+    effect: "lift",
+  },
+})
 
 /**
  * Icon animation utilities
@@ -112,7 +109,8 @@ export const textGradientEffects = cva(
   {
     variants: {
       gradient: {
-        purple: "bg-gradient-to-r from-purple-400 to-purple-600 hover:from-purple-300 hover:to-purple-500",
+        purple:
+          "bg-gradient-to-r from-purple-400 to-purple-600 hover:from-purple-300 hover:to-purple-500",
         blue: "bg-gradient-to-r from-blue-400 to-blue-600 hover:from-blue-300 hover:to-blue-500",
         cosmos: "bg-gradient-to-r from-purple-400 via-blue-400 to-pink-400 hover:via-blue-300",
         fire: "bg-gradient-to-r from-orange-400 to-red-500 hover:from-yellow-300 hover:to-red-400",
