@@ -38,8 +38,6 @@ export function useAchievements() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          // User not authenticated - use mock data
-          console.log("User not authenticated, using mock data")
           return
         }
         throw new Error(`HTTP error! status: ${String(response.status)}`)
@@ -77,7 +75,6 @@ export function useAchievements() {
 
         if (!response.ok) {
           if (response.status === 401) {
-            console.log("Not authenticated - simulating achievement unlock")
             // Optimistically update local state
             setAchievements((prev) => {
               const existing = prev.find((a) => a.achievementId === achievementId)
