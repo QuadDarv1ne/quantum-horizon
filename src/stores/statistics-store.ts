@@ -22,6 +22,30 @@ interface StatisticsState {
 
 const STATISTICS_STORAGE_KEY = "user-statistics"
 
+const safeLocalStorage = {
+  getItem: (key: string): string | null => {
+    try {
+      return localStorage.getItem(key)
+    } catch {
+      return null
+    }
+  },
+  setItem: (key: string, value: string): void => {
+    try {
+      localStorage.setItem(key, value)
+    } catch {
+      // Ignore quota exceeded errors
+    }
+  },
+  removeItem: (key: string): void => {
+    try {
+      localStorage.removeItem(key)
+    } catch {
+      // Ignore errors
+    }
+  },
+}
+
 export const useStatisticsStore = create<StatisticsState>()(
   persist(
     (set, get) => ({
@@ -181,7 +205,7 @@ export const useStatisticsStore = create<StatisticsState>()(
     }),
     {
       name: STATISTICS_STORAGE_KEY,
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => safeLocalStorage),
       partialize: (state) => ({
         statistics: state.statistics,
       }),
