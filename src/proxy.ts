@@ -2,7 +2,17 @@ import { NextRequest, NextResponse } from "next/server"
 import { Ratelimit } from "@upstash/ratelimit"
 import { Redis } from "@upstash/redis"
 
-// Инициализация Redis и Ratelimit только если переменные окружения настроены
+/**
+ * Proxy middleware для Next.js 16+
+ * Обрабатывает rate limiting для API аутентификации
+ *
+ * @see https://nextjs.org/docs/messages/middleware-to-proxy
+ */
+
+/**
+ * Rate limiter для аутентификации
+ * 5 попыток входа в минуту с одного IP
+ */
 const ratelimit =
   process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
     ? new Ratelimit({
@@ -14,7 +24,10 @@ const ratelimit =
       })
     : null
 
-// Лимит для регистрации
+/**
+ * Rate limiter для регистрации
+ * 3 регистрации в час с одного IP
+ */
 const registerRatelimit =
   process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
     ? new Ratelimit({
@@ -25,6 +38,13 @@ const registerRatelimit =
       })
     : null
 
+/**
+ * Proxy функция для обработки запросов
+ * Реализует rate limiting для endpoints аутентификации
+ *
+ * @param request - NextRequest объект
+ * @returns NextResponse - следующий middleware или 429 error
+ */
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
