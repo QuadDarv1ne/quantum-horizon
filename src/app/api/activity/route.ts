@@ -8,6 +8,30 @@ async function getUserId(): Promise<string | null> {
   return session?.user.id ?? null
 }
 
+interface ActivityBody {
+  action?: string
+  topic?: string
+  xpGained?: number
+}
+
+interface ActivityData {
+  id: string
+  userId: string
+  action: string
+  topic: string | null
+  xpGained: number
+  createdAt: Date
+}
+
+interface SuccessResponse<T> {
+  success: true
+  data: T
+}
+
+interface ErrorResponse {
+  error: string
+}
+
 /**
  * GET /api/activity
  * Получить историю активности пользователя
@@ -17,7 +41,7 @@ export async function GET() {
     const userId = await getUserId()
 
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      return NextResponse.json({ error: "Unauthorized" } satisfies ErrorResponse, { status: 401 })
     }
 
     const activities = await db.userActivity.findMany({
@@ -29,10 +53,12 @@ export async function GET() {
     return NextResponse.json({
       success: true,
       data: activities,
-    })
+    } satisfies SuccessResponse<ActivityData[]>)
   } catch (error) {
     console.error("Error fetching activities:", error)
-    return NextResponse.json({ error: "Failed to fetch activities" }, { status: 500 })
+    return NextResponse.json({ error: "Failed to fetch activities" } satisfies ErrorResponse, {
+      status: 500,
+    })
   }
 }
 
@@ -40,21 +66,21 @@ export async function GET() {
  * POST /api/activity
  * Записать новое действие
  */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 export async function POST(request: NextRequest) {
   try {
     const userId = await getUserId()
 
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      return NextResponse.json({ error: "Unauthorized" } satisfies ErrorResponse, { status: 401 })
     }
 
-    const body = await request.json()
+    const body = (await request.json()) as ActivityBody
     const { action, topic, xpGained = 0 } = body
 
     if (!action) {
-      return NextResponse.json({ error: "Action is required" }, { status: 400 })
+      return NextResponse.json({ error: "Action is required" } satisfies ErrorResponse, {
+        status: 400,
+      })
     }
 
     const activity = await db.userActivity.create({
@@ -69,9 +95,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: activity,
-    })
+    } satisfies SuccessResponse<ActivityData>)
   } catch (error) {
     console.error("Error logging activity:", error)
-    return NextResponse.json({ error: "Failed to log activity" }, { status: 500 })
+    return NextResponse.json({ error: "Failed to log activity" } satisfies ErrorResponse, {
+      status: 500,
+    })
   }
 }

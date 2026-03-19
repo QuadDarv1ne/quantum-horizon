@@ -1,8 +1,5 @@
 "use client"
 
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { useState, useEffect, useCallback } from "react"
 
 interface UserActivity {
@@ -12,6 +9,18 @@ interface UserActivity {
   topic?: string
   xpGained: number
   createdAt: string
+}
+
+interface ActivityResponse {
+  success: boolean
+  data?: UserActivity[]
+  error?: string
+}
+
+interface LogActivityResponse {
+  success: boolean
+  data?: UserActivity
+  error?: string
 }
 
 export function useActivity() {
@@ -30,13 +39,13 @@ export function useActivity() {
           console.log("User not authenticated, using mock data")
           return
         }
-        throw new Error(`HTTP error! status: ${response.status}`)
+        throw new Error(`HTTP error! status: ${String(response.status)}`)
       }
 
-      const result = await response.json()
+      const result = (await response.json()) as ActivityResponse
 
       if (result.success && result.data) {
-        setActivities(result.data as UserActivity[])
+        setActivities(result.data)
       }
     } catch (err) {
       console.error("Failed to fetch activities:", err)
@@ -48,7 +57,7 @@ export function useActivity() {
 
   // Log new activity
   const logActivity = useCallback(
-    async (action: string, topic?: string, xpGained = 0) => {
+    async (action: string, topic?: string, xpGained = 0): Promise<boolean> => {
       try {
         const response = await fetch("/api/activity", {
           method: "POST",
@@ -69,7 +78,7 @@ export function useActivity() {
             setActivities((prev) => [
               ...prev,
               {
-                id: `temp_${Date.now()}`,
+                id: `temp_${String(Date.now())}`,
                 userId: "anonymous",
                 action,
                 topic,
@@ -79,10 +88,10 @@ export function useActivity() {
             ])
             return true
           }
-          throw new Error(`HTTP error! status: ${response.status}`)
+          throw new Error(`HTTP error! status: ${String(response.status)}`)
         }
 
-        const result = await response.json()
+        const result = (await response.json()) as LogActivityResponse
 
         if (result.success) {
           await fetchActivities()
@@ -100,14 +109,14 @@ export function useActivity() {
 
   // Track common actions with XP rewards
   const trackLessonComplete = useCallback(
-    async (topic: string) => {
+    async (topic: string): Promise<boolean> => {
       return await logActivity("lesson_completed", topic, 100)
     },
     [logActivity]
   )
 
   const trackQuizPass = useCallback(
-    async (topic: string, score?: number) => {
+    async (topic: string, score?: number): Promise<boolean> => {
       const xp = score && score >= 90 ? 150 : score && score >= 70 ? 100 : 50
       return await logActivity("quiz_passed", topic, xp)
     },
@@ -115,14 +124,14 @@ export function useActivity() {
   )
 
   const trackVisualizationView = useCallback(
-    async (topic: string) => {
+    async (topic: string): Promise<boolean> => {
       return await logActivity("visualization_viewed", topic, 10)
     },
     [logActivity]
   )
 
   const trackAchievementUnlock = useCallback(
-    async (achievementId: string) => {
+    async (achievementId: string): Promise<boolean> => {
       return await logActivity("achievement_unlocked", achievementId, 500)
     },
     [logActivity]
