@@ -1,5 +1,6 @@
 "use client"
 
+import { memo } from "react"
 import { useTranslations } from "next-intl"
 import { VisualizationCard } from "@/components/visualizations/base/visualization-card"
 import {
@@ -12,7 +13,9 @@ interface RelativitySectionProps {
   isDark: boolean
 }
 
-export function RelativitySection({ isDark }: RelativitySectionProps) {
+export const RelativitySection = memo(function RelativitySection({
+  isDark,
+}: RelativitySectionProps) {
   const t = useTranslations()
 
   return (
@@ -45,4 +48,4 @@ export function RelativitySection({ isDark }: RelativitySectionProps) {
       </VisualizationCard>
     </>
   )
-}
+})

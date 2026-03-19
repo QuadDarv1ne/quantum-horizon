@@ -7,23 +7,23 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts")
 const nextConfig: NextConfig = {
   output: "standalone",
   reactStrictMode: true,
-  
+
   // Performance optimizations
   poweredByHeader: false,
   compress: true,
-  
+
   // Image optimization
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
-  
+
   // Compiler optimizations
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
   },
-  
+
   // Experimental features for performance
   experimental: {
     optimizePackageImports: ["lucide-react", "recharts", "@radix-ui/react-dialog"],
@@ -39,14 +39,15 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-              "style-src 'self' 'unsafe-inline'",
+              "script-src 'self' 'wasm-unsafe-eval'",
+              "style-src 'self'",
               "img-src 'self' data: blob: https:",
               "font-src 'self' data:",
               "connect-src 'self' https:",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",
+              "worker-src 'self' blob:",
             ].join("; "),
           },
           {

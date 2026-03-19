@@ -1,5 +1,6 @@
 "use client"
 
+import { memo } from "react"
 import { useTranslations } from "next-intl"
 import { VisualizationCard } from "@/components/visualizations/base/visualization-card"
 import {
@@ -20,7 +21,7 @@ interface CosmosSectionProps {
   isDark: boolean
 }
 
-export function CosmosSection({ isDark }: CosmosSectionProps) {
+export const CosmosSection = memo(function CosmosSection({ isDark }: CosmosSectionProps) {
   const t = useTranslations()
 
   return (
@@ -120,4 +121,4 @@ export function CosmosSection({ isDark }: CosmosSectionProps) {
       </VisualizationCard>
     </>
   )
-}
+})

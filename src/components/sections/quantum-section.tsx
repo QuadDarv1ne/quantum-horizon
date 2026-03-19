@@ -1,5 +1,6 @@
 "use client"
 
+import { memo } from "react"
 import { useTranslations } from "next-intl"
 import { VisualizationCard } from "@/components/visualizations/base/visualization-card"
 import {
@@ -12,7 +13,7 @@ interface QuantumSectionProps {
   isDark: boolean
 }
 
-export function QuantumSection({ isDark }: QuantumSectionProps) {
+export const QuantumSection = memo(function QuantumSection({ isDark }: QuantumSectionProps) {
   const t = useTranslations()
 
   return (
@@ -45,4 +46,4 @@ export function QuantumSection({ isDark }: QuantumSectionProps) {
       </VisualizationCard>
     </>
   )
-}
+})

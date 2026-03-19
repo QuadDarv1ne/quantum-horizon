@@ -173,11 +173,14 @@ export function ThermalRadiationVisualization({ isDark }: ThermalRadiationVisual
           ctx.arc(px, py, 3, 0, Math.PI * 2)
           ctx.fill()
 
-          // Glow effect
-          ctx.shadowColor = `hsla(${String(hue)}, 80%, 60%, 0.6)`
-          ctx.shadowBlur = 10
+          // Glow effect (optimized - use radial gradient instead of shadowBlur)
+          const glowGradient = ctx.createRadialGradient(px, py, 0, px, py, 8)
+          glowGradient.addColorStop(0, `hsla(${String(hue)}, 80%, 60%, 0.4)`)
+          glowGradient.addColorStop(1, "rgba(0, 0, 0, 0)")
+          ctx.fillStyle = glowGradient
+          ctx.beginPath()
+          ctx.arc(px, py, 8, 0, Math.PI * 2)
           ctx.fill()
-          ctx.shadowBlur = 0
         })
       }
 

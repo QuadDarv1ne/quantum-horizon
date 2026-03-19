@@ -79,9 +79,9 @@ export function PresetManager({ visualizationType }: PresetManagerProps) {
 
   const handleApplyPreset = useCallback(
     (preset: Preset) => {
-      const wfSettings = (preset.settings as any).waveFunction
-      const tdSettings = (preset.settings as any).timeDilation
-      const bhSettings = (preset.settings as any).blackHole
+      const wfSettings = preset.settings.waveFunction
+      const tdSettings = preset.settings.timeDilation
+      const bhSettings = preset.settings.blackHole
 
       if (wfSettings) {
         if (wfSettings.quantumNumber !== undefined) {

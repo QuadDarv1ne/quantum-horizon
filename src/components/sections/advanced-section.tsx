@@ -1,5 +1,6 @@
 "use client"
 
+import { memo } from "react"
 import { useTranslations } from "next-intl"
 import { VisualizationCard } from "@/components/visualizations/base/visualization-card"
 import {
@@ -21,7 +22,7 @@ interface AdvancedSectionProps {
   isDark: boolean
 }
 
-export function AdvancedSection({ isDark }: AdvancedSectionProps) {
+export const AdvancedSection = memo(function AdvancedSection({ isDark }: AdvancedSectionProps) {
   const t = useTranslations()
 
   return (
@@ -135,4 +136,4 @@ export function AdvancedSection({ isDark }: AdvancedSectionProps) {
       </VisualizationCard>
     </>
   )
-}
+})

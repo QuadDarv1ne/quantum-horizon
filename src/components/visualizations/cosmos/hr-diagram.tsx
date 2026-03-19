@@ -1,7 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
-import { useRef, useState, useEffect } from "react"
+import { useRef, useState, useEffect, useMemo } from "react"
 import { setupCanvas } from "@/hooks/use-canvas-animation"
 
 interface HRDiagramVisualizationProps {
@@ -21,23 +20,33 @@ export function HRDiagramVisualization({ isDark }: HRDiagramVisualizationProps) 
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [selectedStar, setSelectedStar] = useState<Star | null>(null)
 
-  const stars: Star[] = [
-    { name: "Sun", temp: 5778, luminosity: 1, type: "G2V", color: "#FFF4E0", size: 4 },
-    { name: "Sirius A", temp: 9940, luminosity: 25, type: "A1V", color: "#CAD7FF", size: 6 },
-    {
-      name: "Betelgeuse",
-      temp: 3600,
-      luminosity: 90000,
-      type: "M1Ia",
-      color: "#FF6B35",
-      size: 12,
-    },
-    { name: "Rigel", temp: 12100, luminosity: 120000, type: "B8Ia", color: "#AABFFF", size: 10 },
-    { name: "Proxima", temp: 3042, luminosity: 0.0017, type: "M5Ve", color: "#FF9966", size: 3 },
-    { name: "Vega", temp: 9602, luminosity: 40, type: "A0V", color: "#CAD7FF", size: 6 },
-    { name: "Arcturus", temp: 4286, luminosity: 170, type: "K1.5III", color: "#FFB380", size: 8 },
-    { name: "White Dwarf", temp: 15000, luminosity: 0.001, type: "DA", color: "#E0E8FF", size: 2 },
-  ]
+  const stars = useMemo<Star[]>(
+    () => [
+      { name: "Sun", temp: 5778, luminosity: 1, type: "G2V", color: "#FFF4E0", size: 4 },
+      { name: "Sirius A", temp: 9940, luminosity: 25, type: "A1V", color: "#CAD7FF", size: 6 },
+      {
+        name: "Betelgeuse",
+        temp: 3600,
+        luminosity: 90000,
+        type: "M1Ia",
+        color: "#FF6B35",
+        size: 12,
+      },
+      { name: "Rigel", temp: 12100, luminosity: 120000, type: "B8Ia", color: "#AABFFF", size: 10 },
+      { name: "Proxima", temp: 3042, luminosity: 0.0017, type: "M5Ve", color: "#FF9966", size: 3 },
+      { name: "Vega", temp: 9602, luminosity: 40, type: "A0V", color: "#CAD7FF", size: 6 },
+      { name: "Arcturus", temp: 4286, luminosity: 170, type: "K1.5III", color: "#FFB380", size: 8 },
+      {
+        name: "White Dwarf",
+        temp: 15000,
+        luminosity: 0.001,
+        type: "DA",
+        color: "#E0E8FF",
+        size: 2,
+      },
+    ],
+    []
+  )
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -192,6 +201,7 @@ export function HRDiagramVisualization({ isDark }: HRDiagramVisualizationProps) 
     return () => {
       window.removeEventListener("resize", resize)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDark])
 
   return (

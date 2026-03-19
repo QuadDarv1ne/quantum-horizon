@@ -1,5 +1,6 @@
 "use client"
 
+import { memo } from "react"
 import { useTranslations } from "next-intl"
 import { VisualizationCard } from "@/components/visualizations/base/visualization-card"
 import {
@@ -14,7 +15,9 @@ interface ThermodynamicsSectionProps {
   isDark: boolean
 }
 
-export function ThermodynamicsSection({ isDark }: ThermodynamicsSectionProps) {
+export const ThermodynamicsSection = memo(function ThermodynamicsSection({
+  isDark,
+}: ThermodynamicsSectionProps) {
   const t = useTranslations()
 
   return (
@@ -65,4 +68,4 @@ export function ThermodynamicsSection({ isDark }: ThermodynamicsSectionProps) {
       </VisualizationCard>
     </>
   )
-}
+})
