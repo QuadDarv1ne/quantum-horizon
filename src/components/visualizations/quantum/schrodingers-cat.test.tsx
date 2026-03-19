@@ -66,14 +66,10 @@ describe("SchrodingersCatVisualization", () => {
   it("should show observation status", () => {
     render(<SchrodingersCatVisualization isDark={true} />)
 
-    // Should show probability indicator - use queryByText to avoid multiple matches
-    const statusCards = screen.getAllByRole("region", { hidden: true })
-    expect(statusCards.length).toBeGreaterThan(0)
-
-    // Check for alive or dead text within the cards
-    const aliveText = screen.queryByText("🐱 Alive")
-    const deadText = screen.queryByText("💀 Dead")
-    expect(aliveText || deadText).toBeInTheDocument()
+    // Check for probability indicator - status cards with alive/dead counts
+    const aliveCard = screen.getByText(/Alive/).closest('[class*="border-green"]')
+    const deadCard = screen.getByText(/Dead/).closest('[class*="border-red"]')
+    expect(aliveCard || deadCard).toBeInTheDocument()
   })
 
   it("should handle observe button click", async () => {

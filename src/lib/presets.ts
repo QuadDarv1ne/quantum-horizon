@@ -5,6 +5,9 @@
 
 import { type VisualizationType, type VisualizationSettings } from "@/stores/visualization-store"
 
+// Ре-экспорт типов для тестов
+export type { VisualizationType, VisualizationSettings }
+
 export interface Preset {
   id: string
   name: string

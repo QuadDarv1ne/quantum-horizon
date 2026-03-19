@@ -213,7 +213,13 @@ export function SchrodingersCatVisualization({ isDark }: SchrodingersCatVisualiz
   }
 
   return (
-    <div className="space-y-4" role="region" aria-label="Schrödinger's cat visualization">
+    <div
+      className="space-y-4"
+      role="application"
+      aria-live="polite"
+      aria-atomic="true"
+      aria-label="Schrödinger's cat visualization"
+    >
       <VisualizationCanvas
         draw={draw}
         isDark={isDark}
