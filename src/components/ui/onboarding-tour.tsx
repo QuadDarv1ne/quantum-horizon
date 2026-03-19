@@ -90,13 +90,15 @@ export function OnboardingTour({ onComplete }: OnboardingTourProps) {
   const isLastStep = currentStep === onboardingSteps.length - 1
   const progress = ((currentStep + 1) / onboardingSteps.length) * 100
 
-  // Highlight target element
+  // Highlight target element - only on mount and when step changes
   useEffect(() => {
+    if (!isOpen) return
+
     if (step.targetElement && typeof window !== "undefined") {
       const element = document.querySelector(step.targetElement)
       setHighlightedElement(element)
 
-      // Scroll to element if exists
+      // Scroll to element if exists - only once per step
       if (element) {
         element.scrollIntoView({ behavior: "smooth", block: "center" })
       }
@@ -104,10 +106,11 @@ export function OnboardingTour({ onComplete }: OnboardingTourProps) {
       setHighlightedElement(null)
     }
 
+    // Cleanup on unmount or step change
     return () => {
       setHighlightedElement(null)
     }
-  }, [step.targetElement])
+  }, [step.targetElement, isOpen])
 
   const handleNext = useCallback(() => {
     if (isLastStep) {
@@ -250,24 +253,37 @@ export function OnboardingTour({ onComplete }: OnboardingTourProps) {
 }
 
 // Check if user needs onboarding
-export function useOnboarding(): { showOnboarding: boolean; triggerOnboarding: () => void } {
+export function useOnboarding(): {
+  showOnboarding: boolean
+  triggerOnboarding: () => void
+  completeOnboarding: () => void
+} {
   const [showOnboarding, setShowOnboarding] = useState(false)
+  const [initialized, setInitialized] = useState(false)
 
   useEffect(() => {
+    // Only run on client side
     const completed = localStorage.getItem("onboarding-completed")
-    if (!completed) {
+    if (!completed && !initialized) {
       // Show after a short delay for better UX
       const timer = setTimeout(() => {
         setShowOnboarding(true)
-      }, 1000)
+        setInitialized(true)
+      }, 500)
       return () => clearTimeout(timer)
     }
-  }, [])
+    setInitialized(true)
+  }, [initialized])
 
   const triggerOnboarding = useCallback(() => {
-    setShowOnboarding(true)
     localStorage.removeItem("onboarding-completed")
+    setShowOnboarding(true)
+    setInitialized(true)
   }, [])
 
-  return { showOnboarding, triggerOnboarding }
+  const completeOnboarding = useCallback(() => {
+    setShowOnboarding(false)
+  }, [])
+
+  return { showOnboarding, triggerOnboarding, completeOnboarding }
 }

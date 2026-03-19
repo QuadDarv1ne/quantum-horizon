@@ -37,7 +37,7 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   // Initialize hooks
-  const { showOnboarding } = useOnboarding()
+  const { showOnboarding, completeOnboarding } = useOnboarding()
   const { isOpen: commandPaletteOpen, close: closeCommandPalette } = useCommandPalette()
 
   useEffect(() => {
@@ -94,7 +94,7 @@ export default function Home() {
       dir={isRTL ? "rtl" : "ltr"}
     >
       {/* Interactive Onboarding Tour */}
-      {showOnboarding && <OnboardingTour />}
+      {showOnboarding && <OnboardingTour onComplete={completeOnboarding} />}
 
       {/* Enhanced Command Palette (Ctrl+K) */}
       <EnhancedCommandPalette
