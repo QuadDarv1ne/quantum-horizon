@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useCallback } from "react"
+import { FOCUSABLE_SELECTORS } from "@/lib/a11y"
 
 export interface UseFocusTrapOptions {
   isActive?: boolean
@@ -14,16 +15,7 @@ export function useFocusTrap(options: UseFocusTrapOptions = {}) {
   const previouslyFocusedRef = useRef<HTMLElement | null>(null)
 
   const getFocusableElements = useCallback((container: HTMLElement): HTMLElement[] => {
-    const focusableSelectors = [
-      "button:not([disabled])",
-      "input:not([disabled])",
-      "select:not([disabled])",
-      "textarea:not([disabled])",
-      "a[href]",
-      "[tabindex]:not([tabindex='-1'])",
-    ].join(", ")
-
-    return Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors)).filter((el) => {
+    return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS)).filter((el) => {
       const style = window.getComputedStyle(el)
       return style.display !== "none" && style.visibility !== "hidden"
     })

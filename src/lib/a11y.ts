@@ -5,6 +5,21 @@
  */
 
 /**
+ * Селектор для всех фокусируемых элементов
+ */
+export const FOCUSABLE_SELECTORS = [
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "a[href]",
+  "[tabindex]:not([tabindex='-1'])",
+  "audio[controls]",
+  "video[controls]",
+  "[contenteditable]:not([contenteditable='false'])",
+].join(", ")
+
+/**
  * Приоритет объявления для скринридеров
  */
 export type AnnouncePriority = "polite" | "assertive" | "off"
@@ -92,20 +107,8 @@ export function trapFocus(container: HTMLElement, options: TrapFocusOptions = {}
   const previouslyFocused = document.activeElement as HTMLElement
 
   // Находим все фокусируемые элементы
-  const focusableSelectors = [
-    "button:not([disabled])",
-    "input:not([disabled])",
-    "select:not([disabled])",
-    "textarea:not([disabled])",
-    "a[href]",
-    "[tabindex]:not([tabindex='-1'])",
-    "audio[controls]",
-    "video[controls]",
-    "[contenteditable]:not([contenteditable='false'])",
-  ].join(", ")
-
   const focusableElements = Array.from(
-    container.querySelectorAll<HTMLElement>(focusableSelectors)
+    container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS)
   ).filter((el) => {
     // Проверяем видимость элемента
     const style = window.getComputedStyle(el)
