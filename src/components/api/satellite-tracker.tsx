@@ -69,8 +69,7 @@ export function SatelliteTracker({
         throw new Error(`Failed to fetch satellite ${id}`)
       }
       return await response.json()
-    } catch (err) {
-      console.error(`Error fetching satellite ${id}:`, err)
+    } catch {
       return null
     }
   }
@@ -80,9 +79,7 @@ export function SatelliteTracker({
       setLoading(true)
       setError(null)
 
-      const ids = showMultipleSatellites
-        ? [25544, 48274, 43013, 37849] // ISS, Chinese Space Station, Hubble, GPS
-        : [satelliteId]
+      const ids = showMultipleSatellites ? [25544, 48274, 43013, 37849] : [satelliteId]
 
       const results = await Promise.all(ids.map(fetchSatellite))
       const validResults = results.filter(Boolean) as SatelliteData[]
@@ -90,7 +87,6 @@ export function SatelliteTracker({
       setSatellites(validResults)
       setLastUpdate(new Date())
     } catch (err) {
-      console.error("Failed to fetch satellites:", err)
       setError(err instanceof Error ? err.message : "Failed to load satellites")
     } finally {
       setLoading(false)

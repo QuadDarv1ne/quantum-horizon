@@ -40,8 +40,8 @@ export function ServiceWorkerRegistration() {
             setUpdateAvailable(true)
           }
         })
-      } catch (error) {
-        console.error("Service Worker registration failed:", error)
+      } catch {
+        // Service Worker registration failed silently
       }
     }
 

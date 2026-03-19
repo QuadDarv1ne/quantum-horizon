@@ -50,7 +50,6 @@ export function useActivity() {
         setActivities(result.data)
       }
     } catch (err) {
-      console.error("Failed to fetch activities:", err)
       setError(err instanceof Error ? err.message : "Unknown error")
     } finally {
       setLoading(false)
@@ -101,8 +100,7 @@ export function useActivity() {
         }
 
         return false
-      } catch (err) {
-        console.error("Failed to log activity:", err)
+      } catch {
         return false
       }
     },

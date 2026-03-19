@@ -57,7 +57,6 @@ export function useUserProgress() {
         setProgress(result.data)
       }
     } catch (err) {
-      console.error("Failed to fetch progress:", err)
       setError(err instanceof Error ? err.message : "Unknown error")
     } finally {
       setLoading(false)
@@ -119,8 +118,7 @@ export function useUserProgress() {
         }
 
         return false
-      } catch (err) {
-        console.error("Failed to update progress:", err)
+      } catch {
         return false
       }
     },

@@ -52,8 +52,8 @@ export function NASAAPODViewer({ className, showDateSelector = true }: NASAAPODV
       link.click()
       document.body.removeChild(link)
       window.URL.revokeObjectURL(url)
-    } catch (err) {
-      console.error("Download failed:", err)
+    } catch {
+      // Download failed silently
     }
   }
 
