@@ -7,6 +7,75 @@
 
 ---
 
+## 🔍 Аудит проекта (2026-03-19 20:00) — АКТУАЛЬНОЕ СОСТОЯНИЕ
+
+**Дата проверки:** 2026-03-19 20:00
+**Проверил:** Qwen Code
+
+### ✅ Результаты проверок
+
+**Build:**
+- ✅ Сборка успешна за 4.9s (Turbopack)
+- ✅ TypeScript: 0 ошибок (14.8s)
+- ✅ Service Worker собран (821b)
+- ✅ Все страницы скомпилированы (18/18)
+
+**Lint:**
+- ✅ 0 ошибок ESLint
+
+**Tests:**
+- ✅ 294 passing / 5 skipped (299 total)
+- ✅ 21 файл тестов passed
+- ✅ 1 файл skipped (preset-manager)
+- ✅ 100% success rate
+
+**npm audit:**
+- ⚠️ 15 уязвимостей (6 low, 5 moderate, 4 high)
+  - @hono/node-server, hono — XSS (транзитивные Prisma)
+  - elliptic — криптография (транзитивные Storybook)
+  - lodash — Prototype Pollution (транзитивные chevrotain)
+  - Решение: требует breaking changes (Prisma@6, Storybook@7)
+
+**Git статус:**
+- ✅ Ветка dev: синхронизирована с origin/dev
+- ✅ Ветка main: синхронизирована с origin/main
+- ✅ Merge dev → main выполнен
+
+### 🔴 Текущие проблемы (требуют решения)
+
+**Критические:**
+1. 🔴 **15 уязвимостей npm** — 4 high severity
+   - @hono/node-server <1.19.10 — XSS и обход авторизации
+   - hono <=4.12.6 — множественные уязвимости
+   - elliptic — рискованная криптография
+   - lodash 4.17.21 — Prototype Pollution
+   - Решение: `npm audit fix --force` (breaking changes: Prisma@6, Storybook@7)
+
+**Высокий приоритет:**
+2. 🔴 **Middleware deprecated** — Next.js 16 рекомендует proxy
+   - `src/middleware.ts` — rate limiting для `/api/auth/*`
+   - Требуется миграция на `src/proxy.ts`
+
+**Средний приоритет:**
+3. 🟠 **Peer dependency конфликт** — eslint-plugin-react-hooks v7 и eslint v10
+   - Требует использования --legacy-peer-deps
+   - Решение: обновить eslint-plugin-react-hooks до v8+
+
+4. 🟠 **5 тестов skipped** — preset-manager.test.tsx
+   - Пропущенные тесты требуют внимания
+
+**Низкий приоритет:**
+5. 🟡 **Нет замеров Lighthouse** — Performance и Accessibility
+   - Требуется проверить после оптимизаций
+
+6. 🟡 **Bundle size 219KB initial** — требует оптимизации
+   - Цель: < 500KB (достигнута)
+   - Можно улучшить code splitting
+
+---
+
+---
+
 ## 🔍 Аудит проекта (2026-03-19 19:00)
 
 ### ✅ Сильные стороны проекта
@@ -106,6 +175,39 @@
 - ✅ Lint: 0 ошибок (было 1 warning)
 - ✅ Tests: 294/294 passing (100%)
 - ✅ TypeScript: 0 ошибок
+
+---
+
+## 🔧 Проверка (2026-03-19 20:00) ✅
+
+### ✅ Результаты проверок
+
+**Build:**
+- ✅ Сборка успешна за 4.9s (Turbopack)
+- ✅ TypeScript: 0 ошибок (14.8s)
+- ✅ Service Worker собран (821b)
+- ✅ Все страницы скомпилированы (18/18)
+
+**Lint:**
+- ✅ 0 ошибок
+- ✅ 0 warning
+
+**Tests:**
+- ✅ 294 passing / 5 skipped (299 total)
+- ✅ 21 файл тестов passed
+- ✅ 1 файл skipped (preset-manager)
+
+**TypeScript:**
+- ✅ 0 ошибок
+
+**npm audit:**
+- ⚠️ 15 уязвимостей (требуют breaking changes)
+- ⚠️ Не критично для development
+
+**Git:**
+- ✅ dev синхронизирована с origin/dev
+- ✅ main синхронизирована с origin/main
+- ✅ Merge выполнен
 
 ---
 
@@ -1111,41 +1213,29 @@ src/
 
 ## 🔁 Синхронизация
 
-**Последняя синхронизация:** 2026-03-20 00:30 ✅
+**Последняя синхронизация:** 2026-03-19 20:00 ✅
+
+**Проверка выполнена:**
+- ✅ Build: успешен за 4.9s (Turbopack)
+- ✅ Lint: 0 ошибок
+- ✅ Tests: 294 passing / 5 skipped (100% success rate)
+- ✅ TypeScript: 0 ошибок
 
 | Ветка  | Статус | Коммиты впереди | Последний коммит                   |
 | ------ | ------ | --------------- | ---------------------------------- |
-| dev    | ✅     | 0               | 0484e67 docs: обновлены результаты |
-| main   | ✅     | 0               | 84d3f02 Merge branch 'dev'         |
+| dev    | ✅     | 0               | 86e6132 Merge branch 'main' into dev |
+| main   | ✅     | 0               | 505553f feat: настройка деплоя и инфраструктуры |
 | origin | ✅     | Синхронизирован | Push выполнен в обе ветки          |
 
-**Изменения отправлены:**
-
-**v1.5.0-stable Release (2026-03-19):**
-
-- ✅ Rate limiting (@upstash/ratelimit)
+**Последние изменения:**
+- ✅ Деплой настроен (docker-compose.prod.yml, nginx.conf, DEPLOY.md)
+- ✅ GitHub Actions workflows обновлены
+- ✅ Rate limiting (@upstash/ratelimit) для /api/auth/*
 - ✅ Next.js 16.2.0 (CSRF fix)
-- ✅ CREDENTIALS.md → .gitignore
-- ✅ Tree-shaking (recharts)
-- ✅ React.memo() (5 секций)
-- ✅ CSP headers (wasm-unsafe-eval)
+- ✅ CSP headers улучшены (wasm-unsafe-eval)
+- ✅ Tree-shaking для recharts
+- ✅ React.memo() для 5 секций
 - ✅ Canvas performance (gradient вместо shadowBlur)
-- ✅ Build: 4.9s ✅
-- ✅ Lint: 0 ошибок ✅
-- ✅ Tests: 294/294 (100%) ✅
-
-**🔧 Deploy Setup (2026-03-20 00:30):**
-
-- ✅ `.env.local` — безопасный NEXTAUTH_SECRET
-- ✅ `docker-compose.prod.yml` — production конфигурация
-- ✅ `nginx.conf` — reverse proxy
-- ✅ `DEPLOY.md` — документация (350+ строк)
-- ✅ `.github/workflows/deploy.yml` — обновлён workflow
-- ✅ `.github/workflows/ci.yml` — добавлена ветка dev
-
-**Статус:**
-
-- ✅ Commit в dev: 1dcd927
 - ✅ Merge dev → main: f8864d3
 - ✅ Push в origin: dev + main синхронизированы
 
@@ -1155,25 +1245,37 @@ src/
 
 ### ✅ Выполненная работа (2026-03-11 — 2026-03-19)
 
-**Текущее состояние (2026-03-19 19:00):**
+**Текущее состояние (2026-03-19 20:00) — ПРОВЕРКА:**
 
-- ✅ Сборка: проходит успешно за 6.6s
-- ✅ TypeScript: 1 ошибка (presets.test.ts)
+- ✅ Сборка: проходит успешно за 4.9s (Turbopack)
+- ✅ TypeScript: 0 ошибок (14.8s)
 - ✅ ESLint: 0 ошибок
+- ✅ 294 unit-тестов passing / 5 skipped (100% success rate)
 - ✅ 24 E2E тестов passing
-- ✅ 292 unit-тестов passing (99.3%)
 - ✅ 43+ Storybook stories
 - ✅ 95 физических формул
 - ✅ 93 компонента визуализаций (включая stories)
 - ✅ 5 компонентов секций
 - ✅ dev и main синхронизированы
-- ✅ PWA: Service Worker с кэшированием динамического контента
+- ✅ PWA: Service Worker с кэшированием API (821b)
 - ✅ PWA: Install prompt компонент
 - ✅ UX/UI: 7 новых компонентов (1803 строки)
 - ✅ PostCSS: добавлен postcss.config.js для Tailwind v4
-- ⚠️ npm audit: 15 уязвимостей (4 high, 5 moderate, 6 low)
+- ⚠️ npm audit: 15 уязвимостей (6 low, 5 moderate, 4 high)
+  - Требует breaking changes (Prisma@6, Storybook@7)
 
-**Последние изменения (2026-03-19 19:00) — Аудит проекта:**
+**Последние изменения (2026-03-19 20:00) — Проверка Qwen Code:**
+
+- ✅ Проведена полная проверка проекта
+- ✅ Build: 4.9s (Turbopack) — успешно
+- ✅ Lint: 0 ошибок — успешно
+- ✅ Tests: 294 passing / 5 skipped — успешно
+- ✅ TypeScript: 0 ошибок — успешно
+- ✅ Git: dev и main синхронизированы
+- ✅ Обновлён todo.md с актуальными данными
+- ✅ Добавлен раздел "Аудит проекта (2026-03-19 20:00)"
+
+**Последние изменения (2026-03-19 19:00) — Аудит проекта:****
 
 - ✅ Проведён полный аудит проекта
 - ✅ Выявлены сильные стороны: архитектура, a11y, PWA, производительность
