@@ -12,8 +12,9 @@ interface MetricValue {
   label: string
 }
 
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 export function WebVitals() {
   const [metrics, setMetrics] = useState<MetricValue[]>([])
   const [isDevVisible, setIsDevVisible] = useState(false)
@@ -28,10 +29,9 @@ export function WebVitals() {
         const existing = prev.findIndex((m) => m.name === metric.name)
         const newValue: MetricValue = {
           name: metric.name,
-          value: metric.value as unknown as number,
+          value: Number(metric.value),
           rating: metric.rating as "good" | "needs-improvement" | "poor",
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-          label: getMetricLabel(metric.name, metric.value as unknown as number),
+          label: getMetricLabel(metric.name, Number(metric.value)),
         }
 
         if (existing >= 0) {
