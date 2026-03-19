@@ -7,19 +7,18 @@
 
 ---
 
-## 🔍 Аудит проекта (2026-03-19 21:00) — АКТУАЛЬНОЕ СОСТОЯНИЕ
+## 🔍 Аудит проекта (2026-03-19 21:30) — АКТУАЛЬНОЕ СОСТОЯНИЕ
 
-**Дата проверки:** 2026-03-19 21:00
+**Дата проверки:** 2026-03-19 21:30
 **Проверил:** Qwen Code
 
 ### ✅ Результаты проверок
 
 **Build:**
-- ✅ Сборка успешна за 4.9s (Turbopack)
-- ✅ TypeScript: 0 ошибок (16.3s)
+- ✅ Сборка успешна за 5.9s (Turbopack)
+- ✅ TypeScript: 0 ошибок (18.9s)
 - ✅ Service Worker собран (821b)
 - ✅ Все страницы скомпилированы (18/18)
-- ✅ **Proxy (Middleware)** — миграция завершена + JSDoc
 
 **Lint:**
 - ✅ 0 ошибок ESLint
@@ -27,7 +26,7 @@
 **Tests:**
 - ✅ 299 passing / 0 skipped (100% success rate)
 - ✅ 22 файла тестов passed
-- ✅ preset-manager.test.tsx — 5 тестов включены
+- ✅ Duration: 13.57s
 
 **npm audit:**
 - ⚠️ 15 уязвимостей (6 low, 5 moderate, 4 high)
@@ -41,53 +40,44 @@
 - ✅ Ветка main: синхронизирована с origin/main
 - ✅ Merge dev → main выполнен
 
-### ✅ Выполненные задачи (2026-03-19 21:00)
+### ✅ Статус проекта (2026-03-19 21:30)
 
-**1. Миграция middleware → proxy (Next.js 16):**
-- ✅ Переименован `src/middleware.ts` → `src/proxy.ts`
-- ✅ Изменён экспорт: `middleware` → `proxy`
-- ✅ Rate limiting сохранён для `/api/auth/*`
-- ✅ Предупреждение deprecated устранено
-- ✅ Добавлен JSDoc для proxy.ts
+**Метрики качества:**
+- ✅ Build: 5.9s — стабильно
+- ✅ Lint: 0 ошибок — чисто
+- ✅ Tests: 299 passing (100%) — все тесты работают
+- ✅ TypeScript: 0 ошибок — строгая типизация
+- ✅ Bundle: 219KB initial — в пределах нормы
 
-**2. Включение skipped тестов:**
-- ✅ `preset-manager.test.tsx` — 5 тестов включены
-- ✅ Добавлен mock Zustand store
-- ✅ Все тесты passing (299/299)
+**Архитектура:**
+- ✅ 93 компонента визуализаций
+- ✅ 5 компонентов секций
+- ✅ Proxy architecture (Next.js 16)
+- ✅ Zustand store + React Query
+- ✅ PWA поддержка
 
-**3. npm audit fix:**
-- ✅ Исправлены уязвимости прямых зависимостей
-- ✅ Остались 15 транзитивных уязвимостей (требуют breaking changes)
+**Инфраструктура:**
+- ✅ Docker (dev + prod)
+- ✅ CI/CD (GitHub Actions)
+- ✅ Rate limiting (@upstash/ratelimit)
+- ✅ CSP headers
+- ✅ i18n (4 языка)
 
-**4. JSDoc документация:**
-- ✅ proxy.ts — полная документация
-- ✅ useCanvasAnimation.ts — уже была документация
-- ✅ physics.ts — 95 функций с JSDoc
-- ✅ visualization-store.ts — документация
-
-**5. Производительность:**
-- ✅ useCanvasAnimation хук оптимизирован (FPS limit, IntersectionObserver)
-- ✅ Canvas визуализации используют оптимизации
-- ✅ Bundle size 219KB initial (цель < 500KB достигнута)
-
-### 🔴 Текущие проблемы (требуют решения)
+### 🔴 Проблемы (требуют решения)
 
 **Критические:**
-1. 🔴 **15 уязвимостей npm (транзитивные)** — 4 high severity
-   - @hono/node-server <1.19.10 — XSS (Prisma dev dependency)
-   - hono <=4.12.6 — множественные уязвимости (Prisma)
-   - elliptic — криптография (Storybook)
-   - lodash 4.17.21 — Prototype Pollution (chevrotain)
-   - Решение: `npm audit fix --force` (breaking changes: Prisma@6, Storybook@7)
+1. 🔴 **15 npm уязвимостей (транзитивные)** — требуют breaking changes
+   - Prisma@6 (через @hono/node-server, hono)
+   - Storybook@7 (через elliptic)
+   - Не критично для development
 
 **Средний приоритет:**
 2. 🟠 **eslint-plugin-react-hooks v7** — не поддерживает eslint v10
-   - Требует использования --legacy-peer-deps
    - Ожидается обновление до v8+
 
 **Низкий приоритет:**
-3. 🟡 **Нет замеров Lighthouse** — Performance и Accessibility
-4. 🟡 **Bundle size 219KB initial** — можно оптимизировать
+3. 🟡 **Lighthouse замеры** — проверить Performance/Accessibility
+4. 🟡 **Bundle size** — 219KB initial (цель < 200KB)
 
 ---
 
@@ -1196,30 +1186,25 @@ src/
 
 ## 🔁 Синхронизация
 
-**Последняя синхронизация:** 2026-03-19 21:00 ✅
+**Последняя синхронизация:** 2026-03-19 21:30 ✅
 
 **Проверка выполнена:**
-- ✅ Build: успешен за 4.9s (Turbopack)
+- ✅ Build: 5.9s (Turbopack)
 - ✅ Lint: 0 ошибок
-- ✅ Tests: 299 passing / 0 skipped (100%)
+- ✅ Tests: 299 passing (13.57s)
 - ✅ TypeScript: 0 ошибок
 
 | Ветка  | Статус | Коммиты впереди | Последний коммит                   |
 | ------ | ------ | --------------- | ---------------------------------- |
-| dev    | ✅     | 0               | eaa21f8 docs: добавлен JSDoc к proxy.ts |
-| main   | ✅     | 0               | a71821a Merge branch 'dev' into main |
+| dev    | ✅     | 0               | 82d0570 docs: обновлены метрики    |
+| main   | ✅     | 0               | 7d6c86e Merge branch 'dev'         |
 | origin | ✅     | Синхронизирован | Push выполнен в обе ветки          |
 
-**Последние изменения:**
-- ✅ Миграция middleware.ts → proxy.ts (Next.js 16 proxy architecture)
-- ✅ Включены 5 skipped тестов preset-manager.test.tsx
-- ✅ npm audit fix (частичное исправление уязвимостей)
-- ✅ Rate limiting сохранён для /api/auth/*
-- ✅ JSDoc документация для proxy.ts
-- ✅ Build: 4.9s (Turbopack)
-- ✅ Tests: 299 passing (100% success rate)
-- ✅ Merge dev → main выполнен
-- ✅ Push в origin: dev + main синхронизированы
+**Статус:**
+- ✅ dev и main синхронизированы
+- ✅ 299 тестов passing (100%)
+- ✅ 0 ошибок lint/typescript
+- ✅ Сборка стабильна
 
 ---
 
