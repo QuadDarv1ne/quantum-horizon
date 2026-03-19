@@ -22,6 +22,7 @@ interface VisualizationCanvasProps {
   ariaLabel?: string
   ariaDescription?: string
   tabIndex?: number
+  role?: string
 }
 
 export function VisualizationCanvas({
@@ -37,6 +38,7 @@ export function VisualizationCanvas({
   ariaLabel = "Interactive physics visualization",
   ariaDescription,
   tabIndex = 0,
+  role = "img",
 }: VisualizationCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -73,7 +75,7 @@ export function VisualizationCanvas({
         data-testid="visualization-canvas"
         aria-label={ariaLabel}
         aria-description={ariaDescription}
-        role="img"
+        role={role}
         tabIndex={tabIndex}
         onClick={onClick}
         onKeyDown={onKeyDown}
