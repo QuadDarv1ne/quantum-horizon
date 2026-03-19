@@ -39,7 +39,6 @@ export function useActivity() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          console.log("User not authenticated, using mock data")
           return
         }
         throw new Error(`HTTP error! status: ${String(response.status)}`)
@@ -77,7 +76,6 @@ export function useActivity() {
 
         if (!response.ok) {
           if (response.status === 401) {
-            console.log("Not authenticated - simulating activity log")
             // Optimistically update local state
             setActivities((prev) => [
               ...prev,

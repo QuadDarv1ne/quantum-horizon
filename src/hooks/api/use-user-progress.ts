@@ -46,7 +46,6 @@ export function useUserProgress() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          console.log("User not authenticated, using mock data")
           return
         }
         throw new Error(`HTTP error! status: ${String(response.status)}`)
@@ -83,7 +82,6 @@ export function useUserProgress() {
 
         if (!response.ok) {
           if (response.status === 401) {
-            console.log("Not authenticated - simulating progress update")
             // Optimistically update local state
             setProgress((prev) => {
               const existing = prev.find((p) => p.topic === topic)
