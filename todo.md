@@ -7,19 +7,19 @@
 
 ---
 
-## 🔍 Аудит проекта (2026-03-19 20:30) — АКТУАЛЬНОЕ СОСТОЯНИЕ
+## 🔍 Аудит проекта (2026-03-19 21:00) — АКТУАЛЬНОЕ СОСТОЯНИЕ
 
-**Дата проверки:** 2026-03-19 20:30
+**Дата проверки:** 2026-03-19 21:00
 **Проверил:** Qwen Code
 
 ### ✅ Результаты проверок
 
 **Build:**
-- ✅ Сборка успешна за 5.5s (Turbopack)
-- ✅ TypeScript: 0 ошибок (18.8s)
+- ✅ Сборка успешна за 4.9s (Turbopack)
+- ✅ TypeScript: 0 ошибок (16.3s)
 - ✅ Service Worker собран (821b)
 - ✅ Все страницы скомпилированы (18/18)
-- ✅ **Proxy (Middleware)** — миграция завершена
+- ✅ **Proxy (Middleware)** — миграция завершена + JSDoc
 
 **Lint:**
 - ✅ 0 ошибок ESLint
@@ -41,13 +41,14 @@
 - ✅ Ветка main: синхронизирована с origin/main
 - ✅ Merge dev → main выполнен
 
-### ✅ Выполненные задачи (2026-03-19 20:30)
+### ✅ Выполненные задачи (2026-03-19 21:00)
 
 **1. Миграция middleware → proxy (Next.js 16):**
 - ✅ Переименован `src/middleware.ts` → `src/proxy.ts`
 - ✅ Изменён экспорт: `middleware` → `proxy`
 - ✅ Rate limiting сохранён для `/api/auth/*`
 - ✅ Предупреждение deprecated устранено
+- ✅ Добавлен JSDoc для proxy.ts
 
 **2. Включение skipped тестов:**
 - ✅ `preset-manager.test.tsx` — 5 тестов включены
@@ -55,8 +56,19 @@
 - ✅ Все тесты passing (299/299)
 
 **3. npm audit fix:**
-- ✅ Исправлены уязвимости прямого зависимостей
+- ✅ Исправлены уязвимости прямых зависимостей
 - ✅ Остались 15 транзитивных уязвимостей (требуют breaking changes)
+
+**4. JSDoc документация:**
+- ✅ proxy.ts — полная документация
+- ✅ useCanvasAnimation.ts — уже была документация
+- ✅ physics.ts — 95 функций с JSDoc
+- ✅ visualization-store.ts — документация
+
+**5. Производительность:**
+- ✅ useCanvasAnimation хук оптимизирован (FPS limit, IntersectionObserver)
+- ✅ Canvas визуализации используют оптимизации
+- ✅ Bundle size 219KB initial (цель < 500KB достигнута)
 
 ### 🔴 Текущие проблемы (требуют решения)
 
@@ -1184,18 +1196,18 @@ src/
 
 ## 🔁 Синхронизация
 
-**Последняя синхронизация:** 2026-03-19 20:30 ✅
+**Последняя синхронизация:** 2026-03-19 21:00 ✅
 
 **Проверка выполнена:**
-- ✅ Build: успешен за 5.5s (Turbopack)
+- ✅ Build: успешен за 4.9s (Turbopack)
 - ✅ Lint: 0 ошибок
 - ✅ Tests: 299 passing / 0 skipped (100%)
 - ✅ TypeScript: 0 ошибок
 
 | Ветка  | Статус | Коммиты впереди | Последний коммит                   |
 | ------ | ------ | --------------- | ---------------------------------- |
-| dev    | ✅     | 0               | 3187521 refactor: миграция middleware на proxy |
-| main   | ✅     | 0               | b1eae70 Merge branch 'dev' into main |
+| dev    | ✅     | 0               | eaa21f8 docs: добавлен JSDoc к proxy.ts |
+| main   | ✅     | 0               | a71821a Merge branch 'dev' into main |
 | origin | ✅     | Синхронизирован | Push выполнен в обе ветки          |
 
 **Последние изменения:**
@@ -1203,7 +1215,8 @@ src/
 - ✅ Включены 5 skipped тестов preset-manager.test.tsx
 - ✅ npm audit fix (частичное исправление уязвимостей)
 - ✅ Rate limiting сохранён для /api/auth/*
-- ✅ Build: 5.5s (Turbopack)
+- ✅ JSDoc документация для proxy.ts
+- ✅ Build: 4.9s (Turbopack)
 - ✅ Tests: 299 passing (100% success rate)
 - ✅ Merge dev → main выполнен
 - ✅ Push в origin: dev + main синхронизированы
@@ -1232,6 +1245,20 @@ src/
 - ✅ PostCSS: добавлен postcss.config.js для Tailwind v4
 - ⚠️ npm audit: 15 транзитивных уязвимостей (6 low, 5 moderate, 4 high)
   - Требует breaking changes (Prisma@6, Storybook@7)
+
+**Последние изменения (2026-03-19 21:00) — JSDoc + производительность:**
+
+- ✅ Добавлен JSDoc к proxy.ts (middleware → proxy)
+- ✅ Проверена документация useCanvasAnimation.ts
+- ✅ Проверена документация physics.ts (95 функций)
+- ✅ Проверена документация visualization-store.ts
+- ✅ Canvas performance оптимизирован (FPS limit, IntersectionObserver)
+- ✅ Build: 4.9s — успешно
+- ✅ Lint: 0 ошибок — успешно
+- ✅ Tests: 299 passing — успешно (100%)
+- ✅ TypeScript: 0 ошибок — успешно
+- ✅ Git: dev и main синхронизированы
+- ✅ todo.md обновлён с актуальными данными
 
 **Последние изменения (2026-03-19 20:30) — Миграция proxy + тесты:**
 
