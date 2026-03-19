@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-
 "use client"
 
 import { useQuery } from "@tanstack/react-query"
@@ -21,26 +17,27 @@ interface UseAPODOptions {
   date?: string
   enabled?: boolean
   staleTime?: number
-  gcTime?: number // Changed from cacheTime (React Query v5)
+  gcTime?: number
 }
 
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 export function useAPOD({
   date,
   enabled = true,
   staleTime = 1000 * 60 * 60, // 1 hour
-  gcTime = 1000 * 60 * 60 * 24, // 24 hours (changed from cacheTime)
+  gcTime = 1000 * 60 * 60 * 24, // 24 hours
 }: UseAPODOptions = {}) {
   const apiKey = process.env.NEXT_PUBLIC_NASA_API_KEY ?? "DEMO_KEY"
   const apiUrl = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}${date ? `&date=${date}` : ""}`
 
   return useQuery<APODData>({
-    queryKey: ["apod", date || "today"],
+    queryKey: ["apod", date ?? "today"],
     queryFn: async () => {
       const response = await fetch(apiUrl)
       if (!response.ok) {
         throw new Error(`Failed to fetch APOD: ${response.status}`)
       }
-      return response.json()
+      return response.json() as Promise<APODData>
     },
     enabled,
     staleTime,

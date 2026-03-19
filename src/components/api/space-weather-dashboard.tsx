@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import { useState, useEffect } from "react"
@@ -10,15 +6,15 @@ import { VisualizationLoader } from "@/components/ui/visualization-loader"
 import { PhysicsTooltip, TooltipTrigger } from "@/components/ui/physics-tooltip-enhanced"
 import { cn } from "@/lib/utils"
 
-interface SpaceWeatherEvent {
-  id: string
-  eventID: string
-  activityID: string
-  startTime21_5: string
-  stopTime21_5: string
-  link: string
-  note: string
-  catalogURL: string | null
+interface SolarFlareEvent {
+  flrID: string
+  flClass: string
+  flEnergy: number
+  peakTime: string
+  sourceLocation: string
+  cme?: boolean
+  note?: string
+  link?: string
 }
 
 interface SolarWindData {
@@ -28,7 +24,7 @@ interface SolarWindData {
   magneticField: number
 }
 
-interface AuroraForecast {
+interface _AuroraForecast {
   kpIndex: number
   visibility: string
   probability: number
@@ -42,23 +38,12 @@ interface SpaceWeatherDashboardProps {
 export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps) {
   const [solarFlares, setSolarFlares] = useState<SolarFlareEvent[]>([])
   const [solarWind, setSolarWind] = useState<SolarWindData | null>(null)
-  const [auroraForecast, setAuroraForecast] = useState<AuroraForecast | null>(null)
+  const [auroraForecast, setAuroraForecast] = useState<_AuroraForecast | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  interface SolarFlareEvent {
-    flrID: string
-    flClass: string
-    flEnergy: number
-    peakTime: string
-    sourceLocation: string
-    cme?: boolean
-    note?: string
-    link?: string
-  }
-
   // Mock data (in production, fetch from NASA DONKI API)
-  const mockSolarFlares: SolarFlareEvent[] = [
+  const mockSolarFlares = [
     {
       flrID: "gev_20260318_0123",
       flClass: "M2.5",
@@ -85,15 +70,15 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
     },
   ]
 
-  const mockSolarWind: SolarWindData = {
-    speed: 450, // km/s
-    density: 5.2, // protons/cm³
-    temperature: 120000, // Kelvin
-    magneticField: 8.5, // nT
+  const mockSolarWind = {
+    speed: 450,
+    density: 5.2,
+    temperature: 120000,
+    magneticField: 8.5,
   }
 
-  const mockAuroraForecast: AuroraForecast = {
-    kpIndex: 6, // 0-9 scale
+  const mockAuroraForecast = {
+    kpIndex: 6,
     visibility: "High latitudes",
     probability: 75,
     regions: ["Alaska", "Northern Canada", "Scandinavia", "Iceland"],
@@ -103,9 +88,6 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
     const loadSpaceWeather = async () => {
       try {
         setLoading(true)
-
-        // In production: fetch from NASA DONKI API
-        // const response = await fetch('https://api.nasa.gov/DONKI/swx?startDate=...')
 
         // Simulate API delay
         await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -120,7 +102,7 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
       }
     }
 
-    loadSpaceWeather()
+    void loadSpaceWeather()
 
     // Update every 5 minutes
     const interval = setInterval(
@@ -132,6 +114,7 @@ export function SpaceWeatherDashboard({ className }: SpaceWeatherDashboardProps)
     return () => {
       clearInterval(interval)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (loading) {

@@ -1,7 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-
-/* eslint-disable @typescript-eslint/require-await */
-
 "use client"
 
 import { useState, useEffect, useRef } from "react"
@@ -110,7 +107,6 @@ export function ExoplanetExplorer({ className }: ExoplanetExplorerProps) {
   const [selectedPlanet, setSelectedPlanet] = useState<number | null>(null)
   const [planets, setPlanets] = useState<ExoplanetData[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
   // Sample exoplanet data (in real implementation, fetch from NASA API)
   const samplePlanets: ExoplanetData[] = [
@@ -187,21 +183,8 @@ export function ExoplanetExplorer({ className }: ExoplanetExplorerProps) {
   ]
 
   useEffect(() => {
-    // Simulate API fetch with sample data
-    const loadPlanets = async () => {
-      try {
-        setLoading(true)
-        // In production: fetch from NASA Exoplanet Archive
-        // const response = await fetch('https://exoplanetarchive.ipac.caltech.edu/TAP/sync')
-        setPlanets(samplePlanets)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load exoplanets")
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    void loadPlanets()
+    setPlanets(samplePlanets)
+    setLoading(false)
   }, [])
 
   const getPlanetColor = (temperature: number): string => {
@@ -226,28 +209,6 @@ export function ExoplanetExplorer({ className }: ExoplanetExplorerProps) {
 
   if (loading) {
     return <VisualizationLoader className={className} />
-  }
-
-  if (error) {
-    return (
-      <div
-        className={cn("bg-card flex items-center justify-center rounded-xl border p-8", className)}
-      >
-        <div className="space-y-4 text-center">
-          <div className="text-4xl">🪐</div>
-          <h3 className="text-lg font-semibold">Lost in Space</h3>
-          <p className="text-muted-foreground text-sm">{error}</p>
-          <button
-            onClick={() => {
-              window.location.reload()
-            }}
-            className="rounded-md bg-purple-600 px-4 py-2 text-white hover:bg-purple-700"
-          >
-            Warp Again
-          </button>
-        </div>
-      </div>
-    )
   }
 
   const selectedData = selectedPlanet !== null ? planets[selectedPlanet] : null

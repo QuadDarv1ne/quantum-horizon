@@ -163,6 +163,7 @@ export function BigBangVisualization({ isDark }: BigBangVisualizationProps) {
       ctx.font = "10px sans-serif"
       ctx.textAlign = "left"
 
+      // eslint-disable-next-line no-useless-assignment
       let eraText = ""
       if (timeScale < 5) eraText = "t < 10⁻⁴³ s (Planck epoch)"
       else if (timeScale < 15) eraText = "t ~ 10⁻³⁵ s (Inflation)"

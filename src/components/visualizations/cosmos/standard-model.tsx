@@ -1,9 +1,8 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-/* eslint-disable @typescript-eslint/no-unnecessary-type-conversion */
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useMemo } from "react"
 import { setupCanvas } from "@/hooks/use-canvas-animation"
 import { Button } from "@/components/ui/button"
 
@@ -32,155 +31,158 @@ export function StandardModelVisualization({ isDark }: StandardModelVisualizatio
   const [selectedParticle, setSelectedParticle] = useState<string | null>(null)
   const [showDecays, setShowDecays] = useState(false)
 
-  const particles: ParticlesData = {
-    quarks: [
-      {
-        name: "u",
-        fullName: "Up",
-        mass: "2.2 MeV",
-        charge: "+2/3",
-        color: isDark ? "#EF4444" : "#DC2626",
-        generation: 1,
-      },
-      {
-        name: "d",
-        fullName: "Down",
-        mass: "4.7 MeV",
-        charge: "-1/3",
-        color: isDark ? "#22C55E" : "#16A34A",
-        generation: 1,
-      },
-      {
-        name: "c",
-        fullName: "Charm",
-        mass: "1.28 GeV",
-        charge: "+2/3",
-        color: isDark ? "#F97316" : "#EA580C",
-        generation: 2,
-      },
-      {
-        name: "s",
-        fullName: "Strange",
-        mass: "95 MeV",
-        charge: "-1/3",
-        color: isDark ? "#84CC16" : "#65A30D",
-        generation: 2,
-      },
-      {
-        name: "t",
-        fullName: "Top",
-        mass: "173 GeV",
-        charge: "+2/3",
-        color: isDark ? "#DC2626" : "#B91C1C",
-        generation: 3,
-      },
-      {
-        name: "b",
-        fullName: "Bottom",
-        mass: "4.18 GeV",
-        charge: "-1/3",
-        color: isDark ? "#16A34A" : "#15803D",
-        generation: 3,
-      },
-    ],
-    leptons: [
-      {
-        name: "e",
-        fullName: "Electron",
-        mass: "0.511 MeV",
-        charge: "-1",
-        color: isDark ? "#3B82F6" : "#2563EB",
-        generation: 1,
-      },
-      {
-        name: "νe",
-        fullName: "Electron neutrino",
-        mass: "< 0.000002 eV",
-        charge: "0",
-        color: isDark ? "#60A5FA" : "#3B82F6",
-        generation: 1,
-      },
-      {
-        name: "μ",
-        fullName: "Muon",
-        mass: "105.7 MeV",
-        charge: "-1",
-        color: isDark ? "#8B5CF6" : "#7C3AED",
-        generation: 2,
-      },
-      {
-        name: "νμ",
-        fullName: "Muon neutrino",
-        mass: "< 0.17 MeV",
-        charge: "0",
-        color: isDark ? "#A78BFA" : "#8B5CF6",
-        generation: 2,
-      },
-      {
-        name: "τ",
-        fullName: "Tau",
-        mass: "1.777 GeV",
-        charge: "-1",
-        color: isDark ? "#EC4899" : "#DB2777",
-        generation: 3,
-      },
-      {
-        name: "ντ",
-        fullName: "Tau neutrino",
-        mass: "< 18 MeV",
-        charge: "0",
-        color: isDark ? "#F472B6" : "#EC4899",
-        generation: 3,
-      },
-    ],
-    bosons: [
-      {
-        name: "γ",
-        fullName: "Photon",
-        mass: "0",
-        charge: "0",
-        color: isDark ? "#FBBF24" : "#F59E0B",
-        spin: "1",
-        generation: 0,
-      },
-      {
-        name: "g",
-        fullName: "Gluon",
-        mass: "0",
-        charge: "0",
-        color: isDark ? "#F59E0B" : "#D97706",
-        spin: "1",
-        generation: 0,
-      },
-      {
-        name: "Z",
-        fullName: "Z boson",
-        mass: "91.2 GeV",
-        charge: "0",
-        color: isDark ? "#A855F7" : "#9333EA",
-        spin: "1",
-        generation: 0,
-      },
-      {
-        name: "W",
-        fullName: "W boson",
-        mass: "80.4 GeV",
-        charge: "±1",
-        color: isDark ? "#EF4444" : "#DC2626",
-        spin: "1",
-        generation: 0,
-      },
-      {
-        name: "H",
-        fullName: "Higgs",
-        mass: "125 GeV",
-        charge: "0",
-        color: isDark ? "#FFD700" : "#FBBF24",
-        spin: "0",
-        generation: 0,
-      },
-    ],
-  }
+  const particles = useMemo<ParticlesData>(
+    () => ({
+      quarks: [
+        {
+          name: "u",
+          fullName: "Up",
+          mass: "2.2 MeV",
+          charge: "+2/3",
+          color: isDark ? "#EF4444" : "#DC2626",
+          generation: 1,
+        },
+        {
+          name: "d",
+          fullName: "Down",
+          mass: "4.7 MeV",
+          charge: "-1/3",
+          color: isDark ? "#22C55E" : "#16A34A",
+          generation: 1,
+        },
+        {
+          name: "c",
+          fullName: "Charm",
+          mass: "1.28 GeV",
+          charge: "+2/3",
+          color: isDark ? "#F97316" : "#EA580C",
+          generation: 2,
+        },
+        {
+          name: "s",
+          fullName: "Strange",
+          mass: "95 MeV",
+          charge: "-1/3",
+          color: isDark ? "#84CC16" : "#65A30D",
+          generation: 2,
+        },
+        {
+          name: "t",
+          fullName: "Top",
+          mass: "173 GeV",
+          charge: "+2/3",
+          color: isDark ? "#DC2626" : "#B91C1C",
+          generation: 3,
+        },
+        {
+          name: "b",
+          fullName: "Bottom",
+          mass: "4.18 GeV",
+          charge: "-1/3",
+          color: isDark ? "#16A34A" : "#15803D",
+          generation: 3,
+        },
+      ],
+      leptons: [
+        {
+          name: "e",
+          fullName: "Electron",
+          mass: "0.511 MeV",
+          charge: "-1",
+          color: isDark ? "#3B82F6" : "#2563EB",
+          generation: 1,
+        },
+        {
+          name: "νe",
+          fullName: "Electron neutrino",
+          mass: "< 0.000002 eV",
+          charge: "0",
+          color: isDark ? "#60A5FA" : "#3B82F6",
+          generation: 1,
+        },
+        {
+          name: "μ",
+          fullName: "Muon",
+          mass: "105.7 MeV",
+          charge: "-1",
+          color: isDark ? "#8B5CF6" : "#7C3AED",
+          generation: 2,
+        },
+        {
+          name: "νμ",
+          fullName: "Muon neutrino",
+          mass: "< 0.17 MeV",
+          charge: "0",
+          color: isDark ? "#A78BFA" : "#8B5CF6",
+          generation: 2,
+        },
+        {
+          name: "τ",
+          fullName: "Tau",
+          mass: "1.777 GeV",
+          charge: "-1",
+          color: isDark ? "#EC4899" : "#DB2777",
+          generation: 3,
+        },
+        {
+          name: "ντ",
+          fullName: "Tau neutrino",
+          mass: "< 18 MeV",
+          charge: "0",
+          color: isDark ? "#F472B6" : "#EC4899",
+          generation: 3,
+        },
+      ],
+      bosons: [
+        {
+          name: "γ",
+          fullName: "Photon",
+          mass: "0",
+          charge: "0",
+          color: isDark ? "#FBBF24" : "#F59E0B",
+          spin: "1",
+          generation: 0,
+        },
+        {
+          name: "g",
+          fullName: "Gluon",
+          mass: "0",
+          charge: "0",
+          color: isDark ? "#F59E0B" : "#D97706",
+          spin: "1",
+          generation: 0,
+        },
+        {
+          name: "Z",
+          fullName: "Z boson",
+          mass: "91.2 GeV",
+          charge: "0",
+          color: isDark ? "#A855F7" : "#9333EA",
+          spin: "1",
+          generation: 0,
+        },
+        {
+          name: "W",
+          fullName: "W boson",
+          mass: "80.4 GeV",
+          charge: "±1",
+          color: isDark ? "#EF4444" : "#DC2626",
+          spin: "1",
+          generation: 0,
+        },
+        {
+          name: "H",
+          fullName: "Higgs",
+          mass: "125 GeV",
+          charge: "0",
+          color: isDark ? "#FFD700" : "#FBBF24",
+          spin: "0",
+          generation: 0,
+        },
+      ],
+    }),
+    [isDark]
+  )
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -376,10 +378,10 @@ export function StandardModelVisualization({ isDark }: StandardModelVisualizatio
 
         ctx.fillStyle = isDark ? "rgba(255, 255, 255, 0.8)" : "rgba(0, 0, 0, 0.8)"
         ctx.font = "9px sans-serif"
-        ctx.fillText(`m: ${String(selected.mass)}`, width - 88, height - 38)
-        ctx.fillText(`q: ${String(selected.charge)}`, width - 88, height - 24)
+        ctx.fillText(`m: ${selected.mass}`, width - 88, height - 38)
+        ctx.fillText(`q: ${selected.charge}`, width - 88, height - 24)
         if ("spin" in selected) {
-          ctx.fillText(`spin: ${String(selected.spin)}`, width - 88, height - 10)
+          ctx.fillText(`spin: ${selected.spin}`, width - 88, height - 10)
         }
       }
 
@@ -393,7 +395,7 @@ export function StandardModelVisualization({ isDark }: StandardModelVisualizatio
         for (let i = 0; i < 5; i++) {
           const q1 = particlePositions[i]
           const q2 = particlePositions[i + 1]
-          if (q1 && q2 && i % 2 === 0) {
+          if (i % 2 === 0 && q1 && q2) {
             ctx.beginPath()
             ctx.moveTo(q1.x, q1.y)
             const midX = (q1.x + q2.x) / 2 + Math.sin(time * 3) * 10
@@ -412,8 +414,8 @@ export function StandardModelVisualization({ isDark }: StandardModelVisualizatio
           const angle = time + (i * Math.PI) / 4
           const radius = 40 + Math.sin(time * 2 + i) * 5
           ctx.strokeStyle = isDark
-            ? `rgba(255, 215, 0, ${String(0.3 - i * 0.03)})`
-            : `rgba(251, 191, 36, ${String(0.3 - i * 0.03)})`
+            ? `rgba(255, 215, 0, ${0.3 - i * 0.03})`
+            : `rgba(251, 191, 36, ${0.3 - i * 0.03})`
           ctx.lineWidth = 1
           ctx.beginPath()
           ctx.arc(higgsPos.x, higgsPos.y, radius, angle, angle + 0.3)
@@ -430,6 +432,7 @@ export function StandardModelVisualization({ isDark }: StandardModelVisualizatio
       window.removeEventListener("resize", resize)
       cancelAnimationFrame(animationFrameId)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedParticle, showDecays, isDark])
 
   return (

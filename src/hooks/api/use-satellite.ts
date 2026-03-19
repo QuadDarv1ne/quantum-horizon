@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-
 "use client"
 
 import { useQuery } from "@tanstack/react-query"
@@ -15,7 +12,6 @@ interface SatelliteData {
   visibility: string
   footprint: number
   timestamp: number
-  daynum: number
   solar_lat: number
   solar_lon: number
 }
@@ -28,6 +24,7 @@ interface UseSatelliteOptions {
   gcTime?: number
 }
 
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 export function useSatellite({
   satelliteId = 25544, // ISS
   enabled = true,
@@ -35,16 +32,16 @@ export function useSatellite({
   staleTime = 1000 * 5, // 5 seconds
   gcTime = 1000 * 60 * 5, // 5 minutes
 }: UseSatelliteOptions = {}) {
-  const apiUrl = `https://api.wheretheiss.at/v1/satellites/${satelliteId}`
-
   return useQuery<SatelliteData>({
     queryKey: ["satellite", satelliteId],
     queryFn: async () => {
-      const response = await fetch(apiUrl)
+      const response = await fetch(
+        `https://api.wheretheiss.at/v1/satellites/${String(satelliteId)}`
+      )
       if (!response.ok) {
         throw new Error(`Failed to fetch satellite data: ${response.status}`)
       }
-      return response.json()
+      return response.json() as Promise<SatelliteData>
     },
     enabled,
     refetchInterval,
@@ -63,9 +60,9 @@ export function useMultipleSatellites(
     queryKey: ["satellites", satelliteIds],
     queryFn: async () => {
       const promises = satelliteIds.map((id) =>
-        fetch(`https://api.wheretheiss.at/v1/satellites/${id}`).then((res) => {
-          if (!res.ok) throw new Error(`Failed to fetch satellite ${id}`)
-          return res.json()
+        fetch(`https://api.wheretheiss.at/v1/satellites/${String(id)}`).then((res) => {
+          if (!res.ok) throw new Error(`Failed to fetch satellite ${String(id)}`)
+          return res.json() as Promise<SatelliteData>
         })
       )
 
