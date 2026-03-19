@@ -23,6 +23,8 @@ interface MicroInteractionProps {
     duration?: number
   }
   onClick?: () => void
+  ariaLabel?: string
+  role?: string
 }
 
 /**
@@ -36,6 +38,8 @@ export function MicroInteraction({
   whileTap = { scale: 0.95, y: 0 },
   transition = { type: "spring", stiffness: 400, damping: 17 },
   onClick,
+  ariaLabel,
+  role = "button",
 }: MicroInteractionProps) {
   return (
     <motion.div
@@ -51,6 +55,8 @@ export function MicroInteraction({
       whileInView={{ opacity: 1, y: 0 }}
       initial={{ opacity: 0, y: 10 }}
       viewport={{ once: true }}
+      aria-label={ariaLabel}
+      role={role}
     >
       {children}
     </motion.div>

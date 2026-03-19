@@ -145,11 +145,19 @@ export function PresentationMode({
 /**
  * Quick settings panel for presentations
  */
+interface PresentationSettings {
+  animationSpeed?: number
+  showControls?: boolean
+  isFullscreen?: boolean
+  colorScheme?: string
+  [key: string]: number | boolean | string | undefined
+}
+
 interface QuickSettingsProps {
   isOpen: boolean
   onClose: () => void
-  settings: Record<string, any>
-  onSettingChange: (key: string, value: any) => void
+  settings: PresentationSettings
+  onSettingChange: (key: string, value: number | boolean | string) => void
 }
 
 export function QuickSettingsPanel({

@@ -30,13 +30,22 @@ export async function copyCanvasToClipboard(canvas: HTMLCanvasElement): Promise<
     canvas.toBlob(resolve, "image/png")
   })
 
-  if (!blob) throw new Error("Failed to create blob from canvas")
+  if (!blob) {
+    throw new Error("Failed to create blob from canvas: toBlob returned null")
+  }
 
-  await navigator.clipboard.write([
-    new ClipboardItem({
-      "image/png": blob,
-    }),
-  ])
+  try {
+    await navigator.clipboard.write([
+      new ClipboardItem({
+        "image/png": blob,
+      }),
+    ])
+  } catch {
+    // Fallback для браузеров без поддержки ClipboardItem
+    const dataUrl = canvas.toDataURL("image/png")
+    const text = await new Blob([dataUrl], { type: "text/plain" }).text()
+    await navigator.clipboard.writeText(text)
+  }
 }
 
 /**

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 // Физические формулы и расчёты
 import {
@@ -21,9 +20,9 @@ import {
 const memoCache = new Map<string, number>()
 const MEMO_LIMIT = 1000
 
-function _memoize<T extends (...args: any[]) => number>(
+function _memoize<T extends (...args: Parameters<T>) => number>(
   fn: T,
-  keyFn: (...args: any[]) => string
+  keyFn: (...args: Parameters<T>) => string
 ): T {
   return ((...args: Parameters<T>) => {
     const key = keyFn(...args)

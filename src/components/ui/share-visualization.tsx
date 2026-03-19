@@ -13,10 +13,15 @@ import {
 import { toast } from "@/hooks/use-toast"
 import { cn } from "@/lib/utils"
 
+interface VisualizationParams {
+  viz?: string
+  [key: string]: string | undefined
+}
+
 interface ShareVisualizationProps {
   visualizationId: string
   visualizationName: string
-  parameters?: Record<string, any>
+  parameters?: Record<string, string | number | boolean>
   className?: string
 }
 
@@ -48,14 +53,33 @@ export function ShareVisualization({
 
   const handleCopyLink = async () => {
     try {
-      await navigator.clipboard.writeText(shareUrl)
-      setCopied(true)
-      toast({
-        title: "Link copied!",
-        description: "The shareable link has been copied to your clipboard.",
-        duration: 2000,
-      })
-      setTimeout(() => setCopied(false), 2000)
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(shareUrl)
+        setCopied(true)
+        toast({
+          title: "Link copied!",
+          description: "The shareable link has been copied to your clipboard.",
+          duration: 2000,
+        })
+        setTimeout(() => setCopied(false), 2000)
+      } else {
+        // Fallback для браузеров без clipboard API
+        const textarea = document.createElement("textarea")
+        textarea.value = shareUrl
+        textarea.style.position = "fixed"
+        textarea.style.opacity = "0"
+        document.body.appendChild(textarea)
+        textarea.select()
+        document.execCommand("copy")
+        document.body.removeChild(textarea)
+        setCopied(true)
+        toast({
+          title: "Link copied!",
+          description: "The shareable link has been copied to your clipboard.",
+          duration: 2000,
+        })
+        setTimeout(() => setCopied(false), 2000)
+      }
     } catch (error) {
       toast({
         title: "Failed to copy",
@@ -192,7 +216,7 @@ export function ShareVisualization({
 
 // Hook to read URL parameters on mount
 export function useVisualizationFromURL() {
-  const [params, setParams] = useState<{ viz?: string; [key: string]: any }>({})
+  const [params, setParams] = useState<VisualizationParams>({})
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -200,7 +224,7 @@ export function useVisualizationFromURL() {
       const vizId = searchParams.get("viz")
 
       if (vizId) {
-        const extractedParams: any = { viz: vizId }
+        const extractedParams: VisualizationParams = { viz: vizId }
         searchParams.forEach((value, key) => {
           if (key !== "viz") {
             extractedParams[key] = value
