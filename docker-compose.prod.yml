@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  # PostgreSQL база данных
+  postgres:
+    image: postgres:15-alpine
+    container_name: quantum-horizon-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-quantum}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-quantum_password_secure}
+      POSTGRES_DB: quantum_horizon
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - quantum-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-quantum} -d quantum_horizon"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Приложение Next.js (production)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    container_name: quantum-horizon-app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-quantum}:${POSTGRES_PASSWORD:-quantum_password_secure}@postgres:5432/quantum_horizon?schema=public
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXT_TELEMETRY_DISABLED=1
+    ports:
+      - "${PORT:-3000}:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - quantum-network
+    command: node server.js
+
+  # Nginx reverse proxy (опционально, для HTTPS)
+  nginx:
+    image: nginx:alpine
+    container_name: quantum-horizon-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - app
+    networks:
+      - quantum-network
+    profiles:
+      - with-nginx
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  quantum-network:
+    driver: bridge

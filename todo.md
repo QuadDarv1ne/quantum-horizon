@@ -1,7 +1,7 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-19 (23:00) — проект стабилен
+**Обновлено:** 2026-03-20 (00:30) — деплой настроен
 **Статус:** ✅ dev и main синхронизированы
 **Версия:** 0.3.0 (v1.5.0-stable)
 
@@ -1056,8 +1056,14 @@ src/
     - Build: 6.6s ✅
     - Lint: 0 ошибок ✅
     - Tests: 292/294 passing (99.3%) ✅
-50. [ ] Исправить 2 failing теста в schrodingers-cat.test.tsx
-51. [ ] Настроить Upstash Redis для rate limiting (требует API ключей)
+50. ✅ Исправить 2 failing теста в schrodingers-cat.test.tsx — 2026-03-19 23:00
+51. ✅ Деплой настроен — 2026-03-20 00:30
+    - `.env.local` с безопасным секретом
+    - `docker-compose.prod.yml` для production
+    - `nginx.conf` для reverse proxy
+    - `DEPLOY.md` документация
+    - GitHub Actions workflows обновлены
+52. [ ] Настроить Upstash Redis для rate limiting (требует API ключей)
 
 ### 📋 Следующие задачи
 
@@ -1070,34 +1076,42 @@ src/
 2. [ ] **Middleware → Proxy** — миграция на Next.js 16 proxy architecture
    - src/middleware.ts → src/proxy.ts
    - Сохранить rate limiting для /api/auth/\*
+3. [ ] **GitHub Secrets** — настроить для деплоя
+   - `NEXTAUTH_SECRET`
+   - `NEXTAUTH_URL`
+   - `DATABASE_URL`
 
 **Высокий приоритет:**
 
-3. [x] ~~Исправить 2 failing теста в schrodingers-cat.test.tsx~~ ✅ **ВЫПОЛНЕНО**
+4. [x] ~~Исправить 2 failing теста в schrodingers-cat.test.tsx~~ ✅ **ВЫПОЛНЕНО**
    - accessibility тесты (role="application", aria-live="polite")
-4. [x] ~~TypeScript ошибка в presets.test.ts~~ ✅ **ВЫПОЛНЕНО**
+5. [x] ~~TypeScript ошибка в presets.test.ts~~ ✅ **ВЫПОЛНЕНО**
    - Добавлен экспорт VisualizationType из presets
+6. [x] ~~Деплой документация~~ ✅ **ВЫПОЛНЕНО**
+   - DEPLOY.md создан
+   - docker-compose.prod.yml настроен
+   - nginx.conf создан
 
 **Средний приоритет:**
 
-5. [ ] Обновить eslint-plugin-react-hooks для совместимости с eslint v10
-6. [x] ~~Вынести DATABASE_URL в переменную окружения (src/lib/db.ts)~~ ✅ **ВЫПОЛНЕНО**
-7. [ ] Замерить Lighthouse Performance и Accessibility
-8. [ ] Оптимизировать производительность визуализаций (canvas FPS)
+7. [ ] Обновить eslint-plugin-react-hooks для совместимости с eslint v10
+8. [x] ~~Вынести DATABASE_URL в переменную окружения (src/lib/db.ts)~~ ✅ **ВЫПОЛНЕНО**
+9. [ ] Замерить Lighthouse Performance и Accessibility
+10. [ ] Оптимизировать производительность визуализаций (canvas FPS)
 
 **Низкий приоритет:**
 
-9. [ ] Добавить больше Stories для Storybook
-10. [ ] Bundle size оптимизация (проверить после Lighthouse)
-11. [ ] Протестировать PWA install prompt в production
-12. [ ] Проверить работу Service Worker с кэшированием API
-13. [ ] Настроить Upstash Redis для rate limiting (требует API ключей)
+11. [ ] Добавить больше Stories для Storybook
+12. [ ] Bundle size оптимизация (проверить после Lighthouse)
+13. [ ] Протестировать PWA install prompt в production
+14. [ ] Проверить работу Service Worker с кэшированием API
+15. [ ] Настроить Upstash Redis для rate limiting (требует API ключей)
 
 ---
 
 ## 🔁 Синхронизация
 
-**Последняя синхронизация:** 2026-03-19 23:00 ✅
+**Последняя синхронизация:** 2026-03-20 00:30 ✅
 
 | Ветка  | Статус | Коммиты впереди | Последний коммит                   |
 | ------ | ------ | --------------- | ---------------------------------- |
@@ -1119,6 +1133,15 @@ src/
 - ✅ Build: 4.9s ✅
 - ✅ Lint: 0 ошибок ✅
 - ✅ Tests: 294/294 (100%) ✅
+
+**🔧 Deploy Setup (2026-03-20 00:30):**
+
+- ✅ `.env.local` — безопасный NEXTAUTH_SECRET
+- ✅ `docker-compose.prod.yml` — production конфигурация
+- ✅ `nginx.conf` — reverse proxy
+- ✅ `DEPLOY.md` — документация (350+ строк)
+- ✅ `.github/workflows/deploy.yml` — обновлён workflow
+- ✅ `.github/workflows/ci.yml` — добавлена ветка dev
 
 **Статус:**
 
@@ -1427,13 +1450,52 @@ src/
 - ✅ ~~`src/app/proxy.ts`~~ — удалён (2026-03-18)
 - ✅ ~~`middleware.ts`~~ — корректный файл Next.js (i18n + auth)
 
+### 🔧 Деплой и инфраструктура (2026-03-20 00:30) ✅
+
+**Созданные файлы:**
+
+- ✅ `.env.local` — локальная конфигурация с безопасным `NEXTAUTH_SECRET`
+- ✅ `docker-compose.prod.yml` — production Docker конфигурация (runner stage)
+- ✅ `nginx.conf` — reverse proxy с gzip, rate limiting, security headers
+- ✅ `DEPLOY.md` — полное руководство по деплою (350+ строк)
+
+**Обновлённые файлы:**
+
+- ✅ `.github/workflows/deploy.yml` — добавлены lint, typecheck, тесты, deployment summary
+- ✅ `.github/workflows/ci.yml` — добавлена ветка `dev`, улучшена стабильность
+
+**Настройки безопасности:**
+
+- ✅ `NEXTAUTH_SECRET` сгенерирован (crypto.randomBytes)
+- ✅ `.env.local` в `.gitignore` — секреты не попадут в репозиторий
+- ✅ GitHub Actions secrets требуют настройки: `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `DATABASE_URL`
+
+**Docker конфигурации:**
+
+- ✅ Development: `docker-compose up --build` (app + postgres + pgadmin)
+- ✅ Production: `docker-compose -f docker-compose.prod.yml up -d` (runner stage + nginx опционально)
+
+**GitHub Actions workflow:**
+
+- ✅ Автоматический деплой при push в `main`
+- ✅ Ручной запуск через `workflow_dispatch`
+- ✅ Проверки: lint, typecheck, test, build
+- ✅ Артефакты собираются в `.next/standalone`
+
+**Требуется настроить:**
+
+- [ ] GitHub Secrets: `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `DATABASE_URL`
+- [ ] Production домен и HTTPS сертификат
+- [ ] Production база данных (PostgreSQL)
+- [ ] Мониторинг и логирование (PM2 или systemd)
+
 ### Хорошие практики (уже есть)
 
 - ✅ Zustand store с persist middleware
 - ✅ Хук `useCanvasAnimation` для общей логики
 - ✅ Физические константы вынесены в `constants.ts`
 - ✅ CI/CD pipeline настроен
-- ✅ Docker поддержка
+- ✅ Docker поддержка (dev + prod)
 - ✅ 292 unit-тестов passing
 - ✅ 24 E2E тестов passing
 - ✅ Lazy loading для визуализаций
@@ -1457,6 +1519,9 @@ src/
 - ✅ Tree-shaking для recharts
 - ✅ React.memo() для 5 секций
 - ✅ Canvas performance (shadowBlur → gradient)
+- ✅ Деплой документация (DEPLOY.md)
+- ✅ Production Docker compose
+- ✅ Nginx reverse proxy конфигурация
 
 ### Проблемные места
 
