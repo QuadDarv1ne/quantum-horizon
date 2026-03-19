@@ -1,9 +1,88 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-19 (18:00) — перформанс и безопасность, build/lint/test пройдены
+**Обновлено:** 2026-03-19 (19:00) — аудит проекта, выявлены новые задачи
 **Статус:** ✅ dev и main синхронизированы
 **Версия:** 0.3.0 (v1.5.0-stable)
+
+---
+
+## 🔍 Аудит проекта (2026-03-19 19:00)
+
+### ✅ Сильные стороны проекта
+
+**Архитектура:**
+
+- ✅ 93 компонента визуализаций с чётким разделением по областям (quantum, relativity, cosmos, thermodynamics, advanced)
+- ✅ Базовые переиспользуемые компоненты (VisualizationCanvas, VisualizationControls, VisualizationSelector)
+- ✅ Zustand для глобального состояния + React Query для кэширования API
+- ✅ DRY принцип соблюдается
+
+**Accessibility (a11y):**
+
+- ✅ ARIA-атрибуты на всех canvas-визуализациях
+- ✅ Keyboard navigation (Space, R, 1-5, стрелки)
+- ✅ Screen reader поддержка через aria-live регионы
+
+**PWA:**
+
+- ✅ Service Worker с кэшированием статики и API
+- ✅ Manifest для установки приложения
+- ✅ Offline страница
+
+**Производительность:**
+
+- ✅ Security headers (CSP, X-Frame-Options, X-XSS-Protection)
+- ✅ Сжатие и оптимизация изображений
+- ✅ Lazy loading для тяжёлых компонентов
+
+### 🔴 Выявленные проблемы (Аудит 2026-03-19)
+
+**Критические:**
+
+- 🔴 **15 уязвимостей npm** — 6 low, 5 moderate, 4 high
+  - @hono/node-server, hono — XSS и обход авторизации (транзитивные Prisma)
+  - elliptic — рискованная криптографическая реализация
+  - lodash 4.17.21 — Prototype Pollution в _.unset и _.omit
+  - Решение: `npm audit fix`, обновить Prisma
+
+**Высокий приоритет:**
+
+- 🔴 **Middleware deprecated** — Next.js 16 рекомендует proxy
+  - `src/middleware.ts` — rate limiting для `/api/auth/*`
+  - Требуется миграция на новую архитектуру proxy
+
+- 🔴 **2 проваленных теста** — schrodingers-cat.test.tsx
+  - accessibility тесты не проходят (role="application", aria-live="polite")
+  - Требуется обновление тестов или реализации
+
+**Средний приоритет:**
+
+- 🟠 **TypeScript ошибка** — src/lib/presets.test.ts
+  - VisualizationType импортируется но не экспортируется из presets
+  - Требуется добавить экспорт типа
+
+- 🟠 **Peer dependency конфликт** — eslint-plugin-react-hooks и eslint v10
+  - Требует использования --legacy-peer-deps
+  - Решение: обновить eslint-plugin-react-hooks
+
+**Низкий приоритет:**
+
+- 🟡 **Захардкоженный путь БД** — src/lib/db.ts
+  - "file:./prisma/dev.db" вместо process.env.DATABASE_URL
+  - Требуется вынести в переменную окружения
+
+- 🟡 **Eslint-disable комментарии** — указывают на проблемы типобезопасности
+  - @typescript-eslint/no-unsafe-assignment
+  - @typescript-eslint/no-deprecated
+
+**Результаты аудита:**
+
+- ✅ Build: успешен (6.6s)
+- ✅ Lint: 0 ошибок
+- ✅ Tests: 292/294 passing (99.3%)
+- ⚠️ TypeScript: 1 ошибка (presets.test.ts)
+- ⚠️ npm audit: 15 уязвимостей (4 high)
 
 ---
 
@@ -886,26 +965,49 @@ src/
 
 ### 📋 Следующие задачи
 
-1. [ ] Замерить Lighthouse Performance и Accessibility
-2. [ ] Оптимизировать производительность визуализаций (canvas FPS)
-3. [ ] Добавить больше Stories для Storybook
-4. [ ] Bundle size оптимизация (проверить после Lighthouse)
-5. [ ] Протестировать PWA install prompt в production
-6. [ ] Проверить работу Service Worker с кэшированием API
-7. [ ] Исправить 2 failing теста в schrodingers-cat.test.tsx
-8. [ ] Настроить Upstash Redis для rate limiting (требует API ключей)
+**Критический приоритет:**
+
+1. [ ] **npm audit fix** — исправить 15 уязвимостей (4 high)
+   - Обновить @hono/node-server, hono (XSS уязвимости)
+   - Обновить elliptic (криптографические проблемы)
+   - Обновить lodash (Prototype Pollution)
+2. [ ] **Middleware → Proxy** — миграция на Next.js 16 proxy architecture
+   - src/middleware.ts → src/proxy.ts
+   - Сохранить rate limiting для /api/auth/\*
+
+**Высокий приоритет:**
+
+3. [ ] Исправить 2 failing теста в schrodingers-cat.test.tsx
+   - accessibility тесты (role="application", aria-live="polite")
+4. [ ] TypeScript ошибка в presets.test.ts
+   - Добавить экспорт VisualizationType из presets
+
+**Средний приоритет:**
+
+5. [ ] Обновить eslint-plugin-react-hooks для совместимости с eslint v10
+6. [ ] Вынести DATABASE_URL в переменную окружения (src/lib/db.ts)
+7. [ ] Замерить Lighthouse Performance и Accessibility
+8. [ ] Оптимизировать производительность визуализаций (canvas FPS)
+
+**Низкий приоритет:**
+
+9. [ ] Добавить больше Stories для Storybook
+10. [ ] Bundle size оптимизация (проверить после Lighthouse)
+11. [ ] Протестировать PWA install prompt в production
+12. [ ] Проверить работу Service Worker с кэшированием API
+13. [ ] Настроить Upstash Redis для rate limiting (требует API ключей)
 
 ---
 
 ## 🔁 Синхронизация
 
-**Последняя синхронизация:** 2026-03-19 18:00 ✅
+**Последняя синхронизация:** 2026-03-19 19:00 ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                                            |
-| ------ | ------ | --------------- | ----------------------------------------------------------- |
-| dev    | ✅     | 0               | a9b8315 docs: актуализирована синхронизация (v1.5.0-stable) |
-| main   | ✅     | 0               | ede7a2c Merge branch 'dev'                                  |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                                   |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                                |
+| ------ | ------ | --------------- | ----------------------------------------------- |
+| dev    | ✅     | 0               | b2dcada docs: обновлены метрики (v1.5.0-stable) |
+| main   | ✅     | 0               | 6c9c853 Merge branch 'dev'                      |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                       |
 
 **Изменения отправлены:**
 
@@ -924,8 +1026,8 @@ src/
 
 **Статус:**
 
-- ✅ Commit в dev: a9b8315
-- ✅ Merge dev → main: ede7a2c
+- ✅ Commit в dev: b2dcada
+- ✅ Merge dev → main: 6c9c853
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
@@ -934,10 +1036,10 @@ src/
 
 ### ✅ Выполненная работа (2026-03-11 — 2026-03-19)
 
-**Текущее состояние (2026-03-19 18:00):**
+**Текущее состояние (2026-03-19 19:00):**
 
 - ✅ Сборка: проходит успешно за 6.6s
-- ✅ TypeScript: 0 ошибок
+- ✅ TypeScript: 1 ошибка (presets.test.ts)
 - ✅ ESLint: 0 ошибок
 - ✅ 24 E2E тестов passing
 - ✅ 292 unit-тестов passing (99.3%)
@@ -950,13 +1052,15 @@ src/
 - ✅ PWA: Install prompt компонент
 - ✅ UX/UI: 7 новых компонентов (1803 строки)
 - ✅ PostCSS: добавлен postcss.config.js для Tailwind v4
+- ⚠️ npm audit: 15 уязвимостей (4 high, 5 moderate, 6 low)
 
-**Последние изменения (2026-03-19 18:00) — Обновление todo.md:**
+**Последние изменения (2026-03-19 19:00) — Аудит проекта:**
 
-- ✅ Обновлены метрики тестов: 292/294 passing (99.3%)
-- ✅ Обновлены метрики сборки: 6.6s (было 19.5s)
-- ✅ Обновлён последний коммит: a9b8315
-- ✅ Исправлено количество failing тестов: 2 вместо 7
+- ✅ Проведён полный аудит проекта
+- ✅ Выявлены сильные стороны: архитектура, a11y, PWA, производительность
+- ✅ Выявлены проблемы: уязвимости npm, deprecated middleware, тесты
+- ✅ Создан раздел "Аудит проекта" в todo.md
+- ✅ Обновлены приоритеты задач
 - ✅ 1 коммит: dev + main синхронизированы
 
 **Последние изменения (2026-03-18) — Инфраструктура:**
