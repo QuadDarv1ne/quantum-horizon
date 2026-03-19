@@ -861,7 +861,7 @@ src/
 30. ✅ page.tsx сокращён с 516 до 161 строк (рефакторинг на секции)
 31. ✅ Созданы компоненты секций: Quantum, Relativity, Cosmos, Thermodynamics, Advanced
 32. ✅ Написано 15 тестов для компонентов секций
-33. ✅ 238 unit-тестов passing
+33. ✅ 292 unit-тестов passing
 34. ✅ 93 компонента визуализаций (включая stories)
 35. ✅ Исправлены TypeScript/ESLint ошибки (2026-03-17 21:45)
 36. ✅ 0 ошибок lint, 0 ошибок tsc
@@ -887,69 +887,40 @@ src/
 4. [ ] Bundle size оптимизация (проверить после Lighthouse)
 5. [ ] Протестировать PWA install prompt в production
 6. [ ] Проверить работу Service Worker с кэшированием API
+7. [ ] Исправить 7 failing тестов в schrodingers-cat.test.tsx
+8. [ ] Настроить Upstash Redis для rate limiting (требует API ключей)
 
 ---
 
 ## 🔁 Синхронизация
 
-**Последняя синхронизация:** 2026-03-17 22:15
+**Последняя синхронизация:** 2026-03-19 17:30 ✅
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                      |
-| ------ | ------ | --------------- | ------------------------------------- |
-| dev    | ✅     | 0               | docs: финальная синхронизация (22:15) |
-| main   | ✅     | 0               | 83457ce Merge branch 'dev' (22:15)    |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки             |
-
-**Проверки:**
-
-- ✅ Тесты: 238 passed (19 files)
-- ✅ Lint: 0 ошибок
-- ✅ tsc: 0 ошибок
-- ✅ Сборка: успешна
-- ✅ Анимации: все 42 визуализации работают
-- ✅ Консоль: без ошибок (MISSING_MESSAGE исправлены)
-
-**Статус анимаций:**
-
-- ✅ `useCanvasAnimation` хук — работает (requestAnimationFrame + FPS limit)
-- ✅ `VisualizationCanvas` — базовый компонент для всех визуализаций
-- ✅ 42 компонента используют canvas с анимацией
-- ✅ HiDPI/Retina поддержка
-- ✅ Pause when hidden (IntersectionObserver)
-- ✅ Reduced motion поддержка
-
----
-
-## 🔁 Синхронизация
-
-**Последняя синхронизация:** 2026-03-19 17:00 ✅
-
-| Ветка  | Статус | Коммиты впереди | Последний коммит                         |
-| ------ | ------ | --------------- | ---------------------------------------- |
-| dev    | ✅     | 0               | a3babb1 fix: исправлены ошибки типизации |
-| main   | ✅     | 0               | af6b8a4 Merge branch 'dev'               |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                               |
+| ------ | ------ | --------------- | ---------------------------------------------- |
+| dev    | ✅     | 0               | 384a901 docs: обновлён todo.md (v1.5.0-stable) |
+| main   | ✅     | 0               | ede7a2c Merge branch 'dev'                     |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки                      |
 
 **Изменения отправлены:**
 
-**Performance & Security Release (2026-03-19 17:00):**
+**v1.5.0-stable Release (2026-03-19):**
 
-- ✅ @upstash/ratelimit — rate limiting для /api/auth/\*
-- ✅ Next.js 16.2.0 — CSRF уязвимости исправлены
-- ✅ CREDENTIALS.md — удалён, добавлен в .gitignore
-- ✅ Tree-shaking — recharts импорты оптимизированы
-- ✅ React.memo() — 5 секций мемоизированы
-- ✅ CSP headers — unsafe-inline/eval удалены
-- ✅ Canvas performance — shadowBlur → radial gradient
-- ✅ TypeScript — исправлены ошибки типизации
-- ✅ Build: успешен (19.5s)
-- ✅ Lint: 0 ошибок
-- ✅ Tests: 292/299 passing (98.7%)
+- ✅ Rate limiting (@upstash/ratelimit)
+- ✅ Next.js 16.2.0 (CSRF fix)
+- ✅ CREDENTIALS.md → .gitignore
+- ✅ Tree-shaking (recharts)
+- ✅ React.memo() (5 секций)
+- ✅ CSP headers (wasm-unsafe-eval)
+- ✅ Canvas performance (gradient вместо shadowBlur)
+- ✅ Build: 19.5s ✅
+- ✅ Lint: 0 ошибок ✅
+- ✅ Tests: 292/299 (98.7%) ✅
 
 **Статус:**
 
-- ✅ Commit в dev: a3babb1
-- ✅ Merge dev → main: af6b8a4
+- ✅ Commit в dev: 384a901
+- ✅ Merge dev → main: ede7a2c
 - ✅ Push в origin: dev + main синхронизированы
 
 ---
@@ -964,7 +935,7 @@ src/
 - ✅ TypeScript: 0 ошибок
 - ✅ ESLint: 0 ошибок
 - ✅ 24 E2E тестов passing
-- ✅ 294 unit-тестов passing (21 файл)
+- ✅ 292 unit-тестов passing (21 файл)
 - ✅ 43+ Storybook stories
 - ✅ 50 физических формул
 - ✅ 93 компонента визуализаций (включая stories)
