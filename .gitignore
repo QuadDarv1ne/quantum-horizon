@@ -8,6 +8,11 @@
 .env.*.example
 .env.render
 
+# ==================== SECURITY ====================
+CREDENTIALS.md
+*.pem
+*.key
+
 # ==================== QWEN CONTEXT ====================
 .qwen/
 
