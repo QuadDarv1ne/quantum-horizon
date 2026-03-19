@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { NextRequest, NextResponse } from "next/server"
 import { Ratelimit } from "@upstash/ratelimit"
 import { Redis } from "@upstash/redis"
@@ -32,7 +30,7 @@ export async function middleware(request: NextRequest) {
 
   // Rate limiting для API аутентификации
   if (pathname.startsWith("/api/auth/")) {
-    const ip = request.ip ?? "127.0.0.1"
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0] ?? "127.0.0.1"
 
     // Лимит для login (signin)
     if (pathname.includes("nextauth")) {
