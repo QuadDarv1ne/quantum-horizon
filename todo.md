@@ -126,6 +126,7 @@
    - `nodemailer` v8 — breaking change для next-auth v4
    - Решение: обновить next-auth до v5 (breaking changes)
    - **Срок:** Q3 2026
+   - **Статус:** Принято решение отложить (не критично для development)
 
 5. ✅ **Storybook уязвимости** — решено 2026-03-29
    - ✅ Обновлён до v10.3.3
