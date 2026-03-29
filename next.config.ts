@@ -40,9 +40,9 @@ const nextConfig: NextConfig = {
             value: [
               "default-src 'self'",
               "script-src 'self' 'wasm-unsafe-eval'",
-              "style-src 'self'",
+              "style-src 'self' 'unsafe-inline'",
               // Images: self + конкретные API домены
-              "img-src 'self' data: blob: https://images-assets.nasa.gov https://where-theiss.at https://api.wheretheiss.at",
+              "img-src 'self' data: blob: https://images-assets.nasa.gov https://where-theiss.at https://api.wheretheiss.at https://*.basemaps.cartocdn.com",
               "font-src 'self' data:",
               // Connect: self + конкретные API домены
               "connect-src 'self' https://api.nasa.gov https://where-theiss.at https://api.wheretheiss.at https://api.open-notify.org",

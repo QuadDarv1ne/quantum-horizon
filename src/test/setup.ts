@@ -1,37 +1,17 @@
-// Vitest setup file
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-deprecated */
-
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import "@testing-library/jest-dom/vitest"
-import { afterEach, vi } from "vitest"
-import { cleanup } from "@testing-library/react"
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-dynamic-delete */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+// Vitest setup file
 
-// Mock next-intl
-vi.mock("next-intl", () => ({
-  useTranslations: () => {
-    // Return a function that returns the key for any translation call
-    const translate = (key: string) => key
-    return translate
-  },
-  useLocale: () => "ru",
-  IntlProvider: ({ children }: { children: React.ReactNode }) => children,
-}))
+import { vi } from "vitest"
+import "@testing-library/jest-dom/vitest"
 
 // Polyfill for ResizeObserver
 class ResizeObserverPolyfill {
-  observe() {
-    // Polyfill for testing
-  }
-
-  unobserve() {
-    // Polyfill for testing
-  }
-
-  disconnect() {
-    // Polyfill for testing
-  }
+  observe = vi.fn()
+  unobserve = vi.fn()
+  disconnect = vi.fn()
 }
 
 global.ResizeObserver = ResizeObserverPolyfill
@@ -98,132 +78,52 @@ const canvasContextMock = {
 }
 
 class HTMLCanvasElementMock extends HTMLElement {
-  getContext(contextType: string) {
-    if (contextType === "2d") {
-      return canvasContextMock
-    }
-    return null
-  }
-
-  toDataURL() {
-    return "data:image/png;base64,"
-  }
-
-  get width() {
-    return 800
-  }
-
-  set width(_value: number) {
-    // Empty setter for compatibility
-  }
-
-  get height() {
-    return 600
-  }
-
-  set height(_value: number) {
-    // Empty setter for compatibility
-  }
-
-  getBoundingClientRect() {
-    return {
-      width: 800,
-      height: 600,
-      top: 0,
-      left: 0,
-      right: 800,
-      bottom: 600,
-      x: 0,
-      y: 0,
-      toJSON: vi.fn(),
-    }
-  }
+  getContext = vi.fn().mockReturnValue(canvasContextMock)
+  toDataURL = vi.fn().mockReturnValue("data:image/png;base64,")
+  toBlob = vi.fn()
+  width = 0
+  height = 0
 }
 
-// Register the custom element
-if (typeof customElements !== "undefined" && !customElements.get("canvas-mock")) {
-  customElements.define("canvas-mock", HTMLCanvasElementMock)
+// @ts-expect-error - Mock for testing
+global.HTMLCanvasElement = HTMLCanvasElementMock
+
+// Mock requestAnimationFrame
+global.requestAnimationFrame = vi.fn((callback: FrameRequestCallback) => setTimeout(() => { callback(0) }, 0)) as unknown as typeof requestAnimationFrame
+global.cancelAnimationFrame = vi.fn()
+
+// Mock IntersectionObserver
+class IntersectionObserverMock {
+  observe = vi.fn()
+  unobserve = vi.fn()
+  disconnect = vi.fn()
 }
 
-// Override createElement to return canvas mock for canvas elements
+global.IntersectionObserver = IntersectionObserverMock as unknown as typeof IntersectionObserver
 
-const originalCreateElement = document.createElement.bind(document)
-
-document.createElement = function (tagName: string, options?: ElementCreationOptions) {
-  if (tagName.toLowerCase() === "canvas") {
-    return new HTMLCanvasElementMock()
-  }
-
-  return originalCreateElement(tagName, options)
-} as typeof document.createElement
-
-// Polyfill for matchMedia
-Object.defineProperty(global, "matchMedia", {
-  writable: true,
-  value: vi.fn().mockImplementation((query) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: vi.fn(),
-    removeListener: vi.fn(),
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-  })),
-})
-
-// Polyfill for IntersectionObserver
-class IntersectionObserverPolyfill {
-  observe() {
-    // Polyfill for testing
-  }
-
-  unobserve() {
-    // Polyfill for testing
-  }
-
-  disconnect() {
-    // Polyfill for testing
-  }
-}
-
-global.IntersectionObserver = IntersectionObserverPolyfill as unknown as typeof IntersectionObserver
-
-// Polyfill for localStorage
-
-const localStorageMock = {
+// Mock localStorage
+const localStorageMock: Storage = {
   store: {} as Record<string, string>,
+  getItem(key) {
+    return this.store[key] ?? null
+  },
+  setItem(key, value) {
+    this.store[key] = value
+  },
+  removeItem(key) {
+    delete this.store[key]
+  },
   clear() {
-    localStorageMock.store = {}
-  },
-  getItem(key: string): string | null {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    return localStorageMock.store[key] || null
-  },
-  setItem(key: string, value: string) {
-    localStorageMock.store[key] = value
-  },
-  removeItem(key: string) {
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    delete localStorageMock.store[key]
+    this.store = {}
   },
   get length() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    return Object.keys(localStorageMock.store).length
+    return Object.keys(this.store).length
   },
-  key(index: number) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    return Object.keys(localStorageMock.store)[index] || null
+  key(index) {
+    return Object.keys(this.store)[index] ?? null
   },
-} as unknown as Storage
+}
 
 Object.defineProperty(global, "localStorage", {
   value: localStorageMock,
-})
-
-// Cleanup after each test
-afterEach(() => {
-  cleanup()
-  localStorageMock.clear()
-  vi.clearAllMocks()
 })

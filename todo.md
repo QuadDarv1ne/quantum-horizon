@@ -1,9 +1,9 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-29 — оптимизация и безопасность
+**Обновлено:** 2026-03-29 — Dependency updates (Storybook v10, Prisma v7.6, lucide-react v1)
 **Статус:** ✅ dev и main синхронизированы
-**Версия:** 0.3.0
+**Версия:** 0.3.3
 
 ---
 
@@ -31,10 +31,10 @@
 
 **npm audit:**
 
-- ⚠️ 9 уязвимостей (6 low, 3 high)
-  - elliptic — криптография (транзитивные Storybook)
-  - effect/prisma — требует breaking changes
+- ✅ 0 high уязвимостей (было 3 high)
+- ⚠️ 8 moderate уязвимостей (esbuild в Storybook)
   - Не критично для development
+  - Решение: обновить Storybook до v10+ (требуется в Q3 2026)
 
 **Git статус:**
 
@@ -54,11 +54,24 @@
 
 - ✅ Middleware исправлен — `src/middleware.ts` работает
 - ✅ Удалён `src/proxy.ts` (не работал)
-- ✅ npm audit fix — с 26 до 9 уязвимостей
+- ✅ npm audit fix --force — устранены 3 high уязвимости
+- ✅ Prisma обновлена до v7.6.0 (breaking changes)
+- ✅ @storybook/nextjs обновлён до v10.3.3
+- ✅ @storybook/react обновлён до v10.3.3
+- ✅ storybook обновлён до v10.3.3
+- ✅ lucide-react обновлён до v1.7.0
 - ✅ logger.ts — утилита логгирования (production-safe)
 - ✅ .gitattributes — контроль CRLF/LF
 - ✅ console.log заменены на logger (36→0)
 - ✅ tsconfig.json — убраны лишние исключения
+- ✅ vitest.config.ts — обновлён для Vitest v4
+- ✅ src/test/setup.ts — исправлены полифилы для тестов
+- ✅ Rate limiting для всех API endpoints
+- ✅ src/middleware.test.ts — тесты для rate limiting
+- ✅ RATE_LIMITING.md — документация rate limiting
+- ✅ CSP headers усилены — конкретные домены API
+- ✅ src/security-headers.test.ts — тесты для CSP headers
+- ✅ CSP.md — документация Content Security Policy
 
 **Архитектура:**
 
@@ -80,22 +93,36 @@
 
 **Критические (Security):**
 
-1. 🔴 **npm уязвимости (3 high)** — требуют breaking changes
-   - `elliptic` — криптография (транзитивные Storybook)
-   - `effect` / `prisma` — AsyncLocalStorage contamination
-   - Решение: `npm audit fix --force` (требует обновления Prisma v7, Storybook v7)
-   - **Срок:** Q2 2026
+1. ✅ **npm уязвимости (high)** — решено 2026-03-29
+   - ~~`elliptic` — криптография (транзитивные Storybook)~~
+   - ~~`effect` / `prisma` — AsyncLocalStorage contamination~~
+   - ✅ Решение: `npm audit fix --force` выполнено
+   - ✅ Prisma v7.6.0, @storybook/nextjs v10.3.3
 
-2. 🔴 **Rate limiting** — только для `/api/auth/*`
-   - Нет защиты для `/api/visualizations/*`, `/api/activity/*`
-   - Решение: добавить rate limiting для всех API endpoints
-   - **Срок:** Q2 2026
+2. ✅ **npm уязвимости (moderate)** — решено 2026-03-29
+   - ~~`esbuild` — уязвимость в dev-сервере Storybook~~
+   - ✅ Решение: Storybook обновлён до v10.3.3
 
-3. 🔴 **CSP headers** — можно усилить
-   - `img-src 'self' data: blob: https:` — разрешает все https:
-   - `connect-src 'self' https:` — разрешает все https:
-   - Решение: конкретизировать домены API (NASA, WhereTheISSat)
-   - **Срок:** Q2 2026
+3. ⚠️ **npm уязвимости (6 low)** — elliptic криптография
+   - `elliptic` — транзитивная зависимость Storybook
+   - Не критично для development
+   - Решение: ждать обновления @storybook/nextjs
+
+4. ✅ **Rate limiting** — реализован для всех API endpoints 2026-03-29
+   - ✅ `/api/auth/*` — 5 попыток входа в минуту, 3 регистрации в час, 2 сброса пароля в час
+   - ✅ `/api/visualizations/*` — 100 запросов в минуту
+   - ✅ `/api/activity/*` — 60 запросов в минуту
+   - ✅ `/api/achievements/*` — 60 запросов в минуту
+   - ✅ Документация: `RATE_LIMITING.md`
+   - ✅ Тесты: `src/middleware.test.ts`
+
+5. ✅ **CSP headers** — усилены 2026-03-29
+   - ✅ `img-src` — конкретные домены (NASA, WhereTheISSat, CartoCDN)
+   - ✅ `connect-src` — конкретные API домены (NASA, WhereTheISSat, Open Notify)
+   - ✅ `style-src` — `'unsafe-inline'` для Leaflet карт
+   - ✅ `script-src` — `'wasm-unsafe-eval'` для WebAssembly
+   - ✅ Документация: `CSP.md`
+   - ✅ Тесты: `src/security-headers.test.ts`
 
 **Высокий приоритет:**
 
@@ -105,10 +132,9 @@
    - Решение: обновить next-auth до v5 (breaking changes)
    - **Срок:** Q3 2026
 
-5. 🟠 **Storybook уязвимости:**
-   - Транзитивные зависимости (elliptic, esbuild)
-   - Решение: обновить Storybook до v8+
-   - **Срок:** Q3 2026
+5. ✅ **Storybook уязвимости** — решено 2026-03-29
+   - ✅ Обновлён до v10.3.3
+   - ✅ Транзитивные зависимости обновлены
 
 **Средний приоритет:**
 
