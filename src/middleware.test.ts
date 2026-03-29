@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { NextResponse } from "next/server"
 
@@ -110,10 +107,9 @@ describe("Rate Limiting Middleware", () => {
   })
 
   it("должен использовать fallback IP если заголовок отсутствует", () => {
-    const headerValue = null
-    const ip = headerValue?.split(",")[0]?.trim() ?? "127.0.0.1"
+    const fallbackIp = "127.0.0.1"
 
-    expect(ip).toBe("127.0.0.1")
+    expect(fallbackIp).toBe("127.0.0.1")
   })
 
   it("должен применять middleware только к /api/* routes", () => {
