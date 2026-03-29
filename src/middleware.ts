@@ -70,12 +70,7 @@ const rateLimiters: Record<string, RateLimitConfig> = {
 /**
  * Обработка rate limit exceeded
  */
-function rateLimitResponse(
-  message: string,
-  limit: number,
-  remaining: number,
-  reset: number
-) {
+function rateLimitResponse(message: string, limit: number, remaining: number, reset: number) {
   return NextResponse.json(
     {
       error: message,
@@ -96,10 +91,7 @@ function rateLimitResponse(
 /**
  * Проверка rate limit
  */
-async function checkRateLimit(
-  ip: string,
-  config: RateLimitConfig
-): Promise<NextResponse | null> {
+async function checkRateLimit(ip: string, config: RateLimitConfig): Promise<NextResponse | null> {
   if (!config.limiter) return null
 
   const { success, limit, reset, remaining } = await config.limiter.limit(ip)

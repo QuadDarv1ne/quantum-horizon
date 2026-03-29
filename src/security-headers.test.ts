@@ -5,9 +5,11 @@ describe("CSP Headers Configuration", () => {
     defaultSrc: "'self'",
     scriptSrc: "'self' 'wasm-unsafe-eval'",
     styleSrc: "'self' 'unsafe-inline'",
-    imgSrc: "'self' data: blob: https://images-assets.nasa.gov https://where-theiss.at https://api.wheretheiss.at https://*.basemaps.cartocdn.com",
+    imgSrc:
+      "'self' data: blob: https://images-assets.nasa.gov https://where-theiss.at https://api.wheretheiss.at https://*.basemaps.cartocdn.com",
     fontSrc: "'self' data:",
-    connectSrc: "'self' https://api.nasa.gov https://where-theiss.at https://api.wheretheiss.at https://api.open-notify.org",
+    connectSrc:
+      "'self' https://api.nasa.gov https://where-theiss.at https://api.wheretheiss.at https://api.open-notify.org",
     frameAncestors: "'none'",
     baseUri: "'self'",
     formAction: "'self'",
@@ -112,10 +114,7 @@ describe("CSP Headers Configuration", () => {
   })
 
   it("должен разрешать NASA API endpoints", () => {
-    const nasaDomains = [
-      "https://api.nasa.gov",
-      "https://images-assets.nasa.gov",
-    ]
+    const nasaDomains = ["https://api.nasa.gov", "https://images-assets.nasa.gov"]
 
     nasaDomains.forEach((domain) => {
       expect(cspConfig.imgSrc.includes(domain) || cspConfig.connectSrc.includes(domain)).toBe(true)
@@ -123,10 +122,7 @@ describe("CSP Headers Configuration", () => {
   })
 
   it("должен разрешать WhereTheISSat API endpoints", () => {
-    const whereTheIssatDomains = [
-      "https://where-theiss.at",
-      "https://api.wheretheiss.at",
-    ]
+    const whereTheIssatDomains = ["https://where-theiss.at", "https://api.wheretheiss.at"]
 
     whereTheIssatDomains.forEach((domain) => {
       expect(cspConfig.imgSrc.includes(domain) || cspConfig.connectSrc.includes(domain)).toBe(true)

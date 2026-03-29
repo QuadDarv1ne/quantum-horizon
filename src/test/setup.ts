@@ -89,7 +89,11 @@ class HTMLCanvasElementMock extends HTMLElement {
 global.HTMLCanvasElement = HTMLCanvasElementMock
 
 // Mock requestAnimationFrame
-global.requestAnimationFrame = vi.fn((callback: FrameRequestCallback) => setTimeout(() => { callback(0) }, 0)) as unknown as typeof requestAnimationFrame
+global.requestAnimationFrame = vi.fn((callback: FrameRequestCallback) =>
+  setTimeout(() => {
+    callback(0)
+  }, 0)
+) as unknown as typeof requestAnimationFrame
 global.cancelAnimationFrame = vi.fn()
 
 // Mock IntersectionObserver
