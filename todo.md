@@ -69,6 +69,10 @@
 - ✅ src/middleware.test.ts — тесты для rate limiting
 - ✅ CSP headers усилены — конкретные домены API
 - ✅ src/security-headers.test.ts — тесты для CSP headers
+- ✅ Удалена неиспользуемая зависимость @reactuses/core
+- ✅ Обновлены зависимости (next, react-query, eslint)
+- ✅ Улучшена архитектура middleware (DRY)
+- ✅ Исправлены иконки Twitter/Facebook/Linkedin (SVG)
 
 **Архитектура:**
 
