@@ -912,6 +912,38 @@ updates:
 - `csp-evaluator` — Google CSP анализ
 - OWASP ZAP — security scanning
 
+#### 4.6 GitHub Security Advisories
+
+**Задачи:**
+
+- [ ] Настроить Private vulnerability reporting
+- [ ] Создать шаблон для отчётов об уязвимостях
+- [ ] Настроить уведомления о новых advisories
+
+**Процесс (из SECURITY.md):**
+
+1. Получение отчёта → 24-48 часов на подтверждение
+2. Анализ → 3-5 дней
+3. План исправления → 7-14 дней
+4. Выпуск патча → 14-30 дней
+
+#### 4.7 Dependabot Security Updates
+
+**Настроить в `.github/dependabot.yml`:**
+
+- [ ] Security updates only (не все обновления)
+- [ ] Weekly schedule (понедельник 09:00 UTC)
+- [ ] Max 10 open PRs
+- [ ] Auto-merge для patch версий
+
+#### 4.8 Hall of Fame
+
+**Задачи:**
+
+- [ ] Создать секцию в SECURITY.md для благодарностей
+- [ ] Добавить критерии для Hall of Fame
+- [ ] Настроить упоминание в CHANGELOG при исправлении уязвимостей
+
 ---
 
 ## 📋 План улучшений
