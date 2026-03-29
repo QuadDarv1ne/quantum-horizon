@@ -41,9 +41,11 @@ const nextConfig: NextConfig = {
               "default-src 'self'",
               "script-src 'self' 'wasm-unsafe-eval'",
               "style-src 'self'",
-              "img-src 'self' data: blob: https:",
+              // Images: self + конкретные API домены
+              "img-src 'self' data: blob: https://images-assets.nasa.gov https://where-theiss.at https://api.wheretheiss.at",
               "font-src 'self' data:",
-              "connect-src 'self' https:",
+              // Connect: self + конкретные API домены
+              "connect-src 'self' https://api.nasa.gov https://where-theiss.at https://api.wheretheiss.at https://api.open-notify.org",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",
