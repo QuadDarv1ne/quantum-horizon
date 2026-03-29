@@ -67,10 +67,8 @@
 - ✅ src/test/setup.ts — исправлены полифилы для тестов
 - ✅ Rate limiting для всех API endpoints
 - ✅ src/middleware.test.ts — тесты для rate limiting
-- ✅ RATE_LIMITING.md — документация rate limiting
 - ✅ CSP headers усилены — конкретные домены API
 - ✅ src/security-headers.test.ts — тесты для CSP headers
-- ✅ CSP.md — документация Content Security Policy
 
 **Архитектура:**
 
@@ -112,7 +110,6 @@
    - ✅ `/api/visualizations/*` — 100 запросов в минуту
    - ✅ `/api/activity/*` — 60 запросов в минуту
    - ✅ `/api/achievements/*` — 60 запросов в минуту
-   - ✅ Документация: `RATE_LIMITING.md`
    - ✅ Тесты: `src/middleware.test.ts`
 
 5. ✅ **CSP headers** — усилены 2026-03-29
@@ -120,7 +117,6 @@
    - ✅ `connect-src` — конкретные API домены (NASA, WhereTheISSat, Open Notify)
    - ✅ `style-src` — `'unsafe-inline'` для Leaflet карт
    - ✅ `script-src` — `'wasm-unsafe-eval'` для WebAssembly
-   - ✅ Документация: `CSP.md`
    - ✅ Тесты: `src/security-headers.test.ts`
 
 **Высокий приоритет:**
