@@ -6,6 +6,9 @@ import { hash } from "bcryptjs"
 import { db } from "@/lib/db"
 import { z } from "zod"
 import { sendPasswordResetEmail } from "@/lib/email"
+import { createLogger } from "@/lib/logger"
+
+const logger = createLogger("api:reset-password")
 
 const resetPasswordSchema = z.object({
   token: z.string(),
@@ -70,7 +73,7 @@ export async function POST(request: NextRequest) {
       message: "Пароль успешно изменен",
     })
   } catch (error) {
-    console.error("Reset password error:", error)
+    logger.error("Reset password error:", error instanceof Error ? error.message : "Unknown error")
     return NextResponse.json({ error: "Ошибка при сбросе пароля" }, { status: 500 })
   }
 }
@@ -105,7 +108,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ valid: true, email: resetToken.email })
   } catch (error) {
-    console.error("Check token error:", error)
+    logger.error("Check token error:", error instanceof Error ? error.message : "Unknown error")
     return NextResponse.json({ error: "Ошибка проверки токена" }, { status: 500 })
   }
 }
@@ -163,7 +166,7 @@ export async function PATCH(request: NextRequest) {
     const emailResult = await sendPasswordResetEmail(email, token)
 
     if (!emailResult.success) {
-      console.error("Failed to send email:", emailResult.error)
+      logger.error("Failed to send email:", emailResult.error)
     }
 
     return NextResponse.json({
@@ -171,7 +174,7 @@ export async function PATCH(request: NextRequest) {
       message: "Если пользователь существует, письмо отправлено",
     })
   } catch (error) {
-    console.error("Request reset error:", error)
+    logger.error("Request reset error:", error instanceof Error ? error.message : "Unknown error")
     return NextResponse.json({ error: "Ошибка при запросе сброса пароля" }, { status: 500 })
   }
 }

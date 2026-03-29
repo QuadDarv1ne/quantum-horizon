@@ -23,7 +23,7 @@ export function AnimatedBackground({ isDark, className }: AnimatedBackgroundProp
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const particlesRef = useRef<Particle[]>([])
   const animationFrameRef = useRef<number | null>(null)
-  const mouseRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
+  const mouseRef = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
     if (!isDark || !canvasRef.current) return

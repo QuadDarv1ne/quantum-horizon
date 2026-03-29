@@ -4,6 +4,9 @@
 // Система пресетов для настроек визуализаций
 
 import { type VisualizationType, type VisualizationSettings } from "@/stores/visualization-store"
+import { createLogger } from "./logger"
+
+const logger = createLogger("presets")
 
 // Ре-экспорт типов для тестов
 export type { VisualizationType, VisualizationSettings }
@@ -244,7 +247,7 @@ export function saveUserPreset(visualizationType: string, preset: Preset): void 
     presets[visualizationType].push(preset)
     localStorage.setItem(PRESETS_STORAGE_KEY, JSON.stringify(presets))
   } catch {
-    console.error("Failed to save preset")
+    logger.error("Failed to save preset")
   }
 }
 
@@ -256,7 +259,7 @@ export function deleteUserPreset(visualizationType: string, presetId: string): v
       localStorage.setItem(PRESETS_STORAGE_KEY, JSON.stringify(presets))
     }
   } catch {
-    console.error("Failed to delete preset")
+    logger.error("Failed to delete preset")
   }
 }
 

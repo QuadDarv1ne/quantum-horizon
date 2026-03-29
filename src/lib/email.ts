@@ -1,4 +1,7 @@
 import nodemailer from "nodemailer"
+import { createLogger } from "./logger"
+
+const logger = createLogger("email")
 
 interface SendEmailOptions {
   to: string
@@ -30,21 +33,21 @@ if (isEmailEnabled) {
 export async function sendEmail({ to, subject, html, text }: SendEmailOptions) {
   // Mock-режим для разработки (вывод в консоль)
   if (!transporter) {
-    console.log("\n" + "=".repeat(60))
-    console.log("📧 EMAIL (MOCK MODE) - Письмо не отправлено")
-    console.log("=".repeat(60))
-    console.log(`Кому: ${to}`)
-    console.log(`Тема: ${subject}`)
-    console.log("-".repeat(60))
-    console.log(text ?? html.substring(0, 500) + "...")
-    console.log("=".repeat(60) + "\n")
+    logger.info("\n" + "=".repeat(60))
+    logger.info("📧 EMAIL (MOCK MODE) - Письмо не отправлено")
+    logger.info("=".repeat(60))
+    logger.info(`Кому: ${to}`)
+    logger.info(`Тема: ${subject}`)
+    logger.info("-".repeat(60))
+    logger.info(text ?? html.substring(0, 500) + "...")
+    logger.info("=".repeat(60) + "\n")
 
     // Вывод ссылки для сброса пароля (если есть)
     const resetLinkMatch = /href="([^"]*reset-password[^"]*)"/.exec(html)
     if (resetLinkMatch) {
-      console.log("🔗 Ссылка для сброса пароля:")
-      console.log(resetLinkMatch[1])
-      console.log("")
+      logger.info("🔗 Ссылка для сброса пароля:")
+      logger.info(resetLinkMatch[1])
+      logger.info("")
     }
 
     return { success: true, messageId: `mock-${String(Date.now())}` }
@@ -62,11 +65,11 @@ export async function sendEmail({ to, subject, html, text }: SendEmailOptions) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const info = await transporter.sendMail(mailOptions)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    console.log("Email sent:", info.messageId)
+    logger.log("Email sent:", info.messageId)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return { success: true, messageId: String(info.messageId) }
   } catch (error) {
-    console.error("Email error:", error)
+    logger.error("Email error:", error instanceof Error ? error.message : "Unknown error")
     return { success: false, error: error instanceof Error ? error.message : "Unknown error" }
   }
 }

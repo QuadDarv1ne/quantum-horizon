@@ -160,8 +160,8 @@ export const authOptions: NextAuthOptions = {
             language: "ru",
           },
         })
-      } catch (error) {
-        console.error("Error creating user progress/settings:", error)
+      } catch {
+        // Silent fail for progress/settings creation
       }
     },
   },

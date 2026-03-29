@@ -31,7 +31,7 @@ interface NASAAPODViewerProps {
 }
 
 export function NASAAPODViewer({ className, showDateSelector = true }: NASAAPODViewerProps) {
-  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split("T")[0])
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0])
 
   const { data, isLoading, error, refetch } = useAPOD({
     date: selectedDate,

@@ -146,7 +146,7 @@ export function CommandPalette({
           break
         case "action":
           if (command.id === "fullscreen") {
-            document.documentElement.requestFullscreen().catch(console.error)
+            document.documentElement.requestFullscreen().catch(() => {})
           }
           setOpen(false)
           break

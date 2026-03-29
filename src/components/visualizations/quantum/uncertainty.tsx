@@ -21,7 +21,7 @@ export function UncertaintyVisualization({ isDark }: UncertaintyVisualizationPro
 
   const [deltaX, setDeltaX] = useState(50)
   const timeRef = useRef(0)
-  const particleCache = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
+  const particleCache = useRef({ x: 0, y: 0 })
 
   const draw = useCallback(
     (

@@ -4,6 +4,9 @@
 import { useEffect, useState } from "react"
 import { Download, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { createLogger } from "@/lib/logger"
+
+const logger = createLogger("pwa-install")
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>
@@ -22,7 +25,7 @@ export function PWAInstallPrompt() {
 
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault()
-      console.log("PWA: Install prompt available")
+      logger.log("PWA: Install prompt available")
       setDeferredPrompt(e as BeforeInstallPromptEvent)
 
       // Show prompt after 30 seconds or on second visit
@@ -51,7 +54,7 @@ export function PWAInstallPrompt() {
       await deferredPrompt.prompt()
       const choice = await deferredPrompt.userChoice
 
-      console.log(`PWA: User ${choice.outcome}`)
+      logger.log(`PWA: User ${choice.outcome}`)
       setShowPrompt(false)
       setDeferredPrompt(null)
     } catch {

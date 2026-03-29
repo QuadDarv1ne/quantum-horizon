@@ -5,6 +5,9 @@ import { NextRequest, NextResponse } from "next/server"
 import { hash } from "bcryptjs"
 import { db } from "@/lib/db"
 import { z } from "zod"
+import { createLogger } from "@/lib/logger"
+
+const logger = createLogger("api:register")
 
 const registerSchema = z.object({
   email: z.string().email("Некорректный email"),
@@ -86,7 +89,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     )
   } catch (error) {
-    console.error("Registration error:", error)
+    logger.error("Registration error:", error instanceof Error ? error.message : "Unknown error")
     return NextResponse.json({ error: "Ошибка при регистрации" }, { status: 500 })
   }
 }

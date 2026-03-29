@@ -60,7 +60,7 @@ export function SatelliteTracker({
   const [satellites, setSatellites] = useState<SatelliteData[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [lastUpdate, setLastUpdate] = useState<Date>(new Date())
+  const [lastUpdate, setLastUpdate] = useState(new Date())
 
   const fetchSatellite = async (id: number) => {
     try {

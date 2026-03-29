@@ -3,6 +3,9 @@
 import { Component, type ReactNode, type ErrorInfo } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { createLogger } from "@/lib/logger"
+
+const logger = createLogger("error-boundary")
 
 interface Props {
   children: ReactNode
@@ -29,10 +32,10 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error(
+    logger.error(
       `[ErrorBoundary${this.props.name ? `: ${this.props.name}` : ""}]`,
-      error,
-      errorInfo
+      error.message,
+      errorInfo.componentStack
     )
 
     this.props.onError?.(error, errorInfo)

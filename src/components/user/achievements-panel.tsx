@@ -37,7 +37,7 @@ interface AchievementsPanelProps {
 }
 
 export function AchievementsPanel({ className }: AchievementsPanelProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>("all")
+  const [selectedCategory, setSelectedCategory] = useState("all")
   const { achievements: apiAchievements, loading, error } = useAchievements()
 
   // Mock achievements data (fallback for non-authenticated users)

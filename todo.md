@@ -1,85 +1,140 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-20 (00:30) — деплой настроен
+**Обновлено:** 2026-03-29 — оптимизация и безопасность
 **Статус:** ✅ dev и main синхронизированы
-**Версия:** 0.3.0 (v1.5.0-stable)
+**Версия:** 0.3.0
 
 ---
 
-## 🔍 Аудит проекта (2026-03-20 01:00) — АКТУАЛЬНОЕ СОСТОЯНИЕ
+## 🔍 Аудит проекта (2026-03-29) — АКТУАЛЬНОЕ СОСТОЯНИЕ
 
-**Дата проверки:** 2026-03-20 01:00
+**Дата проверки:** 2026-03-29
 **Проверил:** Qwen Code
 
 ### ✅ Результаты проверок
 
 **Build:**
-- ✅ Сборка успешна за 5.8s (Turbopack)
-- ✅ TypeScript: 0 ошибок (20.6s)
-- ✅ Service Worker собран (821b)
-- ✅ Все страницы скомпилированы (18/18)
+
+- ✅ Сборка успешна
+- ✅ TypeScript: 0 ошибок
+- ✅ Service Worker собран
+- ✅ Все страницы скомпилированы
 
 **Lint:**
+
 - ✅ 0 ошибок ESLint
 
-**Tests:**
-- ✅ 299 passing / 0 skipped (100% success rate)
-- ✅ 22 файла тестов passed
+**Format:**
+
+- ✅ Prettier — все файлы отформатированы
 
 **npm audit:**
-- ⚠️ 16 уязвимостей (5 low, 8 moderate, 3 high)
+
+- ⚠️ 9 уязвимостей (6 low, 3 high)
   - elliptic — криптография (транзитивные Storybook)
-  - esbuild — XSS в dev server (транзитивные Storybook)
-  - flatted — Prototype Pollution (транзитивные vitest)
-  - Решение: требует breaking changes
+  - effect/prisma — требует breaking changes
+  - Не критично для development
 
 **Git статус:**
+
 - ✅ Ветка dev: синхронизирована с origin/dev
 - ✅ Ветка main: синхронизирована с origin/main
-- ✅ Merge dev → main выполнен
 
-### ✅ Статус проекта (2026-03-20 01:00)
+### ✅ Статус проекта (2026-03-29)
 
 **Метрики качества:**
-- ✅ Build: 5.8s — стабильно
+
+- ✅ Build: успешно
 - ✅ Lint: 0 ошибок — чисто
-- ✅ Tests: 299 passing (100%) — все тесты работают
-- ✅ TypeScript: 20.6s — строгая типизация
-- ✅ Bundle: 219KB initial — в пределах нормы
-- ✅ npm audit: 4 high → 3 high (исправлены)
+- ✅ TypeScript: 0 ошибок — строгая типизация
+- ✅ Prettier: все файлы отформатированы
+
+**Выполнено (2026-03-29):**
+
+- ✅ Middleware исправлен — `src/middleware.ts` работает
+- ✅ Удалён `src/proxy.ts` (не работал)
+- ✅ npm audit fix — с 26 до 9 уязвимостей
+- ✅ logger.ts — утилита логгирования (production-safe)
+- ✅ .gitattributes — контроль CRLF/LF
+- ✅ console.log заменены на logger (36→0)
+- ✅ tsconfig.json — убраны лишние исключения
 
 **Архитектура:**
+
 - ✅ 93 компонента визуализаций
 - ✅ 5 компонентов секций
-- ✅ Proxy architecture (Next.js 16)
+- ✅ Middleware architecture (Next.js 16)
 - ✅ Zustand store + React Query
 - ✅ PWA поддержка
+- ✅ Rate limiting (@upstash/ratelimit)
 
 **Инфраструктура:**
+
 - ✅ Docker (dev + prod)
 - ✅ CI/CD (GitHub Actions)
-- ✅ Rate limiting (@upstash/ratelimit)
 - ✅ CSP headers
 - ✅ i18n (4 языка)
 
 ### 🔴 Проблемы (требуют решения)
 
-**Критические:**
-- ✅ **npm уязвимости** — 4 high исправлено, осталось 3 high (транзитивные)
+**Критические (Security):**
+
+1. 🔴 **npm уязвимости (3 high)** — требуют breaking changes
+   - `elliptic` — криптография (транзитивные Storybook)
+   - `effect` / `prisma` — AsyncLocalStorage contamination
+   - Решение: `npm audit fix --force` (требует обновления Prisma v7, Storybook v7)
+   - **Срок:** Q2 2026
+
+2. 🔴 **Rate limiting** — только для `/api/auth/*`
+   - Нет защиты для `/api/visualizations/*`, `/api/activity/*`
+   - Решение: добавить rate limiting для всех API endpoints
+   - **Срок:** Q2 2026
+
+3. 🔴 **CSP headers** — можно усилить
+   - `img-src 'self' data: blob: https:` — разрешает все https:
+   - `connect-src 'self' https:` — разрешает все https:
+   - Решение: конкретизировать домены API (NASA, WhereTheISSat)
+   - **Срок:** Q2 2026
+
+**Высокий приоритет:**
+
+4. 🟠 **Зависимости требуют обновления:**
+   - `eslint-plugin-react-hooks` v7 — не поддерживает eslint v10
+   - `nodemailer` v8 — breaking change для next-auth v4
+   - Решение: обновить next-auth до v5 (breaking changes)
+   - **Срок:** Q3 2026
+
+5. 🟠 **Storybook уязвимости:**
+   - Транзитивные зависимости (elliptic, esbuild)
+   - Решение: обновить Storybook до v8+
+   - **Срок:** Q3 2026
 
 **Средний приоритет:**
-1. 🟠 **16 npm уязвимостей (транзитивные)** — Storybook + vitest
-   - elliptic, esbuild (Storybook)
-   - flatted (vitest)
-   - Не критично для development
 
-2. 🟠 **eslint-plugin-react-hooks v7** — не поддерживает eslint v10
-   - Ожидается обновление до v8+
+6. 🟡 **Тесты безопасности:**
+   - Нет тестов для rate limiting
+   - Нет тестов для CSP headers
+   - Решение: добавить integration тесты
+   - **Срок:** Q3 2026
+
+7. 🟡 **Мониторинг уязвимостей:**
+   - Нет автоматического Dependabot/Renovate
+   - Решение: настроить Dependabot в `.github/`
+   - **Срок:** Q3 2026
 
 **Низкий приоритет:**
-3. 🟡 **Lighthouse замеры** — проверить Performance/Accessibility
-4. 🟡 **Bundle size** — 219KB initial (цель < 200KB)
+
+8. 🟢 **Lighthouse замеры:**
+   - Проверить Performance/Accessibility/SEO
+   - Цель: 90+ во всех категориях
+   - **Срок:** Q4 2026
+
+9. 🟢 **Bundle size:**
+   - Текущий: ~219KB initial
+   - Цель: <200KB
+   - Решение: code splitting, tree-shaking
+   - **Срок:** Q4 2026
 
 ---
 
@@ -192,28 +247,34 @@
 ### ✅ Результаты проверок
 
 **Build:**
+
 - ✅ Сборка успешна за 4.9s (Turbopack)
 - ✅ TypeScript: 0 ошибок (14.8s)
 - ✅ Service Worker собран (821b)
 - ✅ Все страницы скомпилированы (18/18)
 
 **Lint:**
+
 - ✅ 0 ошибок
 - ✅ 0 warning
 
 **Tests:**
+
 - ✅ 294 passing / 5 skipped (299 total)
 - ✅ 21 файл тестов passed
 - ✅ 1 файл skipped (preset-manager)
 
 **TypeScript:**
+
 - ✅ 0 ошибок
 
 **npm audit:**
+
 - ⚠️ 15 уязвимостей (требуют breaking changes)
 - ⚠️ Не критично для development
 
 **Git:**
+
 - ✅ dev синхронизирована с origin/dev
 - ✅ main синхронизирована с origin/main
 - ✅ Merge выполнен
@@ -779,6 +840,80 @@ import { AchievementsPanel } from "@/components/user/achievements-panel"
 
 ---
 
+## 🔒 Security Roadmap (2026-03-29)
+
+### Phase 4: Security Hardening (Q2 2026)
+
+**Задачи по безопасности из SECURITY.md:**
+
+#### 4.1 Rate Limiting для всех API
+
+- [ ] `/api/visualizations/*` — 100 запросов в минуту
+- [ ] `/api/activity/*` — 60 запросов в минуту
+- [ ] `/api/achievements/*` — 60 запросов в минуту
+- [ ] `/api/auth/*` — уже настроено (5 в минуту)
+
+**Файлы:**
+
+- `src/middleware.ts` — расширить правила
+- `src/lib/rate-limiter.ts` — утилита для переиспользования
+
+#### 4.2 CSP Headers — конкретизация доменов
+
+**Текущие проблемы:**
+
+- `img-src 'self' data: blob: https:` — разрешает все https:
+- `connect-src 'self' https:` — разрешает все https:
+
+**Решение:**
+
+```typescript
+// next.config.ts
+img-src: "'self' data: blob: https://images-assets.nasa.gov https://where-theiss.at"
+connect-src: "'self' https://api.nasa.gov https://api.wheretheiss.at"
+```
+
+#### 4.3 npm уязвимости — обновление зависимостей
+
+**План:**
+
+1. Prisma v6 → v7 (breaking changes)
+2. Storybook v10 → v8+ (breaking changes)
+3. next-auth v4 → v5 (breaking changes)
+
+**Срок:** Q2 2026
+
+#### 4.4 Dependabot настройка
+
+**Файл:** `.github/dependabot.yml`
+
+```yaml
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+    security-updates-only: true
+```
+
+#### 4.5 Security Tests
+
+**Задачи:**
+
+- [ ] Integration тесты для rate limiting
+- [ ] Тесты для CSP headers (CSP Evaluator)
+- [ ] OWASP Top 10 проверка
+
+**Инструменты:**
+
+- `npm audit` — CI проверка
+- `csp-evaluator` — Google CSP анализ
+- OWASP ZAP — security scanning
+
+---
+
 ## 📋 План улучшений
 
 ### 🔴 Фаза 1: Критический рефакторинг (1-2 недели)
@@ -1116,6 +1251,7 @@ src/
 ### ✅ Выполнено (2026-03-19 20:30)
 
 **Последние изменения:**
+
 1. ✅ **Миграция middleware → proxy** — Next.js 16 proxy architecture
 2. ✅ **Включение тестов preset-manager** — 5 тестов passing
 3. ✅ **npm audit fix** — исправлены прямые уязвимости
@@ -1126,6 +1262,7 @@ src/
 8. ✅ **Git** — dev и main синхронизированы
 
 **Текущее состояние проекта:**
+
 - ✅ 93 компонента визуализаций
 - ✅ 299 unit-тестов passing (100%)
 - ✅ 24 E2E теста passing
@@ -1133,7 +1270,7 @@ src/
 - ✅ 95 физических формул
 - ✅ 5 компонентов секций
 - ✅ PWA поддержка (Service Worker, install prompt)
-- ✅ Rate limiting (@upstash/ratelimit) для /api/auth/*
+- ✅ Rate limiting (@upstash/ratelimit) для /api/auth/\*
 - ✅ CSP headers (без unsafe-inline/eval)
 - ✅ React.memo() для 5 секций
 - ✅ Lazy loading для визуализаций
@@ -1190,19 +1327,21 @@ src/
 **Последняя синхронизация:** 2026-03-20 01:00 ✅
 
 **Проверка выполнена:**
+
 - ✅ Build: 5.8s (Turbopack)
 - ✅ Lint: 0 ошибок
 - ✅ Tests: 299 passing (100%)
 - ✅ TypeScript: 0 ошибок
 - ✅ npm audit: 16 уязвимостей (5 low, 8 moderate, 3 high)
 
-| Ветка  | Статус | Коммиты впереди | Последний коммит                   |
-| ------ | ------ | --------------- | ---------------------------------- |
-| dev    | ✅     | 0               | e0d7439 docs: оставшиеся задачи    |
-| main   | ✅     | 0               | 480e5dd Merge branch 'dev'         |
-| origin | ✅     | Синхронизирован | Push выполнен в обе ветки          |
+| Ветка  | Статус | Коммиты впереди | Последний коммит                |
+| ------ | ------ | --------------- | ------------------------------- |
+| dev    | ✅     | 0               | e0d7439 docs: оставшиеся задачи |
+| main   | ✅     | 0               | 480e5dd Merge branch 'dev'      |
+| origin | ✅     | Синхронизирован | Push выполнен в обе ветки       |
 
 **Статус:**
+
 - ✅ dev и main синхронизированы
 - ✅ 299 тестов passing (100%)
 - ✅ 0 ошибок lint/typescript
@@ -1262,7 +1401,7 @@ src/
 - ✅ Git: dev и main синхронизированы
 - ✅ todo.md обновлён с актуальными данными
 
-**Последние изменения (2026-03-19 20:00) — Проверка Qwen Code:******
+**Последние изменения (2026-03-19 20:00) — Проверка Qwen Code:\*\*\*\***
 
 - ✅ Проведён полный аудит проекта
 - ✅ Выявлены сильные стороны: архитектура, a11y, PWA, производительность

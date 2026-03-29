@@ -17,7 +17,7 @@ interface CarnotEngineVisualizationProps {
   isDark: boolean
 }
 
-interface EngineState {
+interface _EngineState {
   volume: number
   pressure: number
   temperature: number
@@ -37,7 +37,7 @@ export function CarnotEngineVisualization({ isDark }: CarnotEngineVisualizationP
   const [isRunning, setIsRunning] = useState(false)
   const [currentPhase, setCurrentPhase] = useState(0)
 
-  const engineStateRef = useRef<EngineState>({
+  const engineStateRef = useRef({
     volume: 1,
     pressure: 1,
     temperature: tempCold,

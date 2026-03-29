@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { db } from "@/lib/db"
+import { createLogger } from "@/lib/logger"
+
+const logger = createLogger("api:progress")
 
 async function getUserId(): Promise<string | null> {
   const session = await getServerSession(authOptions)
@@ -30,7 +33,7 @@ export async function GET() {
       data: progress,
     })
   } catch {
-    console.error("Error fetching progress:")
+    logger.error("Error fetching progress:")
     return NextResponse.json({ error: "Failed to fetch progress" }, { status: 500 })
   }
 }
@@ -77,7 +80,7 @@ export async function POST(request: NextRequest) {
       data: progress,
     })
   } catch {
-    console.error("Error updating progress:")
+    logger.error("Error updating progress:")
     return NextResponse.json({ error: "Failed to update progress" }, { status: 500 })
   }
 }

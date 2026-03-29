@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client"
 
@@ -36,7 +35,7 @@ export function DoubleSlitVisualization({ isDark }: DoubleSlitVisualizationProps
   const [showParticles, setShowParticles] = useState(false)
   const [showWave, setShowWave] = useState(true)
 
-  const particleHitsRef = useRef<number[]>(new Array(100).fill(0))
+  const particleHitsRef = useRef(new Array(100).fill(0))
   const particlesRef = useRef<Particle[]>([])
   const timeRef = useRef(0)
   const bgGradientRef = useRef<CanvasGradient | null>(null)

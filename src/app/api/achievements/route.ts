@@ -4,6 +4,9 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { db } from "@/lib/db"
+import { createLogger } from "@/lib/logger"
+
+const logger = createLogger("api:achievements")
 
 async function getUserId(): Promise<string | null> {
   const session = await getServerSession(authOptions)
@@ -32,7 +35,10 @@ export async function GET() {
       data: achievements,
     })
   } catch (error) {
-    console.error("Error fetching achievements:", error)
+    logger.error(
+      "Error fetching achievements:",
+      error instanceof Error ? error.message : "Unknown error"
+    )
     return NextResponse.json({ error: "Failed to fetch achievements" }, { status: 500 })
   }
 }
@@ -100,7 +106,10 @@ export async function POST(request: NextRequest) {
       })
     }
   } catch (error) {
-    console.error("Error updating achievement:", error)
+    logger.error(
+      "Error updating achievement:",
+      error instanceof Error ? error.message : "Unknown error"
+    )
     return NextResponse.json({ error: "Failed to update achievement" }, { status: 500 })
   }
 }

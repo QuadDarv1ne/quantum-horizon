@@ -31,5 +31,5 @@
     ".next/dev/types/**/*.ts",
     "public/sw.d.ts"
   ],
-  "exclude": ["node_modules", "src/lib/a11y.tsx", "public/sw.ts"]
+  "exclude": ["node_modules", "public/sw.ts"]
 }

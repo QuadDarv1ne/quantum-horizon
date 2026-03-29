@@ -1,6 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { createLogger } from "@/lib/logger"
+
+const logger = createLogger("service-worker")
 
 export function ServiceWorkerRegistration() {
   const [updateAvailable, setUpdateAvailable] = useState(false)
@@ -19,7 +22,7 @@ export function ServiceWorkerRegistration() {
           scope: "/",
         })
 
-        console.log("Service Worker registered:", registration.scope)
+        logger.log("Service Worker registered:", registration.scope)
 
         // Check for updates
         registration.addEventListener("updatefound", () => {

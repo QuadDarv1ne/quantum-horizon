@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { db } from "@/lib/db"
+import { createLogger } from "@/lib/logger"
+
+const logger = createLogger("api:bookmarks")
 
 async function getUserId(): Promise<string | null> {
   const session = await getServerSession(authOptions)
@@ -30,7 +33,7 @@ export async function GET() {
       data: bookmarks,
     })
   } catch {
-    console.error("Error fetching bookmarks:")
+    logger.error("Error fetching bookmarks:")
     return NextResponse.json({ error: "Failed to fetch bookmarks" }, { status: 500 })
   }
 }
@@ -78,7 +81,7 @@ export async function POST(request: NextRequest) {
       data: bookmark,
     })
   } catch {
-    console.error("Error creating bookmark:")
+    logger.error("Error creating bookmark:")
     return NextResponse.json({ error: "Failed to create bookmark" }, { status: 500 })
   }
 }
@@ -114,7 +117,7 @@ export async function DELETE(request: NextRequest) {
       message: "Bookmark deleted",
     })
   } catch {
-    console.error("Error deleting bookmark:")
+    logger.error("Error deleting bookmark:")
     return NextResponse.json({ error: "Failed to delete bookmark" }, { status: 500 })
   }
 }

@@ -4,6 +4,9 @@ import { useState, useEffect } from "react"
 import { useReportWebVitals } from "next/web-vitals"
 import { Gauge, Activity, Clock, LayoutList } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { createLogger } from "@/lib/logger"
+
+const logger = createLogger("web-vitals")
 
 interface MetricValue {
   name: string
@@ -22,7 +25,7 @@ export function WebVitals() {
   useReportWebVitals((metric) => {
     // Log to console in development
     if (process.env.NODE_ENV === "development") {
-      console.log("[Web Vitals]", metric.name, metric.value)
+      logger.log("[Web Vitals]", metric.name, metric.value)
 
       // Update metrics for display
       setMetrics((prev) => {

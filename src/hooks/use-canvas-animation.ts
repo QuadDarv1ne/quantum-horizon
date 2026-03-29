@@ -48,13 +48,13 @@ export function useCanvasAnimation(
 
   const animationFrameId = useRef<number | undefined>(undefined)
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
-  const lastTimeRef = useRef<number>(0)
-  const accumulatorRef = useRef<number>(0)
-  const isVisibleRef = useRef<boolean>(true)
-  const reducedMotionRef = useRef<boolean>(false)
-  const rafIntervalRef = useRef<number>(1000 / fpsLimit)
-  const frameCountRef = useRef<number>(0)
-  const lastFpsUpdateRef = useRef<number>(0)
+  const lastTimeRef = useRef(0)
+  const accumulatorRef = useRef(0)
+  const isVisibleRef = useRef(true)
+  const reducedMotionRef = useRef(false)
+  const rafIntervalRef = useRef(1000 / fpsLimit)
+  const frameCountRef = useRef(0)
+  const lastFpsUpdateRef = useRef(0)
 
   const setupCanvasCallback = useCallback(() => {
     const canvas = canvasRef.current
