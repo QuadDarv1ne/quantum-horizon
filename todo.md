@@ -949,9 +949,9 @@ updates:
 
 **Настроить в `.github/dependabot.yml`:**
 
-- [ ] Security updates only (не все обновления)
-- [ ] Weekly schedule (понедельник 09:00 UTC)
-- [ ] Max 10 open PRs
+- [x] Security updates only (не все обновления) ✅
+- [x] Weekly schedule (понедельник 09:00 UTC) ✅
+- [x] Max 10 open PRs ✅
 - [ ] Auto-merge для patch версий
 
 #### 4.8 Hall of Fame
@@ -960,7 +960,7 @@ updates:
 
 - [ ] Создать секцию в SECURITY.md для благодарностей
 - [ ] Добавить критерии для Hall of Fame
-- [ ] Настроить упоминание в CHANGELOG при исправлении уязвимостей
+- [x] Настроить упоминание в CHANGELOG при исправлении уязвимостей ✅
 
 #### 4.9 Security Audit — Проверка по типам уязвимостей
 
