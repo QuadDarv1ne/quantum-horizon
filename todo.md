@@ -149,15 +149,12 @@
 
 **Низкий приоритет:**
 
-8. 🟢 **Lighthouse замеры** — выполнено 2026-03-29
-   - Bundle size анализ: ~1.9 MB общих JS чанков (59 файлов)
-   - Крупнейшие чанки:
-     - 0b-gszzq5h~jk.js — 264 KB
-     - 16g.ca89g7fib.js — 222 KB
-     - 0ph41a3ktce.y.js — 140 KB
-     - 03~yq9q893hmn.js — 110 KB
-   - Цель: <200KB initial (требуется code splitting)
-   - **Срок:** Q4 2026
+8. ✅ **Lighthouse замеры** — выполнено 2026-03-29
+   - 🟢 Accessibility: 100 (цель 90+ ✅)
+   - 🟢 SEO: 90 (цель 90+ ✅)
+   - 🟡 Best Practices: 79 (требует улучшений)
+   - 🔴 Performance: 33 (localhost замеры, не репрезентативно)
+   - **Срок:** Q4 2026 — замеры на production
 
 9. 🟢 **Bundle size** — анализ 2026-03-29
    - Текущий: ~1.9 MB total JS
