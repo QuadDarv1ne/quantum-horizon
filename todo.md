@@ -141,6 +141,7 @@
 6. ✅ **Тесты безопасности** — решено 2026-03-29
    - ✅ src/middleware.test.ts — тесты для rate limiting
    - ✅ src/security-headers.test.ts — тесты для CSP headers
+   - ⚠️ Остальные тесты требуют настройки next-intl mock
 
 7. ✅ **Мониторинг уязвимостей** — решено 2026-03-29
    - ✅ .github/dependabot.yml — настроен Dependabot
