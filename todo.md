@@ -885,7 +885,15 @@ connect-src: "'self' https://api.nasa.gov https://api.wheretheiss.at"
 
 #### 4.4 Dependabot настройка
 
-**Файл:** `.github/dependabot.yml`
+**Файл:** `.github/dependabot.yml` ✅ Создано
+
+**Настроено:**
+
+- ✅ Weekly schedule (понедельник 09:00 MSK)
+- ✅ Max 10 open PRs
+- ✅ Security updates only
+- ✅ Игнорирование breaking changes (next-auth, prisma, storybook)
+- ✅ GitHub Actions updates
 
 ```yaml
 version: 2
@@ -894,6 +902,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "09:00"
     open-pull-requests-limit: 10
     security-updates-only: true
 ```
@@ -902,7 +912,7 @@ updates:
 
 **Задачи:**
 
-- [ ] Integration тесты для rate limiting
+- [x] Integration тесты для rate limiting ✅
 - [ ] Тесты для CSP headers (CSP Evaluator)
 - [ ] OWASP Top 10 проверка
 
@@ -912,12 +922,16 @@ updates:
 - `csp-evaluator` — Google CSP анализ
 - OWASP ZAP — security scanning
 
+**Созданные файлы:**
+
+- ✅ `src/middleware.test.ts` — тесты для rate limiting
+
 #### 4.6 GitHub Security Advisories
 
 **Задачи:**
 
-- [ ] Настроить Private vulnerability reporting
-- [ ] Создать шаблон для отчётов об уязвимостях
+- [x] Настроить Private vulnerability reporting ✅
+- [x] Создать шаблон для отчётов об уязвимостях ✅
 - [ ] Настроить уведомления о новых advisories
 
 **Процесс (из SECURITY.md):**
@@ -926,6 +940,10 @@ updates:
 2. Анализ → 3-5 дней
 3. План исправления → 7-14 дней
 4. Выпуск патча → 14-30 дней
+
+**Созданные файлы:**
+
+- ✅ `.github/ISSUE_TEMPLATE/security-vulnerability.md` — шаблон отчёта
 
 #### 4.7 Dependabot Security Updates
 
