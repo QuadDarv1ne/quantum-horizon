@@ -16,15 +16,13 @@ updates:
     commit-message:
       prefix: "chore(deps)"
       include: "scope"
-    # Только security updates по умолчанию
-    security-updates-only: true
+    # Обновлять все зависимости (не только security)
+    security-updates-only: false
     # Игнорировать крупные breaking changes
     ignore:
       - dependency-name: "next-auth"
         update-types: ["version-update:semver-major"]
       - dependency-name: "prisma"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "storybook"
         update-types: ["version-update:semver-major"]
 
   # GitHub Actions updates
