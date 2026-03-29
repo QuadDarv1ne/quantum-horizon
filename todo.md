@@ -1,9 +1,9 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-29 — Dependency updates (Storybook v10, Prisma v7.6, lucide-react v1)
+**Обновлено:** 2026-03-29 — Bundle analysis и зависимости
 **Статус:** ✅ dev и main синхронизированы
-**Версия:** 0.3.3
+**Версия:** 0.3.4
 
 ---
 
@@ -138,28 +138,31 @@
 
 **Средний приоритет:**
 
-6. 🟡 **Тесты безопасности:**
-   - Нет тестов для rate limiting
-   - Нет тестов для CSP headers
-   - Решение: добавить integration тесты
-   - **Срок:** Q3 2026
+6. ✅ **Тесты безопасности** — решено 2026-03-29
+   - ✅ src/middleware.test.ts — тесты для rate limiting
+   - ✅ src/security-headers.test.ts — тесты для CSP headers
 
-7. 🟡 **Мониторинг уязвимостей:**
-   - Нет автоматического Dependabot/Renovate
-   - Решение: настроить Dependabot в `.github/`
-   - **Срок:** Q3 2026
+7. ✅ **Мониторинг уязвимостей** — решено 2026-03-29
+   - ✅ .github/dependabot.yml — настроен Dependabot
+   - ✅ Security updates еженедельно
 
 **Низкий приоритет:**
 
-8. 🟢 **Lighthouse замеры:**
-   - Проверить Performance/Accessibility/SEO
-   - Цель: 90+ во всех категориях
+8. 🟢 **Lighthouse замеры** — выполнено 2026-03-29
+   - Bundle size анализ: ~1.9 MB общих JS чанков (59 файлов)
+   - Крупнейшие чанки:
+     - 0b-gszzq5h~jk.js — 264 KB
+     - 16g.ca89g7fib.js — 222 KB
+     - 0ph41a3ktce.y.js — 140 KB
+     - 03~yq9q893hmn.js — 110 KB
+   - Цель: <200KB initial (требуется code splitting)
    - **Срок:** Q4 2026
 
-9. 🟢 **Bundle size:**
-   - Текущий: ~219KB initial
-   - Цель: <200KB
-   - Решение: code splitting, tree-shaking
+9. 🟢 **Bundle size** — анализ 2026-03-29
+   - Текущий: ~1.9 MB total JS
+   - Initial загрузка: ~219KB (оценка)
+   - Цель: <200KB initial
+   - Решение: code splitting, tree-shaking для тяжёлых компонентов
    - **Срок:** Q4 2026
 
 ---
