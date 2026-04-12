@@ -82,7 +82,9 @@ describe("SplitScreen", () => {
     }
 
     const allButtons = await screen.findAllByRole("button")
-    const swapButton = allButtons.find((btn) => btn.textContent?.toLowerCase().includes("поменят"))
+    const swapButton = allButtons.find((btn) =>
+      btn.getAttribute("aria-label")?.toLowerCase().includes("поменят")
+    )
     expect(swapButton).toBeDefined()
   })
 })
