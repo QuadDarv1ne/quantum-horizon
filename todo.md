@@ -17,7 +17,7 @@
 **Build:** ✅ успешен (4.1s)
 **Lint:** ✅ 0 ошибок ESLint
 **TypeScript:** ✅ 0 ошибок
-**Тесты:** ✅ 308 passing, 21 failing, 3 skipped (было 285 passing, 47 failing)
+**Тесты:** ✅ 315 passing, 14 failing, 3 skipped (было 285 passing, 47 failing)
 
 **Выполнено в v0.4.2:**
 - ✅ CORS конфигурация добавлена в middleware
@@ -29,6 +29,8 @@
 - ✅ Исправлены preset-manager тесты (5/5 passing)
 - ✅ Исправлены split-screen тесты (1/6 passing)
 - ✅ Исправлены visualization-canvas тесты (4/6 passing, 2 skipped)
+- ✅ Исправлены security-headers тесты (22/22 passing)
+- ✅ Исправлены statistics-dashboard тесты (7/7 passing)
 - ✅ Добавлен matchMedia mock в test setup
 - ✅ Обновлены зависимости: Prisma 7.7.0, Next.js 16.2.3, React 19.2.5
 - ✅ Уменьшено уязвимостей npm: 23 → 21 (high: 6 → 4)
@@ -36,7 +38,7 @@
 **Остающиеся проблемы:**
 
 **Средние:**
-- ⚠️ 21 failing тестов (statistics-dashboard 6, use-canvas-animation 5, split-screen 5, visualization-selector 3, preset-manager 2)
+- ⚠️ 14 failing тестов (use-canvas-animation 5, split-screen 5, learning-mode 4, physics-tooltip 4, visualization-selector 3, preset-manager 2)
 - ⚠️ Rate limiting зависит от Upstash Redis (без него отключён)
 
 **Низкие:**
