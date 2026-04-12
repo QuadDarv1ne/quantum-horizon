@@ -3,8 +3,15 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { db } from "@/lib/db"
 import { createLogger } from "@/lib/logger"
+import { z } from "zod"
 
 const logger = createLogger("api:bookmarks")
+
+// Zod схемы для валидации
+const bookmarkSchema = z.object({
+  topic: z.string().min(1).max(100),
+  title: z.string().min(1).max(200),
+})
 
 async function getUserId(): Promise<string | null> {
   const session = await getServerSession(authOptions)
@@ -26,14 +33,30 @@ export async function GET() {
     const bookmarks = await db.bookmark.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        topic: true,
+        title: true,
+        createdAt: true,
+      },
     })
 
-    return NextResponse.json({
-      success: true,
-      data: bookmarks,
-    })
-  } catch {
-    logger.error("Error fetching bookmarks:")
+    return NextResponse.json(
+      {
+        success: true,
+        data: bookmarks,
+      },
+      {
+        headers: {
+          "Cache-Control": "private, no-store",
+        },
+      }
+    )
+  } catch (error) {
+    logger.error(
+      "Error fetching bookmarks:",
+      error instanceof Error ? error.message : "Unknown error"
+    )
     return NextResponse.json({ error: "Failed to fetch bookmarks" }, { status: 500 })
   }
 }
@@ -50,12 +73,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const body = (await request.json()) as { topic?: string; title?: string }
-    const { topic, title } = body
-
-    if (!topic || !title) {
-      return NextResponse.json({ error: "Topic and title are required" }, { status: 400 })
+    const body = await request.json()
+    
+    // Валидация входных данных
+    const validationResult = bookmarkSchema.safeParse(body)
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { error: "Invalid input", details: validationResult.error.errors },
+        { status: 400 }
+      )
     }
+
+    const { topic, title } = validationResult.data
 
     const existing = await db.bookmark.findFirst({
       where: {
@@ -74,14 +103,30 @@ export async function POST(request: NextRequest) {
         topic,
         title,
       },
+      select: {
+        id: true,
+        topic: true,
+        title: true,
+        createdAt: true,
+      },
     })
 
-    return NextResponse.json({
-      success: true,
-      data: bookmark,
-    })
-  } catch {
-    logger.error("Error creating bookmark:")
+    return NextResponse.json(
+      {
+        success: true,
+        data: bookmark,
+      },
+      {
+        headers: {
+          "Cache-Control": "private, no-store",
+        },
+      }
+    )
+  } catch (error) {
+    logger.error(
+      "Error creating bookmark:",
+      error instanceof Error ? error.message : "Unknown error"
+    )
     return NextResponse.json({ error: "Failed to create bookmark" }, { status: 500 })
   }
 }
@@ -105,6 +150,15 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Topic is required" }, { status: 400 })
     }
 
+    // Валидация topic
+    const topicValidation = z.string().min(1).max(100).safeParse(topic)
+    if (!topicValidation.success) {
+      return NextResponse.json(
+        { error: "Invalid topic format" },
+        { status: 400 }
+      )
+    }
+
     await db.bookmark.deleteMany({
       where: {
         topic,
@@ -112,12 +166,22 @@ export async function DELETE(request: NextRequest) {
       },
     })
 
-    return NextResponse.json({
-      success: true,
-      message: "Bookmark deleted",
-    })
-  } catch {
-    logger.error("Error deleting bookmark:")
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Bookmark deleted",
+      },
+      {
+        headers: {
+          "Cache-Control": "private, no-store",
+        },
+      }
+    )
+  } catch (error) {
+    logger.error(
+      "Error deleting bookmark:",
+      error instanceof Error ? error.message : "Unknown error"
+    )
     return NextResponse.json({ error: "Failed to delete bookmark" }, { status: 500 })
   }
 }

@@ -1,12 +1,24 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { db } from "@/lib/db"
 import { createLogger } from "@/lib/logger"
+import { z } from "zod"
 
 const logger = createLogger("api:achievements")
+
+// Zod schemas для валидации
+const achievementSchema = z.object({
+  achievementId: z.string().min(1).max(100),
+  progress: z.number().min(0).max(10000).default(1),
+  target: z.number().min(1).max(10000).default(1),
+})
+
+type AchievementResponse = {
+  success: true
+  data: unknown
+  newlyUnlocked?: boolean
+}
 
 async function getUserId(): Promise<string | null> {
   const session = await getServerSession(authOptions)
@@ -28,12 +40,27 @@ export async function GET() {
     const achievements = await db.userAchievement.findMany({
       where: { userId },
       orderBy: { unlockedAt: "desc" },
+      // Селекция только нужных полей
+      select: {
+        id: true,
+        achievementId: true,
+        progress: true,
+        target: true,
+        unlockedAt: true,
+      },
     })
 
-    return NextResponse.json({
-      success: true,
-      data: achievements,
-    })
+    return NextResponse.json(
+      {
+        success: true,
+        data: achievements,
+      },
+      {
+        headers: {
+          "Cache-Control": "private, no-store",
+        },
+      }
+    )
   } catch (error) {
     logger.error(
       "Error fetching achievements:",
@@ -56,11 +83,17 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { achievementId, progress = 1, target = 1 } = body
-
-    if (!achievementId) {
-      return NextResponse.json({ error: "Achievement ID is required" }, { status: 400 })
+    
+    // Валидация входных данных
+    const validationResult = achievementSchema.safeParse(body)
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { error: "Invalid input", details: validationResult.error.errors },
+        { status: 400 }
+      )
     }
+
+    const { achievementId, progress, target } = validationResult.data
 
     // Check if achievement already exists
     const existing = await db.userAchievement.findUnique({
@@ -83,11 +116,18 @@ export async function POST(request: NextRequest) {
         },
       })
 
-      return NextResponse.json({
-        success: true,
-        data: updated,
-        newlyUnlocked: updated.progress >= updated.target && existing.progress < existing.target,
-      })
+      return NextResponse.json(
+        {
+          success: true,
+          data: updated,
+          newlyUnlocked: updated.progress >= updated.target && existing.progress < existing.target,
+        },
+        {
+          headers: {
+            "Cache-Control": "private, no-store",
+          },
+        }
+      )
     } else {
       // Create new achievement
       const achievement = await db.userAchievement.create({
@@ -99,17 +139,27 @@ export async function POST(request: NextRequest) {
         },
       })
 
-      return NextResponse.json({
-        success: true,
-        data: achievement,
-        newlyUnlocked: progress >= target,
-      })
+      return NextResponse.json(
+        {
+          success: true,
+          data: achievement,
+          newlyUnlocked: progress >= target,
+        },
+        {
+          headers: {
+            "Cache-Control": "private, no-store",
+          },
+        }
+      )
     }
   } catch (error) {
     logger.error(
       "Error updating achievement:",
       error instanceof Error ? error.message : "Unknown error"
     )
-    return NextResponse.json({ error: "Failed to update achievement" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Failed to update achievement" },
+      { status: 500 }
+    )
   }
 }

@@ -3,8 +3,15 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { db } from "@/lib/db"
 import { createLogger } from "@/lib/logger"
+import { z } from "zod"
 
 const logger = createLogger("api:progress")
+
+// Zod схемы для валидации
+const progressSchema = z.object({
+  topic: z.string().min(1).max(100),
+  completedCount: z.number().min(1).max(1000).default(1),
+})
 
 async function getUserId(): Promise<string | null> {
   const session = await getServerSession(authOptions)
@@ -26,14 +33,30 @@ export async function GET() {
     const progress = await db.userProgress.findMany({
       where: { userId },
       orderBy: { lastCompleted: "desc" },
+      select: {
+        id: true,
+        topic: true,
+        completedCount: true,
+        lastCompleted: true,
+      },
     })
 
-    return NextResponse.json({
-      success: true,
-      data: progress,
-    })
-  } catch {
-    logger.error("Error fetching progress:")
+    return NextResponse.json(
+      {
+        success: true,
+        data: progress,
+      },
+      {
+        headers: {
+          "Cache-Control": "private, no-store",
+        },
+      }
+    )
+  } catch (error) {
+    logger.error(
+      "Error fetching progress:",
+      error instanceof Error ? error.message : "Unknown error"
+    )
     return NextResponse.json({ error: "Failed to fetch progress" }, { status: 500 })
   }
 }
