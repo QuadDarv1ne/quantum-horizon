@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import { render, screen, cleanup } from "@testing-library/react"
+import { render, cleanup } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { VisualizationCanvas } from "./visualization-canvas"
 
@@ -16,6 +16,7 @@ describe("VisualizationCanvas", () => {
 
   it("renders canvas element", () => {
     const { getByTestId } = render(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       <VisualizationCanvas draw={mockDraw} isDark={true} className="test-class" />
     )
 
