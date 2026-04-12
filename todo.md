@@ -1915,4 +1915,351 @@ src/
 
 ---
 
-**Следующее обновление:** После замеров Lighthouse и Bundle size оптимизации
+**Следующее обновление:** После реализации приоритетных задач из раздела "Дальнейшие планы"
+
+---
+
+## 🎯 Дальнейшие планы (Roadmap 2026 Q2-Q4)
+
+### 📋 Приоритет 1: Качество кода и тестирование (Q2 2026 — Апрель-Май)
+
+#### 1.1 Исправление lint ошибок в тестах
+
+**Статус:** ⚠️ 1 error, 3 warnings (2026-04-12)
+
+**Проблемы:**
+- `visualization-canvas.test.tsx` — unsafe call (строка 95)
+- `use-canvas-animation.test.ts` — unused import setupCanvas
+- `proxy.test.ts` — unused import getToken
+
+**Задачи:**
+- [ ] Исправить unsafe call в visualization-canvas.test.tsx
+- [ ] Удалить unused imports из тестов
+- [ ] Запустить `npm run lint:fix` для автоматического исправления
+- [ ] Проверить, что все тесты проходят
+
+**Ожидаемый результат:** 0 lint ошибок, 0 warnings
+
+---
+
+#### 1.2 E2E тесты для Auth protection
+
+**Статус:** 📝 2 tests marked as todo в proxy.test.ts
+
+**Проблема:** Auth protection тесты требуют real middleware chain, сложно мокать
+
+**Задачи:**
+- [ ] Создать `e2e/auth.spec.ts` с Playwright тестами
+- [ ] Тест: redirect на signin при доступе к /dashboard без auth
+- [ ] Тест: redirect на / при доступе к /auth/signin с auth
+- [ ] Тест: проверка session persistence
+- [ ] Добавить тесты в CI/CD pipeline
+
+**Ожидаемый результат:** 3+ E2E теста для auth flow
+
+---
+
+#### 1.3 Canvas тесты (опционально)
+
+**Статус:** 📝 7 tests skipped/todo
+
+**Варианты решения:**
+
+**Вариант A:** Установить `canvas` npm package
+- [ ] `npm install --save-dev canvas`
+- [ ] Обновить test setup для использования canvas
+- [ ] Раскрыть 7 skipped тестов
+
+**Вариант B:** Оставить как E2E тесты
+- [ ] Создать визуальные тесты с Playwright screenshots
+- [ ] Сравнивать рендеринг canvas на реальных устройствах
+
+**Рекомендация:** Вариант B — более реалистичное тестирование
+
+---
+
+### 📋 Приоритет 2: Производительность (Q2-Q3 2026 — Май-Июль)
+
+#### 2.1 Lighthouse Performance
+
+**Текущий статус:**
+- Performance: 33 (localhost, не репрезентативно)
+- Accessibility: 100 ✅
+- Best Practices: 79
+- SEO: 90 ✅
+
+**Задачи:**
+- [ ] Замерить Lighthouse на production (Vercel)
+- [ ] Цель: Performance > 90
+- [ ] Цель: Best Practices > 90
+- [ ] Оптимизировать critical rendering path
+- [ ] Добавить preconnect для внешних API (NASA, WhereTheISSat)
+- [ ] Lazy load тяжелых компонентов (Three.js, Leaflet)
+- [ ] Использовать Next.js Image component для всех изображений
+
+**Метрики:**
+- [ ] LCP < 2.5s
+- [ ] FID < 100ms
+- [ ] CLS < 0.1
+- [ ] TTFB < 800ms
+
+---
+
+#### 2.2 Bundle Size оптимизация
+
+**Текущий статус:**
+- Initial загрузка: ~219KB (оценка)
+- Total JS: ~1.1 MB
+- Цель: < 200KB initial
+
+**Задачи:**
+- [ ] Проанализировать bundle с `npm run build:analyze`
+- [ ] Tree-shaking для unused компонентов
+- [ ] Dynamic imports для всех 3D визуализаций
+- [ ] Code splitting по route segments
+- [ ] Удалить unused зависимости
+- [ ] Использовать `next/dynamic` для тяжелых компонентов
+
+**Target:**
+- Initial bundle < 150KB
+- Total JS < 800KB
+
+---
+
+#### 2.3 React Query оптимизация
+
+**Статус:** ⚠️ Не используется активно
+
+**Задачи:**
+- [ ] Мигрировать все fetch запросы на React Query
+- [ ] Настроить staleTime/gcTime для каждого endpoint
+- [ ] Добавить optimistic updates для визуализаций
+- [ ] Prefetch данных на сервере (getServerSideProps)
+- [ ] Добавить offline support через React Query persist
+
+---
+
+### 📋 Приоритет 3: Безопасность (Q3 2026 — Июль-Сентябрь)
+
+#### 3.1 npm уязвимости
+
+**Текущий статус:** 21 уязвимость (10 low, 7 moderate, 4 high)
+
+**Критичные:**
+- `elliptic` — криптография (транзитивная Storybook)
+- `basic-ftp` — CRLF injection (high)
+- `vite` — path traversal (high)
+- `lodash` — prototype pollution (high)
+
+**Breaking changes required:**
+- Prisma 7.x → 6.x (не возможно, уже на 7.x)
+- Storybook 10.x → 7.x (major downgrade)
+- next-auth 4.x → 5.x (major upgrade)
+
+**План действий:**
+- [ ] Обновить next-auth до v5 (breaks nodemailer v8 compatibility)
+- [ ] Обновить Storybook до latest stable
+- [ ] Проверить совместимость после обновлений
+- [ ] Запустить full test suite
+- [ ] Обновить документацию
+
+**Risk:** Breaking changes могут потребовать рефакторинга auth flow
+
+---
+
+#### 3.2 .env.example улучшение
+
+**Статус:** ⚠️ Содержит placeholder-секреты
+
+**Задачи:**
+- [ ] Сгенерировать реальный NEXTAUTH_SECRET для example
+- [ ] Добавить комментарии к каждой переменной
+- [ ] Указать, какие переменные обязательные
+- [ ] Добавить пример DATABASE_URL для PostgreSQL
+- [ ] Создать скрипт для генерации секретов
+
+---
+
+#### 3.3 Production security audit
+
+**Задачи:**
+- [ ] Настроить HTTPS для production
+- [ ] Добавить HSTS header
+- [ ] Настроить Content-Security-Policy report-uri
+- [ ] Добавить Subresource Integrity (SRI) для внешних скриптов
+- [ ] Провести penetration testing
+- [ ] Настроить мониторинг уязвимостей (Dependabot alerts)
+
+---
+
+### 📋 Приоритет 4: Функциональность (Q3-Q4 2026)
+
+#### 4.1 Новые визуализации
+
+**Запланировано:**
+- [ ] **Эффект Доплера** — изменение частоты волн
+- [ ] **Интерференция волн** — суперпозиция волновых фронтов
+- [ ] **Поляризация света** — фильтры и угол Брюстера
+- [ ] **Эффект Зеемана** — расщепление спектральных линий
+- [ ] **Ядерный синтез** — термоядерные реакции в звёздах
+- [ ] **Квантовый компьютер** — кубиты и гейты
+- [ ] **Теория струн** — многомерные вибрации
+
+**Приоритет:** Высокий (увеличивает образовательную ценность)
+
+---
+
+#### 4.2 User Engagement
+
+**Задачи:**
+- [ ] Система уровней и XP (gamification)
+- [ ] Достижения за прохождение тестов
+- [ ] Leaderboard (опционально)
+- [ ] Сохранение прогресса между устройствами
+- [ ] Social sharing результатов
+- [ ] Email уведомления о новых достижениях
+
+---
+
+#### 4.3 Мобильная оптимизация
+
+**Задачи:**
+- [ ] Touch жесты для canvas визуализаций
+- [ ] Swipe navigation между разделами
+- [ ] Bottom sheet для настроек
+- [ ] Оптимизация для экранов < 768px
+- [ ] PWA offline improvements
+- [ ] Reduce motion для мобильных устройств
+
+---
+
+### 📋 Приоритет 5: Документация и DevEx (Q4 2026)
+
+#### 5.1 Developer Experience
+
+**Задачи:**
+- [ ] Создать CONTRIBUTING_GUIDE.md для новых контрибьюторов
+- [ ] Добавить issue templates (bug, feature, question)
+- [ ] Создать PR template с checklist
+- [ ] Настроить automated changelog generation
+- [ ] Добавить code owners для разных директорий
+- [ ] Создать architecture diagrams
+
+---
+
+#### 5.2 Документация кода
+
+**Задачи:**
+- [ ] JSDoc комментарии для всех публичных API
+- [ ] TypeDoc генерация документации
+- [ ] Storybook для всех UI компонентов
+- [ ] ADR (Architecture Decision Records)
+- [ ] Onboarding guide для новых разработчиков
+
+---
+
+#### 5.3 CI/CD улучшения
+
+**Задачи:**
+- [ ] Автоматические semantic versioning
+- [ ] Auto-generate release notes
+- [ ] Preview деплойменты для PR (Vercel)
+- [ ] Visual regression testing (Percy/Chromatic)
+- [ ] Performance budget enforcement
+- [ ] Automated dependency updates (Renovate bot)
+
+---
+
+### 📋 Долгосрочные цели (2027+)
+
+#### 6.1 Интеграции
+
+- [ ] **NASA APIs** — реальная интегра с DONKI, EONET, GIBS
+- [ ] **ESA APIs** — European Space Agency данные
+- [ ] **SIMBAD** — astronomical database
+- [ ] **arXiv** — ссылки на научные статьи
+- [ ] **Wikipedia** — физические статьи с ссылками
+
+---
+
+#### 6.2 Мультиязычность
+
+- [ ] Добавить 10+ языков (es, fr, de, ja, ko, ar, hi, pt, it, nl)
+- [ ] RTL поддержка (Arabic, Hebrew)
+- [ ] Community translation platform (Crowdin/Weblate)
+- [ ] Machine translation с human review
+
+---
+
+#### 6.3 Accessibility
+
+- [ ] WCAG 2.1 Level AAA compliance
+- [ ] Screen reader optimization
+- [ ] High contrast mode
+- [ ] Custom font sizes
+- [ ] Reduced motion presets
+- [ ] Keyboard-only navigation flow
+
+---
+
+#### 6.4 Монетизация (опционально)
+
+- [ ] Premium визуализации (donation-based)
+- [ ] Sponsorship program
+- [ ] Educational institution licensing
+- [ ] Custom visualization development
+- [ ] Workshops и online courses
+
+---
+
+### 📊 Метрики успеха (OKRs 2026)
+
+**Objective 1: Качество кода**
+- KR1: 0 lint ошибок (текущее: 1 error, 3 warnings)
+- KR2: 350+ тестов passing (текущее: 313)
+- KR3: 90%+ code coverage (текущее: ~70%)
+- KR4: 0 high vulnerabilities (текущее: 4 high)
+
+**Objective 2: Производительность**
+- KR1: Lighthouse Performance > 90 (текущее: 33 localhost)
+- KR2: Initial bundle < 150KB (текущее: ~219KB)
+- KR3: LCP < 2.5s (требует замеров)
+- KR4: CLS < 0.1 (требует замеров)
+
+**Objective 3: Пользовательский опыт**
+- KR1: 1000+ monthly active users
+- KR2: 4.5+ star rating
+- KR3: 50+ GitHub stars
+- KR4: 10+ контрибьюторов
+
+**Objective 4: Документация**
+- KR1: 100% API endpoints задокументировано ✅ (API.md создан)
+- KR2: 50+ Storybook stories (текущее: 43+)
+- KR3: Developer onboarding < 30 минут
+- KR4: 0 open issues без ответа > 7 дней
+
+---
+
+### 🗓️ Review Cadence
+
+**Еженедельно:**
+- [ ] Проверить Dependabot alerts
+- [ ] Review open PRs
+- [ ] Update todo.md статус
+
+**Ежемесячно:**
+- [ ] Замерить Lighthouse метрики
+- [ ] Проверить bundle size
+- [ ] Обновить зависимости
+- [ ] Проанализировать user feedback
+
+**Ежеквартально:**
+- [ ] Провести security audit
+- [ ] Пересмотреть OKRs
+- [ ] Обновить ROADMAP
+- [ ] Release major version (если необходимо)
+
+---
+
+**Последнее обновление:** 2026-04-12 v0.4.3
+**Следующий review:** 2026-04-19
