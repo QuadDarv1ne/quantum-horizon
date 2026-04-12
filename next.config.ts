@@ -29,6 +29,63 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["lucide-react", "recharts", "@radix-ui/react-dialog"],
   },
 
+  // Webpack configuration for better code splitting
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Enable code splitting for vendor chunks
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      config.optimization.splitChunks = {
+        chunks: "all",
+        cacheGroups: {
+          // Three.js ecosystem
+          three: {
+            test: /[\\/]node_modules[\\/](three|@react-three)[\\/]/,
+            name: "three-vendor",
+            priority: 20,
+            reuseExistingChunk: true,
+          },
+          // Framer Motion
+          framer: {
+            test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
+            name: "framer-vendor",
+            priority: 20,
+            reuseExistingChunk: true,
+          },
+          // Radix UI
+          radix: {
+            test: /[\\/]node_modules[\\/]@radix-ui[\\/]/,
+            name: "radix-vendor",
+            priority: 20,
+            reuseExistingChunk: true,
+          },
+          // React ecosystem
+          react: {
+            test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+            name: "react-vendor",
+            priority: 30,
+            reuseExistingChunk: true,
+          },
+          // Charting libraries
+          charts: {
+            test: /[\\/]node_modules[\\/](recharts|d3)[\\/]/,
+            name: "charts-vendor",
+            priority: 20,
+            reuseExistingChunk: true,
+          },
+          // Map libraries
+          maps: {
+            test: /[\\/]node_modules[\\/](leaflet|react-leaflet)[\\/]/,
+            name: "maps-vendor",
+            priority: 20,
+            reuseExistingChunk: true,
+          },
+        },
+      }
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return config
+  },
+
   // Security headers
   headers() {
     return [

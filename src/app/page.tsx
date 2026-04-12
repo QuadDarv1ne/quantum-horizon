@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react"
 import { useLocale } from "next-intl"
+import dynamic from "next/dynamic"
 import { SideMenu } from "@/components/layout/side-menu"
 import { HeaderControls } from "@/components/layout/header-controls"
 import { Navigation } from "@/components/layout/navigation"
 import { AnimatedBackground } from "@/components/layout/animated-background"
-import { OnboardingTour, useOnboarding } from "@/components/ui/onboarding-tour"
-import { EnhancedCommandPalette, useCommandPalette } from "@/components/ui/enhanced-command-palette"
 import { QuickActions } from "@/components/ui/quick-actions"
+import { useOnboarding } from "@/components/ui/onboarding-tour"
+import { useCommandPalette } from "@/components/ui/enhanced-command-palette"
 import {
   QuantumSection,
   RelativitySection,
@@ -18,6 +19,20 @@ import {
 } from "@/components/sections"
 import { SECTIONS, type Section, type Language } from "@/lib/constants-ui"
 import type { Theme } from "@/types"
+
+// Lazy load heavy UI components to reduce initial bundle
+const OnboardingTour = dynamic(
+  () => import("@/components/ui/onboarding-tour").then((m) => m.OnboardingTour),
+  { ssr: false }
+)
+
+const EnhancedCommandPalette = dynamic(
+  () =>
+    import("@/components/ui/enhanced-command-palette").then(
+      (m) => m.EnhancedCommandPalette,
+    ),
+  { ssr: false }
+)
 
 const STORAGE_KEYS = {
   THEME: "physics-theme",
