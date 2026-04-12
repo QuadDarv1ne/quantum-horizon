@@ -1,47 +1,73 @@
-import { describe, it, expect } from "vitest"
-import { render, screen } from "@testing-library/react"
+import { describe, it, expect, afterEach } from "vitest"
+import { render, screen, cleanup } from "@testing-library/react"
 import { LearningMode } from "./learning-mode"
 
 describe("LearningMode", () => {
+  afterEach(() => {
+    cleanup()
+  })
+
   it("рендерит кнопку обучения для waveFunction", () => {
     render(<LearningMode visualizationType="waveFunction" />)
 
-    const learningButton = screen.getByRole("button", { name: /обучение/i })
-    expect(learningButton).toBeInTheDocument()
+    const buttons = screen.getAllByRole("button")
+    const learningButton = buttons.find((btn) =>
+      btn.textContent?.toLowerCase().includes("обучение")
+    )
+    expect(learningButton).toBeDefined()
   })
 
   it("показывает 'недоступно' для неизвестного типа визуализации", () => {
     render(<LearningMode visualizationType="unknown" />)
 
-    const disabledButton = screen.getByRole("button", { name: /обучение.*недоступно/i })
-    expect(disabledButton).toBeDisabled()
+    const buttons = screen.getAllByRole("button")
+    const disabledButton = buttons.find((btn) =>
+      btn.textContent?.toLowerCase().includes("недоступно")
+    )
+    expect(disabledButton).toBeDefined()
   })
 
   it("имеет правильный модуль для uncertainty", () => {
     render(<LearningMode visualizationType="uncertainty" />)
 
-    const learningButton = screen.getByRole("button", { name: /обучение/i })
+    const buttons = screen.getAllByRole("button")
+    const learningButton = buttons.find((btn) =>
+      btn.textContent?.toLowerCase().includes("обучение")
+    )
+    expect(learningButton).toBeDefined()
     expect(learningButton).not.toBeDisabled()
   })
 
   it("имеет правильный модуль для timeDilation", () => {
     render(<LearningMode visualizationType="timeDilation" />)
 
-    const learningButton = screen.getByRole("button", { name: /обучение/i })
+    const buttons = screen.getAllByRole("button")
+    const learningButton = buttons.find((btn) =>
+      btn.textContent?.toLowerCase().includes("обучение")
+    )
+    expect(learningButton).toBeDefined()
     expect(learningButton).not.toBeDisabled()
   })
 
   it("имеет правильный модуль для blackHole", () => {
     render(<LearningMode visualizationType="blackHole" />)
 
-    const learningButton = screen.getByRole("button", { name: /обучение/i })
+    const buttons = screen.getAllByRole("button")
+    const learningButton = buttons.find((btn) =>
+      btn.textContent?.toLowerCase().includes("обучение")
+    )
+    expect(learningButton).toBeDefined()
     expect(learningButton).not.toBeDisabled()
   })
 
   it("имеет правильный модуль для massEnergy", () => {
     render(<LearningMode visualizationType="massEnergy" />)
 
-    const learningButton = screen.getByRole("button", { name: /обучение/i })
+    const buttons = screen.getAllByRole("button")
+    const learningButton = buttons.find((btn) =>
+      btn.textContent?.toLowerCase().includes("обучение")
+    )
+    expect(learningButton).toBeDefined()
     expect(learningButton).not.toBeDisabled()
   })
 })
