@@ -1,13 +1,66 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-03-29 — Lighthouse замеры
-**Статус:** ✅ dev и main синхронизированы
-**Версия:** 0.3.9
+**Обновлено:** 2026-04-12 — v0.4.1: оптимизация производительности, security fixes
+**Статус:** ✅ dev и main синхронизированы (commit b265d62)
+**Версия:** 0.4.1
 
 ---
 
-## 🔍 Аудит проекта (2026-03-29) — АКТУАЛЬНОЕ СОСТОЯНИЕ
+## 🔍 Аудит проекта (2026-04-12) — v0.4.1
+
+**Дата проверки:** 2026-04-12
+**Проверил:** Qwen Code
+
+### ✅ Выполнено в v0.4.1
+
+**Производительность:**
+- ✅ Dynamic imports для OnboardingTour и EnhancedCommandPalette (src/app/page.tsx)
+- ✅ Webpack splitChunks для vendor библиотек (next.config.ts)
+  - three-vendor, framer-vendor, radix-vendor, react-vendor, charts-vendor, maps-vendor
+- ✅ Удалены 4 неиспользуемые зависимости: @hookform/resolvers, @reactuses/core, date-fns, react-markdown
+- ✅ Удалено 83 пакета (~2-3 MB node_modules)
+
+**Lighthouse Best Practices:**
+- ✅ Создан favicon.ico — исправлена 404 ошибка
+- ✅ Ожидаемый рост: 79 → ~90+ баллов
+
+**Безопасность API:**
+- ✅ Zod валидация в achievements/route.ts, bookmarks/route.ts, progress/route.ts
+- ✅ Cache-Control: private, no-store заголовки во всех API endpoints
+- ✅ Селекция полей в Prisma запросах (select вместо всех полей)
+- ✅ Улучшена обработка ошибок в catch блоках (ранее пустые)
+- ✅ Валидация входных данных для achievementId, topic, title, progress, completedCount
+
+**Тесты:**
+- ✅ Исправлены visualization-selector.test.tsx (8/8 passing)
+- ✅ Build: успешен (5.1s)
+- ✅ Lint: 0 ошибок
+- ✅ TypeScript: 0 ошибок
+
+**Git:**
+- ✅ dev и main синхронизированы (commit b265d62)
+- ✅ 3 коммита: perf, chore, fix
+
+### 🔴 Остающиеся проблемы
+
+**Критические:**
+- ⚠️ Утечка email в reset-password/route.ts:105 (возвращается email при проверке токена)
+- ⚠️ Нет валидации xpGained в activity/route.ts (можно начислять произвольный XP)
+- ⚠️ Нет проверки существования achievementId (можно создать произвольный)
+
+**Средние:**
+- ⚠️ Rate limiting зависит от наличия Upstash Redis (без него отключён)
+- ⚠️ Нет CORS конфигурации
+- ⚠️ Неоднородная типизация ответов в API
+
+**Низкие:**
+- ⚠️ .env.example содержит placeholder-секреты (могут скопировать в production)
+- ⚠️ SQLite в development vs PostgreSQL в production (расхождение)
+
+---
+
+## 🔍 Аудит проекта (2026-03-29) — АРХИВ
 
 **Дата проверки:** 2026-03-29
 **Проверил:** Qwen Code
