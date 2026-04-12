@@ -2,7 +2,7 @@
 
 **Дата:** 2026-03-11
 **Обновлено:** 2026-04-12 — v0.4.1: оптимизация производительности, security fixes
-**Статус:** ✅ dev и main синхронизированы (commit b265d62)
+**Статус:** ✅ dev и main синхронизированы (commit 27510be)
 **Версия:** 0.4.1
 
 ---
@@ -12,28 +12,17 @@
 **Дата проверки:** 2026-04-12
 **Проверил:** Qwen Code
 
-### ✅ Выполнено в v0.4.1
+### ✅ Текущий статус
 
-**Производительность:**
-- ✅ Dynamic imports для OnboardingTour и EnhancedCommandPalette
-- ✅ Webpack splitChunks для vendor библиотек (six-vendor чанки)
-- ✅ Удалены 4 неиспользуемые зависимости (83 пакета)
-
-**Lighthouse Best Practices:**
-- ✅ Создан favicon.ico — исправлена 404 ошибка
-
-**Безопасность API (v0.4.1 — завершено):**
-- ✅ Исправлена утечка email в reset-password GET (возвращается только `{ valid: true }`)
-- ✅ Zod валидация во всех endpoints: achievements, activity, bookmarks, progress
-- ✅ Валидация xpGained: min(0), max(10000) — защита от накрутки XP
-- ✅ Селекция полей в Prisma запросах (select вместо всех полей)
-- ✅ Cache-Control: private, no-store заголовки
-- ✅ Улучшена обработка ошибок в catch блоках
+**Build:** ✅ успешен (5.1s)
+**Lint:** ✅ 0 ошибок ESLint
+**TypeScript:** ✅ 0 ошибок
+**Тесты:** ✅ visualization-selector 8/8 passing
 
 **Остающиеся проблемы:**
 
 **Средние:**
-- ⚠️ Rate limiting зависит от наличия Upstash Redis (без него отключён)
+- ⚠️ Rate limiting зависит от Upstash Redis (без него отключён)
 - ⚠️ Нет CORS конфигурации
 
 **Низкие:**
