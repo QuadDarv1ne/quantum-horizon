@@ -15,48 +15,30 @@
 ### ✅ Выполнено в v0.4.1
 
 **Производительность:**
-- ✅ Dynamic imports для OnboardingTour и EnhancedCommandPalette (src/app/page.tsx)
-- ✅ Webpack splitChunks для vendor библиотек (next.config.ts)
-  - three-vendor, framer-vendor, radix-vendor, react-vendor, charts-vendor, maps-vendor
-- ✅ Удалены 4 неиспользуемые зависимости: @hookform/resolvers, @reactuses/core, date-fns, react-markdown
-- ✅ Удалено 83 пакета (~2-3 MB node_modules)
+- ✅ Dynamic imports для OnboardingTour и EnhancedCommandPalette
+- ✅ Webpack splitChunks для vendor библиотек (six-vendor чанки)
+- ✅ Удалены 4 неиспользуемые зависимости (83 пакета)
 
 **Lighthouse Best Practices:**
 - ✅ Создан favicon.ico — исправлена 404 ошибка
-- ✅ Ожидаемый рост: 79 → ~90+ баллов
 
-**Безопасность API:**
-- ✅ Zod валидация в achievements/route.ts, bookmarks/route.ts, progress/route.ts
-- ✅ Cache-Control: private, no-store заголовки во всех API endpoints
+**Безопасность API (v0.4.1 — завершено):**
+- ✅ Исправлена утечка email в reset-password GET (возвращается только `{ valid: true }`)
+- ✅ Zod валидация во всех endpoints: achievements, activity, bookmarks, progress
+- ✅ Валидация xpGained: min(0), max(10000) — защита от накрутки XP
 - ✅ Селекция полей в Prisma запросах (select вместо всех полей)
-- ✅ Улучшена обработка ошибок в catch блоках (ранее пустые)
-- ✅ Валидация входных данных для achievementId, topic, title, progress, completedCount
+- ✅ Cache-Control: private, no-store заголовки
+- ✅ Улучшена обработка ошибок в catch блоках
 
-**Тесты:**
-- ✅ Исправлены visualization-selector.test.tsx (8/8 passing)
-- ✅ Build: успешен (5.1s)
-- ✅ Lint: 0 ошибок
-- ✅ TypeScript: 0 ошибок
-
-**Git:**
-- ✅ dev и main синхронизированы (commit b265d62)
-- ✅ 3 коммита: perf, chore, fix
-
-### 🔴 Остающиеся проблемы
-
-**Критические:**
-- ⚠️ Утечка email в reset-password/route.ts:105 (возвращается email при проверке токена)
-- ⚠️ Нет валидации xpGained в activity/route.ts (можно начислять произвольный XP)
-- ⚠️ Нет проверки существования achievementId (можно создать произвольный)
+**Остающиеся проблемы:**
 
 **Средние:**
 - ⚠️ Rate limiting зависит от наличия Upstash Redis (без него отключён)
 - ⚠️ Нет CORS конфигурации
-- ⚠️ Неоднородная типизация ответов в API
 
 **Низкие:**
-- ⚠️ .env.example содержит placeholder-секреты (могут скопировать в production)
-- ⚠️ SQLite в development vs PostgreSQL в production (расхождение)
+- ⚠️ .env.example содержит placeholder-секреты
+- ⚠️ SQLite в development vs PostgreSQL в production
 
 ---
 
