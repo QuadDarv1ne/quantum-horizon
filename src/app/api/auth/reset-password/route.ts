@@ -106,7 +106,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ valid: false, error: "Токен истек" }, { status: 400 })
     }
 
-    return NextResponse.json({ valid: true, email: resetToken.email })
+    // Не раскрываем email — только валидность токена
+    return NextResponse.json({ valid: true })
   } catch (error) {
     logger.error("Check token error:", error instanceof Error ? error.message : "Unknown error")
     return NextResponse.json({ error: "Ошибка проверки токена" }, { status: 500 })

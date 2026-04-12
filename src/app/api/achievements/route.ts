@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { db } from "@/lib/db"
 import { createLogger } from "@/lib/logger"
-import { z } from "zod"
+import { z, treeifyError } from "zod"
 
 const logger = createLogger("api:achievements")
 
@@ -13,12 +13,6 @@ const achievementSchema = z.object({
   progress: z.number().min(0).max(10000).default(1),
   target: z.number().min(1).max(10000).default(1),
 })
-
-type AchievementResponse = {
-  success: true
-  data: unknown
-  newlyUnlocked?: boolean
-}
 
 async function getUserId(): Promise<string | null> {
   const session = await getServerSession(authOptions)
@@ -82,13 +76,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const body = await request.json()
-    
+    const body = (await request.json()) as Record<string, unknown>
+
     // Валидация входных данных
     const validationResult = achievementSchema.safeParse(body)
     if (!validationResult.success) {
       return NextResponse.json(
-        { error: "Invalid input", details: validationResult.error.errors },
+        { error: "Invalid input", details: treeifyError(validationResult.error) },
         { status: 400 }
       )
     }

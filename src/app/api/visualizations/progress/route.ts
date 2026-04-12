@@ -3,11 +3,10 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { db } from "@/lib/db"
 import { createLogger } from "@/lib/logger"
-import { z } from "zod"
+import { z, treeifyError } from "zod"
 
 const logger = createLogger("api:progress")
 
-// Zod схемы для валидации
 const progressSchema = z.object({
   topic: z.string().min(1).max(100),
   completedCount: z.number().min(1).max(1000).default(1),
@@ -73,12 +72,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const body = (await request.json()) as { topic?: string; completedCount?: number }
-    const { topic, completedCount = 1 } = body
-
-    if (!topic) {
-      return NextResponse.json({ error: "Topic is required" }, { status: 400 })
+    const body = (await request.json()) as Record<string, unknown>
+    const validationResult = progressSchema.safeParse(body)
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { error: "Invalid input", details: treeifyError(validationResult.error) },
+        { status: 400 }
+      )
     }
+
+    const { topic, completedCount } = validationResult.data
 
     const progress = await db.userProgress.upsert({
       where: {
