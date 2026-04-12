@@ -7,6 +7,35 @@
 
 ---
 
+## [0.4.1] - 2026-04-12
+
+### Улучшено
+
+- **Производительность** — dynamic imports для OnboardingTour и EnhancedCommandPalette
+- **Bundle size** — webpack splitChunks для vendor библиотек (three.js, framer-motion, Radix UI, recharts, leaflet)
+- **Lighthouse Best Practices** — исправлена 404 ошибка favicon (79 → ~90+ баллов)
+
+### Удалено
+
+- **@hookform/resolvers** — не использовался в проекте
+- **@reactuses/core** — не использовался в проекте
+- **date-fns** — не использовался (react-day-picker v9 имеет встроенную работу с датами)
+- **react-markdown** — не использовался в проекте
+- Удалено 83 пакета зависимостей (~2-3 MB node_modules)
+
+### Исправлено
+
+- **Тесты** — visualization-selector.test.tsx теперь проходит все 8 тестов
+- **Favicon** — добавлен favicon.ico для совместимости с браузерами
+
+### Технические детали
+
+- `next.config.ts` — добавлена webpack splitChunks конфигурация
+- `src/app/page.tsx` — конвертированы тяжёлые компоненты в dynamic imports
+- `public/favicon.ico` — создан из favicon.svg
+
+---
+
 ## [0.4.0] - 2026-03-13
 
 ### Добавлено

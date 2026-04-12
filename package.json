@@ -1,6 +1,6 @@
 {
   "name": "nextjs_tailwind_shadcn_ts",
-  "version": "0.3.9",
+  "version": "0.4.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -38,7 +38,6 @@
     ]
   },
   "dependencies": {
-    "@hookform/resolvers": "^5.2.2",
     "@prisma/adapter-better-sqlite3": "^7.6.0",
     "@prisma/client": "^7.6.0",
     "@radix-ui/react-accordion": "^1.2.12",
@@ -70,7 +69,6 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
-    "@reactuses/core": "^6.3.0",
     "@storybook/react": "^10.3.3",
     "@tanstack/react-query": "^5.95.2",
     "@tanstack/react-query-devtools": "^5.95.2",
@@ -81,7 +79,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
-    "date-fns": "^4.1.0",
     "dotenv": "^17.3.1",
     "framer-motion": "^12.38.0",
     "leaflet": "^1.9.4",
@@ -97,7 +94,6 @@
     "react-dom": "^19.2.4",
     "react-hook-form": "^7.72.0",
     "react-leaflet": "^5.0.0",
-    "react-markdown": "^10.1.0",
     "recharts": "^3.8.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.5.0",
