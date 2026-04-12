@@ -104,41 +104,98 @@ async function checkRateLimit(ip: string, config: RateLimitConfig): Promise<Next
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0] ?? "127.0.0.1"
+  const origin = request.headers.get("origin") ?? ""
 
-  // Rate limiting для API аутентификации
-  if (pathname.startsWith("/api/auth/")) {
-    if (pathname.includes("nextauth")) {
-      const response = await checkRateLimit(ip, rateLimiters.auth)
-      if (response) return response
+  // Разрешённые домены для CORS
+  const allowedOrigins = [
+    "http://localhost:3000",
+    "http://localhost:64764",
+    "https://quantum-horizon.vercel.app",
+    "https://quantum-horizon.onrender.com",
+  ]
+
+  // CORS headers для API запросов
+  if (pathname.startsWith("/api/")) {
+    const isAllowedOrigin = allowedOrigins.includes(origin)
+
+    // Preflight request (OPTIONS)
+    if (request.method === "OPTIONS") {
+      if (isAllowedOrigin || !origin) {
+        return new NextResponse(null, {
+          headers: {
+            "Access-Control-Allow-Origin": isAllowedOrigin ? origin : "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+            "Access-Control-Max-Age": "86400", // 24 часа
+          },
+        })
+      }
+      return new NextResponse("Forbidden", { status: 403 })
     }
 
-    if (pathname.includes("register")) {
-      const response = await checkRateLimit(ip, rateLimiters.register)
-      if (response) return response
+    // Проверка rate limit
+    if (pathname.startsWith("/api/auth/")) {
+      if (pathname.includes("nextauth")) {
+        const response = await checkRateLimit(ip, rateLimiters.auth)
+        if (response) {
+          response.headers.set("Access-Control-Allow-Origin", isAllowedOrigin ? origin : "*")
+          return response
+        }
+      }
+
+      if (pathname.includes("register")) {
+        const response = await checkRateLimit(ip, rateLimiters.register)
+        if (response) {
+          response.headers.set("Access-Control-Allow-Origin", isAllowedOrigin ? origin : "*")
+          return response
+        }
+      }
+
+      if (pathname.includes("reset-password")) {
+        const response = await checkRateLimit(ip, rateLimiters.reset)
+        if (response) {
+          response.headers.set("Access-Control-Allow-Origin", isAllowedOrigin ? origin : "*")
+          return response
+        }
+      }
     }
 
-    if (pathname.includes("reset-password")) {
-      const response = await checkRateLimit(ip, rateLimiters.reset)
-      if (response) return response
+    // Rate limiting для визуализаций
+    if (pathname.startsWith("/api/visualizations/")) {
+      const response = await checkRateLimit(ip, rateLimiters.visualizations)
+      if (response) {
+        response.headers.set("Access-Control-Allow-Origin", isAllowedOrigin ? origin : "*")
+        return response
+      }
     }
-  }
 
-  // Rate limiting для визуализаций
-  if (pathname.startsWith("/api/visualizations/")) {
-    const response = await checkRateLimit(ip, rateLimiters.visualizations)
-    if (response) return response
-  }
+    // Rate limiting для активности
+    if (pathname.startsWith("/api/activity/")) {
+      const response = await checkRateLimit(ip, rateLimiters.activity)
+      if (response) {
+        response.headers.set("Access-Control-Allow-Origin", isAllowedOrigin ? origin : "*")
+        return response
+      }
+    }
 
-  // Rate limiting для активности
-  if (pathname.startsWith("/api/activity/")) {
-    const response = await checkRateLimit(ip, rateLimiters.activity)
-    if (response) return response
-  }
+    // Rate limiting для достижений
+    if (pathname.startsWith("/api/achievements/")) {
+      const response = await checkRateLimit(ip, rateLimiters.achievements)
+      if (response) {
+        response.headers.set("Access-Control-Allow-Origin", isAllowedOrigin ? origin : "*")
+        return response
+      }
+    }
 
-  // Rate limiting для достижений
-  if (pathname.startsWith("/api/achievements/")) {
-    const response = await checkRateLimit(ip, rateLimiters.achievements)
-    if (response) return response
+    // Добавляем CORS заголовки к обычным ответам
+    const response = NextResponse.next()
+    if (isAllowedOrigin) {
+      response.headers.set("Access-Control-Allow-Origin", origin)
+      response.headers.set("Access-Control-Allow-Credentials", "true")
+    }
+    response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+    response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
+    return response
   }
 
   return NextResponse.next()

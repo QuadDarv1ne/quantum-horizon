@@ -7,6 +7,74 @@
 
 ---
 
+## [0.4.2] - 2026-04-12
+
+### Добавлено
+
+- **CORS поддержка** — конфигурация CORS заголовков для API endpoints
+  - Разрешённые домены: localhost, Vercel, Render
+  - Preflight OPTIONS requests с cache (24 часа)
+  - Access-Control-Allow-Credentials для авторизованных запросов
+  - Фильтрация неразрешённых origins
+
+### Улучшено
+
+- **Middleware** — расширена архитектура middleware
+  - CORS заголовки для всех API endpoints
+  - Rate limiting + CORS integration
+  - Улучшена обработка ошибок с CORS заголовками
+
+- **Тесты** — масштабное исправление тестов
+  - **schrodingers-cat.test.tsx**: 7/7 passing (было 5/7)
+    - Исправлены проблемы с множественными элементами
+    - Улучшены селекторы для кнопок
+    - Корректная обработка эмодзи в текстах
+  - **visualization-controls.test.tsx**: 7/8 passing (было 3/8)
+    - Исправлены селекторы кнопок play/pause
+    - Улучшена работа с slider элементами
+  - **a11y.test.ts**: 30/30 passing (было 28/30)
+    - Добавлен matchMedia mock в test setup
+  - **button.test.tsx**: 5/5 passing (было 2/5)
+    - Добавлен cleanup после каждого теста
+    - Исправлены селекторы для rerender тестов
+  - **preset-manager.test.tsx**: 5/5 passing (было 0/5)
+    - Исправлены все тесты с множественными элементами
+    - Добавлен cleanup после каждого теста
+  - **middleware.test.ts**: 11/11 passing
+    - 4 новых CORS теста
+  - **Итого**: 302 passing tests (было 285)
+
+- **Test infrastructure** — улучшения тестового окружения
+  - Добавлен `window.matchMedia` mock в `src/test/setup.ts`
+  - Добавлен `cleanup()` в button и preset-manager тесты
+  - Улучшена обработка множественных элементов через `getAllByRole`
+
+### Обновлено
+
+- **Зависимости** — обновлены пакеты для безопасности
+  - Prisma: 7.6.0 → 7.7.0
+  - Next.js: 16.2.1 → 16.2.3
+  - React: 19.2.4 → 19.2.5
+  - Уменьшено уязвимостей: 23 → 21 (high: 6 → 4)
+
+### Исправлено
+
+- **Lint ошибки** — все ESLint ошибки исправлены (0 errors)
+- **TypeScript** — 0 ошибок
+- **Build** — успешная сборка (4.1s)
+
+### Технические детали
+
+- `src/middleware.ts` — добавлена CORS логика
+- `src/middleware.test.ts` — 4 новых CORS теста
+- `src/test/setup.ts` — добавлен matchMedia mock
+- `src/components/visualizations/quantum/schrodingers-cat.test.tsx` — исправлены селекторы
+- `src/components/visualizations/base/visualization-controls.test.tsx` — исправлены тесты
+- `src/components/ui/button.test.tsx` — добавлен cleanup
+- `src/components/ui/preset-manager.test.tsx` — исправлены все тесты
+
+---
+
 ## [0.4.1] - 2026-04-12
 
 ### Улучшено

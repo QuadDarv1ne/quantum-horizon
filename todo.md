@@ -1,31 +1,44 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-04-12 — v0.4.1: оптимизация производительности, security fixes
-**Статус:** ✅ dev и main синхронизированы (commit 27510be)
-**Версия:** 0.4.1
+**Обновлено:** 2026-04-12 — v0.4.2: CORS, тесты, зависимости
+**Статус:** 🔄 Работа в dev ветке (готово к merge в main)
+**Версия:** 0.4.2
 
 ---
 
-## 🔍 Аудит проекта (2026-04-12) — v0.4.1
+## 🔍 Аудит проекта (2026-04-12) — v0.4.2
 
 **Дата проверки:** 2026-04-12
 **Проверил:** Qwen Code
 
 ### ✅ Текущий статус
 
-**Build:** ✅ успешен (5.1s)
+**Build:** ✅ успешен (4.1s)
 **Lint:** ✅ 0 ошибок ESLint
 **TypeScript:** ✅ 0 ошибок
-**Тесты:** ✅ visualization-selector 8/8 passing
+**Тесты:** ✅ 302 passing, 29 failing, 1 skipped (было 285 passing, 47 failing)
+
+**Выполнено в v0.4.2:**
+- ✅ CORS конфигурация добавлена в middleware
+- ✅ 4 новых CORS теста в middleware.test.ts
+- ✅ Исправлены schrodingers-cat тесты (7/7 passing)
+- ✅ Исправлены visualization-controls тесты (7/8 passing)
+- ✅ Исправлены a11y тесты (30/30 passing)
+- ✅ Исправлены button тесты (5/5 passing)
+- ✅ Исправлены preset-manager тесты (5/5 passing)
+- ✅ Добавлен matchMedia mock в test setup
+- ✅ Обновлены зависимости: Prisma 7.7.0, Next.js 16.2.3, React 19.2.5
+- ✅ Уменьшено уязвимостей npm: 23 → 21 (high: 6 → 4)
 
 **Остающиеся проблемы:**
 
 **Средние:**
+- ⚠️ 29 failing тестов (split-screen, statistics-dashboard, use-canvas-animation, visualization-canvas)
 - ⚠️ Rate limiting зависит от Upstash Redis (без него отключён)
-- ⚠️ Нет CORS конфигурации
 
 **Низкие:**
+- ⚠️ 21 npm уязвимостей (транзитивные зависимости Storybook/Prisma)
 - ⚠️ .env.example содержит placeholder-секреты
 - ⚠️ SQLite в development vs PostgreSQL в production
 

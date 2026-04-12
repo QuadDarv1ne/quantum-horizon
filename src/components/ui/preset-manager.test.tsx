@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from "vitest"
-import { render, screen } from "@testing-library/react"
+import { describe, it, expect, beforeEach, vi, afterEach } from "vitest"
+import { render, screen, cleanup } from "@testing-library/react"
 import { PresetManager } from "./preset-manager"
 import { useVisualizationStore } from "@/stores/visualization-store"
 
@@ -17,6 +17,10 @@ vi.mock("@/stores/visualization-store", () => ({
 }))
 
 describe("PresetManager", () => {
+  afterEach(() => {
+    cleanup()
+  })
+
   beforeEach(() => {
     vi.clearAllMocks()
     vi.spyOn(Storage.prototype, "getItem").mockReturnValue(null)
@@ -29,35 +33,40 @@ describe("PresetManager", () => {
   it("рендерит кнопку пресетов", () => {
     render(<PresetManager visualizationType="waveFunction" />)
 
-    const presetButton = screen.getByRole("button", { name: /пресеты/i })
-    expect(presetButton).toBeInTheDocument()
+    const buttons = screen.getAllByRole("button")
+    const presetButton = buttons.find((btn) => btn.textContent?.toLowerCase().includes("пресет"))
+    expect(presetButton).toBeDefined()
   })
 
   it("показывает стандартные пресеты для waveFunction", () => {
     render(<PresetManager visualizationType="waveFunction" />)
 
-    const presetButton = screen.getByRole("button", { name: /пресеты/i })
-    expect(presetButton).toBeInTheDocument()
+    const buttons = screen.getAllByRole("button")
+    const presetButton = buttons.find((btn) => btn.textContent?.toLowerCase().includes("пресет"))
+    expect(presetButton).toBeDefined()
   })
 
   it("показывает стандартные пресеты для timeDilation", () => {
     render(<PresetManager visualizationType="timeDilation" />)
 
-    const presetButton = screen.getByRole("button", { name: /пресеты/i })
-    expect(presetButton).toBeInTheDocument()
+    const buttons = screen.getAllByRole("button")
+    const presetButton = buttons.find((btn) => btn.textContent?.toLowerCase().includes("пресет"))
+    expect(presetButton).toBeDefined()
   })
 
   it("показывает стандартные пресеты для blackHole", () => {
     render(<PresetManager visualizationType="blackHole" />)
 
-    const presetButton = screen.getByRole("button", { name: /пресеты/i })
-    expect(presetButton).toBeInTheDocument()
+    const buttons = screen.getAllByRole("button")
+    const presetButton = buttons.find((btn) => btn.textContent?.toLowerCase().includes("пресет"))
+    expect(presetButton).toBeDefined()
   })
 
   it("имеет кнопку сохранения пресета", () => {
     render(<PresetManager visualizationType="waveFunction" />)
 
-    const presetButton = screen.getByRole("button", { name: /пресеты/i })
-    expect(presetButton).toBeInTheDocument()
+    const buttons = screen.getAllByRole("button")
+    const presetButton = buttons.find((btn) => btn.textContent?.toLowerCase().includes("пресет"))
+    expect(presetButton).toBeDefined()
   })
 })
