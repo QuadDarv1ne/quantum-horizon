@@ -7,46 +7,11 @@ import { renderHook, act } from "@testing-library/react"
 import { setupCanvas, useCanvasAnimation } from "./use-canvas-animation"
 
 describe("setupCanvas", () => {
-  it.skip("should setup canvas with correct dimensions", () => {
-    // Requires real canvas context not available in jsdom
-    const canvas = document.createElement("canvas")
-    canvas.style.width = "800px"
-    canvas.style.height = "600px"
-    document.body.appendChild(canvas)
-
-    const ctx = canvas.getContext("2d")
-    if (!ctx) throw new Error("Failed to get 2D context")
-
-    setupCanvas(canvas, ctx)
-
-    const dpr = window.devicePixelRatio || 1
-    expect(canvas.width).toBe(800 * dpr)
-    expect(canvas.height).toBe(600 * dpr)
-
-    document.body.removeChild(canvas)
-  })
-
-  it.skip("should scale context by device pixel ratio", () => {
-    // Requires real canvas context not available in jsdom
-    const canvas = document.createElement("canvas")
-    canvas.style.width = "400px"
-    canvas.style.height = "300px"
-    document.body.appendChild(canvas)
-
-    const ctx = canvas.getContext("2d")
-    if (!ctx) throw new Error("Failed to get 2D context")
-
-    const getTransformSpy = vi.spyOn(ctx, "getTransform")
-    setupCanvas(canvas, ctx)
-
-    const transform = ctx.getTransform()
-    const dpr = window.devicePixelRatio || 1
-    expect(transform.a).toBe(dpr)
-    expect(transform.d).toBe(dpr)
-
-    getTransformSpy.mockRestore()
-    document.body.removeChild(canvas)
-  })
+  // NOTE: These tests require real canvas context
+  // Should be implemented as E2E tests or with canvas npm package
+  
+  it.todo("should setup canvas with correct dimensions")
+  it.todo("should scale context by device pixel ratio")
 })
 
 describe("useCanvasAnimation", () => {
@@ -54,34 +19,9 @@ describe("useCanvasAnimation", () => {
     vi.useFakeTimers()
   })
 
-  it.skip("should initialize canvas context", () => {
-    // Requires real canvas context not available in jsdom
-    const canvas = document.createElement("canvas")
-    const canvasRef = { current: canvas }
-    const animateFn = vi.fn()
-
-    renderHook(() => useCanvasAnimation(canvasRef, animateFn))
-
-    expect(canvas.getContext("2d")).toBeTruthy()
-  })
-
-  it.skip("should call animate function with correct parameters", () => {
-    // Requires real canvas context and animation loop
-    const canvas = document.createElement("canvas")
-    canvas.style.width = "800px"
-    canvas.style.height = "600px"
-    const canvasRef = { current: canvas }
-    const animateFn = vi.fn()
-
-    renderHook(() => useCanvasAnimation(canvasRef, animateFn))
-
-    // Advance time to trigger animation frame
-    act(() => {
-      vi.advanceTimersByTime(100)
-    })
-
-    expect(animateFn).toHaveBeenCalled()
-  })
+  // NOTE: These tests require real canvas context and animation loop
+  it.todo("should initialize canvas context")
+  it.todo("should call animate function with correct parameters")
 
   it("should handle resize events", () => {
     const canvas = document.createElement("canvas")
@@ -98,22 +38,7 @@ describe("useCanvasAnimation", () => {
     expect(canvas.width).toBeGreaterThan(0)
   })
 
-  it.skip("should cleanup on unmount", () => {
-    // Requires real animation frame handling
-    const canvas = document.createElement("canvas")
-    const canvasRef = { current: canvas }
-    const animateFn = vi.fn()
-
-    const cancelAnimationFrameSpy = vi.spyOn(window, "cancelAnimationFrame")
-
-    const { unmount } = renderHook(() => useCanvasAnimation(canvasRef, animateFn))
-
-    unmount()
-
-    expect(cancelAnimationFrameSpy).toHaveBeenCalled()
-
-    cancelAnimationFrameSpy.mockRestore()
-  })
+  it.todo("should cleanup on unmount")
 
   it("should respect fpsLimit option", () => {
     const canvas = document.createElement("canvas")
