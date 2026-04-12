@@ -77,16 +77,16 @@ describe("CSP Headers Configuration", () => {
 
   it("должен содержать все required директивы CSP", () => {
     const requiredDirectives = [
-      "default-src",
-      "script-src",
-      "style-src",
-      "img-src",
-      "font-src",
-      "connect-src",
-      "frame-ancestors",
-      "base-uri",
-      "form-action",
-      "worker-src",
+      "defaultSrc",
+      "scriptSrc",
+      "styleSrc",
+      "imgSrc",
+      "fontSrc",
+      "connectSrc",
+      "frameAncestors",
+      "baseUri",
+      "formAction",
+      "workerSrc",
     ]
 
     const cspString = Object.entries(cspConfig)
