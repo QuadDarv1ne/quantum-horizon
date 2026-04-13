@@ -1,67 +1,58 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-04-13 — v0.4.4: Proxy refactor, e2e tests, lint fixes
-**Статус:** ✅ v0.4.4 в main
-**Версия:** 0.4.4
+**Обновлено:** 2026-04-13 — v0.4.5: Bundle size optimization, dynamic imports, dead code removal
+**Статус:** ✅ v0.4.5 в main
+**Версия:** 0.4.5
 
 ---
 
-## 🔍 Аудит проекта (2026-04-13) — v0.4.4
+## 🔍 Аудит проекта (2026-04-13) — v0.4.5
 
 **Дата проверки:** 2026-04-13
 **Проверил:** Qwen Code
 
 ### ✅ Текущий статус
 
-**Build:** ✅ успешен (4.1s)
+**Build:** ✅ успешен (4.9s)
 **Lint:** ✅ 0 ошибок ESLint, 0 warnings
 **TypeScript:** ✅ 0 ошибок
-**Тесты:** ✅ 320 passing, 0 failing, 5 skipped, 2 todo (было 313 passing)
+**Тесты:** ✅ 320 passing, 0 failing, 5 skipped, 2 todo
 
-**Выполнено в v0.4.4:**
-- ✅ **Proxy.ts refactor** — улучшена архитектура CORS, rate limiting, auth protection
-  - Упрощена структура rate limiter (getRateLimiter функция)
-  - Разделены функции: applyCorsHeaders, handleCorsPreflight, isAllowedOrigin
-  - Исправлены lint ошибки: заменено || на ?? для nullish coalescing
-  - Исправлена await-thenable ошибка (убран await перед синхронным вызовом)
-  - Добавлены JSDoc комментарии ко всем функциям
+**Выполнено в v0.4.5:**
+- ✅ **Bundle Size Optimization** — удалены неиспользуемые зависимости и мёртвый код
+  - Удалено 85 npm пакетов (~380 KB reduction)
+    - leaflet, react-leaflet, @types/leaflet: ~140 KB
+    - recharts: ~50 KB
+    - three.js, @react-three/fiber, @react-three/drei: ~190 KB
+  - Удалены unused файлы:
+    - exoplanet-explorer.tsx (477 строк мёртвого кода)
+    - satellite-tracker.tsx (320 строк мёртвого кода)
+    - chart.tsx, satellite-tracker.stories.tsx
+  - Total: удалено 2044 строки кода
 
-- ✅ **E2E тесты добавлены** — Playwright тесты для auth и CORS
-  - e2e/auth.spec.ts: 6 тестов для auth protection (protected paths, signin page, public content)
-  - e2e/cors-rate-limiting.spec.ts: 8 тестов для CORS и rate limiting
-    - CORS headers для allowed origins
-    - OPTIONS preflight requests
-    - Disallowed origins rejection
-    - Auth endpoint validation
-    - Multiple rapid requests
-    - CORS headers vary by origin
+- ✅ **Dynamic Imports Optimization** — отложена загрузка тяжёлых компонентов
+  - QuickActions → dynamic import (defers framer-motion ~35 KB off initial)
+  - CommandPalette → dynamic import в header-controls
+  - Оба компонента теперь загружаются on-demand вместо initial bundle
+  - ssr: false предотвращает проблемы с server-side rendering
 
-- ✅ **Test improvements** — исправлены и улучшены unit тесты
-  - proxy.test.ts: исправлен mock для next-intl/middleware (используется vi.resetModules)
-  - getToken mock теперь возвращает null (реалистичное поведение)
-  - Добавлен afterEach с restoreAllMocks
-  - Все 4 proxy теста проходят успешно (2 auth теста отмечены как todo для E2E)
-
-- ✅ **TypeScript fix** — исправлена ошибка в test setup
-  - measureText cast: добавлен `as unknown` для TextMetrics
-  - Build проходит без ошибок
-
-- ✅ **Playwright config** — улучшена конфигурация
-  - baseURL использует BASE_URL env var с fallback
-  - Удалена webServer команда (dev сервер запускается отдельно)
+- ✅ **Code Quality** — все проверки проходят
+  - Lint: 0 ошибок, 0 warnings
+  - TypeScript: 0 ошибок
+  - Тесты: 320 passed, 5 skipped, 2 todo (0 failed!)
+  - Build: успешен без предупреждений
 
 **Остающиеся проблемы:**
 
 **Средние:**
-- ⚠️ 5 skipped тестов (canvas требует real context или canvas npm package)
+- ⚠️ 5 skipped тестов (canvas требует real context)
 - ⚠️ 2 todo теста (auth protection — реализованы в E2E)
 - ⚠️ Rate limiting зависит от Upstash Redis (без него in-memory fallback)
+- ⚠️ Два CommandPalette компонента (command-palette.tsx + enhanced-command-palette.tsx) — можно объединить
 
 **Низкие:**
-- ⚠️ 21 npm уязвимостей (транзитивные зависимости Storybook/Prisma)
-  - elliptic (crypto), basic-ftp (CRLF), vite (path traversal)
-  - Решение: npm audit fix --force требует breaking changes
+- ⚠️ 20 npm уязвимостей (10 low, 6 moderate, 4 high) — транзитивные зависимости
 - ⚠️ SQLite в development vs PostgreSQL в production
 
 ---
