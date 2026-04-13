@@ -28,70 +28,88 @@ class ResizeObserverPolyfill {
 global.ResizeObserver = ResizeObserverPolyfill
 
 // Polyfill for HTMLCanvasElement
-const canvasContextMock = {
-  fillStyle: "",
-  strokeStyle: "",
-  lineWidth: 1,
-  lineCap: "butt",
-  lineJoin: "miter",
-  miterLimit: 10,
-  globalAlpha: 1,
-  globalCompositeOperation: "source-over",
-  font: "10px sans-serif",
-  textAlign: "start",
-  textBaseline: "alphabetic",
-  imageSmoothingEnabled: true,
-  imageSmoothingQuality: "low",
-  direction: "inherit",
-  fillRect: vi.fn(),
-  strokeRect: vi.fn(),
-  clearRect: vi.fn(),
-  fillText: vi.fn(),
-  strokeText: vi.fn(),
-  measureText: vi.fn().mockReturnValue({ width: 100, height: 10 }),
-  beginPath: vi.fn(),
-  closePath: vi.fn(),
-  moveTo: vi.fn(),
-  lineTo: vi.fn(),
-  bezierCurveTo: vi.fn(),
-  quadraticCurveTo: vi.fn(),
-  arc: vi.fn(),
-  arcTo: vi.fn(),
-  ellipse: vi.fn(),
-  rect: vi.fn(),
-  stroke: vi.fn(),
-  fill: vi.fn(),
-  clip: vi.fn(),
-  drawImage: vi.fn(),
-  save: vi.fn(),
-  restore: vi.fn(),
-  scale: vi.fn(),
-  rotate: vi.fn(),
-  translate: vi.fn(),
-  transform: vi.fn(),
-  setTransform: vi.fn(),
-  resetTransform: vi.fn(),
-  getTransform: vi.fn().mockReturnValue({ a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 }),
-  createLinearGradient: vi.fn().mockReturnValue({
-    addColorStop: vi.fn(),
-  }),
-  createRadialGradient: vi.fn().mockReturnValue({
-    addColorStop: vi.fn(),
-  }),
-  createPattern: vi.fn(),
-  isPointInPath: vi.fn().mockReturnValue(false),
-  isPointInStroke: vi.fn().mockReturnValue(false),
-  putImageData: vi.fn(),
-  getImageData: vi.fn().mockReturnValue({ data: new Uint8ClampedArray(4), width: 1, height: 1 }),
-  createImageData: vi.fn().mockReturnValue({ data: new Uint8ClampedArray(4), width: 1, height: 1 }),
-  setLineDash: vi.fn(),
-  getLineDash: vi.fn().mockReturnValue([]),
+// Using real canvas implementation from npm package when available
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-require-imports */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+let canvasContextMock: any
+
+try {
+  // Try to use real canvas package
+  const { createCanvas } = require("canvas")
+  const testCanvas = createCanvas(1, 1)
+  canvasContextMock = testCanvas.getContext("2d")
+} catch {
+  // Fallback to mock if canvas package not installed
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const noop = () => {}
+  
+  canvasContextMock = {
+    fillStyle: "",
+    strokeStyle: "",
+    lineWidth: 1,
+    lineCap: "butt" as CanvasLineCap,
+    lineJoin: "miter" as CanvasLineJoin,
+    miterLimit: 10,
+    globalAlpha: 1,
+    globalCompositeOperation: "source-over" as GlobalCompositeOperation,
+    font: "10px sans-serif",
+    textAlign: "start" as CanvasTextAlign,
+    textBaseline: "alphabetic" as CanvasTextBaseline,
+    imageSmoothingEnabled: true,
+    imageSmoothingQuality: "low" as ImageSmoothingQuality,
+    direction: "inherit" as CanvasDirection,
+    fillRect: noop,
+    strokeRect: noop,
+    clearRect: noop,
+    fillText: noop,
+    strokeText: noop,
+    measureText: () => ({ width: 100, height: 10 } as TextMetrics),
+    beginPath: noop,
+    closePath: noop,
+    moveTo: noop,
+    lineTo: noop,
+    bezierCurveTo: noop,
+    quadraticCurveTo: noop,
+    arc: noop,
+    arcTo: noop,
+    ellipse: noop,
+    rect: noop,
+    stroke: noop,
+    fill: noop,
+    clip: noop,
+    drawImage: noop,
+    save: noop,
+    restore: noop,
+    scale: noop,
+    rotate: noop,
+    translate: noop,
+    transform: noop,
+    setTransform: noop,
+    resetTransform: noop,
+    getTransform: () => ({ a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 } as DOMMatrix),
+    createLinearGradient: () => ({
+      addColorStop: noop,
+    }),
+    createRadialGradient: () => ({
+      addColorStop: noop,
+    }),
+    createPattern: () => null,
+    isPointInPath: () => false,
+    isPointInStroke: () => false,
+    putImageData: noop,
+    getImageData: () => ({ data: new Uint8ClampedArray(4), width: 1, height: 1 } as ImageData),
+    createImageData: () => ({ data: new Uint8ClampedArray(4), width: 1, height: 1 } as ImageData),
+    setLineDash: noop,
+    getLineDash: () => [],
+  }
 }
 
 class HTMLCanvasElementMock extends HTMLElement {
-  getContext = vi.fn().mockReturnValue(canvasContextMock)
-  toDataURL = vi.fn().mockReturnValue("data:image/png;base64,")
-  toBlob = vi.fn()
+  getContext = () => canvasContextMock
+  toDataURL = () => "data:image/png;base64,"
+  toBlob = () => null
   width = 0
   height = 0
 }

@@ -12,7 +12,7 @@ vi.mock("next-auth/jwt", () => ({
   getToken: vi.fn(),
 }))
 
-// Mock Upstash
+// Mock Upstash - используем in-memory fallback
 vi.mock("@upstash/ratelimit", () => ({
   Ratelimit: vi.fn().mockImplementation(() => ({
     limit: vi.fn().mockResolvedValue({
@@ -30,7 +30,19 @@ vi.mock("@upstash/redis", () => ({
   },
 }))
 
-import { getToken } from "next-auth/jwt"
+// Mock in-memory rate limiter
+vi.mock("@/lib/in-memory-rate-limiter", () => ({
+  createInMemoryRateLimiter: vi.fn().mockImplementation(() => ({
+    limit: vi.fn().mockResolvedValue({
+      success: true,
+      limit: 5,
+      remaining: 4,
+      reset: Date.now() + 60000,
+    }),
+  })),
+}))
+
+import { getToken as _getToken } from "next-auth/jwt"
 
 describe("Proxy", () => {
   beforeEach(() => {

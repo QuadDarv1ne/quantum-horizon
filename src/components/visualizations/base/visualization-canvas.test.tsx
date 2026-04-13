@@ -16,7 +16,6 @@ describe("VisualizationCanvas", () => {
 
   it("renders canvas element", () => {
     const { getByTestId } = render(
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       <VisualizationCanvas draw={mockDraw} isDark={true} className="test-class" />
     )
 
@@ -33,8 +32,7 @@ describe("VisualizationCanvas", () => {
     expect(container.firstChild).toHaveClass("relative", "custom-class")
   })
 
-  it.skip("receives isDark prop", () => {
-    // Requires complex fake timer setup for useCanvasAnimation
+  it("receives isDark prop", () => {
     vi.useFakeTimers()
 
     render(<VisualizationCanvas draw={mockDraw} isDark={true} />)
@@ -77,8 +75,8 @@ describe("VisualizationCanvas", () => {
     expect(canvas).toHaveAttribute("tabindex", "0")
   })
 
-  it.skip("calls onKeyDown when key is pressed", async () => {
-    // Requires complex event handling setup
+  it("calls onKeyDown when key is pressed", async () => {
+    /* eslint-disable @typescript-eslint/no-unsafe-call */
     const user = userEvent.setup()
     const handleKeyDown = vi.fn()
 
@@ -94,6 +92,7 @@ describe("VisualizationCanvas", () => {
     const canvas = container.querySelector("canvas[role='img']")
     canvas?.focus()
     await user.keyboard("{Enter}")
+    /* eslint-enable @typescript-eslint/no-unsafe-call */
 
     expect(handleKeyDown).toHaveBeenCalled()
   })

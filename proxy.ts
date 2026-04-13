@@ -4,6 +4,7 @@ import { getToken } from "next-auth/jwt"
 import { locales, defaultLocale } from "@/i18n/config"
 import { Ratelimit } from "@upstash/ratelimit"
 import { Redis } from "@upstash/redis"
+import { createInMemoryRateLimiter, type InMemoryRateLimiter } from "@/lib/in-memory-rate-limiter"
 
 // next-intl middleware для обработки локали
 const intlMiddleware = createMiddleware({
@@ -15,22 +16,25 @@ const intlMiddleware = createMiddleware({
 
 /**
  * Создание rate limiter
+ * Использует Redis если доступен, иначе fallback на in-memory
  */
 function createRateLimiter(
   requests: number,
   window: "1 m" | "1 h",
   prefix: string
-): Ratelimit | null {
-  if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
-    return null
+): Ratelimit | InMemoryRateLimiter {
+  // Используем Redis если настроен
+  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+    return new Ratelimit({
+      redis: Redis.fromEnv(),
+      limiter: Ratelimit.slidingWindow(requests, window),
+      analytics: true,
+      prefix: `@upstash/ratelimit/${prefix}`,
+    })
   }
 
-  return new Ratelimit({
-    redis: Redis.fromEnv(),
-    limiter: Ratelimit.slidingWindow(requests, window),
-    analytics: true,
-    prefix: `@upstash/ratelimit/${prefix}`,
-  })
+  // Fallback на in-memory rate limiter
+  return createInMemoryRateLimiter(requests, window, prefix)
 }
 
 // Конфигурация rate limiters
@@ -69,11 +73,9 @@ function rateLimitResponse(message: string, limit: number, remaining: number, re
  */
 async function checkRateLimit(
   ip: string,
-  limiter: Ratelimit | null,
+  limiter: Ratelimit | InMemoryRateLimiter,
   message: string
 ): Promise<NextResponse | null> {
-  if (!limiter) return null
-
   const { success, limit, reset, remaining } = await limiter.limit(ip)
   if (!success) {
     return rateLimitResponse(message, limit, remaining, reset)
@@ -117,7 +119,7 @@ async function handleApiRequest(request: NextRequest): Promise<NextResponse> {
   // Проверка rate limit
   const rateLimitChecks: Array<{
     pattern: string
-    limiter: Ratelimit | null
+    limiter: Ratelimit | InMemoryRateLimiter
     message: string
   }> = [
     {
