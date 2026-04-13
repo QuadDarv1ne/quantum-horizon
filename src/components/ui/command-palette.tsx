@@ -10,7 +10,6 @@ import {
   BookOpen,
   Atom,
   Telescope,
-  Microscope,
   FlaskConical,
   Brain,
   ChevronRight,
