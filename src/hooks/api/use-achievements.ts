@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { fetchWithTimeout } from "@/lib/fetch-with-timeout"
 
 interface UserAchievement {
@@ -23,106 +23,108 @@ interface UnlockAchievementBody {
   target: number
 }
 
-export function useAchievements() {
-  const [achievements, setAchievements] = useState<UserAchievement[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+const ACHIEVEMENTS_QUERY_KEY = ["achievements"] as const
 
-  // Fetch achievements from API
-  const fetchAchievements = useCallback(async () => {
-    try {
-      setLoading(true)
+export function useAchievements() {
+  const queryClient = useQueryClient()
+
+  // Fetch achievements using React Query
+  const {
+    data: achievements = [],
+    isLoading: loading,
+    error: queryError,
+    refetch,
+  } = useQuery({
+    queryKey: ACHIEVEMENTS_QUERY_KEY,
+    queryFn: async () => {
       const response = await fetchWithTimeout("/api/achievements", {
         timeoutMs: 10000,
       })
 
       if (!response.ok) {
         if (response.status === 401) {
-          return
+          return []
         }
         throw new Error(`HTTP error! status: ${String(response.status)}`)
       }
 
       const result = (await response.json()) as APIResponse
-
-      if (result.success && result.data) {
-        setAchievements(result.data)
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unknown error")
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  // Unlock or update achievement
-  const unlockAchievement = useCallback(
-    async (achievementId: string, progress = 1, target = 1): Promise<boolean> => {
-      try {
-        const response = await fetchWithTimeout("/api/achievements", {
-          timeoutMs: 10000,
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            achievementId,
-            progress,
-            target,
-          } satisfies UnlockAchievementBody),
-        })
-
-        if (!response.ok) {
-          if (response.status === 401) {
-            // Optimistically update local state
-            setAchievements((prev) => {
-              const existing = prev.find((a) => a.achievementId === achievementId)
-              if (existing) {
-                return prev.map((a) =>
-                  a.achievementId === achievementId ? { ...a, progress: a.progress + progress } : a
-                )
-              }
-              return [
-                ...prev,
-                {
-                  id: `temp_${String(Date.now())}`,
-                  achievementId,
-                  progress,
-                  target,
-                  unlockedAt: new Date().toISOString(),
-                },
-              ]
-            })
-            return true
-          }
-          throw new Error(`HTTP error! status: ${String(response.status)}`)
-        }
-
-        const result = (await response.json()) as APIResponse
-
-        if (result.success) {
-          // Refresh achievements list
-          await fetchAchievements()
-          return result.newlyUnlocked ?? false
-        }
-
-        return false
-      } catch {
-        return false
-      }
+      return result.success && result.data ? result.data : []
     },
-    [fetchAchievements]
-  )
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes
+    retry: 2,
+  })
 
-  useEffect(() => {
-    void fetchAchievements()
-  }, [fetchAchievements])
+  const error = queryError instanceof Error ? queryError.message : null
+
+  // Unlock or update achievement using mutation
+  const { mutateAsync: unlockAchievement } = useMutation({
+    mutationFn: async ({
+      achievementId,
+      progress = 1,
+      target = 1,
+    }: {
+      achievementId: string
+      progress?: number
+      target?: number
+    }) => {
+      const response = await fetchWithTimeout("/api/achievements", {
+        timeoutMs: 10000,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          achievementId,
+          progress,
+          target,
+        } satisfies UnlockAchievementBody),
+      })
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          // Optimistically update local state
+          queryClient.setQueryData(ACHIEVEMENTS_QUERY_KEY, (old: UserAchievement[] = []) => {
+            const existing = old.find((a) => a.achievementId === achievementId)
+            if (existing) {
+              return old.map((a) =>
+                a.achievementId === achievementId ? { ...a, progress: a.progress + progress } : a
+              )
+            }
+            return [
+              ...old,
+              {
+                id: `temp_${String(Date.now())}`,
+                achievementId,
+                progress,
+                target,
+                unlockedAt: new Date().toISOString(),
+              },
+            ]
+          })
+          return { newlyUnlocked: false }
+        }
+        throw new Error(`HTTP error! status: ${String(response.status)}`)
+      }
+
+      const result = (await response.json()) as APIResponse
+      return { newlyUnlocked: result.newlyUnlocked ?? false }
+    },
+    onSuccess: () => {
+      // Invalidate and refetch achievements
+      void queryClient.invalidateQueries({ queryKey: ACHIEVEMENTS_QUERY_KEY })
+    },
+  })
 
   return {
     achievements,
     loading,
     error,
-    refetch: fetchAchievements,
-    unlockAchievement,
+    refetch,
+    unlockAchievement: async (achievementId: string, progress = 1, target = 1) => {
+      const result = await unlockAchievement({ achievementId, progress, target })
+      return result.newlyUnlocked
+    },
   }
 }

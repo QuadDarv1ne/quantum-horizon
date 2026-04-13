@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { fetchWithTimeout } from "@/lib/fetch-with-timeout"
 
 interface UserActivity {
@@ -18,134 +18,120 @@ interface ActivityResponse {
   error?: string
 }
 
-interface LogActivityResponse {
-  success: boolean
-  data?: UserActivity
-  error?: string
-}
+const ACTIVITY_QUERY_KEY = ["activity"] as const
 
 export function useActivity() {
-  const [activities, setActivities] = useState<UserActivity[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const queryClient = useQueryClient()
 
-  // Fetch user activities from API
-  const fetchActivities = useCallback(async () => {
-    try {
-      setLoading(true)
+  // Fetch activities using React Query
+  const {
+    data: activities = [],
+    isLoading: loading,
+    error: queryError,
+    refetch,
+  } = useQuery({
+    queryKey: ACTIVITY_QUERY_KEY,
+    queryFn: async () => {
       const response = await fetchWithTimeout("/api/activity", {
         timeoutMs: 10000,
       })
 
       if (!response.ok) {
         if (response.status === 401) {
-          return
+          return []
         }
         throw new Error(`HTTP error! status: ${String(response.status)}`)
       }
 
       const result = (await response.json()) as ActivityResponse
+      return result.success && result.data ? result.data : []
+    },
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    gcTime: 15 * 60 * 1000, // 15 minutes
+    retry: 2,
+  })
 
-      if (result.success && result.data) {
-        setActivities(result.data)
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unknown error")
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+  const error = queryError instanceof Error ? queryError.message : null
 
-  // Log new activity
-  const logActivity = useCallback(
-    async (action: string, topic?: string, xpGained = 0): Promise<boolean> => {
-      try {
-        const response = await fetchWithTimeout("/api/activity", {
-          timeoutMs: 10000,
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            action,
-            topic,
-            xpGained,
-          }),
-        })
+  // Log activity using mutation
+  const { mutateAsync: logActivityMutation } = useMutation({
+    mutationFn: async ({
+      action,
+      topic,
+      xpGained,
+    }: {
+      action: string
+      topic?: string
+      xpGained: number
+    }) => {
+      const response = await fetchWithTimeout("/api/activity", {
+        timeoutMs: 10000,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action, topic, xpGained }),
+      })
 
-        if (!response.ok) {
-          if (response.status === 401) {
-            // Optimistically update local state
-            setActivities((prev) => [
-              ...prev,
-              {
-                id: `temp_${String(Date.now())}`,
-                userId: "anonymous",
-                action,
-                topic,
-                xpGained,
-                createdAt: new Date().toISOString(),
-              },
-            ])
-            return true
-          }
-          throw new Error(`HTTP error! status: ${String(response.status)}`)
-        }
-
-        const result = (await response.json()) as LogActivityResponse
-
-        if (result.success) {
-          await fetchActivities()
+      if (!response.ok) {
+        if (response.status === 401) {
+          // Optimistically update local state
+          queryClient.setQueryData(ACTIVITY_QUERY_KEY, (old: UserActivity[] = []) => [
+            ...old,
+            {
+              id: `temp_${String(Date.now())}`,
+              userId: "anonymous",
+              action,
+              topic,
+              xpGained,
+              createdAt: new Date().toISOString(),
+            },
+          ])
           return true
         }
-
-        return false
-      } catch {
-        return false
+        throw new Error(`HTTP error! status: ${String(response.status)}`)
       }
+
+      const result = (await response.json()) as ActivityResponse
+      return result.success || false
     },
-    [fetchActivities]
-  )
+    onSuccess: () => {
+      // Invalidate and refetch activities
+      void queryClient.invalidateQueries({ queryKey: ACTIVITY_QUERY_KEY })
+    },
+  })
 
   // Track common actions with XP rewards
-  const trackLessonComplete = useCallback(
-    async (topic: string): Promise<boolean> => {
-      return await logActivity("lesson_completed", topic, 100)
-    },
-    [logActivity]
-  )
+  const logActivity = async (action: string, topic?: string, xpGained = 0) => {
+    return await logActivityMutation({ action, topic, xpGained })
+  }
 
-  const trackQuizPass = useCallback(
-    async (topic: string, score?: number): Promise<boolean> => {
-      const xp = score && score >= 90 ? 150 : score && score >= 70 ? 100 : 50
-      return await logActivity("quiz_passed", topic, xp)
-    },
-    [logActivity]
-  )
+  const trackLessonComplete = async (topic: string) => {
+    return await logActivityMutation({ action: "lesson_completed", topic, xpGained: 100 })
+  }
 
-  const trackVisualizationView = useCallback(
-    async (topic: string): Promise<boolean> => {
-      return await logActivity("visualization_viewed", topic, 10)
-    },
-    [logActivity]
-  )
+  const trackQuizPass = async (topic: string, score?: number) => {
+    const xp = score && score >= 90 ? 150 : score && score >= 70 ? 100 : 50
+    return await logActivityMutation({ action: "quiz_passed", topic, xpGained: xp })
+  }
 
-  const trackAchievementUnlock = useCallback(
-    async (achievementId: string): Promise<boolean> => {
-      return await logActivity("achievement_unlocked", achievementId, 500)
-    },
-    [logActivity]
-  )
+  const trackVisualizationView = async (topic: string) => {
+    return await logActivityMutation({ action: "visualization_viewed", topic, xpGained: 10 })
+  }
 
-  useEffect(() => {
-    void fetchActivities()
-  }, [fetchActivities])
+  const trackAchievementUnlock = async (achievementId: string) => {
+    return await logActivityMutation({
+      action: "achievement_unlocked",
+      topic: achievementId,
+      xpGained: 500,
+    })
+  }
 
   return {
     activities,
     loading,
     error,
-    refetch: fetchActivities,
+    refetch,
     logActivity,
     trackLessonComplete,
     trackQuizPass,
