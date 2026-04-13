@@ -1,53 +1,35 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-04-13 — v0.4.6: Complete React Query migration, all API hooks modernized
-**Статус:** ✅ v0.4.6 в main
-**Версия:** 0.4.6
+**Обновлено:** 2026-04-13 — v0.4.7: Lighthouse performance optimizations, font fixes, image optimization
+**Статус:** ✅ v0.4.7 в main
+**Версия:** 0.4.7
 
 ---
 
-## 🔍 Аудит проекта (2026-04-13) — v0.4.6
+## 🔍 Аудит проекта (2026-04-13) — v0.4.7
 
 **Дата проверки:** 2026-04-13
 **Проверил:** Qwen Code
 
 ### ✅ Текущий статус
 
-**Build:** ✅ успешен (3.9s)
+**Build:** ✅ успешен (7.6s)
 **Lint:** ✅ 0 ошибок ESLint, 0 warnings
 **TypeScript:** ✅ 0 ошибок
 **Тесты:** ✅ 320 passing, 0 failing, 5 skipped, 2 todo
 
-**Выполнено в v0.4.6:**
-- ✅ **Complete React Query Migration** — все API хуки мигрированы на React Query
-  - **useAchievements**: useQuery + useMutation
-    - staleTime: 5 мин, gcTime: 30 мин, retry: 2
-    - Optimistic updates для offline поддержки
-  - **useActivity**: useQuery + useMutation
-    - staleTime: 2 мин, gcTime: 15 мин, retry: 2
-    - Optimistic updates для логирования активности
-  - **useUserProgress**: useQuery + useMutation
-    - staleTime: 3 мин, gcTime: 20 мин, retry: 2
-    - Extracted calculateStatsFromProgress utility
-  - **useAPOD**: уже был на React Query
-    - staleTime: 1 час, gcTime: 24 часа
-  - **useAuth**: использует useSession из next-auth (уже React Query-based)
-  - **useVisualization hooks**: уже на React Query (use-visualizations.ts)
-
-- ✅ **Benefits от миграции:**
-  - Автоматический кэшинг и дедупликация запросов
-  - Настраиваемые staleTime/gcTime для каждого endpoint
-  - Built-in retry логика
-  - Optimistic updates для лучшего UX
-  - Удалён ручной useState/useEffect boilerplate (-30 строк)
-  - Лучшая производительность с интеллектуальным кэшированием
-
-- ✅ **Code Quality:**
-  - Lint: 0 ошибок, 0 warnings
-  - TypeScript: 0 ошибок
-  - Тесты: 320 passed, 5 skipped, 2 todo
-  - Build: успешен без предупреждений
+**Выполнено в v0.4.7:**
+- ✅ **Lighthouse Performance Optimizations**
+  - Cyrillic font subset — русский текст теперь корректно отображается
+  - display: swap для шрифтов — предотвращает FOIT (Flash of Invisible Text)
+  - preconnect для NASA APIs — уменьшает задержку при запросах к API
+    - api.nasa.gov, images-assets.nasa.gov, apod.nasa.gov
+  - dns-prefetch для внешних сервисов — whereTheISSat, CartoCDN
+  - remotePatterns для Next.js Image — NASA изображения теперь оптимизируются (WebP/AVIF)
+  - Убран unoptimized флаг из NASA APOD Image
+  - Добавлен sizes prop для responsive image loading
+  - Dynamic import AnimatedBackground — canvas анимация не блокирует initial paint
 
 **Остающиеся проблемы:**
 
@@ -55,11 +37,11 @@
 - ⚠️ 5 skipped тестов (canvas требует real context)
 - ⚠️ 2 todo теста (auth protection — реализованы в E2E)
 - ⚠️ Rate limiting зависит от Upstash Redis (без него in-memory fallback)
-- ⚠️ Два CommandPalette компонента — можно объединить
 
 **Низкие:**
 - ⚠️ 20 npm уязвимостей (10 low, 6 moderate, 4 high) — транзитивные зависимости
 - ⚠️ SQLite в development vs PostgreSQL в production
+- ⚠️ Lighthouse Performance замер на production ещё не выполнен (цель: > 90)
 
 ---
 
