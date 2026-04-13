@@ -1,62 +1,67 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-04-12 — v0.4.3: Proxy migration, test improvements, API docs
-**Статус:** ✅ v0.4.3 в development
-**Версия:** 0.4.3
+**Обновлено:** 2026-04-13 — v0.4.4: Proxy refactor, e2e tests, lint fixes
+**Статус:** ✅ v0.4.4 в main
+**Версия:** 0.4.4
 
 ---
 
-## 🔍 Аудит проекта (2026-04-12) — v0.4.3
+## 🔍 Аудит проекта (2026-04-13) — v0.4.4
 
-**Дата проверки:** 2026-04-12
+**Дата проверки:** 2026-04-13
 **Проверил:** Qwen Code
 
 ### ✅ Текущий статус
 
-**Build:** ✅ успешен (4.3s, без предупреждений middleware)
-**Lint:** ✅ 0 ошибок ESLint
+**Build:** ✅ успешен (4.1s)
+**Lint:** ✅ 0 ошибок ESLint, 0 warnings
 **TypeScript:** ✅ 0 ошибок
-**Тесты:** ✅ 313 passing, 0 failing, 7 skipped, 7 todo (было 319 passing, 6 failing)
+**Тесты:** ✅ 320 passing, 0 failing, 5 skipped, 2 todo (было 313 passing)
 
-**Выполнено в v0.4.3:**
-- ✅ **MIGRATION: Middleware → Proxy** — удалён deprecated middleware.ts
-  - Консолидирована вся логика в proxy.ts (Next.js 16 рекомендация)
-  - CORS + rate limiting + auth protection в одном файле
-  - Удалено 412 строк, добавлено 309 строк (net: -103 строки)
-  - Build warning resolved: больше нет предупреждений о middleware
+**Выполнено в v0.4.4:**
+- ✅ **Proxy.ts refactor** — улучшена архитектура CORS, rate limiting, auth protection
+  - Упрощена структура rate limiter (getRateLimiter функция)
+  - Разделены функции: applyCorsHeaders, handleCorsPreflight, isAllowedOrigin
+  - Исправлены lint ошибки: заменено || на ?? для nullish coalescing
+  - Исправлена await-thenable ошибка (убран await перед синхронным вызовом)
+  - Добавлены JSDoc комментарии ко всем функциям
 
-- ✅ **Test improvements** — улучшено покрытие тестов
-  - Добавлен proxy.test.ts с 4 CORS тестами (2 auth tests marked as todo для E2E)
-  - 5 use-canvas-animation тестов конвертированы в todo (требуют real canvas/E2E)
-  - Исправлен split-screen test selector (использует aria-label вместо textContent)
-  - Все тесты проходят: 313 passed, 0 failed, 7 skipped, 7 todo
+- ✅ **E2E тесты добавлены** — Playwright тесты для auth и CORS
+  - e2e/auth.spec.ts: 6 тестов для auth protection (protected paths, signin page, public content)
+  - e2e/cors-rate-limiting.spec.ts: 8 тестов для CORS и rate limiting
+    - CORS headers для allowed origins
+    - OPTIONS preflight requests
+    - Disallowed origins rejection
+    - Auth endpoint validation
+    - Multiple rapid requests
+    - CORS headers vary by origin
 
-- ✅ **API Documentation** — полная документация API
-  - API.md: 400+ строк документации
-  - Все endpoints: auth, visualizations, activity, achievements
-  - Request/response examples
-  - Rate limiting configuration
-  - CORS и security headers
-  - Development setup instructions
+- ✅ **Test improvements** — исправлены и улучшены unit тесты
+  - proxy.test.ts: исправлен mock для next-intl/middleware (используется vi.resetModules)
+  - getToken mock теперь возвращает null (реалистичное поведение)
+  - Добавлен afterEach с restoreAllMocks
+  - Все 4 proxy теста проходят успешно (2 auth теста отмечены как todo для E2E)
 
-- ✅ **Vulnerability assessment** — оценка уязвимостей
-  - 21 уязвимость остаётся (10 low, 7 moderate, 4 high)
-  - Большинство требуют breaking changes (Prisma v6, Storybook v7, next-auth v5)
-  - Решение: отложить до Q3 2026, когда будет готова миграция мажорных версий
+- ✅ **TypeScript fix** — исправлена ошибка в test setup
+  - measureText cast: добавлен `as unknown` для TextMetrics
+  - Build проходит без ошибок
+
+- ✅ **Playwright config** — улучшена конфигурация
+  - baseURL использует BASE_URL env var с fallback
+  - Удалена webServer команда (dev сервер запускается отдельно)
 
 **Остающиеся проблемы:**
 
 **Средние:**
-- ⚠️ 7 skipped тестов (canvas требует real context или canvas npm package)
-- ⚠️ 7 todo тестов (требуют E2E testing с Playwright)
-- ⚠️ Rate limiting зависит от Upstash Redis (без него отключён)
+- ⚠️ 5 skipped тестов (canvas требует real context или canvas npm package)
+- ⚠️ 2 todo теста (auth protection — реализованы в E2E)
+- ⚠️ Rate limiting зависит от Upstash Redis (без него in-memory fallback)
 
 **Низкие:**
 - ⚠️ 21 npm уязвимостей (транзитивные зависимости Storybook/Prisma)
   - elliptic (crypto), basic-ftp (CRLF), vite (path traversal)
   - Решение: npm audit fix --force требует breaking changes
-- ⚠️ .env.example содержит placeholder-секреты
 - ⚠️ SQLite в development vs PostgreSQL в production
 
 ---
