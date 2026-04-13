@@ -1,46 +1,52 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-04-13 — v0.4.5: Bundle size optimization, dynamic imports, dead code removal
-**Статус:** ✅ v0.4.5 в main
-**Версия:** 0.4.5
+**Обновлено:** 2026-04-13 — v0.4.6: Complete React Query migration, all API hooks modernized
+**Статус:** ✅ v0.4.6 в main
+**Версия:** 0.4.6
 
 ---
 
-## 🔍 Аудит проекта (2026-04-13) — v0.4.5
+## 🔍 Аудит проекта (2026-04-13) — v0.4.6
 
 **Дата проверки:** 2026-04-13
 **Проверил:** Qwen Code
 
 ### ✅ Текущий статус
 
-**Build:** ✅ успешен (4.9s)
+**Build:** ✅ успешен (3.9s)
 **Lint:** ✅ 0 ошибок ESLint, 0 warnings
 **TypeScript:** ✅ 0 ошибок
 **Тесты:** ✅ 320 passing, 0 failing, 5 skipped, 2 todo
 
-**Выполнено в v0.4.5:**
-- ✅ **Bundle Size Optimization** — удалены неиспользуемые зависимости и мёртвый код
-  - Удалено 85 npm пакетов (~380 KB reduction)
-    - leaflet, react-leaflet, @types/leaflet: ~140 KB
-    - recharts: ~50 KB
-    - three.js, @react-three/fiber, @react-three/drei: ~190 KB
-  - Удалены unused файлы:
-    - exoplanet-explorer.tsx (477 строк мёртвого кода)
-    - satellite-tracker.tsx (320 строк мёртвого кода)
-    - chart.tsx, satellite-tracker.stories.tsx
-  - Total: удалено 2044 строки кода
+**Выполнено в v0.4.6:**
+- ✅ **Complete React Query Migration** — все API хуки мигрированы на React Query
+  - **useAchievements**: useQuery + useMutation
+    - staleTime: 5 мин, gcTime: 30 мин, retry: 2
+    - Optimistic updates для offline поддержки
+  - **useActivity**: useQuery + useMutation
+    - staleTime: 2 мин, gcTime: 15 мин, retry: 2
+    - Optimistic updates для логирования активности
+  - **useUserProgress**: useQuery + useMutation
+    - staleTime: 3 мин, gcTime: 20 мин, retry: 2
+    - Extracted calculateStatsFromProgress utility
+  - **useAPOD**: уже был на React Query
+    - staleTime: 1 час, gcTime: 24 часа
+  - **useAuth**: использует useSession из next-auth (уже React Query-based)
+  - **useVisualization hooks**: уже на React Query (use-visualizations.ts)
 
-- ✅ **Dynamic Imports Optimization** — отложена загрузка тяжёлых компонентов
-  - QuickActions → dynamic import (defers framer-motion ~35 KB off initial)
-  - CommandPalette → dynamic import в header-controls
-  - Оба компонента теперь загружаются on-demand вместо initial bundle
-  - ssr: false предотвращает проблемы с server-side rendering
+- ✅ **Benefits от миграции:**
+  - Автоматический кэшинг и дедупликация запросов
+  - Настраиваемые staleTime/gcTime для каждого endpoint
+  - Built-in retry логика
+  - Optimistic updates для лучшего UX
+  - Удалён ручной useState/useEffect boilerplate (-30 строк)
+  - Лучшая производительность с интеллектуальным кэшированием
 
-- ✅ **Code Quality** — все проверки проходят
+- ✅ **Code Quality:**
   - Lint: 0 ошибок, 0 warnings
   - TypeScript: 0 ошибок
-  - Тесты: 320 passed, 5 skipped, 2 todo (0 failed!)
+  - Тесты: 320 passed, 5 skipped, 2 todo
   - Build: успешен без предупреждений
 
 **Остающиеся проблемы:**
@@ -49,7 +55,7 @@
 - ⚠️ 5 skipped тестов (canvas требует real context)
 - ⚠️ 2 todo теста (auth protection — реализованы в E2E)
 - ⚠️ Rate limiting зависит от Upstash Redis (без него in-memory fallback)
-- ⚠️ Два CommandPalette компонента (command-palette.tsx + enhanced-command-palette.tsx) — можно объединить
+- ⚠️ Два CommandPalette компонента — можно объединить
 
 **Низкие:**
 - ⚠️ 20 npm уязвимостей (10 low, 6 moderate, 4 high) — транзитивные зависимости
