@@ -6,7 +6,7 @@ import { notFound } from "next/navigation"
 import { ReactQueryProvider } from "@/components/providers/react-query-provider"
 import { ServiceWorkerRegistration } from "@/components/pwa/service-worker-registration"
 import { PWAInstallPrompt } from "@/components/pwa/pwa-install-prompt"
-import { WebVitals } from "@/components/pwa/web-vitals"
+import { WebVitalsDev } from "@/components/pwa/web-vitals-dev-only"
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
 import { metadata } from "./metadata"
@@ -74,7 +74,7 @@ export default async function RootLayout({
             <Toaster />
             <ServiceWorkerRegistration />
             <PWAInstallPrompt />
-            <WebVitals />
+            <WebVitalsDev />
           </ReactQueryProvider>
         </NextIntlClientProvider>
       </body>
