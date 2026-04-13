@@ -145,7 +145,7 @@ export function NASAAPODViewer({ className, showDateSelector = true }: NASAAPODV
               alt={data.title}
               fill
               className="object-contain"
-              unoptimized
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
               priority
             />
             {data.copyright && (

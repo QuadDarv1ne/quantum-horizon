@@ -14,12 +14,14 @@ import { locales, type Locale } from "@/i18n/config"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic"],
+  display: "swap",
 })
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 })
 
 export { metadata }
@@ -58,6 +60,12 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Quantum Horizon" />
+        {/* Preconnect to external API domains */}
+        <link rel="preconnect" href="https://api.nasa.gov" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://images-assets.nasa.gov" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://apod.nasa.gov" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://api.wheretheiss.at" />
+        <link rel="dns-prefetch" href="https://*.basemaps.cartocdn.com" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NextIntlClientProvider messages={messages}>
