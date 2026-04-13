@@ -1,15 +1,17 @@
-import { describe, it, expect, vi, beforeEach } from "vitest"
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 import { NextRequest, NextResponse } from "next/server"
 
-// Mock next-intl middleware
-const mockIntlResponse = new NextResponse()
-vi.mock("next-intl/middleware", () => ({
-  default: vi.fn(() => mockIntlResponse),
-}))
+// Mock next-intl middleware - createIntlMiddleware returns a middleware function
+vi.mock("next-intl/middleware", () => {
+  const middlewareFn = vi.fn(() => new NextResponse())
+  return {
+    default: vi.fn(() => middlewareFn),
+  }
+})
 
 // Mock next-auth
 vi.mock("next-auth/jwt", () => ({
-  getToken: vi.fn(),
+  getToken: vi.fn().mockResolvedValue(null),
 }))
 
 // Mock Upstash - используем in-memory fallback
@@ -42,11 +44,14 @@ vi.mock("@/lib/in-memory-rate-limiter", () => ({
   })),
 }))
 
-import { getToken as _getToken } from "next-auth/jwt"
-
 describe("Proxy", () => {
   beforeEach(() => {
+    vi.resetModules()
     vi.clearAllMocks()
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 
   describe("CORS headers", () => {

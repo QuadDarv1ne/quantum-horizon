@@ -65,7 +65,7 @@ try {
     clearRect: noop,
     fillText: noop,
     strokeText: noop,
-    measureText: () => ({ width: 100, height: 10 } as TextMetrics),
+    measureText: () => ({ width: 100, height: 10 } as unknown as TextMetrics),
     beginPath: noop,
     closePath: noop,
     moveTo: noop,
