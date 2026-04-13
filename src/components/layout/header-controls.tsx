@@ -1,9 +1,15 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { CommandPalette } from "@/components/ui/command-palette"
+import dynamic from "next/dynamic"
 import { MobileNavigation } from "@/components/ui/mobile-navigation"
 import { LANGUAGES, type Section, type Language } from "@/lib/constants-ui"
+
+// Lazy load CommandPalette to reduce initial bundle
+const CommandPalette = dynamic(
+  () => import("@/components/ui/command-palette").then((m) => m.CommandPalette),
+  { ssr: false }
+)
 
 interface HeaderControlsProps {
   locale: string

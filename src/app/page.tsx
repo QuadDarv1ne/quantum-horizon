@@ -7,7 +7,6 @@ import { SideMenu } from "@/components/layout/side-menu"
 import { HeaderControls } from "@/components/layout/header-controls"
 import { Navigation } from "@/components/layout/navigation"
 import { AnimatedBackground } from "@/components/layout/animated-background"
-import { QuickActions } from "@/components/ui/quick-actions"
 import { useOnboarding } from "@/components/ui/onboarding-tour"
 import { useCommandPalette } from "@/components/ui/enhanced-command-palette"
 import {
@@ -31,6 +30,12 @@ const EnhancedCommandPalette = dynamic(
     import("@/components/ui/enhanced-command-palette").then(
       (m) => m.EnhancedCommandPalette,
     ),
+  { ssr: false }
+)
+
+// Lazy load QuickActions to defer framer-motion bundle
+const QuickActions = dynamic(
+  () => import("@/components/ui/quick-actions").then((m) => m.QuickActions),
   { ssr: false }
 )
 
