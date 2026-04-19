@@ -14,7 +14,7 @@
 
 ### ✅ Текущий статус
 
-**Build:** ✅ успешен (5.3s)
+**Build:** ✅ успешен (4.9s)
 **Lint:** ✅ 0 ошибок ESLint, 0 warnings
 **TypeScript:** ✅ 0 ошибок
 **Тесты:** ✅ 320 passing, 0 failing, 5 skipped, 2 todo
@@ -32,7 +32,7 @@
   - Dynamic import AnimatedBackground — canvas анимация не блокирует initial paint
 - ✅ **Security updates and dependency fixes**
   - Обновлены lodash, lodash-es, basic-ftp, vite для устранения высоких уязвимостей
-  - Исправлены все высокие уязвимости (после обновления остались 10 low и 7 moderate)
+  - Исправлены все высокие уязвимости (после обновления остались 11 low и 4 moderate)
 
 **Остающиеся проблемы:**
 
@@ -42,7 +42,7 @@
 - ⚠️ Rate limiting зависит от Upstash Redis (без него in-memory fallback)
 
 **Низкие:**
-- ⚠️ 17 npm уязвимостей (10 low, 7 moderate) — транзитивные зависимости
+- ⚠️ 15 npm уязвимостей (11 low, 4 moderate) — транзитивные зависимости
 - ⚠️ SQLite в development vs PostgreSQL в production
 - ⚠️ Lighthouse Performance замер на production ещё не выполнен (цель: > 90)
 

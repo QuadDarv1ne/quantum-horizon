@@ -25,33 +25,44 @@ export default function ResetPasswordPage() {
   const token = searchParams.get("token")
 
   useEffect(() => {
+    let timeoutId: number | null = null
     if (!token) {
-      setError("Токен не предоставлен")
-      setTokenValid(false)
-      return
-    }
-
-    const checkToken = async () => {
-      try {
-        const response = await fetchWithTimeout(`/api/auth/reset-password?token=${token}`, {
-          timeoutMs: 10000,
-        })
-        const data = (await response.json()) as { valid?: boolean; email?: string; error?: string }
-
-        if (response.ok && data.valid) {
-          setTokenValid(true)
-          setEmail(data.email ?? null)
-        } else {
-          setTokenValid(false)
-          setError(data.error ?? "Неверный токен")
-        }
-      } catch {
+      timeoutId = window.setTimeout(() => {
+        setError("Токен не предоставлен")
         setTokenValid(false)
-        setError("Ошибка проверки токена")
+      }, 0)
+    }
+    return () => {
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId)
       }
     }
+  }, [token])
 
-    void checkToken()
+  useEffect(() => {
+    if (token) {
+      const checkToken = async () => {
+        try {
+          const response = await fetchWithTimeout(`/api/auth/reset-password?token=${token}`, {
+            timeoutMs: 10000,
+          })
+          const data = (await response.json()) as { valid?: boolean; email?: string; error?: string }
+
+          if (response.ok && data.valid) {
+            setTokenValid(true)
+            setEmail(data.email ?? null)
+          } else {
+            setTokenValid(false)
+            setError(data.error ?? "Неверный токен")
+          }
+        } catch {
+          setTokenValid(false)
+          setError("Ошибка проверки токена")
+        }
+      }
+
+      void checkToken()
+    }
   }, [token])
 
   const handleSubmit = async (e: React.SyntheticEvent) => {
