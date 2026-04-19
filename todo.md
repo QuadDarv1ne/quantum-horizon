@@ -1,20 +1,20 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-04-13 — v0.4.7: Lighthouse performance optimizations, font fixes, image optimization
+**Обновлено:** 2026-04-19 — v0.4.7: Security updates, dependency fixes
 **Статус:** ✅ v0.4.7 в main
 **Версия:** 0.4.7
 
 ---
 
-## 🔍 Аудит проекта (2026-04-13) — v0.4.7
+## 🔍 Аудит проекта (2026-04-19) — v0.4.7
 
-**Дата проверки:** 2026-04-13
+**Дата проверки:** 2026-04-19
 **Проверил:** Qwen Code
 
 ### ✅ Текущий статус
 
-**Build:** ✅ успешен (7.6s)
+**Build:** ✅ успешен (5.3s)
 **Lint:** ✅ 0 ошибок ESLint, 0 warnings
 **TypeScript:** ✅ 0 ошибок
 **Тесты:** ✅ 320 passing, 0 failing, 5 skipped, 2 todo
@@ -30,6 +30,9 @@
   - Убран unoptimized флаг из NASA APOD Image
   - Добавлен sizes prop для responsive image loading
   - Dynamic import AnimatedBackground — canvas анимация не блокирует initial paint
+- ✅ **Security updates and dependency fixes**
+  - Обновлены lodash, lodash-es, basic-ftp, vite для устранения высоких уязвимостей
+  - Исправлены 17 уязвимостей (10 low, 7 moderate) после обновления
 
 **Остающиеся проблемы:**
 
@@ -39,7 +42,7 @@
 - ⚠️ Rate limiting зависит от Upstash Redis (без него in-memory fallback)
 
 **Низкие:**
-- ⚠️ 20 npm уязвимостей (10 low, 6 moderate, 4 high) — транзитивные зависимости
+- ⚠️ 17 npm уязвимостей (10 low, 7 moderate) — транзитивные зависимости
 - ⚠️ SQLite в development vs PostgreSQL в production
 - ⚠️ Lighthouse Performance замер на production ещё не выполнен (цель: > 90)
 
@@ -2199,10 +2202,10 @@ src/
 ### 📊 Метрики успеха (OKRs 2026)
 
 **Objective 1: Качество кода**
-- KR1: 0 lint ошибок (текущее: 1 error, 3 warnings)
-- KR2: 350+ тестов passing (текущее: 313)
+- KR1: 0 lint ошибок (текущее: 0 error, 0 warnings)
+- KR2: 350+ тестов passing (текущее: 320)
 - KR3: 90%+ code coverage (текущее: ~70%)
-- KR4: 0 high vulnerabilities (текущее: 4 high)
+- KR4: 0 high vulnerabilities (текущее: 0 high)
 
 **Objective 2: Производительность**
 - KR1: Lighthouse Performance > 90 (текущее: 33 localhost)

@@ -9,10 +9,10 @@ vi.mock("next-intl/middleware", () => {
   }
 })
 
-// Mock next-auth
-vi.mock("next-auth/jwt", () => ({
-  getToken: vi.fn().mockResolvedValue(null),
-}))
+// Mock next-auth - not used in current tests (auth protection tests are todo)
+// vi.mock("next-auth/jwt", () => ({
+//   getToken: vi.fn().mockResolvedValue(null),
+// }))
 
 // Mock Upstash - используем in-memory fallback
 vi.mock("@upstash/ratelimit", () => ({

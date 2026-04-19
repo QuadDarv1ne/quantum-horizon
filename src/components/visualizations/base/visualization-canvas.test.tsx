@@ -76,23 +76,21 @@ describe("VisualizationCanvas", () => {
   })
 
   it("calls onKeyDown when key is pressed", async () => {
-    /* eslint-disable @typescript-eslint/no-unsafe-call */
-    const user = userEvent.setup()
     const handleKeyDown = vi.fn()
 
-    const { container } = render(
+    const { getByTestId } = render(
       <VisualizationCanvas
         draw={mockDraw}
         isDark={true}
         onKeyDown={handleKeyDown}
         ariaLabel="Test visualization"
+        tabIndex={0}
       />
     )
 
-    const canvas = container.querySelector("canvas[role='img']")
-    canvas?.focus()
-    await user.keyboard("{Enter}")
-    /* eslint-enable @typescript-eslint/no-unsafe-call */
+    const canvas = getByTestId('visualization-canvas')
+    canvas.focus()
+    await userEvent.keyboard("{Enter}")
 
     expect(handleKeyDown).toHaveBeenCalled()
   })

@@ -10,8 +10,7 @@ export function WebVitalsDev() {
   }
 
   // Dynamic import only in dev
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-require-imports
-  const { WebVitals } = require("./web-vitals")
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return <WebVitals />
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { WebVitals } = require("./web-vitals") as { WebVitals: React.ComponentType<unknown> };
+  return <WebVitals />;
 }

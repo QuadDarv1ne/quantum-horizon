@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-confusing-void-expression */
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest"
 import { renderHook, act } from "@testing-library/react"
 import { setupCanvas, useCanvasAnimation } from "./use-canvas-animation"
@@ -86,7 +82,9 @@ describe("useCanvasAnimation", () => {
     const canvasRef = { current: canvas }
     const animateFn = vi.fn()
 
-    renderHook(() => useCanvasAnimation(canvasRef, animateFn))
+    renderHook(() => {
+      useCanvasAnimation(canvasRef, animateFn);
+    })
 
     // Canvas context should be initialized
     expect(canvas.getContext("2d")).toBeDefined()
@@ -99,7 +97,9 @@ describe("useCanvasAnimation", () => {
     const canvasRef = { current: canvas }
     const animateFn = vi.fn()
 
-    renderHook(() => useCanvasAnimation(canvasRef, animateFn))
+    renderHook(() => {
+      useCanvasAnimation(canvasRef, animateFn);
+    })
 
     act(() => {
       vi.advanceTimersByTime(100)
@@ -116,7 +116,7 @@ describe("useCanvasAnimation", () => {
     const canvasRef = { current: canvas }
     const animateFn = vi.fn()
 
-    const { unmount } = renderHook(() => useCanvasAnimation(canvasRef, animateFn))
+    const { unmount } = renderHook(() => { useCanvasAnimation(canvasRef, animateFn); })
 
     // Unmount the hook
     unmount()
@@ -132,7 +132,9 @@ describe("useCanvasAnimation", () => {
     const canvasRef = { current: canvas }
     const animateFn = vi.fn()
 
-    renderHook(() => useCanvasAnimation(canvasRef, animateFn))
+    renderHook(() => {
+      useCanvasAnimation(canvasRef, animateFn);
+    })
 
     // Canvas should be initialized with dimensions
     expect(canvas.width).toBeGreaterThanOrEqual(0)
@@ -150,11 +152,9 @@ describe("useCanvasAnimation", () => {
     const canvasRef = { current: canvas }
     const animateFn = vi.fn()
 
-    renderHook(() =>
-      useCanvasAnimation(canvasRef, animateFn, {
-        fpsLimit: 30,
-      })
-    )
+    renderHook(() => {
+      useCanvasAnimation(canvasRef, animateFn, { fpsLimit: 30 });
+    })
 
     act(() => {
       vi.advanceTimersByTime(100)
@@ -170,9 +170,9 @@ describe("useCanvasAnimation", () => {
     const animateFn = vi.fn()
 
     renderHook(() =>
-      useCanvasAnimation(canvasRef, animateFn, {
+      { useCanvasAnimation(canvasRef, animateFn, {
         pauseWhenHidden: true,
-      })
+      }); }
     )
 
     // Simulate canvas being hidden
@@ -192,7 +192,7 @@ describe("useCanvasAnimation", () => {
     // Mock reduced motion preference
     Object.defineProperty(window, "matchMedia", {
       writable: true,
-      value: vi.fn().mockImplementation((query) => ({
+      value: vi.fn().mockImplementation((query: string) => ({
         matches: query.includes("reduced-motion"),
         media: query,
         onchange: null,
@@ -205,9 +205,9 @@ describe("useCanvasAnimation", () => {
     })
 
     renderHook(() =>
-      useCanvasAnimation(canvasRef, animateFn, {
+      { useCanvasAnimation(canvasRef, animateFn, {
         respectReducedMotion: true,
-      })
+      }); }
     )
 
     expect(window.matchMedia).toHaveBeenCalledWith("(prefers-reduced-motion: reduce)")
