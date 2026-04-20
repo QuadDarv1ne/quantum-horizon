@@ -20,16 +20,16 @@ test.describe("Auth Protection (E2E)", () => {
   test("can access public homepage", async ({ page }) => {
     await page.goto("/")
 
-    // Public content should be accessible
-    const mainHeading = page.getByText(/QUANTUM HORIZON/i)
+    // Public content should be accessible - use more specific selector
+    const mainHeading = page.getByRole("heading", { name: /Quantum Horizon/i, level: 1 })
     await expect(mainHeading).toBeVisible()
   })
 
   test("can access visualization pages", async ({ page }) => {
     await page.goto("/")
 
-    // Should be able to see visualizations
-    const waveFunctionCard = page.getByText(/Wave Function/i)
+    // Should be able to see visualizations - use more specific selector
+    const waveFunctionCard = page.getByRole("heading", { name: /Wave Function/i, level: 3 })
     await expect(waveFunctionCard).toBeVisible()
   })
 
@@ -47,5 +47,28 @@ test.describe("Auth Protection (E2E)", () => {
     // Page should load without 500 error
     const statusCode = page.locator("text=500")
     await expect(statusCode).not.toBeVisible()
+  })
+
+  test("should redirect to signin when accessing protected path without auth", async ({ page }) => {
+    // Access a protected path without authentication
+    await page.goto("/dashboard")
+    // Expect redirect to signin with callbackUrl
+    await expect(page).toHaveURL(/.*\/auth\/signin.*/)
+    const url = new URL(page.url())
+    expect(url.searchParams.get('callbackUrl')).toBe('/dashboard')
+  })
+
+  test("should redirect away from auth pages when already authenticated", async ({ page }) => {
+    // First, log in using seed credentials
+    await page.goto("/auth/signin")
+    await page.fill('input[type="email"]', 'student@quantum-horizon.app')
+    await page.fill('input[type="password"]', 'Student@123456')
+    await page.click('button:has-text("Sign in")')
+    // Wait for redirect to dashboard
+    await expect(page).toHaveURL('/dashboard')
+
+    // Now, go to signin page (should redirect to dashboard)
+    await page.goto("/auth/signin")
+    await expect(page).toHaveURL('/dashboard')
   })
 })

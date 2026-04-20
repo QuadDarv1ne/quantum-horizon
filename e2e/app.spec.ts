@@ -7,27 +7,28 @@ test.describe("Quantum Horizon", () => {
     // Check title
     await expect(page).toHaveTitle(/Quantum Horizon/)
 
-    // Check main heading
-    const mainHeading = page.getByText(/QUANTUM HORIZON/i)
+    // Check main heading - use more specific selector for the main heading
+    const mainHeading = page.getByRole("heading", { name: /Quantum Horizon/i, level: 1 })
     await expect(mainHeading).toBeVisible()
   })
 
   test("displays visualization cards", async ({ page }) => {
     await page.goto("/")
 
-    // Check for visualization cards
-    const waveFunctionCard = page.getByText(/Wave Function/i)
+    // Check for visualization cards - use more specific selectors
+    const waveFunctionCard = page.getByRole("heading", { name: /Wave Function/i, level: 3 })
     await expect(waveFunctionCard).toBeVisible()
 
-    const timeDilationCard = page.getByText(/Time Dilation/i)
+    const timeDilationCard = page.getByRole("heading", { name: /Time Dilation/i, level: 3 })
     await expect(timeDilationCard).toBeVisible()
   })
 
   test("theme toggle works", async ({ page }) => {
     await page.goto("/")
 
-    // Find theme toggle button
+    // Find theme toggle button - more specific
     const themeToggle = page.getByRole("button", { name: /theme/i })
+    await expect(themeToggle).toBeVisible()
     await themeToggle.click()
 
     // Check if theme changed
@@ -39,8 +40,8 @@ test.describe("Quantum Horizon", () => {
   test("language switcher is accessible", async ({ page }) => {
     await page.goto("/")
 
-    // Check language switcher
-    const languageSelect = page.getByRole("combobox", { name: /language/i })
+    // Check language switcher - more specific
+    const languageSelect = page.getByLabel(/language/i)
     await expect(languageSelect).toBeVisible()
 
     // Test language change
@@ -56,8 +57,8 @@ test.describe("Quantum Horizon", () => {
     await page.setViewportSize({ width: 375, height: 667 })
     await page.goto("/")
 
-    // Check main content is visible
-    const mainHeading = page.getByText(/QUANTUM HORIZON/i)
+    // Check main content is visible - use heading role
+    const mainHeading = page.getByRole("heading", { name: /Quantum Horizon/i, level: 1 })
     await expect(mainHeading).toBeVisible()
   })
 
@@ -65,27 +66,30 @@ test.describe("Quantum Horizon", () => {
     await page.goto("/")
 
     // Click on Relativity tab
-    const relativityTab = page.getByRole("button", { name: /relativity/i })
+    const relativityTab = page.getByRole("tab", { name: /relativity/i })
+    await expect(relativityTab).toBeVisible()
     await relativityTab.click()
 
     // Check relativity visualizations appear
-    const timeDilation = page.getByText(/Time Dilation/i)
+    const timeDilation = page.getByRole("heading", { name: /Time Dilation/i, level: 3 })
     await expect(timeDilation).toBeVisible()
 
     // Click on Cosmos tab
-    const cosmosTab = page.getByRole("button", { name: /cosmos/i })
+    const cosmosTab = page.getByRole("tab", { name: /cosmos/i })
+    await expect(cosmosTab).toBeVisible()
     await cosmosTab.click()
 
     // Check cosmos visualizations appear
-    const blackHole = page.getByText(/Black Hole/i)
+    const blackHole = page.getByRole("heading", { name: /Black Hole/i, level: 3 })
     await expect(blackHole).toBeVisible()
   })
 
   test("opens visualization in fullscreen mode", async ({ page }) => {
     await page.goto("/")
 
-    // Find and click fullscreen button on first visualization
+    // Find and click fullscreen button on first visualization - more specific
     const fullscreenButton = page.getByRole("button", { name: /fullscreen/i }).first()
+    await expect(fullscreenButton).toBeVisible()
     await fullscreenButton.click()
 
     // Check fullscreen modal opens
@@ -100,8 +104,8 @@ test.describe("Quantum Horizon", () => {
   test("play/pause button controls animation", async ({ page }) => {
     await page.goto("/")
 
-    // Find play button (should be pause initially or play)
-    const playButton = page.getByRole("button", { name: /play|pause/i }).first()
+    // Find play button (should be pause initially or play) - more specific
+    const playButton = page.getByRole("button", { name: /play|pause/i, exact: false }).first()
     await expect(playButton).toBeVisible()
 
     // Click to toggle
@@ -114,7 +118,7 @@ test.describe("Quantum Horizon", () => {
   test("settings panel can be opened and closed", async ({ page }) => {
     await page.goto("/")
 
-    // Find settings/menu button
+    // Find settings/menu button - more specific
     const menuButton = page.getByRole("button", { name: /menu|settings/i })
     if (await menuButton.isVisible()) {
       await menuButton.click()
@@ -140,7 +144,7 @@ test.describe("Quantum Horizon", () => {
     await page.waitForTimeout(300)
 
     // Check quantum section is active
-    const quantumSection = page.getByRole("button", { name: /quantum/i })
+    const quantumSection = page.getByRole("tab", { name: /quantum/i })
     await expect(quantumSection).toBeVisible()
   })
 
@@ -150,7 +154,7 @@ test.describe("Quantum Horizon", () => {
     const tabs = ["Quantum", "Relativity", "Cosmos", "Advanced"]
 
     for (const tab of tabs) {
-      const tabButton = page.getByRole("button", { name: new RegExp(tab, "i") })
+      const tabButton = page.getByRole("tab", { name: new RegExp(tab, "i") })
       if (await tabButton.isVisible()) {
         await tabButton.click()
         await page.waitForTimeout(200)
@@ -168,7 +172,7 @@ test.describe("Quantum Horizon", () => {
       await page.waitForTimeout(300)
 
       // Should filter to show wave function
-      const waveFunction = page.getByText(/Wave Function/i)
+      const waveFunction = page.getByRole("heading", { name: /Wave Function/i, level: 3 })
       await expect(waveFunction).toBeVisible()
 
       // Clear search
@@ -210,13 +214,13 @@ test.describe("Quantum Horizon", () => {
     await page.goto("/")
 
     // Click on Thermodynamics tab
-    const thermoTab = page.getByRole("button", { name: /thermodynamics/i })
+    const thermoTab = page.getByRole("tab", { name: /thermodynamics/i })
     if (await thermoTab.isVisible()) {
       await thermoTab.click()
       await page.waitForTimeout(300)
 
       // Check thermodynamics visualizations appear
-      const thermalRadiation = page.getByText(/Thermal Radiation/i)
+      const thermalRadiation = page.getByRole("heading", { name: /Thermal Radiation/i, level: 3 })
       await expect(thermalRadiation).toBeVisible()
     }
   })
@@ -225,12 +229,13 @@ test.describe("Quantum Horizon", () => {
     await page.goto("/")
 
     // Click on Cosmos tab
-    const cosmosTab = page.getByRole("button", { name: /cosmos/i })
+    const cosmosTab = page.getByRole("tab", { name: /cosmos/i })
+    await expect(cosmosTab).toBeVisible()
     await cosmosTab.click()
     await page.waitForTimeout(300)
 
     // Check wormhole visualization appears
-    const wormhole = page.getByText(/Wormhole/i)
+    const wormhole = page.getByRole("heading", { name: /Wormhole/i, level: 3 })
     await expect(wormhole).toBeVisible()
   })
 
@@ -238,12 +243,13 @@ test.describe("Quantum Horizon", () => {
     await page.goto("/")
 
     // Click on Cosmos tab
-    const cosmosTab = page.getByRole("button", { name: /cosmos/i })
+    const cosmosTab = page.getByRole("tab", { name: /cosmos/i })
+    await expect(cosmosTab).toBeVisible()
     await cosmosTab.click()
     await page.waitForTimeout(300)
 
     // Check pulsar visualization appears
-    const pulsar = page.getByText(/Pulsar/i)
+    const pulsar = page.getByRole("heading", { name: /Pulsar/i, level: 3 })
     await expect(pulsar).toBeVisible()
   })
 
@@ -251,12 +257,13 @@ test.describe("Quantum Horizon", () => {
     await page.goto("/")
 
     // Click on Cosmos tab
-    const cosmosTab = page.getByRole("button", { name: /cosmos/i })
+    const cosmosTab = page.getByRole("tab", { name: /cosmos/i })
+    await expect(cosmosTab).toBeVisible()
     await cosmosTab.click()
     await page.waitForTimeout(300)
 
     // Check quasar visualization appears
-    const quasar = page.getByText(/Quasar/i)
+    const quasar = page.getByRole("heading", { name: /Quasar/i, level: 3 })
     await expect(quasar).toBeVisible()
   })
 
@@ -264,12 +271,13 @@ test.describe("Quantum Horizon", () => {
     await page.goto("/")
 
     // Click on Cosmos tab
-    const cosmosTab = page.getByRole("button", { name: /cosmos/i })
+    const cosmosTab = page.getByRole("tab", { name: /cosmos/i })
+    await expect(cosmosTab).toBeVisible()
     await cosmosTab.click()
     await page.waitForTimeout(300)
 
     // Check protoplanetary disk visualization appears
-    const disk = page.getByText(/Protoplanetary Disk/i)
+    const disk = page.getByRole("heading", { name: /Protoplanetary Disk/i, level: 3 })
     await expect(disk).toBeVisible()
   })
 
@@ -277,13 +285,13 @@ test.describe("Quantum Horizon", () => {
     await page.goto("/")
 
     // Click on Thermodynamics tab
-    const thermoTab = page.getByRole("button", { name: /thermodynamics/i })
+    const thermoTab = page.getByRole("tab", { name: /thermodynamics/i })
     if (await thermoTab.isVisible()) {
       await thermoTab.click()
       await page.waitForTimeout(300)
 
       // Check entropy visualization appears
-      const entropy = page.getByText(/Entropy/i)
+      const entropy = page.getByRole("heading", { name: /Entropy/i, level: 3 })
       await expect(entropy).toBeVisible()
     }
   })
@@ -292,13 +300,13 @@ test.describe("Quantum Horizon", () => {
     await page.goto("/")
 
     // Click on Thermodynamics tab
-    const thermoTab = page.getByRole("button", { name: /thermodynamics/i })
+    const thermoTab = page.getByRole("tab", { name: /thermodynamics/i })
     if (await thermoTab.isVisible()) {
       await thermoTab.click()
       await page.waitForTimeout(300)
 
       // Check phase transition visualization appears
-      const phaseTransition = page.getByText(/Phase Transition/i)
+      const phaseTransition = page.getByRole("heading", { name: /Phase Transition/i, level: 3 })
       await expect(phaseTransition).toBeVisible()
     }
   })
@@ -307,13 +315,13 @@ test.describe("Quantum Horizon", () => {
     await page.goto("/")
 
     // Click on Thermodynamics tab
-    const thermoTab = page.getByRole("button", { name: /thermodynamics/i })
+    const thermoTab = page.getByRole("tab", { name: /thermodynamics/i })
     if (await thermoTab.isVisible()) {
       await thermoTab.click()
       await page.waitForTimeout(300)
 
       // Check ideal gas visualization appears
-      const idealGas = page.getByText(/Ideal Gas/i)
+      const idealGas = page.getByRole("heading", { name: /Ideal Gas/i, level: 3 })
       await expect(idealGas).toBeVisible()
     }
   })
@@ -322,13 +330,13 @@ test.describe("Quantum Horizon", () => {
     await page.goto("/")
 
     // Click on Thermodynamics tab
-    const thermoTab = page.getByRole("button", { name: /thermodynamics/i })
+    const thermoTab = page.getByRole("tab", { name: /thermodynamics/i })
     if (await thermoTab.isVisible()) {
       await thermoTab.click()
       await page.waitForTimeout(300)
 
       // Check carnot engine visualization appears
-      const carnot = page.getByText(/Carnot Engine/i)
+      const carnot = page.getByRole("heading", { name: /Carnot Engine/i, level: 3 })
       await expect(carnot).toBeVisible()
     }
   })
