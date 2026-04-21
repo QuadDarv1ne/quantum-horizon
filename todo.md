@@ -1,7 +1,7 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-04-20 — v0.4.7: Security updates, dependency fixes; verified tests and lint
+**Обновлено:** 2026-04-21 — v0.4.7: Security updates, dependency fixes; verified tests and lint; build successful
 **Статус:** ✅ v0.4.7 в main, готово к слиянию dev в main
 **Версия:** 0.4.7
 
