@@ -1,9 +1,9 @@
 # Quantum Horizon — План улучшений
 
 **Дата:** 2026-03-11
-**Обновлено:** 2026-04-21 — v0.4.7: Security updates, dependency fixes; verified tests and lint; build successful
-**Статус:** ✅ v0.4.7 в main, готово к слиянию dev в main
-**Версия:** 0.4.7
+**Обновлено:** 2026-04-22 — v0.4.8: Fixed dialog accessibility in physics-tooltip, split-screen, and statistics-dashboard; added DialogDescription and adjusted DialogTitle placement; all tests passing; build successful; branches synchronized
+**Статус:** ✅ v0.4.8 в main, готово к следующим улучшениям
+**Версия:** 0.4.8
 
 ---
 
@@ -48,9 +48,14 @@
 
 ## 📝 Примечания от Qwen Code (2026-04-22)
 
-- Выполнен анализ файла dialog.tsx; обнаружено, что тесты падают из-за проблем с JSX-трансформацией в Vite (окс). Рекомендуется проверить конфигурацию Vite/Oxc.
-- Текущий статус: ветка dev синхронна с origin/dev, но есть failing тесты (см. вывод npm test).
-- Следующие шаги: исправить failing тесты, затем запушить в main после проверки.
+- Исправлены проблемы с доступностью в диалоговых компонентах (physics-tooltip, split-screen, statistics-dashboard):
+  - Добавлены DialogDescription как прямой потомок DialogContent для улучшения доступности скринридеров.
+  - Перемещены DialogTitle вне DialogHeader, чтобы быть прямым потомком DialogContent.
+  - Удалены лишние обертки div, которые могли вызывать проблемы с JSX-трансформацией.
+  - Все тесты проходят после исправлений (325 passed, 2 todo).
+  - Линтинг и сборка проходят без ошибок.
+- Ветка dev синхронизирована с origin/dev, изменения слиты в main и pushed в origin/main.
+- Следующие шаги: продолжить улучшения в dev ветке перед следующим слиянием в main.
 
 ---
 
@@ -209,5 +214,3 @@
    - Цель: <200KB initial
    - Решение: code splitting, tree-shaking для тяжёлых компонентов
    - **Срок:** Q4 2026
-
----
