@@ -24,6 +24,7 @@ import { Progress } from "@/components/ui/progress"
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -74,10 +75,11 @@ export function StatisticsDashboard() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-h-[90vh] max-w-5xl overflow-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl">Статистика и достижения</DialogTitle>
-        </DialogHeader>
+      <DialogContent aria-label="Статистика и достижения" className="max-h-[90vh] max-w-5xl overflow-auto">
+        <DialogTitle className="text-2xl">Статистика и достижения</DialogTitle>
+        <DialogDescription className="sr-only">
+          Диалог со статистикой и достижениями: продолжительность, графики, проверки, серии, прогресс.
+        </DialogDescription>
 
         <div className="space-y-6">
           {/* Общие статистики */}

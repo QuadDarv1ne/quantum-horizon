@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -107,13 +108,17 @@ export function SplitScreen({
       </DialogTrigger>
 
       <DialogContent
+        aria-label="Сравнение визуализаций"
         className={cn(
           "flex w-full max-w-[95vw] flex-col overflow-hidden p-0",
           isFullscreen ? "h-[95vh]" : "h-[80vh]"
         )}
       >
+        <DialogTitle className="sr-only">Сравнение визуализаций</DialogTitle>
+        <DialogDescription className="sr-only">
+          Диалог для сравнения двух визуализаций side-by-side с возможностью перетаскивания разделителя и переключения на полноэкранный режим.
+        </DialogDescription>
         <DialogHeader className="flex-shrink-0 border-b p-4">
-          <DialogTitle className="sr-only">Сравнение визуализаций</DialogTitle>
           <div className="flex items-center justify-between">
             <div className="flex flex-1 items-center gap-4">
               <div className="flex flex-1 items-center gap-2">
