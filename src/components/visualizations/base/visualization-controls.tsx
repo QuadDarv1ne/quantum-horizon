@@ -27,7 +27,7 @@ export function VisualizationControls({
       if (e.code === "Space") {
         e.preventDefault()
         onTogglePlay()
-      } else if (e.code === "KeyR" && onReset) {
+      } else if (e.code === "KeyR" && typeof onReset === 'function') {
         e.preventDefault()
         onReset()
       }
@@ -110,7 +110,7 @@ export function VisualizationControls({
         />
       </div>
 
-      {onReset && (
+      {typeof onReset === 'function' && (
         <Button
           variant="outline"
           size="sm"
@@ -124,7 +124,7 @@ export function VisualizationControls({
       )}
       <div className={textMuted} aria-hidden="true">
         <kbd className="rounded bg-gray-700/50 px-1.5 py-0.5">Space</kbd> Play/Pause
-        {onReset && (
+        {typeof onReset === 'function' && (
           <>
             {" "}
             |<kbd className="rounded bg-gray-700/50 px-1.5 py-0.5">R</kbd> Reset

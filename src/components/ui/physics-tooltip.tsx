@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Info, X, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -42,7 +42,9 @@ export function PhysicsTooltip({ visualizationType, variant = "button" }: Physic
             <Info className="h-4 w-4" />
           </Button>
         </DialogTrigger>
-        <PhysicsDialogContent info={info} onClose={() => setOpen(false)} />
+        <DialogContent>
+          <PhysicsDialogContent info={info} onClose={() => setOpen(false)} />
+        </DialogContent>
       </Dialog>
     )
   }
@@ -59,7 +61,9 @@ export function PhysicsTooltip({ visualizationType, variant = "button" }: Physic
             </div>
           </div>
         </DialogTrigger>
-        <PhysicsDialogContent info={info} onClose={() => setOpen(false)} />
+        <DialogContent>
+          <PhysicsDialogContent info={info} onClose={() => setOpen(false)} />
+        </DialogContent>
       </Dialog>
     )
   }
@@ -73,7 +77,9 @@ export function PhysicsTooltip({ visualizationType, variant = "button" }: Physic
           Информация
         </Button>
       </DialogTrigger>
-      <PhysicsDialogContent info={info} onClose={() => setOpen(false)} />
+      <DialogContent>
+        <PhysicsDialogContent info={info} onClose={() => setOpen(false)} />
+      </DialogContent>
     </Dialog>
   )
 }
@@ -92,9 +98,6 @@ function PhysicsDialogContent({ info, onClose }: PhysicsDialogContentProps) {
             <DialogTitle className="text-2xl">{info.title}</DialogTitle>
             <DialogDescription className="text-base">{info.description}</DialogDescription>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose} className="shrink-0">
-            <X className="h-4 w-4" />
-          </Button>
         </div>
       </DialogHeader>
 

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { describe, it, expect, vi, beforeEach } from "vitest"
-import { render, screen } from "@testing-library/react"
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
+import { render, screen, cleanup } from "@testing-library/react"
 import { userEvent } from "@testing-library/user-event"
 import { VisualizationControls } from "./visualization-controls"
 
@@ -16,6 +16,10 @@ describe("VisualizationControls", () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
+  })
+
+  afterEach(() => {
+    cleanup()
   })
 
   it("renders play button when not playing", () => {
@@ -69,24 +73,18 @@ describe("VisualizationControls", () => {
     expect(resetButton).toBeInTheDocument()
   })
 
-  it.skip("does not render reset button when onReset is not provided", () => {
-    // This test is skipped because the conditional rendering is straightforward
-    // and testing implementation details adds maintenance burden
+  it("does not render reset button when onReset is not provided", () => {
     const propsWithoutReset = {
       isPlaying: false,
       animationSpeed: 1,
       onTogglePlay: vi.fn(),
       onSpeedChange: vi.fn(),
+      onReset: undefined,
       isDark: true,
     }
     render(<VisualizationControls {...propsWithoutReset} />)
-
-    const allButtons = screen.getAllByRole("button")
-    const hasResetButton = allButtons.some((btn) =>
-      btn.getAttribute("aria-label")?.includes("Reset")
-    )
-
-    expect(hasResetButton).toBe(false)
+    const resetButton = screen.queryByRole("button", { name: /reset animation/i })
+    expect(resetButton).not.toBeInTheDocument()
   })
 
   it("applies dark theme styles when isDark is true", () => {
