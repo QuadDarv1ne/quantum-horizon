@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
   DialogDescription,
   DialogTrigger,
@@ -42,8 +41,64 @@ export function PhysicsTooltip({ visualizationType, variant = "button" }: Physic
             <Info className="h-4 w-4" />
           </Button>
         </DialogTrigger>
-        <DialogContent>
-          <PhysicsDialogContent info={info} onClose={() => setOpen(false)} />
+        <DialogContent className="max-h-[80vh] max-w-3xl p-0">
+          <DialogTitle className="text-2xl">{info.title}</DialogTitle>
+          <DialogDescription className="text-base">{info.description}</DialogDescription>
+          <div className="h-0.5 bg-border my-6" />
+          <ScrollArea className="max-h-[60vh] px-6 pb-6">
+            <div className="space-y-6">
+              {/* Formula */}
+              {info.formula && (
+                <section className="space-y-2">
+                  <h4 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
+                    Формула
+                  </h4>
+                  <div className="bg-muted rounded-lg p-4 text-center font-mono text-lg">
+                    {info.formula}
+                  </div>
+                </section>
+              )}
+
+              {/* Key Concepts */}
+              <section className="space-y-2">
+                <h4 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
+                  Ключевые понятия
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {info.keyConcepts.map((concept) => (
+                    <Badge key={concept} variant="secondary">
+                      {concept}
+                    </Badge>
+                  ))}
+                </div>
+              </section>
+
+              {/* Real World Applications */}
+              <section className="space-y-2">
+                <h4 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
+                  Применение
+                </h4>
+                <ul className="grid gap-2">
+                  {info.realWorldApplications.map((app, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm">
+                      <ChevronRight className="text-primary h-4 w-4" />
+                      {app}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              {/* Historical Context */}
+              <section className="space-y-2">
+                <h4 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
+                  Исторический контекст
+                </h4>
+                <div className="bg-accent/50 rounded-lg p-4 text-sm leading-relaxed">
+                  {info.historicalContext}
+                </div>
+              </section>
+            </div>
+          </ScrollArea>
         </DialogContent>
       </Dialog>
     )
@@ -61,8 +116,64 @@ export function PhysicsTooltip({ visualizationType, variant = "button" }: Physic
             </div>
           </div>
         </DialogTrigger>
-        <DialogContent>
-          <PhysicsDialogContent info={info} onClose={() => setOpen(false)} />
+        <DialogContent className="max-h-[80vh] max-w-3xl p-0">
+          <DialogTitle className="text-2xl">{info.title}</DialogTitle>
+          <DialogDescription className="text-base">{info.description}</DialogDescription>
+          <div className="h-0.5 bg-border my-6" />
+          <ScrollArea className="max-h-[60vh] px-6 pb-6">
+            <div className="space-y-6">
+              {/* Formula */}
+              {info.formula && (
+                <section className="space-y-2">
+                  <h4 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
+                    Формула
+                  </h4>
+                  <div className="bg-muted rounded-lg p-4 text-center font-mono text-lg">
+                    {info.formula}
+                  </div>
+                </section>
+              )}
+
+              {/* Key Concepts */}
+              <section className="space-y-2">
+                <h4 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
+                  Ключевые понятия
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {info.keyConcepts.map((concept) => (
+                    <Badge key={concept} variant="secondary">
+                      {concept}
+                    </Badge>
+                  ))}
+                </div>
+              </section>
+
+              {/* Real World Applications */}
+              <section className="space-y-2">
+                <h4 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
+                  Применение
+                </h4>
+                <ul className="grid gap-2">
+                  {info.realWorldApplications.map((app, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm">
+                      <ChevronRight className="text-primary h-4 w-4" />
+                      {app}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              {/* Historical Context */}
+              <section className="space-y-2">
+                <h4 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
+                  Исторический контекст
+                </h4>
+                <div className="bg-accent/50 rounded-lg p-4 text-sm leading-relaxed">
+                  {info.historicalContext}
+                </div>
+              </section>
+            </div>
+          </ScrollArea>
         </DialogContent>
       </Dialog>
     )
@@ -77,84 +188,65 @@ export function PhysicsTooltip({ visualizationType, variant = "button" }: Physic
           Информация
         </Button>
       </DialogTrigger>
-      <DialogContent>
-        <PhysicsDialogContent info={info} onClose={() => setOpen(false)} />
-      </DialogContent>
-    </Dialog>
-  )
-}
+      <DialogContent className="max-h-[80vh] max-w-3xl p-0">
+        <DialogTitle className="text-2xl">{info.title}</DialogTitle>
+        <DialogDescription className="text-base">{info.description}</DialogDescription>
+        <div className="h-0.5 bg-border my-6" />
+        <ScrollArea className="max-h-[60vh] px-6 pb-6">
+          <div className="space-y-6">
+            {/* Formula */}
+            {info.formula && (
+              <section className="space-y-2">
+                <h4 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
+                  Формула
+                </h4>
+                <div className="bg-muted rounded-lg p-4 text-center font-mono text-lg">
+                  {info.formula}
+                </div>
+              </section>
+            )}
 
-interface PhysicsDialogContentProps {
-  info: PhysicsInfo
-  onClose: () => void
-}
-
-function PhysicsDialogContent({ info, onClose }: PhysicsDialogContentProps) {
-  return (
-    <DialogContent className="max-h-[80vh] max-w-3xl p-0">
-      <DialogHeader className="border-b p-6 pb-4">
-        <div className="flex items-start justify-between gap-4">
-          <div className="space-y-2">
-            <DialogTitle className="text-2xl">{info.title}</DialogTitle>
-            <DialogDescription className="text-base">{info.description}</DialogDescription>
-          </div>
-        </div>
-      </DialogHeader>
-
-      <ScrollArea className="max-h-[60vh] px-6 pb-6">
-        <div className="space-y-6">
-          {/* Formula */}
-          {info.formula && (
+            {/* Key Concepts */}
             <section className="space-y-2">
               <h4 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
-                Формула
+                Ключевые понятия
               </h4>
-              <div className="bg-muted rounded-lg p-4 text-center font-mono text-lg">
-                {info.formula}
+              <div className="flex flex-wrap gap-2">
+                {info.keyConcepts.map((concept) => (
+                  <Badge key={concept} variant="secondary">
+                    {concept}
+                  </Badge>
+                ))}
               </div>
             </section>
-          )}
 
-          {/* Key Concepts */}
-          <section className="space-y-2">
-            <h4 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
-              Ключевые понятия
-            </h4>
-            <div className="flex flex-wrap gap-2">
-              {info.keyConcepts.map((concept) => (
-                <Badge key={concept} variant="secondary">
-                  {concept}
-                </Badge>
-              ))}
-            </div>
-          </section>
+            {/* Real World Applications */}
+            <section className="space-y-2">
+              <h4 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
+                Применение
+              </h4>
+              <ul className="grid gap-2">
+                {info.realWorldApplications.map((app, i) => (
+                  <li key={i} className="flex items-center gap-2 text-sm">
+                    <ChevronRight className="text-primary h-4 w-4" />
+                    {app}
+                  </li>
+                ))}
+              </ul>
+            </section>
 
-          {/* Real World Applications */}
-          <section className="space-y-2">
-            <h4 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
-              Применение
-            </h4>
-            <ul className="grid gap-2">
-              {info.realWorldApplications.map((app, i) => (
-                <li key={i} className="flex items-center gap-2 text-sm">
-                  <ChevronRight className="text-primary h-4 w-4" />
-                  {app}
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          {/* Historical Context */}
-          <section className="space-y-2">
-            <h4 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
-              Исторический контекст
-            </h4>
-            <div className="bg-accent/50 rounded-lg p-4 text-sm leading-relaxed">
-              {info.historicalContext}
-            </div>
-          </section>
-        </div>
-      </ScrollArea>
-    </DialogContent>
+            {/* Historical Context */}
+            <section className="space-y-2">
+              <h4 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
+                Исторический контекст
+              </h4>
+              <div className="bg-accent/50 rounded-lg p-4 text-sm leading-relaxed">
+                {info.historicalContext}
+              </div>
+            </section>
+          </div>
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
   )
 }
