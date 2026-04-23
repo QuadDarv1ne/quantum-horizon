@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Horizon — Интерактивная платформа по физике</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
+    <script src="https://unpkg.com/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <style>
+        body{font-family:'Inter',sans-serif}
+        html{scroll-behavior:smooth}
+        ::selection{background:#E0E7FF;color:#312E81}
+        @keyframes pulse-glow{0%,100%{box-shadow:0 0 0 0 rgba(79,70,229,.4)}50%{box-shadow:0 0 0 14px rgba(79,70,229,0)}}
+        .pulse-glow{animation:pulse-glow 2s infinite}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        .float-anim{animation:float 4s ease-in-out infinite}
+        @keyframes float-delayed{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+        .float-delayed{animation:float-delayed 5s ease-in-out infinite 1s}
+        @keyframes gradient-shift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        .gradient-shift{background-size:200% 200%;animation:gradient-shift 8s ease infinite}
+        @keyframes star-twinkle{0%,100%{opacity:.3}50%{opacity:1}}
+        .star{animation:star-twinkle 3s ease-in-out infinite}
+        #progressBar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#4F46E5,#818CF8,#A78BFA);z-index:100;transition:width .1s linear;width:0;box-shadow:0 0 10px rgba(79,70,229,.5)}
+        #backToTop{position:fixed;bottom:24px;right:24px;z-index:50;opacity:0;transform:translateY(10px);transition:all .3s cubic-bezier(.4,0,.2,1);pointer-events:none}
+        #backToTop.show{opacity:1;transform:translateY(0);pointer-events:auto}
+        .doc-page{background:#fff;box-shadow:0 20px 50px -12px rgba(0,0,0,.15),0 0 0 1px rgba(0,0,0,.03)}
+        .dp p{text-indent:1.25cm}
+        .dp p.ni{text-indent:0}
+        .dp .h2{font-size:13pt;font-weight:700;color:#1E293B;margin-top:16pt;margin-bottom:6pt;text-indent:0;border-bottom:2pt solid #4F46E5;padding-bottom:3pt}
+        .dp .h3{font-size:11pt;font-weight:600;color:#4F46E5;margin-top:10pt;margin-bottom:4pt;text-indent:0}
+        .dp .bt{font-size:10.5pt;line-height:1.5;color:#1E293B;text-align:justify}
+        .dp table{width:100%;border-collapse:collapse;margin:8pt 0;font-size:9pt;overflow:hidden;border-radius:6pt}
+        .dp table th{background:linear-gradient(135deg,#4F46E5,#7C3AED);color:#fff;padding:4pt 6pt;text-align:left;font-weight:600;font-size:8.5pt;text-transform:uppercase;letter-spacing:.03em}
+        .dp table td{padding:3pt 6pt;border-bottom:.5pt solid #E2E8F0;color:#1E293B;vertical-align:top}
+        .dp table tr:last-child td{border-bottom:none}
+        .dp table tr:nth-child(even) td{background:#F8FAFC}
+        .dp table tr:hover td{background:#EEF2FF;transition:background .2s}
+        .dp .box-i{background:linear-gradient(135deg,#EEF2FF,#E0E7FF);border-left:3pt solid #4F46E5;padding:6pt 8pt;margin:8pt 0;font-size:9.5pt;color:#312E81;border-radius:0 4pt 4pt 0;box-shadow:0 1px 3px rgba(79,70,229,.1)}
+        .dp .box-g{background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border-left:3pt solid #16A34A;padding:6pt 8pt;margin:8pt 0;font-size:9.5pt;color:#14532D;border-radius:0 4pt 4pt 0;box-shadow:0 1px 3px rgba(22,163,74,.1)}
+        .dp .box-o{background:linear-gradient(135deg,#FFF7ED,#FEF3C7);border-left:3pt solid #EA580C;padding:6pt 8pt;margin:8pt 0;font-size:9.5pt;color:#7C2D12;border-radius:0 4pt 4pt 0;box-shadow:0 1px 3px rgba(234,88,12,.1)}
+        .dp .hdr{border-bottom:2pt solid #4F46E5;padding-bottom:6pt;margin-bottom:16pt;background:linear-gradient(180deg,#F8FAFC,transparent);padding:8pt;-margin:0 0 16pt 0}
+        .tp{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:297mm;padding:50pt 70pt;position:relative;overflow:hidden}
+        .tp::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(79,70,229,.03) 0%,transparent 70%);animation:float 20s linear infinite}
+        .tp-logo{width:80pt;height:80pt;background:linear-gradient(135deg,#4F46E5,#7C3AED,#A78BFA);border-radius:20pt;display:flex;align-items:center;justify-content:center;margin-bottom:24pt;box-shadow:0 15px 35px rgba(79,70,229,.25),0 0 60px rgba(79,70,229,.1)}
+        .mod-tag{display:inline-block;padding:2pt 6pt;background:#EEF2FF;color:#4F46E5;border-radius:4pt;font-size:8pt;font-weight:600;margin-right:4pt}
+        @media print{.no-print{display:none!important}body{background:#fff}.doc-page{box-shadow:none;margin:0;border-radius:0}}
+        @keyframes pop{0%{transform:scale(.8);opacity:0}50%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+        .pop{animation:pop .35s ease-out forwards}
+        @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+        .shake{animation:shake .35s ease-out}
+        @keyframes slideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+        .slide-in{animation:slideIn .5s ease-out forwards}
+        .topic-card{transition:all .3s cubic-bezier(.4,0,.2,1)}
+        .topic-card:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(79,70,229,.15)}
+        .nav-link{position:relative;transition:color .2s}
+        .nav-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:#4F46E5;transition:width .3s}
+        .nav-link:hover::after{width:100%}
+        .stat-card{background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.05));backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.15)}
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-indigo-50/30 to-violet-50 text-slate-800">
+
+<div id="progressBar" class="no-print"></div>
+<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="no-print w-10 h-10 bg-white/90 backdrop-blur border border-slate-200 rounded-xl flex items-center justify-center shadow-lg hover:bg-indigo-50 hover:border-indigo-200 transition-all group"><i data-lucide="chevron-up" class="w-5 h-5 text-slate-500 group-hover:text-indigo-600 transition-colors"></i></button>
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 no-print shadow-sm">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-lg flex items-center justify-center shadow-md">
+                <i data-lucide="atom" class="w-4 h-4 text-white"></i>
+            </div>
+            <div>
+                <span class="font-semibold text-slate-900 text-sm">Quantum Horizon</span>
+                <p class="text-[10px] text-slate-500 -mt-0.5">Maestro7IT</p>
+            </div>
+        </div>
+        <div class="hidden md:flex items-center gap-5 text-xs font-medium text-slate-600">
+            <a href="#about" class="nav-link hover:text-indigo-600">О проекте</a>
+            <a href="#topics" class="nav-link hover:text-indigo-600">Темы</a>
+            <a href="#features" class="nav-link hover:text-indigo-600">Возможности</a>
+            <a href="#results" class="nav-link hover:text-indigo-600">Результаты</a>
+        </div>
+        <div class="flex items-center gap-2">
+            <button onclick="window.print()" class="text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 p-2 rounded-lg transition-all" title="Печать"><i data-lucide="printer" class="w-4 h-4"></i></button>
+            <button id="downloadBtn" onclick="downloadDocx()" class="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-md hover:shadow-lg pulse-glow">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                <span class="hidden sm:inline">DOCX</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<div id="toast" class="fixed top-20 right-6 z-[60] hidden no-print">
+    <div id="toastInner" class="flex items-center gap-2.5 px-4 py-3 rounded-xl shadow-xl text-white text-sm font-medium backdrop-blur"></div>
+</div>
+
+<!-- HERO SECTION -->
+<section class="pt-24 pb-12 px-6 no-print relative overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute top-20 right-10 w-72 h-72 bg-indigo-400/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-10 left-10 w-96 h-96 bg-violet-400/10 rounded-full blur-3xl"></div>
+        <div class="absolute top-40 left-1/4 w-2 h-2 bg-indigo-400 rounded-full star"></div>
+        <div class="absolute top-60 right-1/4 w-1.5 h-1.5 bg-violet-400 rounded-full star" style="animation-delay:1s"></div>
+        <div class="absolute bottom-32 right-1/3 w-1 h-1 bg-indigo-300 rounded-full star" style="animation-delay:2s"></div>
+    </div>
+    <div class="max-w-6xl mx-auto relative z-10">
+        <div class="bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 gradient-shift rounded-2xl p-8 md:p-10 text-white shadow-2xl relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute top-8 right-12 w-32 h-32 border-2 border-white/20 rounded-full"></div>
+                <div class="absolute bottom-6 left-16 w-20 h-20 border border-white/15 rounded-full"></div>
+                <div class="absolute top-1/2 left-1/3 w-16 h-16 border border-white/10 rounded-full"></div>
+            </div>
+            <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
+                <div class="w-16 h-16 bg-white/15 backdrop-blur-md rounded-2xl flex items-center justify-center float-anim border border-white/25 shrink-0 shadow-xl">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round">
+                        <circle cx="12" cy="12" r="3"/>
+                        <ellipse cx="12" cy="12" rx="10" ry="4"/>
+                        <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/>
+                        <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="px-2.5 py-1 bg-white/20 backdrop-blur rounded-full text-[10px] font-semibold tracking-wide">ПРЕЗЕНТАЦИЯ ПРОЕКТА</span>
+                        <span class="px-2.5 py-1 bg-emerald-500/20 backdrop-blur rounded-full text-[10px] font-semibold tracking-wide text-emerald-200">ДЛЯ ШКОЛ МОСКВЫ</span>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-bold tracking-tight mb-2">Quantum Horizon</h1>
+                    <p class="text-indigo-100 text-base font-light leading-relaxed">Интерактивная платформа для визуализации и изучения современной физики: от классической механики до космологии</p>
+                </div>
+                <div class="hidden lg:flex flex-col items-end gap-2 text-right">
+                    <div class="flex items-center gap-2 text-indigo-200 text-sm">
+                        <i data-lucide="layers" class="w-4 h-4"></i>
+                        <span>11 направлений</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-indigo-200 text-sm">
+                        <i data-lucide="zap" class="w-4 h-4"></i>
+                        <span>70+ визуализаций</span>
+                    </div>
+                    <div class="flex items-center gap-2 text-indigo-200 text-sm">
+                        <i data-lucide="users" class="w-4 h-4"></i>
+                        <span>9–11 классы</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="pt-16 pb-6 px-6 no-print">
+    <div class="max-w-5xl mx-auto">
+        <div class="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-xl p-6 md:p-8 text-white relative overflow-hidden">
+            <div class="absolute inset-0 opacity-[.07]"><div class="absolute top-3 right-6 w-28 h-28 border border-white/30 rounded-full"></div><div class="absolute bottom-1 left-10 w-16 h-16 border border-white/20 rounded-full"></div></div>
+            <div class="relative z-10 flex items-center gap-5">
+                <div class="w-14 h-14 bg-white/10 backdrop-blur rounded-xl flex items-center justify-center float-anim border border-white/20 shrink-0"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/></svg></div>
+                <div><h1 class="text-xl md:text-2xl font-semibold tracking-tight">Quantum Horizon</h1><p class="text-indigo-100 text-sm font-light mt-0.5">Интерактивная платформа для визуализации современной физики</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MAIN CONTENT FOR DOCX GENERATION (hidden from web view) -->
+<div id="docxContent" class="hidden">
+
+<!-- TITLE PAGE -->
+<div class="tp border-b border-indigo-500">
+    <div class="tp-logo"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/></svg></div>
+    <div style="font-size:9pt;color:#64748B;text-transform:uppercase;letter-spacing:.12em;font-weight:600;margin-bottom:6pt">Школа программирования Maestro7IT</div>
+    <div style="font-size:26pt;font-weight:700;color:#0F172A;line-height:1.2;margin-bottom:6pt">Quantum Horizon</div>
+    <div style="font-size:13pt;color:#4F46E5;font-weight:500;margin-bottom:16pt">Интерактивная платформа для визуализации<br>и изучения современной физики</div>
+    <div style="width:50pt;height:2.5pt;background:#4F46E5;border-radius:2pt;margin:0 auto 16pt"></div>
+    <div style="font-size:10.5pt;color:#475569;line-height:1.6;max-width:360pt;margin:0 auto 28pt">От классической механики до космологии. Образовательная веб-платформа для внедрения в школы г. Москвы.</div>
+    <div style="font-size:8.5pt;color:#94A3B8;line-height:1.8">Автор проекта: Дуплей Максим Игоревич<br>Преподаватель Maestro7IT<br><br>school-maestro7it.ru<br>github.com/QuadDarv1ne/quantum-horizon<br><br>Москва, 2026</div>
+</div>
+
+<!-- PAGE 1 -->
+<div class="dp p-6 md:p-9 lg:p-11 border-b border-slate-100" style="min-height:297mm">
+    <div class="hdr flex items-center justify-between"><div style="font-size:14pt;font-weight:700;color:#1E293B">Описание проекта</div><div style="font-size:8pt;color:#94A3B8">Москва, 2026</div></div>
+
+    <div class="box-i ni"><strong>О проекте.</strong> Образовательная веб-платформа с интерактивными визуализациями физических явлений. Охватывает 11 направлений — от классической механики до космологии. Реализована на стеке веб-технологий (Three.js / WebGL), что дополнительно позволяет использовать её как учебный пример на информатике.</div>
+
+    <div class="h2">1. Проблематика</div>
+    <p class="bt"><strong>68% старшеклассников</strong> считают «Квантовую физику» и «Астрономию» наиболее сложными (Пироговский центр, 2024). <strong>82% педагогов</strong> признают дефицит наглядных средств. С обновлением ФТП требования растут, а инструментарий учителя ограничен.</p>
+    <div class="box-g ni"><strong>Цель:</strong> преодолеть разрыв между абстрактным аппаратом и интуитивным пониманием через интерактивные визуализации в браузере.</div>
+
+    <div class="h2">2. Направления и темы</div>
+
+    <div class="h3">I. Классическая механика</div>
+    <table>
+        <thead><tr><th style="width:35%">Тема</th><th>Что визуализируется</th><th style="width:10%">Кл.</th></tr></thead>
+        <tbody>
+            <tr><td>Законы Ньютона</td><td>Три закона, взаимодействие сил, масса и ускорение</td><td>9</td></tr>
+            <tr><td>Кинематика</td><td>Равномерное и равноускоренное движение, графики</td><td>9</td></tr>
+            <tr><td>Динамика</td><td>Силы трения, упругости, гравитации</td><td>9</td></tr>
+            <tr><td>Механические колебания</td><td>Пружинный и математический маятники, резонанс</td><td>9, 11</td></tr>
+            <tr><td>Механические волны</td><td>Продольные и поперечные волны, интерференция, длина волны</td><td>9, 11</td></tr>
+            <tr><td>Закон сохранения энергии</td><td>Переход кинетической в потенциальную и обратно</td><td>9, 10</td></tr>
+            <tr><td>Закон сохранения импульса</td><td>Упругий и неупругий удар</td><td>10</td></tr>
+        </tbody>
+    </table>
+
+    <div class="h3">II. Молекулярная физика</div>
+    <table>
+        <thead><tr><th style="width:35%">Тема</th><th>Что визуализируется</th><th style="width:10%">Кл.</th></tr></thead>
+        <tbody>
+            <tr><td>Модель идеального газа</td><td>Движение частиц, давление на стенки, изопроцессы</td><td>10</td></tr>
+            <tr><td>Ур-ние Менделеева-Клапейрона</td><td>Связь p, V, T; интерактивные графики изопроцессов</td><td>10</td></tr>
+            <tr><td>Распределение Максвелла</td><td>Распределение молекул по скоростям при разных T</td><td>10</td></tr>
+            <tr><td>Испарение и конденсация</td><td>Фазовые переходы, диаграмма состояний</td><td>10</td></tr>
+        </tbody>
+    </table>
+
+    <div class="h3">III. Термодинамика</div>
+    <table>
+        <thead><tr><th style="width:35%">Тема</th><th>Что визуализируется</th><th style="width:10%">Кл.</th></tr></thead>
+        <tbody>
+            <tr><td>Нулевое начало</td><td>Тепловое равновесие между системами</td><td>10</td></tr>
+            <tr><td>Первое начало</td><td>ΔU = Q − A; работа газа, теплообмен</td><td>10</td></tr>
+            <tr><td>Второе начало</td><td>Необратимость процессов, направление теплообмена</td><td>10</td></tr>
+            <tr><td>Третье начало</td><td>Абсолютный нуль, достижение предела</td><td>10</td></tr>
+            <tr><td>Энтропия</td><td>Изменение энтропии в процессах, статистический смысл</td><td>10</td></tr>
+            <tr><td>Цикл Карно</td><td>pV- и TS-диаграммы, КПД тепловой машины</td><td>10</td></tr>
+        </tbody>
+    </table>
+
+    <div class="h3">IV. Электродинамика</div>
+    <table>
+        <thead><tr><th style="width:35%">Тема</th><th>Что визуализируется</th><th style="width:10%">Кл.</th></tr></thead>
+        <tbody>
+            <tr><td>Закон Кулона</td><td>Сила взаимодействия зарядов, векторная диаграмма</td><td>10</td></tr>
+            <tr><td>Электрическое поле</td><td>Силовые линии, потенциал, разность потенциалов</td><td>10</td></tr>
+            <tr><td>Конденсаторы</td><td>Ёмкость, параллельное и последовательное соединение</td><td>10</td></tr>
+            <tr><td>Закон Ома</td><td>Сила тока, сопротивление, ВАХ</td><td>10</td></tr>
+            <tr><td>Магнитное поле</td><td>Силовые линии, правило буравчика, сила Ампера</td><td>11</td></tr>
+            <tr><td>Электромагнитная индукция</td><td>Закон Фарадея, правило Ленца, ЭДС индукции</td><td>11</td></tr>
+            <tr><td>Уравнения Максвелла</td><td>Связь электрического и магнитного полей</td><td>11 угл.</td></tr>
+            <tr><td>Электромагнитные волны</td><td>Излучение, спектр, шкала ЭМВ</td><td>11</td></tr>
+        </tbody>
+    </table>
+</div>
+</div>
+
+<!-- WEB VIEW: About Section -->
+<section id="about" class="py-10 px-6">
+    <div class="max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-8 items-start">
+            <div class="space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-3">О проекте</h2>
+                    <p class="text-slate-600 leading-relaxed">
+                        Образовательная веб-платформа с интерактивными визуализациями физических явлений. 
+                        Охватывает <strong>11 направлений</strong> — от классической механики до космологии. 
+                        Реализована на <strong>Three.js / WebGL</strong>, что позволяет использовать её 
+                        как учебный пример на информатике.
+                    </p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-indigo-50 to-violet-50 rounded-xl p-5 border border-indigo-100">
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center shrink-0">
+                            <i data-lucide="target" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-slate-900 mb-1">Цель проекта</h3>
+                            <p class="text-sm text-slate-600">Преодолеть разрыв между абстрактным аппаратом физики и интуитивным пониманием через интерактивные визуализации в браузере.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
+                        <div class="text-3xl font-bold text-indigo-600 mb-1">68%</div>
+                        <div class="text-xs text-slate-500">старшеклассников считают квантовую физику сложной</div>
+                    </div>
+                    <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
+                        <div class="text-3xl font-bold text-violet-600 mb-1">82%</div>
+                        <div class="text-xs text-slate-500">педагогов признают дефицит наглядных средств</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-slate-100 to-indigo-50 rounded-2xl p-6 border border-slate-200">
+                <h3 class="font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                    <i data-lucide="layers" class="w-5 h-5 text-indigo-600"></i>
+                    11 направлений обучения
+                </h3>
+                <div class="grid grid-cols-1 gap-2 text-sm">
+                    <div class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-100">
+                        <span class="w-6 h-6 bg-indigo-100 text-indigo-700 rounded flex items-center justify-center text-xs font-bold">1</span>
+                        <span class="text-slate-700">Классическая механика</span>
+                    </div>
+                    <div class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-100">
+                        <span class="w-6 h-6 bg-indigo-100 text-indigo-700 rounded flex items-center justify-center text-xs font-bold">2</span>
+                        <span class="text-slate-700">Молекулярная физика</span>
+                    </div>
+                    <div class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-100">
+                        <span class="w-6 h-6 bg-indigo-100 text-indigo-700 rounded flex items-center justify-center text-xs font-bold">3</span>
+                        <span class="text-slate-700">Термодинамика</span>
+                    </div>
+                    <div class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-100">
+                        <span class="w-6 h-6 bg-indigo-100 text-indigo-700 rounded flex items-center justify-center text-xs font-bold">4</span>
+                        <span class="text-slate-700">Электродинамика</span>
+                    </div>
+                    <div class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-100">
+                        <span class="w-6 h-6 bg-indigo-100 text-indigo-700 rounded flex items-center justify-center text-xs font-bold">5</span>
+                        <span class="text-slate-700">Оптика</span>
+                    </div>
+                    <div class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-100">
+                        <span class="w-6 h-6 bg-violet-100 text-violet-700 rounded flex items-center justify-center text-xs font-bold">6</span>
+                        <span class="text-slate-700">Квантовая механика</span>
+                    </div>
+                    <div class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-100">
+                        <span class="w-6 h-6 bg-violet-100 text-violet-700 rounded flex items-center justify-center text-xs font-bold">7</span>
+                        <span class="text-slate-700">Строение атома</span>
+                    </div>
+                    <div class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-100">
+                        <span class="w-6 h-6 bg-violet-100 text-violet-700 rounded flex items-center justify-center text-xs font-bold">8</span>
+                        <span class="text-slate-700">Ядерная физика</span>
+                    </div>
+                    <div class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-100">
+                        <span class="w-6 h-6 bg-violet-100 text-violet-700 rounded flex items-center justify-center text-xs font-bold">9</span>
+                        <span class="text-slate-700">Теория относительности</span>
+                    </div>
+                    <div class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-100">
+                        <span class="w-6 h-6 bg-violet-100 text-violet-700 rounded flex items-center justify-center text-xs font-bold">10</span>
+                        <span class="text-slate-700">Астрофизика</span>
+                    </div>
+                    <div class="flex items-center gap-2 p-2 bg-white rounded-lg border border-slate-100">
+                        <span class="w-6 h-6 bg-violet-100 text-violet-700 rounded flex items-center justify-center text-xs font-bold">11</span>
+                        <span class="text-slate-700">Космология</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PAGE 2 -->
+<div class="dp p-6 md:p-9 lg:p-11 border-b border-slate-100" style="min-height:297mm">
+    <div class="hdr flex items-center justify-between"><div style="font-size:14pt;font-weight:700;color:#1E293B">Описание проекта</div><div style="font-size:8pt;color:#94A3B8">Продолжение</div></div>
+
+    <div class="h3">V. Оптика</div>
+    <table>
+        <thead><tr><th style="width:35%">Тема</th><th>Что визуализируется</th><th style="width:10%">Кл.</th></tr></thead>
+        <tbody>
+            <tr><td>Закон отражения и преломления</td><td>Лучи на границе сред, показатель преломления</td><td>11</td></tr>
+            <tr><td>Линзы</td><td>Построение изображений, тонкая и толстая линза</td><td>11</td></tr>
+            <tr><td>Интерференция света</td><td>Кольца Ньютона, опыты Юнга, бипризма Френеля</td><td>11</td></tr>
+            <tr><td>Дифракция</td><td>Дифракционная решётка, дифракция на щели</td><td>11</td></tr>
+            <tr><td>Поляризация</td><td>Поляроиды, закон Малюса, двойное лучепреломление</td><td>11 угл.</td></tr>
+            <tr><td>Дисперсия света</td><td>Разложение белого света в призме, спектры</td><td>11</td></tr>
+            <tr><td>Фотоэффект</td><td>Вольт-амперная характеристика, уравнение Эйнштейна</td><td>11</td></tr>
+        </tbody>
+    </table>
+
+    <div class="h3">VI. Квантовая механика</div>
+    <table>
+        <thead><tr><th style="width:35%">Тема</th><th>Что визуализируется</th><th style="width:10%">Кл.</th></tr></thead>
+        <tbody>
+            <tr><td>Корпускулярно-волновой дуализм</td><td>Двойственная природа света и вещества</td><td>11</td></tr>
+            <tr><td>Гипотеза де Бройля</td><td>Длина волны де Бройля, дифракция электронов</td><td>11</td></tr>
+            <tr><td>Волновая функция</td><td>ψ(x,t), плотность вероятности |ψ|²</td><td>11</td></tr>
+            <tr><td>Уравнение Шрёдингера</td><td>Стационарное и нестационарное, частица в потенциальной яме</td><td>11</td></tr>
+            <tr><td>Квантовая суперпозиция</td><td>Наложение состояний, эксперимент с двумя щелями</td><td>11</td></tr>
+            <tr><td>Принцип неопределённости</td><td>ΔxΔp ≥ ℏ/2, визуализация компромисса</td><td>11</td></tr>
+            <tr><td>Туннельный эффект</td><td>Прохождение через барьер, вероятность туннелирования</td><td>11</td></tr>
+            <tr><td>Квантовые числа</td><td>n, l, mₗ, mₛ — форма и ориентация орбиталей</td><td>11</td></tr>
+        </tbody>
+    </table>
+
+    <div class="h3">VII. Строение атома</div>
+    <table>
+        <thead><tr><th style="width:35%">Тема</th><th>Что визуализируется</th><th style="width:10%">Кл.</th></tr></thead>
+        <tbody>
+            <tr><td>Модель Томсона</td><td>«Пудинг с изюмом», распределение заряда</td><td>9</td></tr>
+            <tr><td>Опыт Резерфорда</td><td>Рассеяние α-частиц, ядерная модель</td><td>9</td></tr>
+            <tr><td>Постулаты Бора</td><td>Стационарные орбиты, квантовые переходы</td><td>9, 11</td></tr>
+            <tr><td>Электронные оболочки</td><td>Заполнение уровней, конфигурация элементов</td><td>11</td></tr>
+            <tr><td>Спектральные серии</td><td>Серии Лаймана, Бальмера, Пашена — переходы</td><td>11</td></tr>
+            <tr><td>Периодическая таблица</td><td>Квантовое представление, блоки s, p, d, f</td><td>11</td></tr>
+        </tbody>
+    </table>
+
+    <div class="h3">VIII. Ядерная физика</div>
+    <table>
+        <thead><tr><th style="width:35%">Тема</th><th>Что визуализируется</th><th style="width:10%">Кл.</th></tr></thead>
+        <tbody>
+            <tr><td>Радиоактивный распад</td><td>α-, β-, γ-распад, экспоненциальный закон</td><td>9</td></tr>
+            <tr><td>Закон радиоактивного распада</td><td>T½, N(t) = N₀·2^(−t/T), интерактивный график</td><td>9</td></tr>
+            <tr><td>Ядерные реакции</td><td>Запись реакций, сохранение зарядового и массового чисел</td><td>9</td></tr>
+            <tr><td>Деление ядер</td><td>Цепная реакция, критическая масса, управление</td><td>9</td></tr>
+            <tr><td>Термоядерный синтез</td><td>pp-цикл, CNO-цикл, условия в звёздах</td><td>9</td></tr>
+            <tr><td>Энергия связи ядра</td><td>Кривая удельной энергии связи, дефект массы</td><td>9</td></tr>
+            <tr><td>Диаграммы распада</td><td>Цепочки распада, схемы превращений</td><td>9</td></tr>
+        </tbody>
+    </table>
+
+    <div class="h3">IX. Теория относительности</div>
+    <table>
+        <thead><tr><th style="width:35%">Тема</th><th>Что визуализируется</th><th style="width:10%">Кл.</th></tr></thead>
+        <tbody>
+            <tr><td>Постулаты Эйнштейна</td><td>Принцип относительности, постоянство скорости света</td><td>10–11 угл.</td></tr>
+            <tr><td>Замедление времени</td><td>Парадокс близнецов, зависимость Δt от v</td><td>10–11 угл.</td></tr>
+            <tr><td>Лоренцево сокращение</td><td>Сокращение длины вдоль движения</td><td>10–11 угл.</td></tr>
+            <tr><td>Пространство-время Минковского</td><td>Четырёхмерная диаграмма, световой конус</td><td>10–11 угл.</td></tr>
+            <tr><td>Релятивистская масса и энергия</td><td>E = mc², зависимость от скорости</td><td>10–11 угл.</td></tr>
+            <tr><td>Гравитационное линзирование</td><td>Искривление света массивным телом, Эйнштейново кольцо</td><td>11 угл.</td></tr>
+            <tr><td>Гравитационные волны</td><td>Рябь пространства-времени, детекторы LIGO/Virgo</td><td>11 угл.</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- PAGE 3 -->
+<div class="dp p-6 md:p-9 lg:p-11 border-b border-slate-100" style="min-height:297mm">
+    <div class="hdr flex items-center justify-between"><div style="font-size:14pt;font-weight:700;color:#1E293B">Описание проекта</div><div style="font-size:8pt;color:#94A3B8">Продолжение</div></div>
+
+    <div class="h3">X. Астрофизика</div>
+    <table>
+        <thead><tr><th style="width:35%">Тема</th><th>Что визуализируется</th><th style="width:10%">Кл.</th></tr></thead>
+        <tbody>
+            <tr><td>Диаграмма Герцшпрунга — Рассела</td><td>Спектральные классы, главная последовательность, гиганты, карлики</td><td>10–11</td></tr>
+            <tr><td>Эволюция звёзд</td><td>Протозвезда → главная последовательность → красный гигант → …</td><td>10–11</td></tr>
+            <tr><td>Белые карлики</td><td>Вырожденный газ, предел Чандрасекара</td><td>11</td></tr>
+            <tr><td>Нейтронные звёзды</td><td>Пульсары, быстровращающиеся магнитные звёзды</td><td>11</td></tr>
+            <tr><td>Чёрные дыры</td><td>Горизонт событий, сингулярность, гравитационное притяжение</td><td>11</td></tr>
+            <tr><td>Сверхновые</td><td>Тип Ia и II, выброс оболочки, остатки</td><td>11</td></tr>
+            <tr><td>Аккреционные диски</td><td>Вращение материи вокруг компактного объекта</td><td>11 угл.</td></tr>
+            <tr><td>Чувствительность телескопов</td><td>Диапазоны наблюдения разных инструментов</td><td>11</td></tr>
+        </tbody>
+    </table>
+
+    <div class="h3">XI. Космология</div>
+    <table>
+        <thead><tr><th style="width:35%">Тема</th><th>Что визуализируется</th><th style="width:10%">Кл.</th></tr></thead>
+        <tbody>
+            <tr><td>Большой взрыв</td><td>Хронология: от планковской эпохи до сегодняшнего дня</td><td>11</td></tr>
+            <tr><td>Расширение Вселенной</td><td>Красное смещение, удаляющиеся галактики</td><td>11</td></tr>
+            <tr><td>Закон Хаббла</td><td>v = H₀·d, зависимость скорости от расстояния</td><td>11</td></tr>
+            <tr><td>Космологическое красное смещение</td><td>Сдвиг спектральных линий удалённых галактик</td><td>11</td></tr>
+            <tr><td>Реликтовое излучение</td><td>CMB, анизотропии, спектр планковского излучения</td><td>11</td></tr>
+            <tr><td>Нуклеосинтез</td><td>Первичный нуклеосинтез: H, He, Li в первые минуты</td><td>11</td></tr>
+            <tr><td>Тёмная материя</td><td>Гравитационное влияние, кривая вращения галактик</td><td>11</td></tr>
+            <tr><td>Тёмная энергия</td><td>Ускоренное расширение, космологическая постоянная Λ</td><td>11</td></tr>
+            <tr><td>Будущее Вселенной</td><td>Сценарии: тепловая смерть, большое сжатие, большое разрыв</td><td>11</td></tr>
+        </tbody>
+    </table>
+
+    <div class="box-i ni"><strong>Итого:</strong> 11 направлений, <strong>70+ интерактивных визуализаций</strong>, охватывающих полный курс физики 9–11 классов с углублением до уровня вступительных экзаменов в вузы.</div>
+
+    <div class="h2">3. Функционал</div>
+    <div class="h3">Интерактивные сцены</div>
+    <p class="bt">Учащийся меняет параметры (масса, заряд, энергия, расстояние) и наблюдает изменения в реальном времени. WebGL / Three.js, 60 FPS на школьных ПК.</p>
+    <div class="h3">Адаптивные подсказки</div>
+    <p class="bt">Наведение — краткое пояснение, клик — описание с формулами. Два уровня: базовый (9 кл.) и расширенный (10–11 углублённый).</p>
+    <div class="h3">Режим исследователя</div>
+    <p class="bt">Свободный режим для самостоятельных экспериментов: изменение потенциального барьера, настройка начальных условий реакции, построение спектров и др.</p>
+    <div class="h3">Открытый код</div>
+    <p class="bt">GitHub под открытой лицензией — использование платформы и изучение кода на информатике.</p>
+
+    <div class="h2">4. Технические характеристики</div>
+    <table>
+        <thead><tr><th style="width:28%">Параметр</th><th>Значение</th></tr></thead>
+        <tbody>
+            <tr><td style="font-weight:600">Платформа</td><td>Веб-приложение, любой современный браузер</td></tr>
+            <tr><td style="font-weight:600">Установка</td><td>Не требуется — доступ по ссылке</td></tr>
+            <tr><td style="font-weight:600">Стек</td><td>HTML5, CSS3, JavaScript, Three.js / WebGL</td></tr>
+            <tr><td style="font-weight:600">Минимум</td><td>WebGL (Intel HD 4000+, 2012+)</td></tr>
+            <tr><td style="font-weight:600">Производительность</td><td>60 FPS при 1080p; адаптивное снижение</td></tr>
+            <tr><td style="font-weight:600">Лицензия</td><td>Открытый исходный код, свободное использование</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- PAGE 4 -->
+<div class="dp p-6 md:p-9 lg:p-11 border-b border-slate-100" style="min-height:297mm">
+    <div class="hdr flex items-center justify-between"><div style="font-size:14pt;font-weight:700;color:#1E293B">Описание проекта</div><div style="font-size:8pt;color:#94A3B8">Продолжение</div></div>
+
+    <div class="h2">5. Конкурентные преимущества</div>
+    <table>
+        <thead><tr><th style="width:22%">Критерий</th><th style="width:38%">Аналоги</th><th>Данное решение</th></tr></thead>
+        <tbody>
+            <tr><td style="font-weight:600">Установка</td><td>Десктопные, Python/Java</td><td>Браузер, нулевая конфигурация</td></tr>
+            <tr><td style="font-weight:600">Стоимость</td><td>от 5 000 ₽/год</td><td>Бесплатно</td></tr>
+            <tr><td style="font-weight:600">ФГОС</td><td>Зарубежные, без привязки</td><td>Классы и разделы ФГОС</td></tr>
+            <tr><td style="font-weight:600">Охват тем</td><td>Фрагментарный (1–2 раздела)</td><td>11 направлений, 70+ визуализаций</td></tr>
+            <tr><td style="font-weight:600">Межпредметность</td><td>Только физика</td><td>Физика + информатика (разбор кода)</td></tr>
+            <tr><td style="font-weight:600">Адаптация</td><td>Закрытый код</td><td>Открытый код, доработка школой</td></tr>
+        </tbody>
+    </table>
+
+    <div class="h2">6. Методическая ценность</div>
+    <div class="box-i ni"><strong>Наглядность невидимого.</strong> Квантовые объекты, искривление пространства-времени, эволюция звёзд, термодинамические процессы — получают визуальное представление.</div>
+    <div class="box-i ni"><strong>Исследовательская деятельность.</strong> Виртуальный практикум: гипотезы → параметры → анализ — в рамках ФГОС.</div>
+    <div class="box-i ni"><strong>Дифференциация.</strong> Одна визуализация на базовом и углублённом уровнях без доп. материалов.</div>
+    <div class="box-o ni"><strong>Межпредметная интеграция.</strong> Открытый код — реальный пример на информатике: 3D-графика, обработка ввода, адаптивный дизайн.</div>
+
+    <div class="h2">7. Форматы внедрения</div>
+    <table>
+        <thead><tr><th style="width:24%">Формат</th><th style="width:42%">Описание</th><th>Аудитория</th></tr></thead>
+        <tbody>
+            <tr><td style="font-weight:600">Урок с проекцией</td><td>Визуализация на интерактивной доске</td><td>9–11 кл.</td></tr>
+            <tr><td style="font-weight:600">Индивидуальная работа</td><td>Планшеты / ПК по инструкции</td><td>9–11 кл.</td></tr>
+            <tr><td style="font-weight:600">Виртуальная лабораторная</td><td>Лабораторная с отчётом</td><td>10–11 углубл.</td></tr>
+            <tr><td style="font-weight:600">Проектная деятельность</td><td>Исследовательские мини-проекты</td><td>10–11 кл.</td></tr>
+            <tr><td style="font-weight:600">Дополнительное образование</td><td>Кружки по физике, астрономии, IT</td><td>7–11 кл.</td></tr>
+            <tr><td style="font-weight:600">Подготовка к ЕГЭ</td><td>Визуальное объяснение задач (№18, 24, 27)</td><td>11 кл.</td></tr>
+            <tr><td style="font-weight:600">Разбор кода</td><td>Изучение кода на уроках веб-разработки</td><td>9–11 информатика</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- PAGE 5 -->
+<div class="dp p-6 md:p-9 lg:p-11" style="min-height:297mm">
+    <div class="hdr flex items-center justify-between"><div style="font-size:14pt;font-weight:700;color:#1E293B">Описание проекта</div><div style="font-size:8pt;color:#94A3B8">Продолжение</div></div>
+
+    <div class="h2">8. Ожидаемые результаты</div>
+    <table>
+        <thead><tr><th style="width:6%">№</th><th style="width:50%">Показатель</th><th style="width:14%">Значение</th><th>Измерение</th></tr></thead>
+        <tbody>
+            <tr><td style="font-weight:600;text-align:center">1</td><td>Качество усвоения физических разделов</td><td style="font-weight:600;color:#16A34A">+25–35%</td><td>Входной / итоговый тест</td></tr>
+            <tr><td style="font-weight:600;text-align:center">2</td><td>Ошибки в ЕГЭ по физике</td><td style="font-weight:600;color:#16A34A">−15–20%</td><td>Сравнение пробников</td></tr>
+            <tr><td style="font-weight:600;text-align:center">3</td><td>Доля выбирающих экзамен по физике</td><td style="font-weight:600;color:#16A34A">+10–12%</td><td>Статистика школы</td></tr>
+            <tr><td style="font-weight:600;text-align:center">4</td><td>Учащиеся с исследовательскими навыками</td><td style="font-weight:600;color:#16A34A">≥ 40%</td><td>Оценка проектов</td></tr>
+            <tr><td style="font-weight:600;text-align:center">5</td><td>Экономия времени учителя на наглядность</td><td style="font-weight:600;color:#16A34A">−2 ч/нед</td><td>Анкетирование</td></tr>
+            <tr><td style="font-weight:600;text-align:center">6</td><td>Методическая копилка сценариев</td><td style="font-weight:600;color:#4F46E5">Создана</td><td>Наличие на GitHub</td></tr>
+        </tbody>
+    </table>
+
+    <div class="h2">9. Этапы внедрения</div>
+    <table>
+        <thead><tr><th style="width:6%">№</th><th style="width:18%">Этап</th><th style="width:20%">Срок</th><th>Содержание</th></tr></thead>
+        <tbody>
+            <tr><td style="font-weight:600;text-align:center">1</td><td style="font-weight:600">Пилот</td><td>Сент. — Окт. 2025</td><td>3–5 школ, модули «Механика», «Термодинамика», «Квантовая механика»</td></tr>
+            <tr><td style="font-weight:600;text-align:center">2</td><td style="font-weight:600">Доработка</td><td>Нояб. — Дек. 2025</td><td>Корректировка, добавление «Электродинамика», «Оптика», «Ядерная физика»</td></tr>
+            <tr><td style="font-weight:600;text-align:center">3</td><td style="font-weight:600">Расширение</td><td>Янв. — Март 2026</td><td>15–20 школ, семинары, запуск «Относительность», «Астрофизика», «Космология»</td></tr>
+            <tr><td style="font-weight:600;text-align:center">4</td><td style="font-weight:600">Масштабирование</td><td>Апр. — Сент. 2026</td><td>Открытый доступ, методрекомендации, конференции</td></tr>
+        </tbody>
+    </table>
+
+    <div class="h2">10. Ресурсы и поддержка</div>
+    <table>
+        <thead><tr><th style="width:25%">Ресурс</th><th>Описание</th></tr></thead>
+        <tbody>
+            <tr><td style="font-weight:600">Исходный код</td><td>GitHub — полный код, документация, инструкции по сборке</td></tr>
+            <tr><td style="font-weight:600">Онлайн-версия</td><td>Доступ по ссылке без регистрации, мобильная версия</td></tr>
+            <tr><td style="font-weight:600">Методические материалы</td><td>Сценарии уроков, инструкции, карточки</td></tr>
+            <tr><td style="font-weight:600">Техподдержка</td><td>GitHub Issues + email</td></tr>
+            <tr><td style="font-weight:600">Обучение педагогов</td><td>Мастер-классы (онлайн / очно)</td></tr>
+        </tbody>
+    </table>
+
+    <div style="margin-top:20pt;padding-top:10pt;border-top:1pt solid #E2E8F0">
+        <div style="font-size:8.5pt;color:#64748B;line-height:1.6">
+            <strong>Разработчик:</strong> Школа программирования Maestro7IT &nbsp;|&nbsp;
+            <strong>Автор:</strong> Дуплей Максим Игоревич<br>
+            <strong>Сайт:</strong> <span style="color:#4F46E5">school-maestro7it.ru</span> &nbsp;|&nbsp;
+            <strong>Email:</strong> maksimqwe42@mail.ru &nbsp;|&nbsp;
+            <strong>ORCID:</strong> 0009-0007-7605-539X<br>
+            <strong>GitHub:</strong> <span style="color:#4F46E5">QuadDarv1ne</span> &nbsp;|&nbsp;
+            <strong>Код:</strong> <span style="color:#4F46E5">github.com/QuadDarv1ne/quantum-horizon</span>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+</section>
+
+<!-- Footer -->
+<footer class="no-print bg-slate-900 text-white relative overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none"><div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-indigo-600/8 rounded-full blur-3xl"></div><div class="absolute bottom-0 right-0 w-40 h-40 border border-white/5 rounded-full"></div><div class="absolute top-8 left-8 w-24 h-24 border border-white/5 rounded-full"></div></div>
+    <div class="relative z-10 max-w-5xl mx-auto px-6">
+        <div class="pt-16 pb-10 grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8">
+            <div class="md:col-span-5">
+                <div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/></svg></div><div><div class="font-semibold text-base">Quantum Horizon</div><div class="text-slate-400 text-xs">Maestro7IT</div></div></div>
+                <p class="text-slate-400 text-sm leading-relaxed max-w-sm">Интерактивная платформа для визуализации и изучения современной физики. 11 направлений, 70+ визуализаций, от механики до космологии.</p>
+                <div class="flex flex-wrap gap-2 mt-5">
+                    <span class="px-2.5 py-1 bg-white/5 border border-white/10 rounded-md text-[10px] text-slate-400 font-medium">Three.js</span>
+                    <span class="px-2.5 py-1 bg-white/5 border border-white/10 rounded-md text-[10px] text-slate-400 font-medium">WebGL</span>
+                    <span class="px-2.5 py-1 bg-white/5 border border-white/10 rounded-md text-[10px] text-slate-400 font-medium">JavaScript</span>
+                    <span class="px-2.5 py-1 bg-white/5 border border-white/10 rounded-md text-[10px] text-slate-400 font-medium">Open Source</span>
+                    <span class="px-2.5 py-1 bg-white/5 border border-white/10 rounded-md text-[10px] text-slate-400 font-medium">ФГОС</span>
+                </div>
+            </div>
+            <div class="md:col-span-3">
+                <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Ресурсы</div>
+                <ul class="space-y-2.5">
+                    <li><a href="https://school-maestro7it.ru/" target="_blank" rel="noopener" class="text-sm text-slate-300 hover:text-white transition-colors flex items-center gap-2"><i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-500"></i>Maestro7IT</a></li>
+                    <li><a href="https://github.com/QuadDarv1ne/quantum-horizon" target="_blank" rel="noopener" class="text-sm text-slate-300 hover:text-white transition-colors flex items-center gap-2"><i data-lucide="github" class="w-3.5 h-3.5 text-slate-500"></i>GitHub</a></li>
+                    <li><a href="mailto:maksimqwe42@mail.ru" class="text-sm text-slate-300 hover:text-white transition-colors flex items-center gap-2"><i data-lucide="mail" class="w-3.5 h-3.5 text-slate-500"></i>maksimqwe42@mail.ru</a></li>
+                </ul>
+            </div>
+            <div class="md:col-span-4">
+                <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Проект в цифрах</div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-white/5 border border-white/8 rounded-lg p-3"><div class="text-lg font-bold text-indigo-400">11</div><div class="text-[11px] text-slate-400 mt-0.5">направлений</div></div>
+                    <div class="bg-white/5 border border-white/8 rounded-lg p-3"><div class="text-lg font-bold text-indigo-400">70+</div><div class="text-[11px] text-slate-400 mt-0.5">визуализаций</div></div>
+                    <div class="bg-white/5 border border-white/8 rounded-lg p-3"><div class="text-lg font-bold text-indigo-400">0 ₽</div><div class="text-[11px] text-slate-400 mt-0.5">для школ</div></div>
+                    <div class="bg-white/5 border border-white/8 rounded-lg p-3"><div class="text-lg font-bold text-emerald-400">MIT</div><div class="text-[11px] text-slate-400 mt-0.5">лицензия</div></div>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-white/8 pt-6 pb-8"><div class="text-xs text-slate-500 text-center">© 2025 Maestro7IT &nbsp;·&nbsp; Дуплей Максим Игоревич &nbsp;·&nbsp; ORCID 0009-0007-7605-539X</div></div>
+    </div>
+</footer>
+
+<script>
+lucide.createIcons();
+var progressBar=document.getElementById('progressBar'),backToTop=document.getElementById('backToTop');
+window.addEventListener('scroll',function(){var h=document.documentElement;progressBar.style.width=Math.min((h.scrollTop/(h.scrollHeight-h.clientHeight))*100,100)+'%';backToTop.classList.toggle('show',h.scrollTop>300)},{passive:true});
+function showToast(msg,ok){var t=document.getElementById('toast'),inner=document.getElementById('toastInner');inner.className='flex items-center gap-2.5 px-4 py-2.5 rounded-lg shadow-lg text-white text-sm font-medium '+(ok?'bg-emerald-600 pop':'bg-red-600 shake');inner.innerHTML=(ok?'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>':'<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>')+msg;t.classList.remove('hidden');setTimeout(function(){t.classList.add('hidden')},3000)}
+async function downloadDocx(){
+    var btn=document.getElementById('downloadBtn'),orig=btn.innerHTML;
+    btn.innerHTML='<svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" stroke-dasharray="32" stroke-linecap="round"/></svg> ...';
+    btn.disabled=true;btn.classList.remove('pulse-glow');
+    try{
+        if(typeof docx==='undefined')throw new Error('Библиотека не загрузилась');
+        if(typeof saveAs==='undefined')throw new Error('FileSaver не загрузился');
+        var D=docx.Document,Pa=docx.Packer,Pg=docx.Paragraph,Tr=docx.TextRun,Tbl=docx.Table,TR=docx.TableRow,TC=docx.TableCell,WT=docx.WidthType,AL=docx.AlignmentType,BS=docx.BorderStyle,ST=docx.ShadingType,VA=docx.VerticalAlign,HF=docx.Header,FT=docx.Footer,PN=docx.PageNumber;
+        var F='Times New Roman',IND=708,S28=56,S14=28,S12=24,S11=22,S10=20,S9=18,S8=16;
+        var nb={style:BS.NONE,size:0,color:'FFFFFF'},noB={top:nb,bottom:nb,left:nb,right:nb};
+        function bp(t,o){o=o||{};var r=typeof t==='string'?[new Tr({text:t,font:F,size:S11})]:t.map(function(x){return new Tr({text:x.text,font:F,size:S11,bold:!!x.b,color:x.c||undefined})});return new Pg({spacing:{after:60,line:280},alignment:AL.JUSTIFIED,indent:o.ni?undefined:{firstLine:IND},children:r})}
+        function h2(t){return new Pg({spacing:{before:220,after:70,line:280},border:{bottom:{style:BS.SINGLE,size:10,color:'4F46E5'}},children:[new Tr({text:t,font:F,size:S12,bold:true,color:'1E293B'})]})}
+        function h3(t){return new Pg({spacing:{before:150,after:40,line:280},children:[new Tr({text:t,font:F,size:S11,bold:true,color:'4F46E5'})]})}
+        function bx(t,c,cl){return new Pg({spacing:{before:100,after:100,line:260},indent:{left:220,right:220},shading:{type:ST.SOLID,color:c},border:{left:{style:BS.SINGLE,size:14,color:cl},top:nb,bottom:nb,right:nb},children:[new Tr({text:t,font:F,size:S9,color:cl})]})}
+        function cp(t,s,c,b){return new Pg({alignment:AL.CENTER,spacing:{after:50},children:[new Tr({text:t,font:F,size:s||S11,color:c||'1E293B',bold:!!b})]})}
+        function sp(h){return new Pg({spacing:{before:h||200,after:0},children:[]})}
+        function hc(t,w){return new TC({width:{size:w,type:WT.PERCENTAGE},shading:{type:ST.SOLID,color:'4F46E5'},verticalAlign:VA.CENTER,borders:noB,children:[new Pg({spacing:{before:25,after:25},children:[new Tr({text:t,font:F,size:S8,bold:true,color:'FFFFFF'})]})]})}
+        function dc(t,w){var r=typeof t==='string'?[new Tr({text:t,font:F,size:S8,color:'1E293B'})]:t.map(function(x){return new Tr({text:x.text,font:F,size:S8,color:x.c||'1E293B',bold:!!x.b})});return new TC({width:{size:w,type:WT.PERCENTAGE},verticalAlign:VA.CENTER,borders:{top:nb,left:nb,right:nb,bottom:{style:BS.SINGLE,size:3,color:'E2E8F0'}},children:[new Pg({spacing:{before:18,after:18,line:240},children:r})]})}
+        function dce(t,w){var r=typeof t==='string'?[new Tr({text:t,font:F,size:S8,color:'1E293B'})]:t.map(function(x){return new Tr({text:x.text,font:F,size:S8,color:x.c||'1E293B',bold:!!x.b})});return new TC({width:{size:w,type:WT.PERCENTAGE},shading:{type:ST.SOLID,color:'F8FAFC'},verticalAlign:VA.CENTER,borders:{top:nb,left:nb,right:nb,bottom:{style:BS.SINGLE,size:3,color:'E2E8F0'}},children:[new Pg({spacing:{before:18,after:18,line:240},children:r})]})}
+        function mt(hd,rows,ws){var r=[new TR({tableHeader:true,children:hd.map(function(h,i){return hc(h,ws[i])})})];rows.forEach(function(row,ri){r.push(new TR({children:row.map(function(c,ci){return(ri%2===1?dce:dc)(c,ws[ci])})}))});return new Tbl({width:{size:100,type:WT.PERCENTAGE},rows:r})}
+
+        var hdr=new HF({children:[new Pg({spacing:{after:0},border:{bottom:{style:BS.SINGLE,size:6,color:'4F46E5'}},children:[new Tr({text:'Quantum Horizon',font:F,size:S8,bold:true,color:'4F46E5'}),new Tr({text:'  |  Maestro7IT  |  school-maestro7it.ru',font:F,size:S8,color:'94A3B8'})]})]});
+        var ftr=new FT({children:[new Pg({alignment:AL.CENTER,border:{top:{style:BS.SINGLE,size:3,color:'E2E8F0'}},children:[new Tr({children:[PN.CURRENT],font:F,size:S8,color:'94A3B8'})]})]});
+        var pg={page:{margin:{top:1134,bottom:1134,left:1701,right:850}}};
+
+        function topicRows(title,data){
+            var rows=[[{text:title,b:true}]];
+            data.forEach(function(d){rows.push([d[0],d[1],d[2]])});
+            return rows;
+        }
+
+        var titleSec=Object.assign({},pg,{children:[sp(3600),cp('ШКОЛА ПРОГРАММИРОВАНИЯ MAESTRO7IT',S9,'64748B'),sp(160),cp('Quantum Horizon',S28,'0F172A',true),sp(80),cp('Интерактивная платформа для визуализации',S14,'4F46E5',true),cp('и изучения современной физики',S14,'4F46E5',true),sp(80),cp('От классической механики до космологии',S10,'64748B'),sp(700),cp('Автор проекта: Дуплей Максим Игоревич',S10,'475569'),cp('Преподаватель Maestro7IT',S10,'475569'),sp(400),cp('school-maestro7it.ru',S10,'4F46E5',true),cp('github.com/QuadDarv1ne/quantum-horizon',S10,'4F46E5',true),sp(600),cp('Москва, 2026',S10,'94A3B8')]});
+
+        var s1=Object.assign({headers:{default:hdr},footers:{default:ftr}},pg,{children:[
+            bx('О проекте. Образовательная веб-платформа с интерактивными визуализациями физических явлений. Охватывает 11 направлений — от классической механики до космологии. Реализована на Three.js / WebGL, дополнительно используется как учебный пример на информатике.','EEF2FF','312E81'),
+            h2('1. Проблематика'),bp([{text:'68% старшеклассников',b:true},{text:' считают «Квантовую физику» и «Астрономию» наиболее сложными. '},{text:'82% педагогов',b:true},{text:' признают дефицит наглядных средств. С обновлением ФТП требования растут.'}]),
+            bx('Цель: преодолеть разрыв между абстрактным аппаратом и интуитивным пониманием через интерактивные визуализации в браузере.','F0FDF4','14532D'),
+            h2('2. Направления и темы'),
+            h3('I. Классическая механика'),
+            mt(['Тема','Что визуализируется','Кл.'],topicRows('I. Классическая механика',[['Законы Ньютона','Три закона, взаимодействие сил, масса и ускорение','9'],['Кинематика','Равномерное и равноускоренное движение, графики','9'],['Динамика','Силы трения, упругости, гравитации','9'],['Механические колебания','Пружинный и математический маятники, резонанс','9, 11'],['Механические волны','Продольные и поперечные волны, интерференция','9, 11'],['Закон сохранения энергии','Кинетическая ↔ потенциальная','9, 10'],['Закон сохранения импульса','Упругий и неупругий удар','10']]),[35,55,10]),
+            h3('II. Молекулярная физика'),
+            mt(['Тема','Что визуализируется','Кл.'],topicRows('II. Молекулярная физика',[['Модель идеального газа','Движение частиц, давление, изопроцессы','10'],['Ур-ние Менделеева-Клапейрона','Связь p, V, T; графики изопроцессов','10'],['Распределение Максвелла','Распределение по скоростям при разных T','10'],['Испарение и конденсация','Фазовые переходы, диаграмма состояний','10']]),[35,55,10]),
+            h3('III. Термодинамика'),
+            mt(['Тема','Что визуализируется','Кл.'],topicRows('III. Термодинамика',[['Нулевое начало','Тепловое равновесие между системами','10'],['Первое начало','ΔU = Q − A; работа газа, теплообмен','10'],['Второе начало','Необратимость процессов, направление теплообмена','10'],['Третье начало','Абсолютный нуль, достижение предела','10'],['Энтропия','Изменение энтропии, статистический смысл','10'],['Цикл Карно','pV- и TS-диаграммы, КПД тепловой машины','10']]),[35,55,10]),
+            h3('IV. Электродинамика'),
+            mt(['Тема','Что визуализируется','Кл.'],topicRows('IV. Электродинамика',[['Закон Кулона','Сила взаимодействия зарядов, векторная диаграмма','10'],['Электрическое поле','Силовые линии, потенциал','10'],['Конденсаторы','Ёмкость, соединения','10'],['Закон Ома','Сила тока, сопротивление, ВАХ','10'],['Магнитное поле','Силовые линии, правило буравчика, сила Ампера','11'],['Электромагнитная индукция','Закон Фарадея, правило Ленца','11'],['Уравнения Максвелла','Связь электрического и магнитного полей','11 угл.'],['Электромагнитные волны','Излучение, спектр, шкала ЭМВ','11']]),[35,55,10]),
+        ]});
+
+        var s2=Object.assign({headers:{default:hdr},footers:{default:ftr}},pg,{children:[
+            h3('V. Оптика'),
+            mt(['Тема','Что визуализируется','Кл.'],topicRows('V. Оптика',[['Отражение и преломление','Лучи на границе сред','11'],['Линзы','Построение изображений','11'],['Интерференция','Кольца Ньютона, опыт Юнга','11'],['Дифракция','Дифракционная решётка, дифракция на щели','11'],['Поляризация','Закон Малюса, двойное лучепреломление','11 угл.'],['Дисперсия','Разложение света в призме','11'],['Фотоэффект','ВАХ, уравнение Эйнштейна','11']]),[35,55,10]),
+            h3('VI. Квантовая механика'),
+            mt(['Тема','Что визуализируется','Кл.'],topicRows('VI. Квантовая механика',[['Корпускулярно-волновой дуализм','Двойственная природа света и вещества','11'],['Гипотеза де Бройля','Длина волны, дифракция электронов','11'],['Волновая функция','ψ(x,t), плотность вероятности |ψ|²','11'],['Уравнение Шрёдингера','Стационарное и нестационарное','11'],['Квантовая суперпозиция','Наложение состояний, опыт с двумя щелями','11'],['Принцип неопределённости','ΔxΔp ≥ ℏ/2','11'],['Туннельный эффект','Прохождение через барьер','11'],['Квантовые числа','n, l, mₗ, mₛ, форма орбиталей','11']]),[35,55,10]),
+            h3('VII. Строение атома'),
+            mt(['Тема','Что визуализируется','Кл.'],topicRows('VII. Строение атома',[['Модель Томсона','«Пудинг с изюмом»','9'],['Опыт Резерфорда','Рассеяние α-частиц','9'],['Постулаты Бора','Стационарные орбиты, переходы','9, 11'],['Электронные оболочки','Заполнение уровней','11'],['Спектральные серии','Лаймана, Бальмера, Пашена','11'],['Периодическая таблица','Квантовое представление, блоки s, p, d, f','11']]),[35,55,10]),
+            h3('VIII. Ядерная физика'),
+            mt(['Тема','Что визуализируется','Кл.'],topicRows('VIII. Ядерная физика',[['Радиоактивный распад','α-, β-, γ-распад, экспоненциальный закон','9'],['Закон распада','T½, N(t) = N₀·2^(−t/T)','9'],['Ядерные реакции','Запись, сохранение чисел','9'],['Деление ядер','Цепная реакция, критическая масса','9'],['Термоядерный синтез','pp-цикл, CNO-цикл','9'],['Энергия связи','Кривая удельной энергии, дефект массы','9'],['Диаграммы распада','Цепочки превращений','9']]),[35,55,10]),
+            h3('IX. Теория относительности'),
+            mt(['Тема','Что визуализируется','Кл.'],topicRows('IX. Теория относительности',[['Постулаты Эйнштейна','Принцип относительности, постоянство c','10–11 угл.'],['Замедление времени','Парадокс близнецов, зависимость от v','10–11 угл.'],['Лоренцево сокращение','Сокращение длины','10–11 угл.'],['Пространство-время Минковского','Четырёхмерная диаграмма, световой конус','10–11 угл.'],['E = mc²','Релятивистская масса и энергия','10–11 угл.'],['Гравитационное линзирование','Искривление света, Эйнштейново кольцо','11 угл.'],['Гравитационные волны','Рябь пространства-времени','11 угл.']]),[35,55,10]),
+        ]});
+
+        var s3=Object.assign({headers:{default:hdr},footers:{default:ftr}},pg,{children:[
+            h3('X. Астрофизика'),
+            mt(['Тема','Что визуализируется','Кл.'],topicRows('X. Астрофизика',[['Диаграмма Г—Р','Спектральные классы, главная последовательность','10–11'],['Эволюция звёзд','Протозвезда → … → конечная стадия','10–11'],['Белые карлики','Вырожденный газ, предел Чандрасекара','11'],['Нейтронные звёзды','Пульсары','11'],['Чёрные дыры','Горизонт событий, сингулярность','11'],['Сверхновые','Тип Ia и II','11'],['Аккреционные диски','Вращение материи','11 угл.'],['Чувствительность телескопов','Диапазоны наблюдения','11']]),[35,55,10]),
+            h3('XI. Космология'),
+            mt(['Тема','Что визуализируется','Кл.'],topicRows('XI. Космология',[['Большой взрыв','Хронология: планковская → современная эпоха','11'],['Расширение Вселенной','Красное смещение, удаляющиеся галактики','11'],['Закон Хаббла','v = H₀·d','11'],['Космологическое красное смещение','Сдвиг спектральных линий','11'],['Реликтовое излучение','CMB, анизотропии','11'],['Нуклеосинтез','Первичный: H, He, Li','11'],['Тёмная материя','Гравитационное влияние, кривая вращения','11'],['Тёмная энергия','Ускоренное расширение, Λ','11'],['Будущее Вселенной','Тепловая смерть / сжатие / разрыв','11']]),[35,55,10]),
+            bx('Итого: 11 направлений, 70+ интерактивных визуализаций, полный курс физики 9–11 классов с углублением до вузовского уровня.','EEF2FF','312E81'),
+            h2('3. Функционал'),h3('Интерактивные сцены'),bp('Учащийся меняет параметры и наблюдает изменения в реальном времени. WebGL / Three.js, 60 FPS.'),h3('Адаптивные подсказки'),bp('Наведение — пояснение, клик — описание с формулами. Базовый и расширенный уровни.'),h3('Режим исследователя'),bp('Свободный режим для экспериментов: изменение барьера, настройка условий реакции и др.'),h3('Открытый код'),bp('GitHub под открытой лицензией — использование и изучение на информатике.'),
+            h2('4. Технические характеристики'),mt(['Параметр','Значение'],[[{text:'Платформа',b:true},'Веб-приложение, любой браузер'],[{text:'Установка',b:true},'Не требуется — по ссылке'],[{text:'Стек',b:true},'HTML5, CSS3, JavaScript, Three.js / WebGL'],[{text:'Минимум',b:true},'WebGL (Intel HD 4000+, 2012+)'],[{text:'Производительность',b:true},'60 FPS при 1080p; адаптивное снижение'],[{text:'Лицензия',b:true},'Открытый код, свободное использование']],[28,72]),
+        ]});
+
+        var s4=Object.assign({headers:{default:hdr},footers:{default:ftr}},pg,{children:[
+            h2('5. Конкурентные преимущества'),mt(['Критерий','Аналоги','Данное решение'],[[{text:'Установка',b:true},'Десктопные, Python/Java','Браузер, нулевая конфигурация'],[{text:'Стоимость',b:true},'от 5 000 ₽/год','Бесплатно'],[{text:'ФГОС',b:true},'Зарубежные, без привязки','Классы и разделы ФГОС'],[{text:'Охват тем',b:true},'Фрагментарный (1–2 раздела)','11 направлений, 70+ визуализаций'],[{text:'Межпредметность',b:true},'Только физика','Физика + информатика'],[{text:'Адаптация',b:true},'Закрытый код','Открытый код, доработка']],[22,40,38]),
+            h2('6. Методическая ценность'),bx('Наглядность невидимого. Квантовые объекты, искривление пространства-времени, термодинамические процессы — получают визуальное представление.','EEF2FF','312E81'),bx('Исследовательская деятельность. Виртуальный практикум в рамках ФГОС.','EEF2FF','312E81'),bx('Дифференциация. Одна визуализация на базовом и углублённом уровнях.','EEF2FF','312E81'),bx('Межпредметная интеграция. Открытый код — реальный пример на информатике: 3D-графика, обработка ввода, адаптивный дизайн.','FFF7ED','7C2D12'),
+            h2('7. Форматы внедрения'),mt(['Формат','Описание','Аудитория'],[[{text:'Урок с проекцией',b:true},'Интерактивная доска','9–11 кл.'],[{text:'Индивидуальная работа',b:true},'Планшеты / ПК по инструкции','9–11 кл.'],[{text:'Виртуальная лабораторная',b:true},'Лабораторная с отчётом','10–11 углубл.'],[{text:'Проектная деятельность',b:true},'Мини-проекты','10–11 кл.'],[{text:'Доп. образование',b:true},'Кружки','7–11 кл.'],[{text:'Подготовка к ЕГЭ',b:true},'Визуальное объяснение (№18, 24, 27)','11 кл.'],[{text:'Разбор кода',b:true},'Изучение кода на веб-разработке','9–11 информатика']],[22,42,36]),
+            h2('8. Ожидаемые результаты'),mt(['№','Показатель','Значение','Измерение'],[['1','Качество усвоения физических разделов',[{text:'+25–35%',b:true,c:'16A34A'}],'Входной / итоговый тест'],['2','Ошибки в ЕГЭ',[{text:'−15–20%',b:true,c:'16A34A'}],'Пробники'],['3','Доля выбирающих физику',[{text:'+10–12%',b:true,c:'16A34A'}],'Статистика'],['4','Исследовательские навыки',[{text:'≥ 40%',b:true,c:'16A34A'}],'Оценка проектов'],['5','Экономия времени учителя',[{text:'−2 ч/нед',b:true,c:'16A34A'}],'Анкетирование'],['6','Методическая копилка',[{text:'Создана',b:true,c:'4F46E5'}],'GitHub']],[6,48,14,32]),
+            h2('9. Этапы внедрения'),mt(['№','Этап','Срок','Содержание'],[['1',[{text:'Пилот',b:true}],'Сент. — Окт. 2025','3–5 школ, «Механика», «Термодинамика», «Квантовая механика»'],['2',[{text:'Доработка',b:true}],'Нояб. — Дек. 2025','«Электродинамика», «Оптика», «Ядерная физика»'],['3',[{text:'Расширение',b:true}],'Янв. — Март 2026','15–20 школ, «Относительность», «Астрофизика», «Космология»'],['4',[{text:'Масштабирование',b:true}],'Апр. — Сент. 2026','Открытый доступ, методрекомендации']],[6,18,20,56]),
+            h2('10. Ресурсы и поддержка'),mt(['Ресурс','Описание'],[[{text:'Исходный код',b:true},'GitHub — полный код, документация'],[{text:'Онлайн-версия',b:true},'Доступ по ссылке без регистрации'],[{text:'Методматериалы',b:true},'Сценарии уроков, инструкции, карточки'],[{text:'Техподдержка',b:true},'GitHub Issues + email'],[{text:'Обучение педагогов',b:true},'Мастер-классы (онлайн / очно)']],[25,75]),
+            sp(300),new Pg({spacing:{before:60,after:30},border:{top:{style:BS.SINGLE,size:3,color:'E2E8F0'}},children:[]}),
+            new Pg({spacing:{after:20,line:240},children:[new Tr({text:'Разработчик: ',font:F,size:S8,color:'64748B'}),new Tr({text:'Школа программирования Maestro7IT',font:F,size:S8,bold:true,color:'1E293B'}),new Tr({text:'  |  Автор: ',font:F,size:S8,color:'64748B'}),new Tr({text:'Дуплей Максим Игоревич',font:F,size:S8,bold:true,color:'1E293B'})]}),
+            new Pg({spacing:{after:20,line:240},children:[new Tr({text:'Сайт: ',font:F,size:S8,color:'64748B'}),new Tr({text:'school-maestro7it.ru',font:F,size:S8,color:'4F46E5'}),new Tr({text:'  |  Email: maksimqwe42@mail.ru  |  ORCID: 0009-0007-7605-539X',font:F,size:S8,color:'1E293B'})]}),
+            new Pg({spacing:{after:20,line:240},children:[new Tr({text:'GitHub: ',font:F,size:S8,color:'64748B'}),new Tr({text:'QuadDarv1ne',font:F,size:S8,color:'4F46E5'}),new Tr({text:'  |  Код: ',font:F,size:S8,color:'64748B'}),new Tr({text:'github.com/QuadDarv1ne/quantum-horizon',font:F,size:S8,color:'4F46E5'})]}),
+        ]});
+
+        var doc=new D({features:{updateFields:true},sections:[titleSec,s1,s2,s3,s4]});
+        var blob=await Pa.toBlob(doc);saveAs(blob,'Quantum_Horizon_Maestro7IT.docx');showToast('Файл скачан',true);
+    }catch(e){console.error(e);showToast(e.message,false)}
+    finally{btn.innerHTML=orig;btn.disabled=false;btn.classList.add('pulse-glow')}
+}
+</script>
+</body>
+</html>
