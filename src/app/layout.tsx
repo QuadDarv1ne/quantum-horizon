@@ -1,5 +1,4 @@
 /* eslint-disable react-refresh/only-export-components */
-import { Geist, Geist_Mono } from "next/font/google"
 import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages } from "next-intl/server"
 import { notFound } from "next/navigation"
@@ -11,18 +10,6 @@ import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
 import { metadata } from "./metadata"
 import { locales, type Locale } from "@/i18n/config"
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin", "cyrillic"],
-  display: "swap",
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-})
 
 export { metadata }
 
@@ -67,7 +54,7 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://api.wheretheiss.at" />
         <link rel="dns-prefetch" href="https://*.basemaps.cartocdn.com" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className="antialiased">
         <NextIntlClientProvider messages={messages}>
           <ReactQueryProvider>
             {children}
