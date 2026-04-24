@@ -7,7 +7,7 @@
 
 ---
 
-## [Unreleased] - 2026-04-24
+## [0.4.9] - 2026-04-24
 
 ### Добавлено
 
@@ -195,31 +195,6 @@
 
 ---
 
-## [Unreleased]
-
-### Добавлено
-
-- Docker поддержка (Dockerfile, .dockerignore)
-- Prettier для форматирования кода
-- SECURITY.md — политика безопасности
-- CODE_OF_CONDUCT.md — кодекс поведения
-- LICENSE — полная MIT лицензия
-- Скрипты: `lint:fix`, `format`, `format:check`
-
-### Изменено
-
-- Обновлён README.md с улучшенной структурой
-- Обновлён .env.example до современного формата
-- Обновлён .gitignore (prisma/migrations/ теперь коммитятся)
-- Настроен ESLint v9 с конфигурацией для проекта
-- Оптимизированы хуки (use-canvas-animation, use-toast, use-mobile)
-
-### Исправлено
-
-- Merge конфликты в src/app/page.tsx
-- Типы в src/hooks/use-mobile.ts
-- Типы в src/lib/db.ts
-- Async/await warnings в API routes
 
 ---
 
