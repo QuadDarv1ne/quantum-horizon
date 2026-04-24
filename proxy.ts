@@ -9,7 +9,7 @@ import { Ratelimit } from "@upstash/ratelimit"
 import { Redis } from "@upstash/redis"
 import { getToken } from "next-auth/jwt"
 import createIntlMiddleware from "next-intl/middleware"
-import { createInMemoryRateLimiter } from "@/lib/in-memory-rate-limiter"
+import { createInMemoryRateLimiter, InMemoryRateLimiter } from "@/lib/in-memory-rate-limiter"
 
 // Allowed origins for CORS
 const ALLOWED_ORIGINS = [
@@ -42,9 +42,19 @@ function getRateLimiter(prefix: string, requests: number, window: "1 m" | "1 h")
     })
   }
 
-  // Fallback to in-memory rate limiter
-  return createInMemoryRateLimiter(requests, window, prefix)
+  // Fallback to in-memory rate limiter with caching to ensure same instance for same prefix
+  const cacheKey = `${prefix}:${requests}:${window}`
+  if (inMemoryLimiterCache.has(cacheKey)) {
+    return inMemoryLimiterCache.get(cacheKey)!
+  }
+
+  const limiter = createInMemoryRateLimiter(requests, window, prefix)
+  inMemoryLimiterCache.set(cacheKey, limiter)
+  return limiter
 }
+
+// Cache for in-memory rate limiters to ensure same instance is used for same prefix
+const inMemoryLimiterCache = new Map<string, InMemoryRateLimiter>()
 
 // Rate limit configurations for different endpoints
 const RATE_LIMITS = {
