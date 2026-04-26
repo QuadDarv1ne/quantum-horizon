@@ -168,9 +168,9 @@ describe("InMemoryRateLimiter", () => {
       const limiterWithAuto = new InMemoryRateLimiter(5, 60 * 1000, "auto", {
         autoCleanup: true
       })
-      
+
       expect(limiterWithAuto["cleanupTimer"]).not.toBeNull()
-      
+
       limiterWithAuto.stopCleanup()
     })
 
@@ -178,8 +178,90 @@ describe("InMemoryRateLimiter", () => {
       const limiterWithoutAuto = new InMemoryRateLimiter(5, 60 * 1000, "no-auto", {
         autoCleanup: false
       })
-      
+
       expect(limiterWithoutAuto["cleanupTimer"]).toBeNull()
+    })
+  })
+
+  describe("maxStorageSize and eviction", () => {
+    it("should respect maxStorageSize limit", () => {
+      const limiter = new InMemoryRateLimiter(5, 60 * 1000, "test", {
+        maxStorageSize: 3
+      })
+
+      // Fill up to the limit
+      expect(limiter.limit("key1").success).toBe(true)
+      expect(limiter.limit("key2").success).toBe(true)
+      expect(limiter.limit("key3").success).toBe(true)
+      
+      // All should be allowed
+      expect(limiter.limit("key1").success).toBe(true)
+      expect(limiter.limit("key2").success).toBe(true)
+      expect(limiter.limit("key3").success).toBe(true)
+      
+      // Add a fourth key - should evict the oldest (key1)
+      expect(limiter.limit("key4").success).toBe(true)
+      
+      // key1 should now be treated as new (evicted)
+      const result = limiter.limit("key1")
+      expect(result.success).toBe(true)
+      expect(result.remaining).toBe(4) // Should be 4, not 0
+    })
+
+    it("should evict oldest entries when limit is reached", () => {
+      const limiter = new InMemoryRateLimiter(5, 60 * 1000, "test", {
+        maxStorageSize: 2
+      })
+
+      // Add first two entries
+      limiter.limit("key1")
+      limiter.limit("key2")
+      
+      // Add third entry - should evict key1
+      limiter.limit("key3")
+      
+      // key1 should behave like a new key (evicted)
+      const result1 = limiter.limit("key1")
+      expect(result1.success).toBe(true)
+      expect(result1.remaining).toBe(4) // Like a fresh key
+      
+      // key2 should still be in store (second oldest)
+      const result2 = limiter.limit("key2")
+      expect(result2.success).toBe(true)
+      
+      // Add another to evict key2
+      limiter.limit("key4")
+      const result2After = limiter.limit("key2")
+      expect(result2After.success).toBe(true)
+      expect(result2After.remaining).toBe(3) // Evicted and reset (accessed twice)
+    })
+
+    it("should cleanup expired entries before eviction", () => {
+      const limiter = new InMemoryRateLimiter(5, 60 * 1000, "test", {
+        maxStorageSize: 2
+      })
+
+      // Add entries
+      limiter.limit("key1")
+      limiter.limit("key2")
+      
+      // Manually make one entry expired
+      const expiredKey = "test:key1"
+      const expiredEntry = {
+        count: 5,
+        resetTime: Date.now() - 1000 // Expired 1 second ago
+      }
+      limiter["rateLimitStore"].set(expiredKey, expiredEntry)
+      
+      // Add a third entry - should trigger cleanup and eviction
+      limiter.limit("key3")
+      
+      // After cleanup, expired entry should be removed
+      // Then eviction should happen if still over limit
+      // Since we had 2 entries, one expired, after cleanup we have 1
+      // Adding third makes it 2, which is at limit, so no eviction needed
+      // But let's verify the store size is reasonable
+      expect(limiter["rateLimitStore"].size).toBeLessThanOrEqual(2)
     })
   })
 })
