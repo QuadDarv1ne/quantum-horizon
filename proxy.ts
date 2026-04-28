@@ -43,9 +43,12 @@ function getRateLimiter(prefix: string, requests: number, window: "1 m" | "1 h")
   }
 
   // Fallback to in-memory rate limiter with caching to ensure same instance for same prefix
-  const cacheKey = `${prefix}:${requests}:${window}`
+  const cacheKey = `${prefix}:${String(requests)}:${window}`
   if (inMemoryLimiterCache.has(cacheKey)) {
-    return inMemoryLimiterCache.get(cacheKey)!
+    const cachedLimiter = inMemoryLimiterCache.get(cacheKey)
+    if (cachedLimiter !== undefined) {
+      return cachedLimiter
+    }
   }
 
   const limiter = createInMemoryRateLimiter(requests, window, prefix)

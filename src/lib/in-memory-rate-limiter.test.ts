@@ -14,10 +14,10 @@ describe("InMemoryRateLimiter", () => {
 
   describe("constructor", () => {
     it("should create instance with correct properties", () => {
-      expect(limiter["maxRequests"]).toBe(5)
-      expect(limiter["windowMs"]).toBe(60 * 1000)
-      expect(limiter["prefix"]).toBe("test")
-      expect(limiter["autoCleanup"]).toBe(true)
+      expect(limiter.maxRequests).toBe(5)
+      expect(limiter.windowMs).toBe(60 * 1000)
+      expect(limiter.prefix).toBe("test")
+      expect(limiter.autoCleanup).toBe(true)
     })
 
     it("should accept custom options", () => {
@@ -25,12 +25,12 @@ describe("InMemoryRateLimiter", () => {
         autoCleanup: false,
         cleanupIntervalMs: 30 * 1000
       })
-      
-      expect(customLimiter["maxRequests"]).toBe(10)
-      expect(customLimiter["windowMs"]).toBe(30 * 1000)
-      expect(customLimiter["prefix"]).toBe("custom")
-      expect(customLimiter["autoCleanup"]).toBe(false)
-      expect(customLimiter["cleanupIntervalMs"]).toBe(30 * 1000)
+
+      expect(customLimiter.maxRequests).toBe(10)
+      expect(customLimiter.windowMs).toBe(30 * 1000)
+      expect(customLimiter.prefix).toBe("custom")
+      expect(customLimiter.autoCleanup).toBe(false)
+      expect(customLimiter.cleanupIntervalMs).toBe(30 * 1000)
     })
   })
 
@@ -118,10 +118,10 @@ describe("InMemoryRateLimiter", () => {
   describe("createInMemoryRateLimiter factory function", () => {
     it("should create instance with default options", () => {
       const limiter = createInMemoryRateLimiter(3, "1 m", "factory")
-      expect(limiter["maxRequests"]).toBe(3)
-      expect(limiter["windowMs"]).toBe(60 * 1000)
-      expect(limiter["prefix"]).toBe("factory")
-      expect(limiter["autoCleanup"]).toBe(true)
+      expect(limiter.maxRequests).toBe(3)
+      expect(limiter.windowMs).toBe(60 * 1000)
+      expect(limiter.prefix).toBe("factory")
+      expect(limiter.autoCleanup).toBe(true)
     })
 
     it("should create instance with custom options", () => {
@@ -129,11 +129,11 @@ describe("InMemoryRateLimiter", () => {
         autoCleanup: false,
         cleanupIntervalMs: 30 * 1000
       })
-      expect(limiter["maxRequests"]).toBe(7)
-      expect(limiter["windowMs"]).toBe(60 * 60 * 1000)
-      expect(limiter["prefix"]).toBe("factory-custom")
-      expect(limiter["autoCleanup"]).toBe(false)
-      expect(limiter["cleanupIntervalMs"]).toBe(30 * 1000)
+      expect(limiter.maxRequests).toBe(7)
+      expect(limiter.windowMs).toBe(60 * 60 * 1000)
+      expect(limiter.prefix).toBe("factory-custom")
+      expect(limiter.autoCleanup).toBe(false)
+      expect(limiter.cleanupIntervalMs).toBe(30 * 1000)
     })
   })
 
